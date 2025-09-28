@@ -1,0 +1,67 @@
+/* patient-dashboard.component.css */
+.patient-area-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .patient-area-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .patient-area-header h1 {
+    color: #022F39;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .patient-area-content {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .main-content {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* רספונסיביות */
+  @media (max-width: 1024px) {
+    .patient-area-content {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .sidebar {
+      order: 2;
+    }
+    
+    .main-content {
+      order: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .patient-area-container {
+      padding: 1rem;
+    }
+    
+    .patient-area-header h1 {
+      font-size: 2rem;
+    }
+  }

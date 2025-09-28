@@ -1,0 +1,46 @@
+<div class="create-treatment-dialog">
+  <h2 class="dialog-title">טיפול חדש</h2>
+  <div class="input-dialog">
+    <form [formGroup]="treatmentForm">
+
+      <!-- תאריך -->
+      <div class="form-field">
+        <label for="date">תאריך</label>
+        <input type="date" id="date" formControlName="date">
+      </div>
+
+      <!-- שעת התחלה -->
+      <div class="form-field">
+        <label for="startTime">שעת התחלה</label>
+        <input type="time" id="startTime" formControlName="startTime">
+      </div>
+
+      <!-- שעת סיום -->
+      <div class="form-field">
+        <label for="endTime">שעת סיום</label>
+        <input type="time" id="endTime" formControlName="endTime">
+      </div>
+
+      <!-- מקום -->
+      <div class="form-field">
+        <label for="place">מקום</label>
+        <select id="place" formControlName="place">
+          <option *ngFor="let place of places" [value]="place.id">{{ place.name }}</option>
+        </select>
+      </div>
+
+      <!-- הערות -->
+      <div class="form-field">
+        <label for="notes">הערות</label>
+        <textarea id="notes" formControlName="notes" rows="3"></textarea>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- כפתורים -->
+  <div class="dialog-actions">
+    <button type="button" (click)="close()">ביטול</button>
+    <button type="button" (click)="save()">שמור</button>
+  </div>
+</div>

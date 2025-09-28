@@ -1,1 +1,37 @@
-<app-treatment-list></app-treatment-list>
+<!-- patient-dashboard.component.html -->
+<app-header></app-header>
+<br/>
+<div class="patient-area-container">
+    <div class="patient-area-header">
+      <h1>אזור אישי מטופל</h1>
+    </div>
+  
+    <div class="patient-area-content">
+      
+      <!-- עמודה שמאלית - פרטי מטופל וסיכום -->
+      <div class="sidebar">
+        
+        <!-- פרטי מטופל -->
+        <app-patient-details 
+          [patient]="patient"
+          (patientUpdated)="onPatientUpdated($event)">
+        </app-patient-details>
+        
+        <!-- סיכום שעות טיפול -->
+        <app-treatment-summary
+          [totalHours]="totalHours"
+          [totalCost]="totalCost"
+          [treatmentCount]="treatments.length">
+        </app-treatment-summary>
+        
+      </div>
+  
+      <!-- עמודה ימנית - רשימת טיפולים -->
+      <div class="main-content">
+        <app-treatment-list
+          (treatmentDeleted)="onTreatmentDeleted($event)">
+        </app-treatment-list>
+      </div>
+
+    </div>
+  </div>

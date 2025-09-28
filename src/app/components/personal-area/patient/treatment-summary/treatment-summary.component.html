@@ -1,0 +1,23 @@
+<!-- treatment-summary.component.html -->
+<div class="summary-card">
+  <div class="card-header">
+    <h3>סיכום שעות טיפולים</h3>
+  </div>
+  
+  <div class="summary-content">
+    <div class="summary-row">
+      <span class="summary-label">סה"כ שעות טיפול:</span>
+      <span class="summary-value">{{ formatHours(totalHours) }}</span>
+    </div>
+    
+    <div class="summary-row">
+      <span class="summary-label">מספר טיפולים:</span>
+      <span class="summary-value">{{ treatmentCount }}</span>
+    </div>
+    
+    <div class="summary-row total-cost">
+      <span class="summary-label">סכום כולל:</span>
+      <span class="summary-value">{{ formatCurrency(totalCost) }}</span>
+    </div>
+  </div>
+</div>

@@ -1,33 +1,57 @@
-<br><br><br><br>
+<!-- treatment-list.component.html -->
 <div class="patient-list-container">
-    <h1>רשימת טיפולים</h1>
-  
-    <!-- שדה חיפוש -->
-    <div class="search-container">
-      <button class="icon-button" mat-icon-button (click)="openCreateTreatmentDialog()">
-        <mat-icon style="color: #BB7E2B;">add</mat-icon>
-      </button>      
-      <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
-    </div>
-  
-    <!-- כותרות השדות -->
-    <div class="treatment-row header-row">
-      <div class="treatment-cell">תאריך</div>
-      <div class="treatment-cell">שם פגישה</div>
-      <div class="treatment-cell">מקום</div>
-      <div class="treatment-cell">שעת התחלה</div>
-      <div class="treatment-cell">שעת סיום</div>
-      <div class="treatment-cell">סה"כ</div>
-    </div>
-  
-    <!-- רשימת פגישות -->
-    <div class="treatment-row data-row" *ngFor="let treatment of treatments ">
-      <div class="treatment-cell">{{treatment.date}}</div>
-      <div class="treatment-cell">{{treatment.name}}</div>
-      <div class="treatment-cell">{{treatment.therapist}}</div>
-      <div class="treatment-cell">{{treatment.startTime}}</div>
-      <div class="treatment-cell">{{treatment.endTime}}</div>
-      <div class="treatment-cell">{{treatment.totalCost}}</div>
+  <h1>רשימת טיפולים</h1>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+    <button class="icon-button" mat-icon-button (click)="openCreateTreatmentDialog()">
+      <mat-icon style="color: #BB7E2B;">add</mat-icon>
+    </button>      
+    <input type="text" 
+           placeholder="חיפוש לפי תאריך, שם טיפול או מקום" 
+           class="search-input" 
+           [(ngModel)]="searchTerm">
+  </div>
+
+  <!-- כותרות השדות -->
+  <div class="treatment-row header-row">
+    <div class="treatment-cell">תאריך</div>
+    <div class="treatment-cell">שם פגישה</div>
+    <div class="treatment-cell">מקום</div>
+    <div class="treatment-cell">שעת התחלה</div>
+    <div class="treatment-cell">שעת סיום</div>
+    <div class="treatment-cell">סה"כ</div>
+    <div class="treatment-cell">פעולות</div>
+  </div>
+
+  <!-- רשימת פגישות -->
+  <div class="treatment-row data-row" *ngFor="let treatment of filteredTreatments">
+    <div class="treatment-cell">{{ formatDate(treatment.date) }}</div>
+    <div class="treatment-cell">{{ treatment.name }}</div>
+    <div class="treatment-cell">{{ treatment.therapist }}</div>
+    <div class="treatment-cell">{{ treatment.startTime }}</div>
+    <div class="treatment-cell">{{ treatment.endTime }}</div>
+    <div class="treatment-cell">{{ formatCurrency(treatment.totalCost) }}</div>
+    <div class="treatment-cell actions-cell">
+      <!-- <button class="action-btn edit-btn" (click)="editTreatment(treatment)">
+        <mat-icon>edit</mat-icon>
+      </button> -->
+      <button class="action-btn delete-btn" (click)="deleteTreatment(treatment.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
-  
+
+  <!-- הודעה במקרה של אין תוצאות -->
+  <div class="no-results" *ngIf="filteredTreatments.length === 0 && treatments.length > 0">
+    <p>לא נמצאו טיפולים התואמים לחיפוש</p>
+  </div>
+
+  <!-- הודעה במקרה של אין טיפולים כלל -->
+  <div class="no-treatments" *ngIf="treatments.length === 0">
+    <p>אין טיפולים להצגה</p>
+    <button class="add-first-treatment-btn" (click)="openCreateTreatmentDialog()">
+      הוסף טיפול ראשון
+    </button>
+  </div>
+</div>

@@ -1,161 +1,5 @@
-.dialog-container {
-  min-width: 450px;
-  max-width: 550px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
 
-.dialog-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #1976d2;
-  font-size: 24px;
-  font-weight: 600;
-  padding: 16px 24px;
-  background: #f4f6f8;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.dialog-content {
-  padding: 24px;
-  overflow-y: auto;
-}
-
-.patient-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-mat-form-field {
-  .mat-mdc-text-field-wrapper {
-    border-radius: 8px;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-  }
-
-  .mat-mdc-floating-label {
-    color: #1976d2;
-  }
-
-  &.mat-focused .mat-mdc-floating-label {
-    color: #1976d2;
-  }
-
-  mat-icon[matSuffix] {
-    color: #999;
-  }
-
-  .mat-mdc-input-element {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  mat-form-field.mat-form-field-invalid {
-    .mat-mdc-text-field-wrapper {
-      border-color: #f44336;
-    }
-  }
-}
-
-.dialog-actions {
-  padding: 16px;
-  background: #f9fafb;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-}
-
-button {
-  min-width: 100px;
-  height: 40px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-
-  mat-icon {
-    margin-left: 8px;
-    font-size: 18px;
-  }
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-}
-
-.reset-button {
-  color: #666;
-  border: 1px solid #ddd;
-
-  &:hover:not(:disabled) {
-    background-color: #f5f5f5;
-    border-color: #bbb;
-  }
-}
-
-.cancel-button {
-  color: #666;
-
-  &:hover:not(:disabled) {
-    background-color: #f5f5f5;
-  }
-}
-
-.save-button {
-  background: linear-gradient(135deg, #1976d2, #1565c0);
-  color: white;
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #1565c0, #0d47a1);
-  }
-
-  &:disabled {
-    background: #ccc;
-    color: #999;
-  }
-
-  .button-spinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@media (max-width: 600px) {
-  .action-buttons {
-    flex-direction: column-reverse;
-    gap: 8px;
-  }
-
-  button {
-    width: 100%;
-    min-width: unset;
-  }
-}
-
-/* Animation for dialog entrance */
-.dialog-container {
-  animation: dialogSlideIn 0.3s ease-out;
-}
-
-@keyframes dialogSlideIn {
+/* @keyframes dialogSlideIn {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -165,4 +9,108 @@ button {
     opacity: 1;
     transform: translateY(0);
   }
+}  */
+.create-treatment-dialog {
+  max-width: 500px;
+  background-color: #022F39;
+  color: white;
+  border-radius: 1rem;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.dialog-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.input-dialog {
+  background-color: whitesmoke;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-field label {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  width: 100%;
+  text-align: right;
+  display: block;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+}
+
+.hint {
+  text-align: end;
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  background-color: whitesmoke;
+}
+
+.dialog-actions button {
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button {
+  background-color: white;
+  color: #022F39;
+  border: 1px solid #022F39;
+}
+
+.reset-button:hover {
+  background-color: #e0e0e0;
+}
+
+.cancel-button {
+  background-color: white;
+  color: #022F39;
+  border: 1px solid #022F39;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+.save-button {
+  background-color: #022F39;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #034752;
 }

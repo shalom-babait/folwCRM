@@ -1,0 +1,78 @@
+<!-- patient-details.component.html -->
+<div class="patient-details-card">
+  <div class="card-header">
+    <h3>מטופל: {{ patient.name }}</h3>
+    <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
+      עריכה
+    </button>
+  </div>
+
+  <div class="card-content" *ngIf="!isEditing">
+    <div class="detail-row">
+      <span class="label">שם:</span>
+      <span class="value">{{ patient.name }}</span>
+    </div>
+    
+    <div class="detail-row">
+      <span class="label">טלפון:</span>
+      <span class="value">{{ patient.phone }}</span>
+    </div>
+    
+    <div class="detail-row">
+      <span class="label">מייל:</span>
+      <span class="value">{{ patient.email }}</span>
+    </div>
+    
+    <div class="detail-row">
+      <span class="label">גיל:</span>
+      <span class="value">{{ calculateAge() }}</span>
+    </div>
+    
+    <div class="detail-row">
+      <span class="label">תאריך לידה:</span>
+      <span class="value">{{ formatDate(patient.birthDate) }}</span>
+    </div>
+    
+    <div class="detail-row">
+      <span class="label">כתובת:</span>
+      <span class="value">{{ patient.address }}</span>
+    </div>
+  </div>
+
+  <!-- מצב עריכה -->
+  <form *ngIf="isEditing" [formGroup]="patientForm" class="edit-form">
+    
+    <div class="form-field">
+      <label>שם:</label>
+      <input type="text" formControlName="name" placeholder="הכנס שם מלא">
+    </div>
+    
+    <div class="form-field">
+      <label>טלפון:</label>
+      <input type="tel" formControlName="phone" placeholder="050-123-4567">
+    </div>
+    
+    <div class="form-field">
+      <label>מייל:</label>
+      <input type="email" formControlName="email" placeholder="example@email.com">
+    </div>
+    
+    <div class="form-field">
+      <label>תאריך לידה:</label>
+      <input type="date" formControlName="birthDate">
+    </div>
+    
+    <div class="form-field">
+      <label>כתובת:</label>
+      <textarea formControlName="address" rows="3" placeholder="הכנס כתובת מלאה"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-btn" (click)="cancelEdit()">ביטול</button>
+      <button type="button" class="save-btn" (click)="saveChanges()" [disabled]="!patientForm.valid">
+        שמור
+      </button>
+    </div>
+  </form>
+
+</div>
