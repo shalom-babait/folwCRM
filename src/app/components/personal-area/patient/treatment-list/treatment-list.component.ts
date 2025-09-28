@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from 'src/app/services/patient.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateTreatmentDialogComponent } from '../create-treatment-dialog/create-treatment-dialog.component';
+import { CreateTreatmentDialogComponent } from '../create-treatment-dialog/add-treatment-dialog.component';
 
 @Component({
   selector: 'app-treatment-list',

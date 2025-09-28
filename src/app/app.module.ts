@@ -147,7 +147,7 @@ import { TherapistCalendarComponent } from './components/personal-area/therapist
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
-import { CreateTreatmentDialogComponent } from './components/personal-area/patient/create-treatment-dialog/create-treatment-dialog.component';
+import { CreateTreatmentDialogComponent } from './components/personal-area/patient/create-treatment-dialog/add-treatment-dialog.component';
 
 
 @NgModule({
