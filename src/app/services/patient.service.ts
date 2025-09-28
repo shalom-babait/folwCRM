@@ -137,7 +137,7 @@ export class PatientService {
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
     
-    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}`).pipe(
+    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/patients`).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
       catchError(this.handleError.bind(this)),
@@ -150,7 +150,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient[]>>(
-      `${this.apiUrl}/byTherapist/${therapistId}`
+      `${this.apiUrl}/patients/byTherapist/${therapistId}`
     ).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
@@ -163,7 +163,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient>>(
-      `${this.apiUrl}/${patient_id}`
+      `${this.apiUrl}/patients/${patient_id}`
     ).pipe(
       map(response => response.data || {} as Patient),
       catchError(this.handleError.bind(this)),
@@ -179,7 +179,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient[]>>(
-      `${this.apiUrl}/search?q=${encodeURIComponent(searchTerm)}`
+      `${this.apiUrl}/patients/search?q=${encodeURIComponent(searchTerm)}`
     ).pipe(
       map(response => response.data || []),
       catchError(this.handleError.bind(this)),
