@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateTreatmentDialogComponent } from './create-treatment-dialog.component';
+import { CreateTreatmentDialogComponent } from './add-treatment-dialog.component';
 
 describe('CreateTreatmentDialogComponent', () => {
   let component: CreateTreatmentDialogComponent;

@@ -1,4 +1,4 @@
-// src/app/components/add-patient-dialog/add-patient-dialog.component.ts
+//o[src/app/components/add-patient-dialog/add-patient-dialog.component.ts
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -63,15 +63,15 @@ export class AddPatientDialogComponent implements OnInit {
   // פונקציה לקבלת הודעות שגיאה
   getErrorMessage(fieldName: string): string {
     const field = this.patientForm.get(fieldName);
-    
+
     if (field?.hasError('required')) {
       return `${this.getFieldLabel(fieldName)} הוא שדה חובה`;
     }
-    
+
     if (field?.hasError('min')) {
       return `${this.getFieldLabel(fieldName)} חייב להיות גדול מ-0`;
     }
-    
+
     if (field?.hasError('maxlength')) {
       const maxLength = field.errors?.['maxlength']?.requiredLength;
       return `${this.getFieldLabel(fieldName)} לא יכול להיות יותר מ-${maxLength} תווים`;
@@ -92,128 +92,67 @@ export class AddPatientDialogComponent implements OnInit {
     return labels[fieldName] || fieldName;
   }
 
-  // onSubmit(): void {
-  //   if (this.patientForm.valid) {
-  //     this.isSubmitting = true;
-      
-  //     const patientData: Patient = {
-  //       ...this.patientForm.value,
-  //       // וודא שהתאריך נשלח בפורמט נכון
-  //       birth_date: this.patientForm.value.birth_date ? 
-  //         new Date(this.patientForm.value.birth_date).toISOString().split('T')[0] : 
-  //         null
-  //     };
 
-  //     // הסר שדות ריקים או null
-  //     Object.keys(patientData).forEach(key => {
-  //       if (patientData[key as keyof Patient] === '' || patientData[key as keyof Patient] === null) {
-  //         delete patientData[key as keyof Patient];
-  //       }
-  //     });
+  onSubmit(): void {
+    if (this.patientForm.valid) {
+      this.isSubmitting = true;
 
-  //     this.patientService.createPatient(patientData).subscribe({
-  //       next: (response) => {
-  //         this.isSubmitting = false;
-  //         if (response.success) {
-  //           this.snackBar.open('המטופל נוסף בהצלחה!', 'סגור', {
-  //             duration: 3000,
-  //             panelClass: ['success-snackbar'],
-  //             horizontalPosition: 'center',
-  //             verticalPosition: 'top'
-  //           });
-  //           this.dialogRef.close(response.data);
-  //         } else {
-  //           this.handleError(response.message || 'שגיאה לא ידועה');
-  //         }
-  //       },
-  //       error: (error) => {
-  //         this.isSubmitting = false;
-  //         this.handleError(error.message);
-  //       }
-  //     });
-  //   } else {
-  //     // סמן את כל השדות כנגעו כדי להציג שגיאות
-  //     Object.keys(this.patientForm.controls).forEach(key => {
-  //       const control = this.patientForm.get(key);
-  //       control?.markAsTouched();
-  //     });
-      
-  //     this.snackBar.open('אנא תקן את השגיאות בטופס', 'סגור', {
-  //       duration: 3000,
-  //       panelClass: ['error-snackbar'],
-  //       horizontalPosition: 'center',
-  //       verticalPosition: 'top'
-  //     });
-  //   }
-  // }
-// החלף את הפונקציה onSubmit() בקובץ add-patient-dialog.component.ts
-
-onSubmit(): void {
-  if (this.patientForm.valid) {
-    this.isSubmitting = true;
-    
-    // וודא שיש user_id ושהוא תקין
-    const userId = this.patientForm.value.user_id;
-    if (!userId || userId <= 0) {
-      this.handleError('מזהה משתמש חייב להיות מספר חיובי');
-      this.isSubmitting = false;
-      return;
-    }
-    
-    // יצירת אובייקט מסוג CreatePatientRequest
-    const patientData = {
-      user_id: userId,
-      therapist_id: this.patientForm.value.therapist_id || undefined,
-      birth_date: this.patientForm.value.birth_date ? 
-        new Date(this.patientForm.value.birth_date).toISOString().split('T')[0] : 
-        undefined,
-      gender: this.patientForm.value.gender || undefined,
-      status: this.patientForm.value.status || 'פעיל',
-      history_notes: this.patientForm.value.history_notes || undefined
-    };
-
-    // הסר שדות undefined
-    // Object.keys(patientData).forEach(key => {
-    //   if (patientData[key as keyof typeof patientData] === undefined) {
-    //     delete patientData[key as keyof typeof patientData];
-    //   }
-    // });
-
-    this.patientService.createPatient(patientData).subscribe({
-      next: (response) => {
+      // וודא שיש user_id ושהוא תקין
+      const userId = this.patientForm.value.user_id;
+      if (!userId || userId <= 0) {
+        this.handleError('מזהה משתמש חייב להיות מספר חיובי');
         this.isSubmitting = false;
-        if (response.success) {
-          this.snackBar.open('המטופל נוסף בהצלחה!', 'סגור', {
-            duration: 3000,
-            panelClass: ['success-snackbar'],
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
-          this.dialogRef.close(response.data);
-        } else {
-          this.handleError(response.message || 'שגיאה לא ידועה');
-        }
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        this.handleError(error.message);
+        return;
       }
-    });
-  } else {
-    // סמן את כל השדות כנגעו כדי להציג שגיאות
-    Object.keys(this.patientForm.controls).forEach(key => {
-      const control = this.patientForm.get(key);
-      control?.markAsTouched();
-    });
-    
-    this.snackBar.open('אנא תקן את השגיאות בטופס', 'סגור', {
-      duration: 3000,
-      panelClass: ['error-snackbar'],
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
+
+      // יצירת אובייקט מסוג CreatePatientRequest
+      const patientData = {
+        user_id: userId,
+        therapist_id: this.patientForm.value.therapist_id || undefined,
+        birth_date: this.patientForm.value.birth_date ?
+          new Date(this.patientForm.value.birth_date).toISOString().split('T')[0] :
+          undefined,
+        gender: this.patientForm.value.gender || undefined,
+        status: this.patientForm.value.status || 'פעיל',
+        history_notes: this.patientForm.value.history_notes || undefined
+      };
+
+      this.patientService.createPatient(patientData).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          if (response.success) {
+            this.snackBar.open('המטופל נוסף בהצלחה!', 'סגור', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+            this.dialogRef.close(response.data);
+          } else {
+            this.handleError(response.message || 'שגיאה לא ידועה');
+          }
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          this.handleError(error.message);
+        }
+      });
+    } else {
+      // סמן את כל השדות כנגעו כדי להציג שגיאות
+      Object.keys(this.patientForm.controls).forEach(key => {
+        const control = this.patientForm.get(key);
+        control?.markAsTouched();
+      });
+
+      this.snackBar.open('אנא תקן את השגיאות בטופס', 'סגור', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+    }
   }
-}
+  
   private handleError(message: string): void {
     this.snackBar.open(`שגיאה: ${message}`, 'סגור', {
       duration: 5000,
