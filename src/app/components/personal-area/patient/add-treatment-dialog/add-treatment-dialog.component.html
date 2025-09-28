@@ -1,4 +1,5 @@
 <div class="create-treatment-dialog">
+<<<<<<< HEAD:src/app/components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component.html
   <h2 class="dialog-title">טיפול חדש</h2>
   <div class="input-dialog">
     <form [formGroup]="treatmentForm">
@@ -44,3 +45,55 @@
     <button type="button" (click)="save()">שמור</button>
   </div>
 </div>
+=======
+  <h2 mat-dialog-title>טיפול חדש</h2>
+  <div class="input-dialog">
+    <mat-dialog-content [formGroup]="treatmentForm">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>תאריך</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>שעת התחלה</mat-label>
+        <input matInput type="time" formControlName="startTime">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>שעת סיום</mat-label>
+        <input matInput type="time" formControlName="endTime">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>מקום</mat-label>
+        <mat-select formControlName="place">
+          <mat-option *ngFor="let place of places" [value]="place.room_id">
+            {{ place.room_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>סוג טיפול</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of types" [value]="type.id">
+            {{ type.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- שדה הערות -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>הערות</mat-label>
+        <textarea matInput formControlName="notes" rows="3"></textarea>
+      </mat-form-field>
+    </mat-dialog-content>
+  </div>
+  <mat-dialog-actions align="end">
+
+    <button mat-button mat-dialog-close>ביטול</button>
+    <button mat-button (click)="save()">שמור</button>
+  </mat-dialog-actions>
+</div>
+>>>>>>> 4cb490cad5595bfaabf37c0530c200aa2bda469f:src/app/components/personal-area/patient/create-treatment-dialog/add-treatment-dialog.component.html

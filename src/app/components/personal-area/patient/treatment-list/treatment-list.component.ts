@@ -44,6 +44,7 @@
 // treatment-list.component.ts
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+<<<<<<< HEAD
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 
 interface Treatment {
@@ -57,6 +58,9 @@ interface Treatment {
   place?: string;
   notes?: string;
 }
+=======
+import { CreateTreatmentDialogComponent } from '../create-treatment-dialog/add-treatment-dialog.component';
+>>>>>>> 4cb490cad5595bfaabf37c0530c200aa2bda469f
 
 @Component({
   selector: 'app-treatment-list',

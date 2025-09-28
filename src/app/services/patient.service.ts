@@ -49,12 +49,37 @@ export interface Treatment {
   notes?: string;
   status?: 'מתוכנן' | 'בוצע' | 'בוטל';
 }
+export interface Appointment {
+  appointment_id?: number;
+  therapist_id: number;
+  patient_id: number;
+  type_id: number;
+  room_id: number;
+  appointment_date: string;
+  start_time: string;
+  end_time: string;
+  status?: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
+export interface CreateAppointmentRequest {
+  therapist_id: number;
+  patient_id: number;
+  type_id: number;
+  room_id: number;
+  appointment_date: string;
+  start_time: string;
+  end_time: string;
+  status?: string;
+  notes?: string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = `${environment.apiUrl}/patients`;
+  private apiUrl = environment.apiUrl ;
   
   // BehaviorSubjects לניהול מצב
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
@@ -79,7 +104,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.post<ApiResponse<Patient>>(
-      this.apiUrl, 
+      this.apiUrl+ '/patients', 
       patientData, 
       this.httpOptions
     ).pipe(
@@ -93,10 +118,26 @@ export class PatientService {
     );
   }
 
+  createAppointment(appointmentData: CreateAppointmentRequest): Observable<ApiResponse<Appointment>> {
+    this.setLoading(true);
+    
+    return this.http.post<ApiResponse<Appointment>>(
+      this.apiUrl + '/appointments', 
+      appointmentData, 
+      this.httpOptions
+    ).pipe(
+      tap(response => {
+        console.log('Appointment created successfully:', response);
+      }),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
+  }
+
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
     
-    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}`).pipe(
+    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/patients`).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
       catchError(this.handleError.bind(this)),
@@ -109,7 +150,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient[]>>(
-      `${this.apiUrl}/byTherapist/${therapistId}`
+      `${this.apiUrl}/patients/byTherapist/${therapistId}`
     ).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
@@ -122,7 +163,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient>>(
-      `${this.apiUrl}/${patient_id}`
+      `${this.apiUrl}/patients/${patient_id}`
     ).pipe(
       map(response => response.data || {} as Patient),
       catchError(this.handleError.bind(this)),
@@ -138,7 +179,7 @@ export class PatientService {
     this.setLoading(true);
     
     return this.http.get<ApiResponse<Patient[]>>(
-      `${this.apiUrl}/search?q=${encodeURIComponent(searchTerm)}`
+      `${this.apiUrl}/patients/search?q=${encodeURIComponent(searchTerm)}`
     ).pipe(
       map(response => response.data || []),
       catchError(this.handleError.bind(this)),
