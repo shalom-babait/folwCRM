@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PatientService } from 'src/app/services/patient.service';
+import { PatientService, AppointmentResponse } from 'src/app/services/patient.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../create-treatment-dialog/add-treatment-dialog.component';
 
@@ -10,6 +10,8 @@ import { CreateTreatmentDialogComponent } from '../create-treatment-dialog/add-t
 })
 export class TreatmentListComponent implements OnInit {
   treatments: any[] = [];
+  showtreatments: AppointmentResponse[] = [];
+
   searchTerm: string = '';
 
   constructor(
@@ -19,7 +21,10 @@ export class TreatmentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.patientService.getTreatments().subscribe(data => {
-      this.treatments = data;
+      console.log('Treatments data:', data);
+      this.showtreatments = data;
+      console.log('showtreatments:', this.showtreatments);
+      
     });
   }
 
@@ -29,6 +34,7 @@ export class TreatmentListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+
       if (result) {
         // אם צריך, רענון רשימת טיפולים אחרי הוספה
         this.patientService.getTreatments().subscribe(data => {

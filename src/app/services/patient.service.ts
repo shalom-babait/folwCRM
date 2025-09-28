@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 export interface Patient {
   patient_id?: number;
-  user_id?: number;    
+  user_id?: number;
   therapist_id?: number;
   firstName?: string;
   lastName?: string;
@@ -49,6 +49,7 @@ export interface Treatment {
   notes?: string;
   status?: 'מתוכנן' | 'בוצע' | 'בוטל';
 }
+
 export interface Appointment {
   appointment_id?: number;
   therapist_id: number;
@@ -60,8 +61,7 @@ export interface Appointment {
   end_time: string;
   status?: string;
   notes?: string;
-  created_at?: string;
-  updated_at?: string;
+  total_minutes?: number;
 }
 
 export interface CreateAppointmentRequest {
@@ -75,12 +75,24 @@ export interface CreateAppointmentRequest {
   status?: string;
   notes?: string;
 }
+
+export interface AppointmentResponse {
+  appointment_date: string;
+  appointment_id: number;
+  end_time: string;
+  room: string;
+  start_time: string;
+  status: string;
+  total_minutes: number;
+  treatment_type: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = environment.apiUrl ;
-  
+  private apiUrl = environment.apiUrl;
+
   // BehaviorSubjects לניהול מצב
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
   private patientsListSubject = new BehaviorSubject<Patient[]>([]);
@@ -97,15 +109,15 @@ export class PatientService {
     })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
   createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<Patient>> {
     this.setLoading(true);
-    
+
     return this.http.post<ApiResponse<Patient>>(
-      this.apiUrl+ '/patients', 
-      patientData, 
+      this.apiUrl + '/patients',
+      patientData,
       this.httpOptions
     ).pipe(
       tap(response => {
@@ -120,10 +132,10 @@ export class PatientService {
 
   createAppointment(appointmentData: CreateAppointmentRequest): Observable<ApiResponse<Appointment>> {
     this.setLoading(true);
-    
+
     return this.http.post<ApiResponse<Appointment>>(
-      this.apiUrl + '/appointments', 
-      appointmentData, 
+      this.apiUrl + '/appointments',
+      appointmentData,
       this.httpOptions
     ).pipe(
       tap(response => {
@@ -136,7 +148,7 @@ export class PatientService {
 
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
-    
+
     return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/patients`).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
@@ -148,7 +160,7 @@ export class PatientService {
 
   getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     this.setLoading(true);
-    
+
     return this.http.get<ApiResponse<Patient[]>>(
       `${this.apiUrl}/patients/byTherapist/${therapistId}`
     ).pipe(
@@ -161,7 +173,7 @@ export class PatientService {
 
   getPatientById(patient_id: number): Observable<Patient> {
     this.setLoading(true);
-    
+
     return this.http.get<ApiResponse<Patient>>(
       `${this.apiUrl}/patients/${patient_id}`
     ).pipe(
@@ -175,9 +187,9 @@ export class PatientService {
     if (!searchTerm.trim()) {
       return of([]);
     }
-    
+
     this.setLoading(true);
-    
+
     return this.http.get<ApiResponse<Patient[]>>(
       `${this.apiUrl}/patients/search?q=${encodeURIComponent(searchTerm)}`
     ).pipe(
@@ -192,82 +204,57 @@ export class PatientService {
     this.selectedPatientSubject.next(patient_id);
   }
 
-  
+
   private addPatientToLocalList(patient: Patient): void {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }
 
 
-  getTreatments(patient_id?: number): Observable<Treatment[]> {
+  getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
     // אם יש patientId, קרא מהשרת
     if (patient_id) {
-      return this.http.get<ApiResponse<Treatment[]>>(
+      return this.http.get<ApiResponse<AppointmentResponse[]>>(
         `${environment.apiUrl}/treatments/patient/${patient_id}`
       ).pipe(
         map(response => response.data || []),
         catchError(() => this.getMockTreatments()) // fallback למידע מקומי
       );
     }
-    
+
     // אחרת השתמש במידע המקומי הקיים
     return this.getMockTreatments();
   }
 
- 
-  private getMockTreatments(): Observable<Treatment[]> {
-    const treatments: Treatment[] = [
-      { 
-        treatment_id: 1,
-        patient_id: 1,
-        therapist_id: 1,
-        date: '15/09/2025', 
-        name: 'פגישה טלפונית', 
-        therapist: 'מרפאה מרכזית', 
-        startTime: '10:00', 
-        endTime: '11:00', 
-        totalCost: 200,
-        status: 'בוצע'
-      },
-      { 
-        treatment_id: 2,
-        patient_id: 1,
-        therapist_id: 1,
-        date: '10/09/2025', 
-        name: 'פגישה אישית', 
-        therapist: 'קליניקה רעננה', 
-        startTime: '14:30', 
-        endTime: '15:30', 
-        totalCost: 350,
-        status: 'בוצע'
-      },
-      { 
-        treatment_id: 3,
-        patient_id: 1,
-        therapist_id: 1,
-        date: '01/09/2025', 
-        name: 'פגישה בזום', 
-        therapist: 'משרד ביתי', 
-        startTime: '09:00', 
-        endTime: '10:00', 
-        totalCost: 250,
-        status: 'בוצע'
-      }
-    ];
-    return of(treatments);
+  private getMockTreatments(): Observable<AppointmentResponse[]> {
+    console.log('Fetching all appointments');
+    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/2/1`).pipe(
+      tap(appointments => {
+        console.log('Raw appointments:', appointments);
+      }),
+      map(appointments => {
+        if (!appointments || appointments.length === 0) {
+          console.log('No appointments found');
+          return [];
+        }
+        return appointments; 
+      }),
+      catchError(error => {
+        console.error('Error fetching appointments:', error);
+        return of([]);
+      })
+    );
   }
-
- 
   private setLoading(loading: boolean): void {
     this.loadingSubject.next(loading);
   }
 
- 
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('An error occurred:', error);
-    
+
     let errorMessage = 'שגיאה לא ידועה בשרת';
-    
+
     if (error.error) {
       if (typeof error.error === 'string') {
         errorMessage = error.error;
@@ -307,5 +294,5 @@ export class PatientService {
     return throwError(() => new Error(errorMessage));
   }
 
- 
+
 }
