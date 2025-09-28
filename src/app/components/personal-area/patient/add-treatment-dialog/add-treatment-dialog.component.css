@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/app/components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component.css
 /* דיאלוג כללי */
 .create-treatment-dialog {
   max-width: 500px; /* רוחב קבוע לדיאלוג */
@@ -96,19 +95,3 @@
 .dialog-actions button:last-child:hover {
   background-color: #034752;
 }
-=======
-.create-treatment-dialog {
-    text-align: center;
-   background-color: #022F39;;
-    font-size: 22px;
-    font-weight: bold;
-    color: white;
-  }
-  .input-dialog {
-    background-color: whitesmoke;
-    border-radius: 2rem 2rem 0 0;
-    overflow: none;
-  }
-
-  
->>>>>>> 4cb490cad5595bfaabf37c0530c200aa2bda469f:src/app/components/personal-area/patient/create-treatment-dialog/add-treatment-dialog.component.css
