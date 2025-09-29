@@ -45,17 +45,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
+import { PatientService, AppointmentResponse } from 'src/app/services/patient.service';
 
 interface Treatment {
   id: number;
-  date: string;
-  name: string;
-  therapist: string;
-  startTime: string;
-  endTime: string;
-  totalCost: number;
-  place?: string;
-  notes?: string;
+  appointment_id: number;
+  appointment_date: string;
+  start_time: string;
+  end_time: string;
+  room: string;
+  status: string;
+  treatment_type: string;
+  patient_id: number;
+  total_minutes?: number;
 }
 @Component({
   selector: 'app-treatment-list',
@@ -68,47 +70,26 @@ export class TreatmentListComponent implements OnInit {
   @Output() treatmentDeleted = new EventEmitter<number>();
 
   searchTerm: string = '';
+  showTreatments: AppointmentResponse[] = [];
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private patientService: PatientService
+  ) { }
 
   ngOnInit(): void {
-    // אם לא נשלחו טיפולים מהקומפוננטה האב, השתמש בנתונים לדוגמה
+    // Load treatments from the server if none are provided through Input
     if (this.treatments.length === 0) {
-      this.treatments = [
-        {
-          id: 1,
-          date: '2024-01-15',
-          name: 'טיפול פיזיותרפיה',
-          therapist: 'מרכז רפואי הדסה',
-          startTime: '10:00',
-          endTime: '11:30',
-          totalCost: 300,
-          place: 'מרכז רפואי',
-          notes: 'טיפול ראשון'
-        },
-        {
-          id: 2,
-          date: '2024-01-18',
-          name: 'בדיקת מעקב',
-          therapist: 'קליניקה פרטית',
-          startTime: '14:00',
-          endTime: '15:00',
-          totalCost: 250,
-          place: 'קליניקה פרטית',
-          notes: 'המשך טיפול'
-        },
-        {
-          id: 3,
-          date: '2024-01-22',
-          name: 'טיפול השלמה',
-          therapist: 'מרכז רפואי הדסה',
-          startTime: '09:00',
-          endTime: '10:30',
-          totalCost: 300,
-          place: 'מרכז רפואי',
-          notes: 'בדיקת מעקב'
-        }
-      ];
+      this.patientService.getTreatments().subscribe(data => {
+        console.log('Treatments data:', data);
+        this.showTreatments = data;
+        // Map server response to Treatment interface
+        this.treatments = this.showTreatments.map(appointment => ({
+          ...appointment,
+          id: appointment.appointment_id,
+          patient_id: 0 // This should be set based on the current patient context
+        }));
+      });
     }
   }
 
@@ -119,9 +100,9 @@ export class TreatmentListComponent implements OnInit {
     }
     
     return this.treatments.filter(treatment => 
-      treatment.date.includes(this.searchTerm) ||
-      treatment.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      treatment.therapist.toLowerCase().includes(this.searchTerm.toLowerCase())
+      treatment.appointment_date.includes(this.searchTerm) ||
+      treatment.treatment_type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      treatment.room.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
@@ -133,19 +114,18 @@ export class TreatmentListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
       if (result) {
         // יצירת טיפול חדש
         const newTreatment: Treatment = {
           id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.id)) + 1 : 1,
-          date: result.date,
-          name: result.name || 'טיפול חדש',
-          therapist: result.place || result.therapist,
-          startTime: result.startTime,
-          endTime: result.endTime,
-          totalCost: result.cost || this.calculateCost(result.startTime, result.endTime),
-          place: result.place,
-          notes: result.notes
+          appointment_id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.appointment_id)) + 1 : 1,
+          appointment_date: result.date,
+          treatment_type: result.name || 'טיפול חדש',
+          room: result.place || '',
+          start_time: result.startTime,
+          end_time: result.endTime,
+          status: 'scheduled',
+          patient_id: 0 // This should be set based on the current patient context
         };
 
         // הוספה לרשימה המקומית
@@ -157,29 +137,25 @@ export class TreatmentListComponent implements OnInit {
     });
   }
 
-  // חישוב עלות לפי זמן (פונקציה עזר)
-  private calculateCost(startTime: string, endTime: string): number {
-    const start = new Date(`1970-01-01T${startTime}`);
-    const end = new Date(`1970-01-01T${endTime}`);
-    const durationHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-    return Math.round(durationHours * 200); // 200 ש"ח לשעה
-  }
-
   // פורמט תאריך לתצוגה
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('he-IL');
   }
 
-  // פורמט מחיר
-  formatCurrency(amount: number): string {
-    return `₪${amount.toLocaleString()}`;
-  }
-
   // מחיקת טיפול
   deleteTreatment(treatmentId: number): void {
-    this.treatments = this.treatments.filter(t => t.id !== treatmentId);
+    this.treatments = this.treatments.filter(t => t.appointment_id !== treatmentId);
     this.treatmentDeleted.emit(treatmentId);
+    // Refresh the treatments list from server
+    this.patientService.getTreatments().subscribe(data => {
+      this.showTreatments = data;
+      this.treatments = this.showTreatments.map(appointment => ({
+        ...appointment,
+        id: appointment.appointment_id,
+        patient_id: 0
+      }));
+    });
   }
 
   // עריכת טיפול

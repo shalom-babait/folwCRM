@@ -23,7 +23,29 @@
           <label for="birth_date">תאריך לידה</label>
           <input type="date" id="birth_date" formControlName="birth_date" [max]="maxDate">
         </div>
-  
+  <!-- מין -->
+<div class="form-field">
+    <label for="gender">מין</label>
+    <select id="gender" formControlName="gender">
+        <option *ngFor="let gender of genderOptions" [value]="gender.value">
+            {{ gender.label }}
+        </option>
+    </select>
+</div>
+
+<!-- סטטוס -->
+<div class="form-field">
+    <label for="status">סטטוס</label>
+    <select id="status" formControlName="status" required>
+        <option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.label }}
+        </option>
+    </select>
+    <div *ngIf="f['status'].invalid && f['status'].touched">
+        {{ getErrorMessage('status') }}
+    </div>
+</div>
+
         <!-- הערות היסטוריה -->
         <div class="form-field">
           <label for="history_notes">הערות היסטוריה</label>
