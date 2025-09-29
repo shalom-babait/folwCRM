@@ -1,3 +1,4 @@
+// patient.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
@@ -14,6 +15,9 @@ export interface Patient {
   gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
+  phone?: string;      
+  email?: string;     
+  address?: string;   
 }
 
 export interface ApiResponse<T> {
@@ -111,7 +115,6 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-
   createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<Patient>> {
     this.setLoading(true);
 
@@ -157,7 +160,6 @@ export class PatientService {
     );
   }
 
-
   getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     this.setLoading(true);
 
@@ -199,17 +201,23 @@ export class PatientService {
     );
   }
 
-
   selectPatient(patient_id: number | null): void {
     this.selectedPatientSubject.next(patient_id);
   }
 
+  // פונקציה חדשה - קבלת המטופל הנוכחי
+  getCurrentPatient(): Patient | null {
+    const selectedId = this.selectedPatientSubject.value;
+    if (!selectedId) return null;
+    
+    const patients = this.patientsListSubject.value;
+    return patients.find(p => p.patient_id === selectedId) || null;
+  }
 
   private addPatientToLocalList(patient: Patient): void {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }
-
 
   getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
     // אם יש patientId, קרא מהשרת
@@ -245,10 +253,10 @@ export class PatientService {
       })
     );
   }
+
   private setLoading(loading: boolean): void {
     this.loadingSubject.next(loading);
   }
-
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('An error occurred:', error);
@@ -293,6 +301,4 @@ export class PatientService {
 
     return throwError(() => new Error(errorMessage));
   }
-
-
 }
