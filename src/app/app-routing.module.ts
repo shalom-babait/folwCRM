@@ -18,6 +18,7 @@ const routes: Routes =
   { path: 'contact', component: DetilsContactComponent },
   { path: 'patient', component: PatientDashboardComponent },
   { path: 'patientList', component: PatientListComponent },
+  { path: 'therapistDashboard', component: TherapistDashboardComponent },
 ];
 
 @NgModule({

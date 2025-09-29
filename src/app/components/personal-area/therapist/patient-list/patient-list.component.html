@@ -1,31 +1,51 @@
-<div class="patient-list-container">
-    <div class="patient-list">
-      <div class="title-section">
-        <span style="font-size: 28px;"><b>רשימת מטופלים</b></span>
-        <div class="divider">
-          <button 
-            class="icon-button" 
-            mat-icon-button
-            (click)="openAddPatientDialog()"
-            matTooltip="הוסף מטופל חדש"
-            matTooltipPosition="below"
-            [disabled]="isLoading"
-            aria-label="הוסף מטופל חדש">
-            <mat-icon style="color: #BB7E2B;">add</mat-icon>
-          </button>
-          <button class="find-patient-button" mat-button (click)="openSearchDialog()" matTooltip="חיפוש מטופל"
-          [disabled]="isLoading">
-          חיפוש לפי שם
-          <mat-icon>search</mat-icon>
-        </button>
-        </div>
-      </div>
-  
-      <div class="patient-card" *ngFor="let patient of patients" (click)="viewPatientDetails(patient)">
+<!-- patient-list.component.html -->
+<div class="patient-list-card">
+  <div class="card-header">
+    <h3>רשימת מטופלים</h3>
+    <div class="header-actions">
+      <button 
+        class="add-patient-btn"
+        (click)="openAddPatientDialog()"
+        [disabled]="isLoading"
+        matTooltip="הוסף מטופל חדש"
+        matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף מטופל</span>
+      </button>
+      <button 
+        class="search-btn"
+        (click)="openSearchDialog()"
+        [disabled]="isLoading"
+        matTooltip="חיפוש מטופל">
+        <mat-icon>search</mat-icon>
+        <span>חיפוש</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-content">
+    <!-- אינדיקטור טעינה -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- רשימת מטופלים -->
+    <div *ngIf="!isLoading && patients.length > 0">
+      <div 
+        class="patient-card" 
+        *ngFor="let patient of patients"
+        [class.selected]="selectedPatientId === (patient.patient_id || patient.patient_id)"
+        (click)="viewPatientDetails(patient)">
         <div class="patient-info">
           <span class="patient-name">{{ patient.firstName }} {{ patient.lastName }}</span>
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- הודעה אם אין מטופלים -->
+    <div *ngIf="!isLoading && patients.length === 0" class="no-patients">
+      <p>אין מטופלים כרגע</p>
+      <p>לחץ על "הוסף מטופל" כדי להתחיל</p>
+    </div>
+  </div>
+</div>
