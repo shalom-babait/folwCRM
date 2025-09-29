@@ -133,6 +133,7 @@ export class TreatmentListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+
       if (result) {
         // יצירת טיפול חדש
         const newTreatment: Treatment = {
