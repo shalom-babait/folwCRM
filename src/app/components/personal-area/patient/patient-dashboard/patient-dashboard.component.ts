@@ -1,71 +1,7 @@
-// import { Component, OnInit } from '@angular/core';
-// import { PatientService, AppointmentResponse } from 'src/app/services/patient.service';
-
-
-// @Component({
-//   selector: 'app-patient-dashboard',
-//   templateUrl: './patient-dashboard.component.html',
-//   styleUrls: ['./patient-dashboard.component.css']
-// })
-// export class PatientDashboardComponent implements OnInit {
-//   patient: Patient | null = null;
-//   treatments: Treatment[] = [];
-
-//   constructor(private patientService: PatientService) { }
-
-//   ngOnInit(): void {
-//     const patientId = 1; // דוגמה, יש להחליף ב-id דינמי
-//     this.patientService.getPatientById(patientId).subscribe(data => {
-//       // מיפוי Patient מהשרת למודל הפנימי
-//       this.patient = {
-//         id: data.patient_id || 0,
-//         name: (data.firstName || '') + ' ' + (data.lastName || ''),
-//         phone: '',
-//         email: '',
-//         birthDate: data.birth_date || '',
-//         address: ''
-//       };
-//     });
-//     this.patientService.getTreatments(patientId).subscribe(data => {
-//       // מיפוי AppointmentResponse למודל Treatment
-//       this.treatments = (data || []).map((t: any) => ({
-//         id: t.appointment_id,
-//         appointment_id: t.appointment_id,
-//         appointment_date: t.appointment_date,
-//         start_time: t.start_time,
-//         end_time: t.end_time,
-//         room: t.room,
-//         status: t.status,
-//         treatment_type: t.treatment_type,
-//         patient_id: patientId,
-//         total_minutes: t.total_minutes
-//       }));
-//     });
-//   }
-
-//   get totalHours(): number {
-//     const totalMinutes = this.treatments.reduce((sum, treatment) => sum + (treatment.total_minutes || 0), 0);
-//     return Math.round((totalMinutes / 60) * 10) / 10;
-//   }
-
-//   get totalCost(): number {
-//     // אם יש שדה עלות בטיפול, להוסיף כאן. כרגע אין cost ב-Treatment, אפשר להוסיף בעתיד.
-//     return 0;
-//   }
-
-//   // פונקציה לעדכון פרטי מטופל מה-child
-//   onPatientUpdated(updatedPatient: Patient) {
-//     this.patient = updatedPatient;
-//   }
-
-//   // פונקציה למחיקת טיפול מה-child
-//   onTreatmentDeleted(treatmentId: number) {
-//     this.treatments = this.treatments.filter(t => t.appointment_id !== treatmentId);
-//   }
-// }
 import { Component, OnInit } from '@angular/core';
 import { PatientService, AppointmentResponse } from 'src/app/services/patient.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Patient {
   id: number;
@@ -103,7 +39,11 @@ export class PatientDashboardComponent implements OnInit {
   treatments: Treatment[] = [];
   patientId: number = 0;
 
-  constructor(private patientService: PatientService, private route: ActivatedRoute) { }
+  constructor(
+  private patientService: PatientService,
+  private route: ActivatedRoute,
+  private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -192,9 +132,19 @@ export class PatientDashboardComponent implements OnInit {
             console.error('Error reloading patient after update:', err);
           });
         }
+        this.snackBar.open('העריכה בוצעה בהצלחה!', 'סגור', {
+          duration: 3500,
+          panelClass: 'custom-snackbar',
+          direction: 'rtl'
+        });
       },
       (err) => {
         console.error('Error updating patient:', err);
+        this.snackBar.open('אירעה שגיאה בעת העריכה.', 'סגור', {
+          duration: 3500,
+          panelClass: 'custom-snackbar',
+          direction: 'rtl'
+        });
       }
     );
   }
