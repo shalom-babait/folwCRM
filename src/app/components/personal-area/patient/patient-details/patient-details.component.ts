@@ -1,14 +1,4 @@
-// import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-patient-details',
-//   templateUrl: './patient-details.component.html',
-//   styleUrls: ['./patient-details.component.css']
-// })
-// export class PatientDetailsComponent {
-
-// }
-// patient-details.component.ts
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -19,6 +9,8 @@ interface Patient {
   email: string;
   birthDate: string;
   address: string;
+  teudat_zehut?: string;
+  city?: string;
 }
 
 @Component({
@@ -29,7 +21,6 @@ interface Patient {
 export class PatientDetailsComponent implements OnChanges {
   @Input() patient!: Patient;
   @Output() patientUpdated = new EventEmitter<Patient>();
-
   isEditing = false;
   patientForm: FormGroup;
 
