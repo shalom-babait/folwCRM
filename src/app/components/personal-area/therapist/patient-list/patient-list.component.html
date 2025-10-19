@@ -37,7 +37,7 @@
         [class.selected]="selectedPatientId === (patient.patient_id || patient.patient_id)"
         (click)="viewPatientDetails(patient)">
         <div class="patient-info">
-          <span class="patient-name">{{ patient.firstName }} {{ patient.lastName }}</span>
+          <span class="patient-name">{{ patient.first_name || patient.firstName }} {{ patient.last_name || patient.lastName }}</span>
         </div>
       </div>
     </div>

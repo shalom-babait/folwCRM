@@ -5,6 +5,9 @@
     <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
       עריכה
     </button>
+    <button *ngIf="!isEditing" class="delete-btn" (click)="deletePatient()">
+      מחק
+    </button>
   </div>
 
   <div class="card-content" *ngIf="!isEditing">
@@ -24,8 +27,8 @@
     </div>
     
     <div class="detail-row">
-      <span class="label">גיל:</span>
-      <span class="value">{{ calculateAge() }}</span>
+  <span class="label">גיל:</span>
+  <span class="value">{{ calculateAge() }}</span>
     </div>
     
     <div class="detail-row">
@@ -35,8 +38,14 @@
     
     <div class="detail-row">
       <span class="label">כתובת:</span>
-      <span class="value">{{ patient.address }}</span>
+      <span class="value">{{ patient.address }}   {{ patient.city }}</span>
     </div>
+   
+      <div class="detail-row">
+        <span class="label">תעודת זהות:</span>
+        <span class="value">{{ patient.teudat_zehut }}</span>
+      </div>
+      
   </div>
 
   <!-- מצב עריכה -->

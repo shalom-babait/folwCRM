@@ -5,20 +5,24 @@
 // import { catchError, tap, map } from 'rxjs/operators';
 // import { environment } from 'src/environments/environment';
 
-// export interface Patient {
-//   patient_id?: number;
-//   user_id?: number;
-//   therapist_id?: number;
-//   firstName?: string;
-//   lastName?: string;
-//   birth_date?: string;
-//   gender?: 'זכר' | 'נקבה' | 'אחר';
-//   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
-//   history_notes?: string;
-//   phone?: string;      
-//   email?: string;     
-//   address?: string;   
-// }
+export interface Patient {
+  patient_id?: number;
+  user_id?: number;
+  therapist_id?: number;
+  firstName?: string;
+  lastName?: string;
+  first_name?: string;
+  last_name?: string;
+  birth_date?: string;
+  gender?: 'זכר' | 'נקבה' | 'אחר';
+  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
+  history_notes?: string;
+  phone?: string;      
+  email?: string;
+  address?: string;
+  teudat_zehut?: string;
+  city?: string
+}
 
 // export interface ApiResponse<T> {
 //   success: boolean;
@@ -160,18 +164,8 @@
 //     );
 //   }
 
-//   getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
-//     this.setLoading(true);
 
-//     return this.http.get<ApiResponse<Patient[]>>(
-//       `${this.apiUrl}/patients/byTherapist/${therapistId}`
-//     ).pipe(
-//       map(response => response.data || []),
-//       tap(patients => this.patientsListSubject.next(patients)),
-//       catchError(this.handleError.bind(this)),
-//       tap(() => this.setLoading(false))
-//     );
-//   }
+
 
 //   getPatientById(patient_id: number): Observable<Patient> {
 //     this.setLoading(true);
@@ -396,6 +390,9 @@ export interface AppointmentResponse {
   providedIn: 'root'
 })
 export class PatientService {
+  getPatientOnly(patientId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
+  }
   private apiUrl = environment.apiUrl;
 
   // BehaviorSubjects לניהול מצב
@@ -450,7 +447,9 @@ export class PatientService {
       tap(() => this.setLoading(false))
     );
   }
-
+updatePatient(patientId: number, updatedPatient: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/patients/updatePatient/${patientId}`, updatedPatient);
+}
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
 
@@ -463,26 +462,23 @@ export class PatientService {
   }
 
 
-  getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
-    this.setLoading(true);
+getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
+  this.setLoading(true);
 
-    return this.http.get<ApiResponse<Patient[]>>(
-      `${this.apiUrl}/patients/byTherapist/${therapistId}`
-    ).pipe(
-      map(response => response.data || []),
-      tap(patients => this.patientsListSubject.next(patients)),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
-    );
-  }
-
+  return this.http.get<Patient[]>(
+    `${this.apiUrl}/patients/byTherapist/${therapistId}`
+  ).pipe(
+    tap(patients => this.patientsListSubject.next(patients)),
+    catchError(this.handleError.bind(this)),
+    tap(() => this.setLoading(false))
+  );
+}
   getPatientById(patient_id: number): Observable<Patient> {
     this.setLoading(true);
 
-    return this.http.get<ApiResponse<Patient>>(
-      `${this.apiUrl}/patients/${patient_id}`
+    return this.http.get<Patient>(
+      `${this.apiUrl}/patients/only/${patient_id}`
     ).pipe(
-      map(response => response.data || {} as Patient),
       catchError(this.handleError.bind(this)),
       tap(() => this.setLoading(false))
     );
@@ -516,24 +512,23 @@ export class PatientService {
   }
 
 
-  getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-    // אם יש patientId, קרא מהשרת
-    if (patient_id) {
-      return this.http.get<ApiResponse<AppointmentResponse[]>>(
-        `${environment.apiUrl}/treatments/patient/${patient_id}`
-      ).pipe(
-        map(response => response.data || []),
-        catchError(() => this.getMockTreatments()) // fallback למידע מקומי
-      );
-    }
-
-    // אחרת השתמש במידע המקומי הקיים
-    return this.getMockTreatments();
+getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+  if (patient_id) {
+    return this.http.get<ApiResponse<AppointmentResponse[]>>(
+      `${environment.apiUrl}/treatments/patient/${patient_id}`
+    ).pipe(
+      map(response => response.data || []),
+      catchError(() => this.getMockTreatments(patient_id))
+    );
   }
+  return this.getMockTreatments(patient_id);
+}
 
-  private getMockTreatments(): Observable<AppointmentResponse[]> {
+  private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
     console.log('Fetching all appointments');
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/2/1`).pipe(
+      const id = patient_id || 1;
+
+    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
       tap(appointments => {
         console.log('Raw appointments:', appointments);
       }),
@@ -598,6 +593,7 @@ export class PatientService {
 
     return throwError(() => new Error(errorMessage));
   }
-
-
+deletePatient(patientId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
+}
 }

@@ -1,3 +1,4 @@
+
 // import { Component } from '@angular/core';
 
 // @Component({
@@ -19,6 +20,8 @@ interface Patient {
   email: string;
   birthDate: string;
   address: string;
+  teudat_zehut?: string;
+  city?: string;
 }
 
 @Component({
@@ -29,7 +32,12 @@ interface Patient {
 export class PatientDetailsComponent implements OnChanges {
   @Input() patient!: Patient;
   @Output() patientUpdated = new EventEmitter<Patient>();
-
+  @Output() patientDeleted = new EventEmitter<number>();
+  deletePatient() {
+    if (this.patient && this.patient.id) {
+      this.patientDeleted.emit(this.patient.id);
+    }
+  }
   isEditing = false;
   patientForm: FormGroup;
 

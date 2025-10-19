@@ -16,7 +16,7 @@ const routes: Routes =
   { path: '', component: HomeComponent },
   { path: 'SignUpForCourse', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
-  { path: 'patient', component: PatientDashboardComponent },
+  { path: 'patient/:id', component: PatientDashboardComponent },
   { path: 'patientList', component: PatientListComponent },
   { path: 'therapistDashboard', component: TherapistDashboardComponent },
 ];
