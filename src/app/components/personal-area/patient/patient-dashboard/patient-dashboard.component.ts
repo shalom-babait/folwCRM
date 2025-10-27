@@ -13,6 +13,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./patient-dashboard.component.css']
 })
 export class PatientDashboardComponent implements OnInit {
+  onAppointmentAdded(event: any) {
+    // ניתן להוסיף לוגיקה כאן אם תרצי בעתיד
+  }
+
+  onAppointmentDeleted(event: any) {
+    // ניתן להוסיף לוגיקה כאן אם תרצי בעתיד
+  }
   patient: Patient | null = null;
   appointments: Appointment[] = [];
 
@@ -29,8 +36,10 @@ export class PatientDashboardComponent implements OnInit {
       const id = Number(params.get('id'));
       this.patientId = id;
       if (id) {
-        this.patientService.getPatientById(id).subscribe(data => {
-          console.log('Patient data from server:', data);
+        // שימוש ב-getPatientOnly שמחזיר את כל השדות מה-Users ומה-Patients
+        this.patientService.getPatientOnly(id).subscribe(data => {
+          // ניתן להחזיר לוגים אם צריך דיבאג
+          // console.log('Patient data from server:', data);
           this.patient = {
             ...data,
             patient_id: data.patient_id ?? id ?? 0,
@@ -42,53 +51,35 @@ export class PatientDashboardComponent implements OnInit {
             address: data.address ?? '',
             teudat_zehut: data.teudat_zehut ?? '',
             city: data.city ?? '',
+            gender: data.gender ?? '',
+            status: data.status ?? '',
+            history_notes: data.history_notes ?? '',
+            therapist_id: data.therapist_id ?? undefined,
+            user_id: data.user_id ?? undefined
           };
-          console.log('Patient object for details:', this.patient);
+          // קריאת הפגישות רק אחרי שהמטופל נטען
+          this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+            // ניתן להחזיר לוגים אם צריך דיבאג
+            // console.log('Appointments raw from API:', data);
+            this.appointments = (data || []).map((a: any) => ({
+              ...a,
+              appointment_id: a.appointment_id ?? 0,
+              patient_id: a.patient_id ?? id,
+              room: a.room ?? '',
+              treatment_type: a.treatment_type ?? '',
+              total_minutes: a.total_minutes ?? 0,
+              status: a.status ?? 'מתוזמנת',
+              cost: a.cost ?? 0,
+              place: a.place ?? '',
+              notes: a.notes ?? '',
+              name: a.name ?? '',
+              therapist: a.therapist ?? '',
+              totalCost: a.totalCost ?? 0,
+            }));
+            // ניתן להחזיר לוגים אם צריך דיבאג
+            // console.log('Appointments array for child:', this.appointments);
+          });
         });
-            this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
-              this.appointments = (data || []).map((a: any) => ({
-                ...a,
-                appointment_id: a.appointment_id ?? 0,
-                patient_id: a.patient_id ?? this.patientId,
-                room: a.room ?? '',
-                treatment_type: a.treatment_type ?? '',
-                total_minutes: a.total_minutes ?? 0,
-                status: a.status ?? 'מתוזמנת',
-                cost: a.cost ?? 0,
-                place: a.place ?? '',
-                notes: a.notes ?? '',
-                name: a.name ?? '',
-                therapist: a.therapist ?? '',
-                totalCost: a.totalCost ?? 0,
-              }));
-            });
-//             id: data.patient_id || id || 0,
-//             name: (data.first_name || '') + ' ' + (data.last_name || ''),
-//             phone: data.phone || '',
-//             email: data.email || '',
-//             birthDate: data.birth_date || '',
-//             address: data.address || '',
-//             gender: data.gender || '',
-//             status: data.status || '',
-//             teudat_zehut: data.teudat_zehut || '',
-//             city: data.city || '',
-//           };
-//           console.log('Patient object for details:', this.patient);
-//         });
-//         this.patientService.getTreatments(id).subscribe(data => {
-//           this.treatments = (data || []).map((t: any) => ({
-//             id: t.appointment_id,
-//             appointment_id: t.appointment_id,
-//             appointment_date: t.appointment_date,
-//             start_time: t.start_time,
-//             end_time: t.end_time,
-//             room: t.room,
-//             status: t.status,
-//             treatment_type: t.treatment_type,
-//             patient_id: id,
-//             total_minutes: t.total_minutes
-//           }));
-//         });
       }
     });
   }
@@ -199,9 +190,8 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   get totalHours(): number {
-    const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
-
-    return Math.round((totalMinutes / 60) * 10) / 10;
+  const totalMinutes = (this.appointments || []).reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+  return Math.round((totalMinutes / 60) * 10) / 10;
   }
 
   get totalCost(): number {

@@ -27,6 +27,8 @@ export interface Appointment {
   status?: 'מתוזמנת' | 'הושלמה' | 'בוטלה';
   notes?: string;
   cost?: number;
+  treatment_type?: string;
+  room?: string;
 }
 export interface AppointmentFormInput {
   therapist_id: number;

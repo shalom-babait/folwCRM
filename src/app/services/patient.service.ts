@@ -148,9 +148,8 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
 }
 
   private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-    console.log('Fetching all appointments');
-      const id = patient_id || 1;
-
+    const id = patient_id || 1;
+    console.log('Fetching appointments for patient_id:', id);
     return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
       tap(appointments => {
         console.log('Raw appointments:', appointments);
@@ -160,7 +159,7 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
           console.log('No appointments found');
           return [];
         }
-        return appointments; 
+        return appointments;
       }),
       catchError(error => {
         console.error('Error fetching appointments:', error);
@@ -221,11 +220,11 @@ deletePatient(patientId: number): Observable<any> {
 }
 
 getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-  return this.http.get<ApiResponse<Appointment[]>>(
-    `${this.apiUrl}/appointments/patient/${patientId}`
-  ).pipe(
-    map(response => response.data || []),
-    catchError(this.handleError.bind(this))
-  );
+  // שימוש במוק עבור סביבת פיתוח/טסט
+  const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
+  obs.subscribe(appointments => {
+    console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+  });
+  return obs;
 }
 }

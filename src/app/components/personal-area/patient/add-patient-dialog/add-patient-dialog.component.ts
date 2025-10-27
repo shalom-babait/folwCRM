@@ -44,7 +44,13 @@ export class AddPatientDialogComponent implements OnInit {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      user_id: ['', [Validators.required, Validators.min(1)]],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      teudat_zehut: [''],
+      phone: [''],
+      city: [''],
+      address: [''],
+      email: ['', [Validators.required, Validators.email]],
       therapist_id: [''],
       birth_date: [''],
       gender: [''],
@@ -89,37 +95,56 @@ export class AddPatientDialogComponent implements OnInit {
     if (this.patientForm.valid) {
       this.isSubmitting = true;
 
-      // וודא שיש user_id ושהוא תקין
-      const userId = this.patientForm.value.user_id;
-      if (!userId || userId <= 0) {
-        this.errorHandler.handleError('מזהה משתמש חייב להיות מספר חיובי');
-        this.isSubmitting = false;
-        return;
-      }
-
-      // יצירת אובייקט מסוג CreatePatientRequest
+      // איסוף כל הנתונים מהטופס (משתמש ומטופל)
+      const formValue = this.patientForm.value;
+      // עיבוד תאריך לידה לפורמט YYYY-MM-DD
+      const birthDate = formValue.birth_date ? new Date(formValue.birth_date).toISOString().split('T')[0] : undefined;
       const patientData = {
-        user_id: userId,
-        therapist_id: this.patientForm.value.therapist_id || undefined,
-        birth_date: this.patientForm.value.birth_date ?
-          new Date(this.patientForm.value.birth_date).toISOString().split('T')[0] :
-          undefined,
-        gender: this.patientForm.value.gender || undefined,
-        status: this.patientForm.value.status || 'פעיל',
-        history_notes: this.patientForm.value.history_notes || undefined
+        // שדות משתמש
+        first_name: formValue.first_name,
+        last_name: formValue.last_name,
+        teudat_zehut: formValue.teudat_zehut,
+        phone: formValue.phone,
+        city: formValue.city,
+        address: formValue.address,
+        email: formValue.email,
+        // שדות מטופל
+        therapist_id: formValue.therapist_id || undefined,
+        birth_date: birthDate,
+        gender: formValue.gender || undefined,
+        status: formValue.status || 'פעיל',
+        history_notes: formValue.history_notes || undefined
       };
 
       this.patientService.createPatient(patientData).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          if (response.success) {
+          if (response.success && response.data) {
             this.snackBar.open('המטופל נוסף בהצלחה!', 'סגור', {
               duration: 3000,
               panelClass: ['success-snackbar'],
               horizontalPosition: 'center',
               verticalPosition: 'top'
             });
-            this.dialogRef.close(response.data);
+            // בניית אובייקט מטופל מלא לשימוש ברשימה
+            const user = (response.data as any).user || response.data;
+            const patient = {
+              patient_id: response.data.patient_id,
+              therapist_id: response.data.therapist_id,
+              birth_date: response.data.birth_date,
+              gender: response.data.gender,
+              status: response.data.status,
+              history_notes: response.data.history_notes,
+              user_id: response.data.user_id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              teudat_zehut: user.teudat_zehut,
+              phone: user.phone,
+              city: user.city,
+              address: user.address,
+              email: user.email
+            };
+            this.dialogRef.close(patient);
           } else {
             this.errorHandler.handleError(response.message || 'שגיאה לא ידועה');
           }
