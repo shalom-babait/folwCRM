@@ -4,6 +4,7 @@ import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-trea
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
 
+@Component({
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
   styleUrls: ['./treatment-list.component.css']

@@ -1,10 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators ,AbstractControl} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 // import { TreatmentService } from 'src/app/services/treatment.service'; // לשימוש עתידי
 // import { TreatmentData } from 'src/app/classes/treatment'; // לשימוש עתידי
-
+import { RoomsService } from 'src/app/services/rooms.service';
+import { TypesService } from 'src/app/services/types.service';
+import { Room } from 'src/app/models/room.model';
 //import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import { MatSnackBar } from '@angular/material/snack-bar';
 //import { PatientService } from '../../../../services/patient.service';
@@ -16,33 +19,31 @@ import { ErrorHandlerService } from 'src/app/services/error-handler.service';
   templateUrl: './add-treatment-dialog.component.html',
   styleUrls: ['./add-treatment-dialog.component.css']
 })
-
 export class CreateTreatmentDialogComponent implements OnInit {
   treatmentForm!: FormGroup;
-  places: { id: number; name: string }[] = [];
-
+  rooms: Room[] = [];
+  types: any[] = [];
   constructor(
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
     public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private roomsService: RoomsService,
+    private typesService: TypesService
     // private treatmentService: TreatmentService
-  ) {} 
-
-    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.treatmentForm = this.createForm();
   }
 
   ngOnInit(): void {
-    this.roomsService.getRooms().subscribe({
-      next: (rooms) => {
-        this.places = rooms;
-      },
-      error: (error) => {
-        console.error('Error fetching rooms:', error);
-      }
-    });
-
+this.roomsService.getRooms().subscribe({
+  next: (rooms) => {
+    this.rooms = rooms;
+  },
+  error: (error) => {
+    console.error('Error fetching rooms:', error);
+  }
+});
     this.typesService.getTypes().subscribe({
       next: (type) => {
         this.types = type;
@@ -66,12 +67,6 @@ export class CreateTreatmentDialogComponent implements OnInit {
       place: [null, Validators.required],
       notes: ['', [Validators.maxLength(250)]]
     });
-
-    this.places = [
-      { id: 1, name: 'מרפאה ראשית' },
-      { id: 2, name: 'סניף ירושלים' },
-      { id: 3, name: 'סניף תל אביב' }
-    ];
   }
 
   getFieldLabel(field: string): string {

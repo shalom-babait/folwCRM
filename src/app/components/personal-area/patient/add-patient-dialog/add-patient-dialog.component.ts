@@ -53,10 +53,10 @@ export class AddPatientDialogComponent implements OnInit {
     });
   }
 
-  // // Getter לקבלת שדות הטופס בקלות
-  // get f(): { [key: string]: AbstractControl } {
-  //   return this.patientForm.controls;
-  // }
+  // Getter לקבלת שדות הטופס בקלות
+  get f(): { [key: string]: AbstractControl } {
+    return this.patientForm.controls;
+  }
 
   //מהאינפוטים ומפעילה את הסרויס לטיפול שגיאות פונקציה לקבלת הודעות שגיאה
   getErrorMessage(fieldName: string): string {
