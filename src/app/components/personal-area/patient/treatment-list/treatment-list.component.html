@@ -1,33 +1,31 @@
 <!-- treatment-list.component.html -->
 <div class="patient-list-container">
-    <h1>רשימת טיפולים</h1>
-  
-    <!-- שדה חיפוש -->
-    <div class="search-container">
-      <button class="icon-button" mat-icon-button (click)="openCreateTreatmentDialog()">
-        <mat-icon style="color: #BB7E2B;">add</mat-icon>
-      </button>      
-      <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
-    </div>
-  
-    <!-- כותרות השדות -->
-    <div class="treatment-row header-row">
-      <div class="treatment-cell">תאריך</div>
-      <div class="treatment-cell">שם פגישה</div>
-      <div class="treatment-cell">מקום</div>
-      <div class="treatment-cell">שעת התחלה</div>
-      <div class="treatment-cell">שעת סיום</div>
-      <div class="treatment-cell">סה"כ</div>
-    </div>
-  
-    <!-- רשימת פגישות -->
-    <div class="treatment-row data-row" *ngFor="let treatment of treatments ">
-      <div class="treatment-cell">{{treatment.date}}</div>
-      <div class="treatment-cell">{{treatment.name}}</div>
-      <div class="treatment-cell">{{treatment.therapist}}</div>
-      <div class="treatment-cell">{{treatment.startTime}}</div>
-      <div class="treatment-cell">{{treatment.endTime}}</div>
-      <div class="treatment-cell">{{treatment.totalCost}}</div>
-    </div>
+  <h1>רשימת טיפולים</h1>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+<button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
+  <mat-icon style="color: #BB7E2B;">add</mat-icon>
+</button>
+    <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
   </div>
-  
+
+  <!-- כותרות השדות -->
+  <div class="treatment-row header-row">
+    <div class="treatment-cell">תאריך</div>
+    <div class="treatment-cell">שם פגישה</div>
+    <div class="treatment-cell">מקום</div>
+    <div class="treatment-cell">שעת התחלה</div>
+    <div class="treatment-cell">שעת סיום</div>
+    <div class="treatment-cell">סה"כ</div>
+  </div>
+
+<!-- רשימת פגישות -->
+<div class="treatment-row data-row" *ngFor="let appointment of appointments">
+  <div class="treatment-cell">{{appointment.appointment_date | date:'dd/MM/yyyy'}}</div>
+  <div class="treatment-cell">{{appointment.type_id}}</div>
+  <div class="treatment-cell">{{appointment.room_id}}</div>
+  <div class="treatment-cell">{{appointment.start_time | slice:0:5}}</div>
+  <div class="treatment-cell">{{appointment.end_time | slice:0:5}}</div>
+  <div class="treatment-cell">{{appointment.total_minutes}} דקות</div>
+</div>

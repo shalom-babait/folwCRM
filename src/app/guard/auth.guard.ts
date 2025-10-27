@@ -1,6 +1,6 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
+import { AuthService } from "../services/auth.service";
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -11,25 +11,13 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  const userRole = authService.getRole(); // מחזיר את התפקיד של המשתמש
 
-  switch (userRole) {
-    case 'admin':
-      router.navigate(['/admin-dashboard']);
-      break;
-    case 'secretary':
-      router.navigate(['/secretary-dashboard']);
-      break;
-    case 'therapist':
-      router.navigate(['/therapist-dashboard']);
-      break;
-    case 'patient':
-      router.navigate(['/patient-dashboard']);
-      break;
-    default:
-      router.navigate(['/login']);
-      return false;
+  // הגנה על ראוטים לפי role:
+  const expectedRole = route.data['expectedRole'];
+  if (expectedRole && authService.getRoleFromToken() !== expectedRole) {
+    router.navigate(['/unauthorized']);
+    return false;
   }
 
-  return true; // המשתמש מחובר ויש תפקיד תקין
+  return true; // המשתמש מחובר
 };

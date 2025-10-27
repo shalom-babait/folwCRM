@@ -2,18 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-import { Room } from 'src/app/models/room.model';
+import { Type } from 'src/app/models/type.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoomsService {
-  private apiUrl = `${environment.apiUrl}/rooms`;
+export class TypesService {
+  private apiUrl = `${environment.apiUrl}/types`;
 
   constructor(private http: HttpClient) { }
 
-  getRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiUrl + '/getRooms');
+  getTypes(): Observable<Type[]> {
+    return this.http.get<Type[]>(this.apiUrl + '/getTypes');
   }
 }

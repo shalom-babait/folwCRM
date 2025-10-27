@@ -20,12 +20,12 @@
     <div *ngIf="connectionFormDisplayed">
         <label class="dialogTitle" [class.active]="connectionFormDisplayed" (click)="showConnectionForm()">התחברות</label>
         <div class="connection">
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="username" placeholder="שם משתמש" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="סיסמה" required>
-            <a class="subtitle" (click)="(showSendingPasswordToMail())">?שכחת סיסמה</a>
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="username" placeholder="*כתובת מייל" required [(ngModel)]="username">
+            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="*סיסמה" required [(ngModel)]="password">
+            <a class="subtitle" (click)="showSendingPasswordToMail()">?שכחת סיסמה</a>
             <label class="subtitle" (click)="showEnrollmentForm()">?עוד לא הצטרפת אלינו</label>
         </div>
-        <button class="submitButton">כניסה</button>
+        <button class="submitButton" (click)="onLogin()">כניסה</button>
     </div>
     <div *ngIf="SendingPasswordToMail">
         <div class="showSendingPasswordToMail">

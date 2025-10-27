@@ -11,14 +11,17 @@ import { SecretaryDashboardComponent } from './components/personal-area/secretar
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
 import { PatientListComponent } from './components/personal-area/therapist/patient-list/patient-list.component';
-const routes: Routes = 
-[
+
+const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'SignUpForCourse', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
-  { path: 'patient', component: PatientDashboardComponent },
-  { path: 'patientList', component: PatientListComponent },
-  { path: 'therapistDashboard', component: TherapistDashboardComponent },
+  { path: 'secretary', component: SecretaryDashboardComponent },
+  { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
+  { path: 'patientList', component: PatientListComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+  { path: 'therapistDashboard', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+  { path: 'secretary-dashboard', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' } },
+  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
 ];
 
 @NgModule({

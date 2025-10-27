@@ -1,21 +1,9 @@
 // therapist-dashboard.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { PatientService, Patient } from 'src/app/services/patient.service';
-
-interface Treatment {
-  id: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  place: string;
-  notes: string;
-  duration: number;
-  cost: number;
-  name?: string;
-  therapist?: string;
-  totalCost?: number;
-}
+import { PatientService } from 'src/app/services/patient.service';
+import { Appointment } from 'src/app/models/appointment.model';
+import { Patient } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-therapist-dashboard',
@@ -24,7 +12,7 @@ interface Treatment {
 })
 export class TherapistDashboardComponent implements OnInit, OnDestroy {
   selectedPatient: Patient | null = null;
-  treatments: Treatment[] = [];
+  appointments: Appointment[] = [];
   
   private destroy$ = new Subject<void>();
 
@@ -39,7 +27,7 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
           this.loadPatientData(patientId);
         } else {
           this.selectedPatient = null;
-          this.treatments = [];
+          this.appointments = [];
         }
       });
   }
@@ -57,8 +45,8 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
         next: (patient) => {
           this.selectedPatient = patient;
           console.log('Selected patient data:', this.selectedPatient);
-          // טוענים את הטיפולים של המטופל
-          this.loadPatientTreatments(patientId);
+          // טוענים את הפגישות של המטופל
+          this.loadPatientAppointments(patientId);
         },
         error: (error) => {
           console.error('Error loading patient:', error);
@@ -67,44 +55,31 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  // טעינת טיפולים של המטופל מהשרת
-  loadPatientTreatments(patientId: number) {
+  // טעינת פגישות של המטופל מהשרת
+  loadPatientAppointments(patientId: number) {
     this.patientService.getTreatments(patientId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (treatments) => {
-          // המרה לפורמט של Treatment
-          this.treatments = treatments.map(t => ({
-            id: t.appointment_id || 0,
-            date: t.appointment_date,
-            startTime: t.start_time,
-            endTime: t.end_time,
-            place: t.room,
-            notes: '',
-            duration: t.total_minutes,
-            cost: 0, // יש להוסיף אם יש מידע על עלות
-            name: t.treatment_type,
-            therapist: t.room,
-            totalCost: 0
-          }));
-          console.log('Treatments loaded:', this.treatments);
+        next: (appointments) => {
+          this.appointments = appointments;
+          console.log('Appointments loaded:', this.appointments);
         },
         error: (error) => {
-          console.error('Error loading treatments:', error);
-          this.treatments = [];
+          console.error('Error loading appointments:', error);
+          this.appointments = [];
         }
       });
   }
 
   // חישוב סך שעות טיפול
   get totalHours(): number {
-    const totalMinutes = this.treatments.reduce((sum, treatment) => sum + treatment.duration, 0);
+    const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
     return Math.round((totalMinutes / 60) * 10) / 10;
   }
 
   // חישוב סך עלות
   get totalCost(): number {
-    return this.treatments.reduce((sum, treatment) => sum + treatment.cost, 0);
+    return this.appointments.reduce((sum, appointment) => sum + (appointment.cost || 0), 0);
   }
 
   // עדכון פרטי מטופל
@@ -114,13 +89,5 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
     console.log('Patient updated:', updatedPatient);
     // אם יש לך API לעדכון מטופל:
     // this.patientService.updatePatient(updatedPatient).subscribe(...)
-  }
-
-  // מחיקת טיפול
-  onTreatmentDeleted(treatmentId: number): void {
-    this.treatments = this.treatments.filter(t => t.id !== treatmentId);
-    console.log('Treatment deleted:', treatmentId);
-    // כאן ניתן להוסיף מחיקה בשרת
-    // this.patientService.deleteTreatment(treatmentId).subscribe(...)
   }
 }

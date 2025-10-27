@@ -1,0 +1,52 @@
+<!-- therapist-list.component.html -->
+<div class="therapist-list-card">
+  <div class="card-header">
+    <h3>רשימת מטפלים</h3>
+    <div class="header-actions">
+      <button 
+        class="add-therapist-btn"
+        (click)="openAddTherapistDialog()"
+        [disabled]="isLoading"
+        matTooltip="הוסף מטפל חדש"
+        matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף מטפל</span>
+      </button>
+      <button 
+        class="search-btn"
+        (click)="openSearchDialog()"
+        [disabled]="isLoading"
+        matTooltip="חיפוש מטפל">
+        <mat-icon>search</mat-icon>
+        <span>חיפוש</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-content">
+    <!-- אינדיקטור טעינה -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- רשימת מטפלים -->
+    <div *ngIf="!isLoading && therapists.length > 0">
+      <div 
+        class="therapist-card" 
+        *ngFor="let therapist of therapists"
+        [class.selected]="selectedTherapistId === (therapist.therapist_id || therapist.therapist_id)"
+        (click)="viewTherapistDetails(therapist)">
+        <div class="therapist-info">
+          <!-- <span class="therapist-name">{{ therapist.firstName }} {{ therapist.lastName }}</span> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- הודעה אם אין מטפלים -->
+    <div *ngIf="!isLoading && therapists.length === 0" class="no-therapists">
+      <p>אין מטפלים כרגע</p>
+      <p>לחץ על "הוסף מטפל" כדי להתחיל</p>
+    </div>
+  </div>
+</div>
+

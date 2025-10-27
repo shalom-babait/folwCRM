@@ -1,26 +1,6 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-patient-details',
-//   templateUrl: './patient-details.component.html',
-//   styleUrls: ['./patient-details.component.css']
-// })
-// export class PatientDetailsComponent {
-
-// }
-// patient-details.component.ts
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-interface Patient {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  birthDate: string;
-  address: string;
-}
-
+import { Patient } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-details',
   templateUrl: './patient-details.component.html',
@@ -35,10 +15,11 @@ export class PatientDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.patientForm = this.fb.group({
-      name: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       phone: ['', Validators.required], 
       email: ['', [Validators.required, Validators.email]],
-      birthDate: ['', Validators.required],
+      birth_date: ['', Validators.required],
       address: ['', Validators.required]
     });
   }
@@ -71,10 +52,10 @@ export class PatientDetailsComponent implements OnChanges {
   }
 
   calculateAge(): number {
-    if (!this.patient?.birthDate) return 0;
+  if (!this.patient?.birth_date) return 0;
     
     const today = new Date();
-    const birthDate = new Date(this.patient.birthDate);
+  const birthDate = new Date(this.patient.birth_date);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     

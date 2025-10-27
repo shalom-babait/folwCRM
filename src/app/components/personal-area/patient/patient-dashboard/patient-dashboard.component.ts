@@ -1,54 +1,8 @@
-// import { Component } from '@angular/core';
-// import { Patient, PatientService } from 'src/app/services/patient.service';
-
-// @Component({
-//   selector: 'app-patient-dashboard',
-//   templateUrl: './patient-dashboard.component.html',
-//   styleUrls: ['./patient-dashboard.component.css']
-// })
-// export class PatientDashboardComponent {
-//   patient: Patient | null = null;
-
-//   constructor(private patientService: PatientService) {}
-
-//   ngOnInit() {
-//     // נרשם ל-BehaviorSubject כדי לקבל את המטופל שנבחר
-//     this.patientService.selectedPatient$.subscribe(patientId => {
-//       if (patientId !== null) {
-//         this.patientService.getPatientById(patientId).subscribe(data => {
-//           this.patient = data;
-//         });
-//       }
-//     });
-//   }
-// }
-// patient-dashboard.component.ts
-// patient-dashboard.component.ts
-// patient-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
-
-interface Patient {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  birthDate: string;
-  address: string;
-}
-
-interface Treatment {
-  id: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  place: string;
-  notes: string;
-  duration: number; // בדקות
-  cost: number;
-  name?: string; // הוסף את השדה הזה
-  therapist?: string; // הוסף את השדה הזה
-  totalCost?: number; // הוסף את השדה הזה
-}
+import { PatientService } from 'src/app/services/patient.service';
+import { Patient } from 'src/app/models/patient.model';
+import { Appointment } from 'src/app/models/appointment.model';import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-patient-dashboard',
@@ -56,90 +10,130 @@ interface Treatment {
   styleUrls: ['./patient-dashboard.component.css']
 })
 export class PatientDashboardComponent implements OnInit {
-  
-  // פרטי המטופל
-  patient: Patient = {
-    id: 1,
-    name: 'ישראל ישראלי',
-    phone: '050-123-4567',
-    email: 'israel@example.com',
-    birthDate: '1985-05-15',
-    address: 'רחוב הרצל 123, תל אביב'
-  };
+  patient: Patient | null = null;
+  appointments: Appointment[] = [];
+  patientId: number = 0;
 
-  // רשימת הטיפולים
-  treatments: Treatment[] = [
-    {
-      id: 1,
-      date: '2024-01-15',
-      startTime: '10:00',
-      endTime: '11:30',
-      place: 'מרכז רפואי',
-      notes: 'טיפול ראשון',
-      duration: 90,
-      cost: 300,
-      name: 'טיפול פיזיותרפיה',
-      therapist: 'מרכז רפואי הדסה',
-      totalCost: 300
-    },
-    {
-      id: 2,
-      date: '2024-01-18',
-      startTime: '14:00',
-      endTime: '15:00',
-      place: 'קליניקה פרטית',
-      notes: 'המשך טיפול',
-      duration: 60,
-      cost: 250,
-      name: 'בדיקת מעקב',
-      therapist: 'קליניקה פרטית',
-      totalCost: 250
-    },
-    {
-      id: 3,
-      date: '2024-01-22',
-      startTime: '09:00',
-      endTime: '10:30',
-      place: 'מרכז רפואי',
-      notes: 'בדיקת מעקב',
-      duration: 90,
-      cost: 300,
-      name: 'טיפול השלמה',
-      therapist: 'מרכז רפואי הדסה',
-      totalCost: 300
-    }
-  ];
+  constructor(
+  private patientService: PatientService,
+  private route: ActivatedRoute,
+  private snackBar: MatSnackBar
+  ) {}
 
-  constructor() { }
-
-  ngOnInit(): void { }
-
-  // חישוב סך שעות טיפול
-  get totalHours(): number {
-    const totalMinutes = this.treatments.reduce((sum, treatment) => sum + treatment.duration, 0);
-    return Math.round((totalMinutes / 60) * 10) / 10; // עיגול לעשירית
-  }
-
-  // חישוב סך עלות
-  get totalCost(): number {
-    return this.treatments.reduce((sum, treatment) => sum + treatment.cost, 0);
-  }
-
-  // עדכון פרטי מטופל
-  onPatientUpdated(updatedPatient: Patient): void {
-    this.patient = { ...updatedPatient };
-  }
-
-  // הוספת טיפול חדש
-  onTreatmentAdded(newTreatment: Treatment): void {
-    this.treatments.push({
-      ...newTreatment,
-      id: Math.max(...this.treatments.map(t => t.id)) + 1
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      this.patientId = id;
+      if (id) {
+        this.patientService.getPatientById(id).subscribe(data => {
+          console.log('Patient data from server:', data);
+          this.patient = {
+            ...data,
+            patient_id: data.patient_id ?? id ?? 0,
+            first_name: data.first_name ?? '',
+            last_name: data.last_name ?? '',
+            birth_date: data.birth_date ?? '',
+            phone: data.phone ?? '',
+            email: data.email ?? '',
+            address: data.address ?? '',
+            teudat_zehut: data.teudat_zehut ?? '',
+            city: data.city ?? '',
+          };
+          console.log('Patient object for details:', this.patient);
+        });
+            this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+              this.appointments = (data || []).map((a: any) => ({
+                ...a,
+                appointment_id: a.appointment_id ?? 0,
+                patient_id: a.patient_id ?? this.patientId,
+                room: a.room ?? '',
+                treatment_type: a.treatment_type ?? '',
+                total_minutes: a.total_minutes ?? 0,
+                status: a.status ?? 'מתוזמנת',
+                cost: a.cost ?? 0,
+                place: a.place ?? '',
+                notes: a.notes ?? '',
+                name: a.name ?? '',
+                therapist: a.therapist ?? '',
+                totalCost: a.totalCost ?? 0,
+              }));
+            });
+      }
     });
   }
 
-  // מחיקת טיפול
-  onTreatmentDeleted(treatmentId: number): void {
-    this.treatments = this.treatments.filter(t => t.id !== treatmentId);
+  onPatientUpdated(updatedPatient: Patient) {
+    if (!this.patient) return;
+    const backendPatient = {
+      first_name: updatedPatient.first_name ?? '',
+      last_name: updatedPatient.last_name ?? '',
+      phone: updatedPatient.phone ?? '',
+      email: updatedPatient.email ?? '',
+      birth_date: updatedPatient.birth_date ?? '',
+      address: updatedPatient.address ?? '',
+      teudat_zehut: updatedPatient.teudat_zehut ?? '',
+      city: updatedPatient.city ?? '',
+      gender: updatedPatient.gender ?? undefined,
+      status: updatedPatient.status ?? undefined,
+      history_notes: updatedPatient.history_notes ?? undefined,
+    };
+    this.patientService.updatePatient(this.patient?.patient_id ?? 0, backendPatient).subscribe(
+      (res) => {
+        console.log('Update response:', res);
+        // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
+        if (this.patient && this.patient.patient_id) {
+          // השתמש ב-endpoint שמחזיר את כל נתוני המטופל כולל Users
+          this.patientService.getPatientOnly(this.patient.patient_id).subscribe(data => {
+            console.log('Reloaded patient after update:', data);
+            if (data) {
+              this.patient = {
+                patient_id: data.patient_id ?? (this.patient ? this.patient.patient_id : 0),
+                user_id: data.user_id ?? undefined,
+                therapist_id: data.therapist_id ?? undefined,
+                first_name: data.first_name ?? '',
+                last_name: data.last_name ?? '',
+                birth_date: data.birth_date ?? '',
+                gender: data.gender ?? undefined,
+                status: data.status ?? undefined,
+                history_notes: data.history_notes ?? undefined,
+                phone: data.phone ?? '',
+                email: data.email ?? '',
+                address: data.address ?? '',
+                teudat_zehut: data.teudat_zehut ?? '',
+                city: data.city ?? '',
+              };
+            }
+          }, err => {
+            console.error('Error reloading patient after update:', err);
+          });
+        }
+        this.snackBar.open('העריכה בוצעה בהצלחה!', 'סגור', {
+          duration: 3500,
+          panelClass: 'custom-snackbar',
+          direction: 'rtl'
+        });
+      },
+      (err) => {
+        console.error('Error updating patient:', err);
+        this.snackBar.open('אירעה שגיאה בעת העריכה.', 'סגור', {
+          duration: 3500,
+          panelClass: 'custom-snackbar',
+          direction: 'rtl'
+        });
+      }
+    );
+  }
+
+  onTreatmentDeleted(treatmentId: number) {
+    this.appointments = this.appointments.filter(t => t.appointment_id !== treatmentId);
+  }
+
+  get totalHours(): number {
+    const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+    return Math.round((totalMinutes / 60) * 10) / 10;
+  }
+
+  get totalCost(): number {
+    return 0;
   }
 }

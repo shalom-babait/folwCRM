@@ -13,6 +13,7 @@
         
         <!-- פרטי מטופל -->
         <app-patient-details 
+          *ngIf="patient"
           [patient]="patient"
           (patientUpdated)="onPatientUpdated($event)">
         </app-patient-details>
@@ -21,16 +22,18 @@
         <app-treatment-summary
           [totalHours]="totalHours"
           [totalCost]="totalCost"
-          [treatmentCount]="treatments.length">
+          [treatmentCount]="appointments.length">
         </app-treatment-summary>
         
       </div>
   
       <!-- עמודה ימנית - רשימת טיפולים -->
       <div class="main-content">
-        <app-treatment-list
-          (treatmentDeleted)="onTreatmentDeleted($event)">
-        </app-treatment-list>
+        <!-- <app-treatment-list
+          [appointments]="appointments"
+          (appointmentAdded)="onAppointmentAdded($event)"
+          (appointmentDeleted)="onAppointmentDeleted($event)">
+        </app-treatment-list> -->
       </div>
 
     </div>
