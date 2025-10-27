@@ -1,122 +1,201 @@
-/* therapist-dashboard.component.css */
-.therapist-area-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: Arial, sans-serif;
-    direction: rtl;
-    background-color: #f8f9fa;
-    min-height: 100vh;
+Header Styles
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #022F39;
+  max-height: 8rem;
+}
+
+.divLogo {
+  width: 15%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo {
+  height: 8rem;
+  background-color: white;
+}
+
+/* Navigation Buttons */
+.buttonLink {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  width: 50%;
+}
+
+.buttonLink ul {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  width: 100%;
+}
+
+.buttonLink button {
+  background: none;
+  border: none;
+  font-size: larger;
+  color: white;
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.buttonLink button:hover {
+  color: #BB7E2B;
+}
+
+.buttonLink button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #BB7E2B;
+  transition: width 0.3s ease;
+}
+
+.buttonLink button:hover::after {
+  width: 80%;
+}
+
+/* User Profile Styles */
+.user-profile-container {
+  position: relative;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #BB7E2B;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.user-avatar:hover {
+  border-color: #d89b3d;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(187, 126, 43, 0.4);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Profile Menu Dropdown */
+.profile-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  min-width: 200px;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+  direction: rtl;
+  overflow: hidden;
+  border: 1px solid #d0d7de;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-menu-header {
+  padding: 16px;
+  background: linear-gradient(135deg, #022F39 0%, #034a5a 100%);
+  color: white;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.menu-divider {
+  display: none;
+}
+
+.profile-menu-items {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.profile-menu-items li {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.profile-menu-items li:hover {
+  background: #f6f8fa;
+}
+
+.menu-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.profile-menu-items li.logout {
+  color: #d32f2f;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 8px;
+  padding-top: 12px;
+}
+
+.profile-menu-items li.logout:hover {
+  background: #fff5f5;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .buttonLink button {
+    font-size: medium;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 992px) {
+  .buttonLink button {
+    font-size: small;
+    padding: 6px 10px;
   }
   
-  .therapist-area-header {
-    text-align: center;
-    margin-bottom: 2rem;
+  .divLogo {
+    width: 12%;
   }
-  
-  .therapist-area-header h1 {
-    color: #022F39;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .therapist-area-content {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-  
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .main-content {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    min-height: 500px;
-  }
-  
-  /* הודעת ברוכים הבאים */
-  .welcome-message {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: #666;
-  }
-  
-  .welcome-message h2 {
-    color: #022F39;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .welcome-message p {
-    font-size: 1.1rem;
-    color: #666;
-  }
-  
-  /* רספונסיביות */
-  @media (max-width: 1024px) {
-    .therapist-area-content {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    
-    .sidebar {
-      order: 2;
-    }
-    
-    .main-content {
-      order: 1;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .therapist-area-container {
-      padding: 1rem;
-    }
-    
-    .therapist-area-header h1 {
-      font-size: 2rem;
-    }
-    
-    .main-content {
-      padding: 1.5rem;
-      min-height: 300px;
-    }
-    
-    .welcome-message {
-      padding: 3rem 1rem;
-    }
-    
-    .welcome-message h2 {
-      font-size: 1.5rem;
-    }
-    
-    .welcome-message p {
-      font-size: 1rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .therapist-area-header h1 {
-      font-size: 1.7rem;
-    }
-    
-    .main-content {
-      padding: 1rem;
-    }
-    
-    .welcome-message {
-      padding: 2rem 1rem;
-    }
-    
-    .welcome-message h2 {
-      font-size: 1.3rem;
-    }
-  }
+}
