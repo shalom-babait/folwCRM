@@ -3,9 +3,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
-import { PatientService, Patient } from 'src/app/services/patient.service';
+import { PatientService } from 'src/app/services/patient.service';
 import { AddPatientDialogComponent } from '../../patient/add-patient-dialog/add-patient-dialog.component';
-
+import { Patient } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',

@@ -1,33 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { PatientService, AppointmentResponse } from 'src/app/services/patient.service';
-import { ActivatedRoute } from '@angular/router';
+import { PatientService } from 'src/app/services/patient.service';
+import { Patient } from 'src/app/models/patient.model';
+import { Appointment } from 'src/app/models/appointment.model';import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+//import { ActivatedRoute } from '@angular/router';
+//import { MatSnackBar } from '@angular/material/snack-bar';
 
-interface Patient {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  birthDate: string;
-  address: string;
-  gender?: string;
-  status?: string;
-  teudat_zehut?: string;
-  city?: string;
-}
-
-interface Treatment {
-  id: number;
-  appointment_id: number;
-  appointment_date: string;
-  start_time: string;
-  end_time: string;
-  room: string;
-  status: string;
-  treatment_type: string;
-  patient_id: number;
-  total_minutes?: number;
-}
 
 @Component({
   selector: 'app-patient-dashboard',
@@ -36,7 +14,8 @@ interface Treatment {
 })
 export class PatientDashboardComponent implements OnInit {
   patient: Patient | null = null;
-  treatments: Treatment[] = [];
+  appointments: Appointment[] = [];
+
   patientId: number = 0;
 
   constructor(
@@ -53,77 +32,143 @@ export class PatientDashboardComponent implements OnInit {
         this.patientService.getPatientById(id).subscribe(data => {
           console.log('Patient data from server:', data);
           this.patient = {
-            id: data.patient_id || id || 0,
-            name: (data.first_name || '') + ' ' + (data.last_name || ''),
-            phone: data.phone || '',
-            email: data.email || '',
-            birthDate: data.birth_date || '',
-            address: data.address || '',
-            gender: data.gender || '',
-            status: data.status || '',
-            teudat_zehut: data.teudat_zehut || '',
-            city: data.city || '',
+            ...data,
+            patient_id: data.patient_id ?? id ?? 0,
+            first_name: data.first_name ?? '',
+            last_name: data.last_name ?? '',
+            birth_date: data.birth_date ?? '',
+            phone: data.phone ?? '',
+            email: data.email ?? '',
+            address: data.address ?? '',
+            teudat_zehut: data.teudat_zehut ?? '',
+            city: data.city ?? '',
           };
           console.log('Patient object for details:', this.patient);
         });
-        this.patientService.getTreatments(id).subscribe(data => {
-          this.treatments = (data || []).map((t: any) => ({
-            id: t.appointment_id,
-            appointment_id: t.appointment_id,
-            appointment_date: t.appointment_date,
-            start_time: t.start_time,
-            end_time: t.end_time,
-            room: t.room,
-            status: t.status,
-            treatment_type: t.treatment_type,
-            patient_id: id,
-            total_minutes: t.total_minutes
-          }));
-        });
+            this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+              this.appointments = (data || []).map((a: any) => ({
+                ...a,
+                appointment_id: a.appointment_id ?? 0,
+                patient_id: a.patient_id ?? this.patientId,
+                room: a.room ?? '',
+                treatment_type: a.treatment_type ?? '',
+                total_minutes: a.total_minutes ?? 0,
+                status: a.status ?? 'מתוזמנת',
+                cost: a.cost ?? 0,
+                place: a.place ?? '',
+                notes: a.notes ?? '',
+                name: a.name ?? '',
+                therapist: a.therapist ?? '',
+                totalCost: a.totalCost ?? 0,
+              }));
+            });
+//             id: data.patient_id || id || 0,
+//             name: (data.first_name || '') + ' ' + (data.last_name || ''),
+//             phone: data.phone || '',
+//             email: data.email || '',
+//             birthDate: data.birth_date || '',
+//             address: data.address || '',
+//             gender: data.gender || '',
+//             status: data.status || '',
+//             teudat_zehut: data.teudat_zehut || '',
+//             city: data.city || '',
+//           };
+//           console.log('Patient object for details:', this.patient);
+//         });
+//         this.patientService.getTreatments(id).subscribe(data => {
+//           this.treatments = (data || []).map((t: any) => ({
+//             id: t.appointment_id,
+//             appointment_id: t.appointment_id,
+//             appointment_date: t.appointment_date,
+//             start_time: t.start_time,
+//             end_time: t.end_time,
+//             room: t.room,
+//             status: t.status,
+//             treatment_type: t.treatment_type,
+//             patient_id: id,
+//             total_minutes: t.total_minutes
+//           }));
+//         });
       }
     });
   }
 
   onPatientUpdated(updatedPatient: Patient) {
     if (!this.patient) return;
-    // Split name into first_name and last_name for backend
-    let first_name = '';
-    let last_name = '';
-    if (updatedPatient.name) {
-      const nameParts = updatedPatient.name.split(' ');
-      first_name = nameParts[0] || '';
-      last_name = nameParts.slice(1).join(' ') || '';
-    }
     const backendPatient = {
-      first_name,
-      last_name,
-      phone: updatedPatient.phone,
-      email: updatedPatient.email,
-      birth_date: updatedPatient.birthDate,
-      address: updatedPatient.address,
-      teudat_zehut: updatedPatient.teudat_zehut,
-      city: updatedPatient.city,
-      gender: updatedPatient.gender,
-      status: updatedPatient.status
+      first_name: updatedPatient.first_name ?? '',
+      last_name: updatedPatient.last_name ?? '',
+      phone: updatedPatient.phone ?? '',
+      email: updatedPatient.email ?? '',
+      birth_date: updatedPatient.birth_date ?? '',
+      address: updatedPatient.address ?? '',
+      teudat_zehut: updatedPatient.teudat_zehut ?? '',
+      city: updatedPatient.city ?? '',
+      gender: updatedPatient.gender ?? undefined,
+      status: updatedPatient.status ?? undefined,
+      history_notes: updatedPatient.history_notes ?? undefined,
     };
-    this.patientService.updatePatient(this.patient?.id ?? 0, backendPatient).subscribe(
+    this.patientService.updatePatient(this.patient?.patient_id ?? 0, backendPatient).subscribe(
       (res) => {
         console.log('Update response:', res);
         // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
-        if (this.patient && this.patient.id) {
+        if (this.patient && this.patient.patient_id) {
           // השתמש ב-endpoint שמחזיר את כל נתוני המטופל כולל Users
-          this.patientService.getPatientOnly(this.patient.id).subscribe(data => {
+          this.patientService.getPatientOnly(this.patient.patient_id).subscribe(data => {
             console.log('Reloaded patient after update:', data);
             if (data) {
               this.patient = {
-                id: (data && data.patient_id != null) ? data.patient_id : ((this.patient && this.patient.id) ? this.patient.id : 0),
-                name: (data.first_name ?? '') + ' ' + (data.last_name ?? ''),
+                patient_id: data.patient_id ?? (this.patient ? this.patient.patient_id : 0),
+                user_id: data.user_id ?? undefined,
+                therapist_id: data.therapist_id ?? undefined,
+                first_name: data.first_name ?? '',
+                last_name: data.last_name ?? '',
+                birth_date: data.birth_date ?? '',
+                gender: data.gender ?? undefined,
+                status: data.status ?? undefined,
+                history_notes: data.history_notes ?? undefined,
                 phone: data.phone ?? '',
                 email: data.email ?? '',
-                birthDate: data.birth_date ?? '',
                 address: data.address ?? '',
-                gender: data.gender ?? '',
-                status: data.status ?? '',
+
+//     // Split name into first_name and last_name for backend
+//     let first_name = '';
+//     let last_name = '';
+//     if (updatedPatient.name) {
+//       const nameParts = updatedPatient.name.split(' ');
+//       first_name = nameParts[0] || '';
+//       last_name = nameParts.slice(1).join(' ') || '';
+//     }
+//     const backendPatient = {
+//       first_name,
+//       last_name,
+//       phone: updatedPatient.phone,
+//       email: updatedPatient.email,
+//       birth_date: updatedPatient.birthDate,
+//       address: updatedPatient.address,
+//       teudat_zehut: updatedPatient.teudat_zehut,
+//       city: updatedPatient.city,
+//       gender: updatedPatient.gender,
+//       status: updatedPatient.status
+//     };
+//     this.patientService.updatePatient(this.patient?.id ?? 0, backendPatient).subscribe(
+//       (res) => {
+//         console.log('Update response:', res);
+//         // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
+//         if (this.patient && this.patient.id) {
+//           // השתמש ב-endpoint שמחזיר את כל נתוני המטופל כולל Users
+//           this.patientService.getPatientOnly(this.patient.id).subscribe(data => {
+//             console.log('Reloaded patient after update:', data);
+//             if (data) {
+//               this.patient = {
+//                 id: (data && data.patient_id != null) ? data.patient_id : ((this.patient && this.patient.id) ? this.patient.id : 0),
+//                 name: (data.first_name ?? '') + ' ' + (data.last_name ?? ''),
+//                 phone: data.phone ?? '',
+//                 email: data.email ?? '',
+//                 birthDate: data.birth_date ?? '',
+//                 address: data.address ?? '',
+//                 gender: data.gender ?? '',
+//                 status: data.status ?? '',
                 teudat_zehut: data.teudat_zehut ?? '',
                 city: data.city ?? '',
               };
@@ -150,11 +195,12 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   onTreatmentDeleted(treatmentId: number) {
-    this.treatments = this.treatments.filter(t => t.appointment_id !== treatmentId);
+    this.appointments = this.appointments.filter(t => t.appointment_id !== treatmentId);
   }
 
   get totalHours(): number {
-    const totalMinutes = this.treatments.reduce((sum, treatment) => sum + (treatment.total_minutes || 0), 0);
+    const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+
     return Math.round((totalMinutes / 60) * 10) / 10;
   }
 

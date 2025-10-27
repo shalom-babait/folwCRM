@@ -3,7 +3,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PatientService, Patient } from '../../../../services/patient.service';
+import { PatientService } from '../../../../services/patient.service';
+import { Patient } from 'src/app/models/patient.model';import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
 @Component({
   selector: 'app-add-patient-dialog',
@@ -18,8 +19,7 @@ export class AddPatientDialogComponent implements OnInit {
   genderOptions = [
     { value: 'זכר', label: 'זכר' },
     { value: 'נקבה', label: 'נקבה' },
-    { value: 'אחר', label: 'אחר' }
-  ];
+    ];
 
   statusOptions = [
     { value: 'פעיל', label: 'פעיל' },
@@ -32,16 +32,14 @@ export class AddPatientDialogComponent implements OnInit {
     private patientService: PatientService,
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<AddPatientDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private errorHandler: ErrorHandlerService 
   ) {
     this.patientForm = this.createForm();
   }
 
   ngOnInit(): void {
-    // אם יש נתונים ראשוניים, נכניס אותם לטופס
-    if (this.data && this.data.initialData) {
-      this.patientForm.patchValue(this.data.initialData);
-    }
+
   }
 
   private createForm(): FormGroup {
@@ -55,31 +53,25 @@ export class AddPatientDialogComponent implements OnInit {
     });
   }
 
-  // Getter לקבלת שדות הטופס בקלות
-  get f(): { [key: string]: AbstractControl } {
-    return this.patientForm.controls;
-  }
+  // // Getter לקבלת שדות הטופס בקלות
+  // get f(): { [key: string]: AbstractControl } {
+  //   return this.patientForm.controls;
+  // }
 
-  // פונקציה לקבלת הודעות שגיאה
+  //מהאינפוטים ומפעילה את הסרויס לטיפול שגיאות פונקציה לקבלת הודעות שגיאה
   getErrorMessage(fieldName: string): string {
     const field = this.patientForm.get(fieldName);
-
-    if (field?.hasError('required')) {
-      return `${this.getFieldLabel(fieldName)} הוא שדה חובה`;
+    if (!field) return '';
+    const errors = field.errors;
+    if (!errors) return '';
+    for (const errorKey in errors) {
+      this.errorHandler.handleValidationError(fieldName, errorKey, this.getFieldLabel(fieldName), errors[errorKey]);
+      break;
     }
-
-    if (field?.hasError('min')) {
-      return `${this.getFieldLabel(fieldName)} חייב להיות גדול מ-0`;
-    }
-
-    if (field?.hasError('maxlength')) {
-      const maxLength = field.errors?.['maxlength']?.requiredLength;
-      return `${this.getFieldLabel(fieldName)} לא יכול להיות יותר מ-${maxLength} תווים`;
-    }
-
     return '';
   }
 
+// במקום שיהיה באנגלית יהיה בעברית- פונקציה לקבלת תוויות שדות
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
       'user_id': 'מזהה משתמש',
@@ -100,7 +92,7 @@ export class AddPatientDialogComponent implements OnInit {
       // וודא שיש user_id ושהוא תקין
       const userId = this.patientForm.value.user_id;
       if (!userId || userId <= 0) {
-        this.handleError('מזהה משתמש חייב להיות מספר חיובי');
+        this.errorHandler.handleError('מזהה משתמש חייב להיות מספר חיובי');
         this.isSubmitting = false;
         return;
       }
@@ -129,12 +121,12 @@ export class AddPatientDialogComponent implements OnInit {
             });
             this.dialogRef.close(response.data);
           } else {
-            this.handleError(response.message || 'שגיאה לא ידועה');
+            this.errorHandler.handleError(response.message || 'שגיאה לא ידועה');
           }
         },
         error: (error) => {
           this.isSubmitting = false;
-          this.handleError(error.message);
+          this.errorHandler.handleApiError(error);
         }
       });
     } else {
@@ -144,23 +136,11 @@ export class AddPatientDialogComponent implements OnInit {
         control?.markAsTouched();
       });
 
-      this.snackBar.open('אנא תקן את השגיאות בטופס', 'סגור', {
-        duration: 3000,
-        panelClass: ['error-snackbar'],
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
+      this.errorHandler.handleError('אנא תקן את השגיאות בטופס');
     }
   }
   
-  private handleError(message: string): void {
-    this.snackBar.open(`שגיאה: ${message}`, 'סגור', {
-      duration: 5000,
-      panelClass: ['error-snackbar'],
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
-  }
+  // פונקציית handleError נמחקה – משתמשים ב-ErrorHandlerService
 
   onCancel(): void {
     this.dialogRef.close();
@@ -170,7 +150,7 @@ export class AddPatientDialogComponent implements OnInit {
   onReset(): void {
     this.patientForm.reset();
     this.patientForm.patchValue({
-      status: 'פעיל' // ערך ברירת מחדל
+      status: 'פעיל' 
     });
   }
 }

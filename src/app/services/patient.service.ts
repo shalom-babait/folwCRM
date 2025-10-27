@@ -1,111 +1,13 @@
-
-export interface Patient {
-  patient_id?: number;
-  user_id?: number;
-  therapist_id?: number;
-  firstName?: string;
-  lastName?: string;
-  first_name?: string;
-  last_name?: string;
-  birth_date?: string;
-  gender?: 'זכר' | 'נקבה' | 'אחר';
-  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
-  history_notes?: string;
-  phone?: string;      
-  email?: string;
-  address?: string;
-  teudat_zehut?: string;
-  city?: string
-}
-
+import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
+import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-export interface Patient {
-  patient_id?: number;
-  user_id?: number;
-  therapist_id?: number;
-  firstName?: string;
-  lastName?: string;
-  birth_date?: string;
-  gender?: 'זכר' | 'נקבה' | 'אחר';
-  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
-  history_notes?: string;
-}
+import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
 
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-}
-
-export interface CreatePatientRequest {
-  user_id: number;
-  therapist_id?: number;
-  birth_date?: string;
-  gender?: 'זכר' | 'נקבה' | 'אחר';
-  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
-  history_notes?: string;
-}
-
-export interface UpdatePatientRequest extends Partial<CreatePatientRequest> {
-  patient_id: number;
-}
-
-export interface Treatment {
-  treatment_id?: number;
-  patient_id: number;
-  therapist_id: number;
-  date: string;
-  name: string;
-  therapist: string;
-  startTime: string;
-  endTime: string;
-  totalCost: number;
-  notes?: string;
-  status?: 'מתוכנן' | 'בוצע' | 'בוטל';
-}
-
-export interface Appointment {
-  appointment_id?: number;
-  therapist_id: number;
-  patient_id: number;
-  type_id: number;
-  room_id: number;
-  appointment_date: string;
-  start_time: string;
-  end_time: string;
-  status?: string;
-  notes?: string;
-  total_minutes?: number;
-}
-
-export interface CreateAppointmentRequest {
-  therapist_id: number;
-  patient_id: number;
-  type_id: number;
-  room_id: number;
-  appointment_date: string;
-  start_time: string;
-  end_time: string;
-  status?: string;
-  notes?: string;
-}
-
-export interface AppointmentResponse {
-  appointment_date: string;
-  appointment_id: number;
-  end_time: string;
-  room: string;
-  start_time: string;
-  status: string;
-  total_minutes: number;
-  treatment_type: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -316,5 +218,14 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
   }
 deletePatient(patientId: number): Observable<any> {
   return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
+}
+
+getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
+  return this.http.get<ApiResponse<Appointment[]>>(
+    `${this.apiUrl}/appointments/patient/${patientId}`
+  ).pipe(
+    map(response => response.data || []),
+    catchError(this.handleError.bind(this))
+  );
 }
 }
