@@ -25,7 +25,15 @@
       <div class="form-field">
         <label for="place">מקום</label>
         <select id="place" formControlName="place">
-          <option *ngFor="let place of places" [value]="place.id">{{ place.name }}</option>
+          <option *ngFor="let place of places" [value]="place.room_id">{{ place.room_name }}</option>
+        </select>
+      </div>
+
+      <!-- סוג טיפול -->
+      <div class="form-field">
+        <label for="type">סוג טיפול</label>
+        <select id="type" formControlName="type">
+          <option *ngFor="let type of types" [value]="type.type_id">{{ type.type_name }}</option>
         </select>
       </div>
 
@@ -40,7 +48,7 @@
 
   <!-- כפתורים -->
   <div class="dialog-actions">
-    <!-- <button type="button" (click)="close()">ביטול</button> -->
+    <button type="button" mat-dialog-close>ביטול</button>
     <button type="button" (click)="save()">שמור</button>
   </div>
 </div>

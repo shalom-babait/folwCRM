@@ -1,5 +1,6 @@
 // patient-list.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
@@ -20,7 +21,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   constructor(
     private patientService: PatientService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -73,7 +75,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
     if (patient_id) {
       this.patientService.selectPatient(patient_id);
       this.selectedPatientId = patient_id;
-      console.log('Selected patient:', patient);
+      // ניווט תקני של Angular
+      this.router.navigate(['/patient', patient_id]);
     }
   }
 

@@ -3,6 +3,9 @@ import { PatientService } from 'src/app/services/patient.service';
 import { Patient } from 'src/app/models/patient.model';
 import { Appointment } from 'src/app/models/appointment.model';import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+//import { ActivatedRoute } from '@angular/router';
+//import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-patient-dashboard',
@@ -12,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class PatientDashboardComponent implements OnInit {
   patient: Patient | null = null;
   appointments: Appointment[] = [];
+
   patientId: number = 0;
 
   constructor(
@@ -58,6 +62,33 @@ export class PatientDashboardComponent implements OnInit {
                 totalCost: a.totalCost ?? 0,
               }));
             });
+//             id: data.patient_id || id || 0,
+//             name: (data.first_name || '') + ' ' + (data.last_name || ''),
+//             phone: data.phone || '',
+//             email: data.email || '',
+//             birthDate: data.birth_date || '',
+//             address: data.address || '',
+//             gender: data.gender || '',
+//             status: data.status || '',
+//             teudat_zehut: data.teudat_zehut || '',
+//             city: data.city || '',
+//           };
+//           console.log('Patient object for details:', this.patient);
+//         });
+//         this.patientService.getTreatments(id).subscribe(data => {
+//           this.treatments = (data || []).map((t: any) => ({
+//             id: t.appointment_id,
+//             appointment_id: t.appointment_id,
+//             appointment_date: t.appointment_date,
+//             start_time: t.start_time,
+//             end_time: t.end_time,
+//             room: t.room,
+//             status: t.status,
+//             treatment_type: t.treatment_type,
+//             patient_id: id,
+//             total_minutes: t.total_minutes
+//           }));
+//         });
       }
     });
   }
@@ -99,6 +130,45 @@ export class PatientDashboardComponent implements OnInit {
                 phone: data.phone ?? '',
                 email: data.email ?? '',
                 address: data.address ?? '',
+
+//     // Split name into first_name and last_name for backend
+//     let first_name = '';
+//     let last_name = '';
+//     if (updatedPatient.name) {
+//       const nameParts = updatedPatient.name.split(' ');
+//       first_name = nameParts[0] || '';
+//       last_name = nameParts.slice(1).join(' ') || '';
+//     }
+//     const backendPatient = {
+//       first_name,
+//       last_name,
+//       phone: updatedPatient.phone,
+//       email: updatedPatient.email,
+//       birth_date: updatedPatient.birthDate,
+//       address: updatedPatient.address,
+//       teudat_zehut: updatedPatient.teudat_zehut,
+//       city: updatedPatient.city,
+//       gender: updatedPatient.gender,
+//       status: updatedPatient.status
+//     };
+//     this.patientService.updatePatient(this.patient?.id ?? 0, backendPatient).subscribe(
+//       (res) => {
+//         console.log('Update response:', res);
+//         // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
+//         if (this.patient && this.patient.id) {
+//           // השתמש ב-endpoint שמחזיר את כל נתוני המטופל כולל Users
+//           this.patientService.getPatientOnly(this.patient.id).subscribe(data => {
+//             console.log('Reloaded patient after update:', data);
+//             if (data) {
+//               this.patient = {
+//                 id: (data && data.patient_id != null) ? data.patient_id : ((this.patient && this.patient.id) ? this.patient.id : 0),
+//                 name: (data.first_name ?? '') + ' ' + (data.last_name ?? ''),
+//                 phone: data.phone ?? '',
+//                 email: data.email ?? '',
+//                 birthDate: data.birth_date ?? '',
+//                 address: data.address ?? '',
+//                 gender: data.gender ?? '',
+//                 status: data.status ?? '',
                 teudat_zehut: data.teudat_zehut ?? '',
                 city: data.city ?? '',
               };
@@ -130,6 +200,7 @@ export class PatientDashboardComponent implements OnInit {
 
   get totalHours(): number {
     const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+
     return Math.round((totalMinutes / 60) * 10) / 10;
   }
 

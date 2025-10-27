@@ -22,6 +22,9 @@ const routes: Routes = [
   { path: 'therapistDashboard', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
   { path: 'secretary-dashboard', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' } },
   { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
+  //{ path: 'patient/:id', component: PatientDashboardComponent },
+  //{ path: 'patientList', component: PatientListComponent },
+  //{ path: 'therapistDashboard', component: TherapistDashboardComponent },
 ];
 
 @NgModule({

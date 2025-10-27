@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Patient } from 'src/app/models/patient.model';
+
 @Component({
   selector: 'app-patient-details',
   templateUrl: './patient-details.component.html',
@@ -9,7 +10,6 @@ import { Patient } from 'src/app/models/patient.model';
 export class PatientDetailsComponent implements OnChanges {
   @Input() patient!: Patient;
   @Output() patientUpdated = new EventEmitter<Patient>();
-
   isEditing = false;
   patientForm: FormGroup;
 

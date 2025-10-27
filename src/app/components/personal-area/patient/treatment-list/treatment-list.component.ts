@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
-@Component({
+
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
   styleUrls: ['./treatment-list.component.css']
@@ -15,6 +15,7 @@ export class TreatmentListComponent implements OnInit {
 
   searchTerm: string = '';
   showAppointments: Appointment[] = [];
+
 
   constructor(
     private dialog: MatDialog,
@@ -29,6 +30,7 @@ export class TreatmentListComponent implements OnInit {
         this.showAppointments = data;
         // Map server response to Appointment interface
         this.appointments = this.showAppointments.map(appointment => ({
+
           ...appointment,
           id: appointment.appointment_id,
           patient_id: 0 // This should be set based on the current patient context
@@ -46,6 +48,10 @@ export class TreatmentListComponent implements OnInit {
     return this.appointments.filter(appointment => 
       appointment.appointment_date.includes(this.searchTerm)
       // אפשר להוסיף כאן סינון לפי שדות נוספים אם תרצי
+//     return this.treatments.filter(treatment => 
+//       treatment.appointment_date.includes(this.searchTerm) ||
+//       treatment.treatment_type.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+//       treatment.room.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
@@ -68,6 +74,18 @@ export class TreatmentListComponent implements OnInit {
           status: 'מתוזמנת',
           patient_id: 0 // This should be set based on the current patient context
         } as Appointment;
+//         // יצירת טיפול חדש
+//         const newTreatment: Treatment = {
+//           id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.id)) + 1 : 1,
+//           appointment_id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.appointment_id)) + 1 : 1,
+//           appointment_date: result.date,
+//           treatment_type: result.name || 'טיפול חדש',
+//           room: result.place || '',
+//           start_time: result.startTime,
+//           end_time: result.endTime,
+//           status: 'scheduled',
+//           patient_id: 0 // This should be set based on the current patient context
+//         };
 
         // הוספה לרשימה המקומית
         this.appointments.push(newAppointment);
@@ -83,6 +101,7 @@ export class TreatmentListComponent implements OnInit {
     const date = new Date(dateString);
     return date.toLocaleDateString('he-IL');
   }
+
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {

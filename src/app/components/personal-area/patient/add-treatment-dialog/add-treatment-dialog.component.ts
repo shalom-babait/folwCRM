@@ -1,15 +1,22 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators ,AbstractControl} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 // import { TreatmentService } from 'src/app/services/treatment.service'; // לשימוש עתידי
 // import { TreatmentData } from 'src/app/classes/treatment'; // לשימוש עתידי
 
+//import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+//import { MatSnackBar } from '@angular/material/snack-bar';
+//import { PatientService } from '../../../../services/patient.service';
+//import { RoomsService } from 'src/app/services/rooms.service';
+//import { TypesService } from 'src/app/services/types.service ';
+
 @Component({
   selector: 'app-add-treatment-dialog',
   templateUrl: './add-treatment-dialog.component.html',
-  styleUrls: ['./add-treatment-dialog.component.css'],
+  styleUrls: ['./add-treatment-dialog.component.css']
 })
+
 export class CreateTreatmentDialogComponent implements OnInit {
   treatmentForm!: FormGroup;
   places: { id: number; name: string }[] = [];
@@ -19,10 +26,40 @@ export class CreateTreatmentDialogComponent implements OnInit {
     private errorHandler: ErrorHandlerService,
     public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
     // private treatmentService: TreatmentService
-  ) {}
+  ) {} 
 
-  ngOnInit() {
-    this.treatmentForm = this.fb.group({
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.treatmentForm = this.createForm();
+  }
+
+  ngOnInit(): void {
+    this.roomsService.getRooms().subscribe({
+      next: (rooms) => {
+        this.places = rooms;
+      },
+      error: (error) => {
+        console.error('Error fetching rooms:', error);
+      }
+    });
+
+    this.typesService.getTypes().subscribe({
+      next: (type) => {
+        this.types = type;
+      },
+      error: (error) => {
+        console.error('Error fetching rooms:', error);
+      }
+    });
+    // this.loadTypes();
+    // אם יש נתונים ראשוניים, נכניס אותם לטופס
+    if (this.data && this.data.initialData) {
+      this.treatmentForm.patchValue(this.data.initialData);
+    }
+  }
+
+  private createForm(): FormGroup {
+    return this.fb.group({
       date: [null, Validators.required],
       startTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       endTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
@@ -59,6 +96,7 @@ getErrorMessage(field: string): string {
         this.treatmentForm.get(field)?.markAsTouched();
       });
       return;
+
     }
     // שמירה לשרת (דוגמה)
     // try {
@@ -72,5 +110,6 @@ getErrorMessage(field: string): string {
 
   close() {
     this.dialogRef.close();
+
   }
 }

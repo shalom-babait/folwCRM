@@ -1,6 +1,5 @@
 import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
@@ -8,6 +7,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -122,14 +123,17 @@ getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     );
   }
 
+
   selectPatient(patient_id: number | null): void {
     this.selectedPatientSubject.next(patient_id);
   }
+
 
   private addPatientToLocalList(patient: Patient): void {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }
+
 
 getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
   if (patient_id) {
