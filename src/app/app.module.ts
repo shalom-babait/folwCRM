@@ -36,6 +36,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card'; // הוספת MatCardModule
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { SignUpForCourseComponent } from './components/marketing/sign-up-for-course/sign-up-for-course.component';
 import { HomeComponent } from './components/marketing/home/home.component';
@@ -58,6 +59,8 @@ import { TherapistListComponent } from './components/personal-area/secretary/the
 import { AddTherapistDialogComponent } from './components/personal-area/secretary/add-therapist-dialog/add-therapist-dialog.component';
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
+import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
+import { TherapistsViewComponent } from './components/personal-area/secretary/therapists-view/therapists-view.component';
 
 
 @NgModule({
@@ -93,8 +96,11 @@ import { TherapistHeaderComponent } from './components/personal-area/therapist/t
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
+    RoomsViewComponent,
+    TherapistsViewComponent,
   ],
   imports: [
+    MatMenuModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

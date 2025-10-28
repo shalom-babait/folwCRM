@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserData } from '../models/user.model';
 import { PatientData } from '../models/patient.model';
-import { TherapistData } from '../models/therapist.model';
+import { TherapistCreationData, TherapistData } from '../models/therapist.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
+  private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {}
 
@@ -19,19 +19,20 @@ export class UserService {
   }
 
   createTherapist(userData: UserData, therapistData: TherapistData): Observable<any> {
-    alert('Creating therapist with userData: ' + JSON.stringify(userData) + ' and therapistData: ' + JSON.stringify(therapistData));  
-    return this.http.post(`${this.apiUrl}/therapist`, { userData, therapistData });
+    console.log("service front end!!!!!!!!!!!!!");
+    console.log(this.http.post(`${this.apiUrl}/therapists`, { user: userData, therapist: therapistData }));
+    return this.http.post(`${this.apiUrl}/therapists/create`, { user: userData, therapist: therapistData });
   }
 
   createPatient(userData: UserData, patientData: PatientData): Observable<any> {
     return this.http.post(`${this.apiUrl}/patient`, { userData, patientData });
   }
 
-  getAllTherapists(): Observable<TherapistData[]> {
-    return this.http.get<TherapistData[]>(`${this.apiUrl}/therapists`);
+  getAllTherapists(): Observable<TherapistCreationData[]> {
+    return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/all`);
   }
 
-  searchTherapists(searchTerm: string): Observable<TherapistData[]> {
-    return this.http.get<TherapistData[]>(`${this.apiUrl}/therapists/search?name=${encodeURIComponent(searchTerm)}`);
+  searchTherapists(searchTerm: string): Observable<TherapistCreationData[]> {
+    return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/search?name=${encodeURIComponent(searchTerm)}`);
   }
 }

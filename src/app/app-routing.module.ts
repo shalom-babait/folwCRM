@@ -11,12 +11,18 @@ import { SecretaryDashboardComponent } from './components/personal-area/secretar
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
 import { PatientListComponent } from './components/personal-area/therapist/patient-list/patient-list.component';
+import { TherapistsViewComponent } from './components/personal-area/secretary/therapists-view/therapists-view.component';
+import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'SignUpForCourse', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
-  { path: 'secretary', component: SecretaryDashboardComponent },
+  { path: 'secretary', component: SecretaryDashboardComponent,children: [
+      { path: '', redirectTo: 'therapists', pathMatch: 'full' },
+      { path: 'therapists', component: TherapistsViewComponent },
+      { path: 'rooms', component: RoomsViewComponent }
+    ] },
   // { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
   // { path: 'patientList', component: PatientListComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
   // { path: 'therapistDashboard', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },

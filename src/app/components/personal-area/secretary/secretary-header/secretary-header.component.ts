@@ -39,4 +39,11 @@ export class SecretaryHeaderComponent {
     console.log('Logout');
     this.router.navigate(['/login']);
   }
+  navigateToTherapists() {
+    this.router.navigate(['/secretary-dashboard/therapists']);
+  }
+
+  navigateToRooms() {
+    this.router.navigate(['/secretary-dashboard/rooms']);
+  }
 }
