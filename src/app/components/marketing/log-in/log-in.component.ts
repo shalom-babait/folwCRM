@@ -14,34 +14,26 @@ export class LogInComponent {
   passwordHasBeenSent: boolean = false;
   SendingPasswordToMail: boolean = false;
 
-  username: string = '';
+  email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService) {}
 
   onLogin() {
-    this.authService.login(this.username, this.password).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: (res: any) => {
-      localStorage.setItem('token', res.token);
-      const payload = JSON.parse(atob(res.token.split('.')[1]));
-      switch (payload.role) {
-        case 'therapist':
-        this.router.navigate(['/personal-area/therapist']);
-        break;
-        case 'patient':
-        this.router.navigate(['/personal-area/patient']);
-        break;
-        case 'secretary':
-        this.router.navigate(['/personal-area/secretary']);
-        break;
-        default:
-        this.router.navigate(['/']);
-      }
+        localStorage.setItem('token', res.token);
+        if (res.user) {
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const role = user.role;
+        // סגירת הדיאלוג והחזרת התפקיד באנגלית
+        (window as any).dialogRef?.close(role);
       },
- error: (err) => {
-  console.error('Login error:', err);
-  alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
-}
+      error: (err) => {
+        alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
+      }
     });
   }
 

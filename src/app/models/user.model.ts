@@ -9,7 +9,7 @@ export interface UserData {
   address?: string;
   email: string;
   password?: string;
-  role?: 'מזכיר' | 'מנהל' | 'מטפל' | 'מטופל';
+  role?: 'secretary' | 'manager' | 'therapist' | 'patient' | 'other';
   agree?: 0 | 1;
   created_at?: string; // YYYY-MM-DD HH:mm:ss
 }

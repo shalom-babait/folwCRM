@@ -53,7 +53,7 @@ export class AddTherapistDialogComponent implements OnInit {
           phone: formValue.phone.trim(),
           city: formValue.city.trim(),
           address: formValue.address?.trim() || undefined,
-          role: 'מטפל',
+          role: 'therapist',
           agree: formValue.agree ? 1 : 0
         },
         therapist: {

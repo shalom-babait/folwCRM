@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as e from 'express';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -7,23 +8,21 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
+  constructor(private http: HttpClient) {
+    window.addEventListener('unload', () => {
+      localStorage.clear();
+    });
+  }
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
 
-  // התחברות – שולחת email וסיסמה ומקבלת token
-login(email: string, password: string): Observable<{ success: boolean; token: string }> {
+login(email: string, password: string): Observable<{ success: boolean; token: string; user?: any }> {
+  console.log("auth service login called", email, password);
   alert("email: " + email + " password: " + password);
-  return this.http.post<{ success: boolean; token: string }>(
+  return this.http.post<{ success: boolean; token: string; user?: any }>(
     `${this.apiUrl}/login`,
     { email, password }
-  ).pipe(
-    tap(res => {
-      if (res.success && res.token) {
-        localStorage.setItem('token', res.token);
-      }
-    })
   );
 }
 
@@ -57,6 +56,6 @@ login(email: string, password: string): Observable<{ success: boolean; token: st
 
   // התנתקות – מוחק את ה־token
   logout(): void {
-    localStorage.removeItem('token');
+  localStorage.clear();
   }
 }

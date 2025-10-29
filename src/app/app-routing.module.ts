@@ -16,21 +16,17 @@ import { RoomsViewComponent } from './components/personal-area/secretary/rooms-v
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'SignUpForCourse', component: SignUpForCourseComponent },
+  { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
-  { path: 'secretary', component: SecretaryDashboardComponent,children: [
-      { path: '', redirectTo: 'therapists', pathMatch: 'full' },
+  { path: 'personal-area', children: [
+    { path: 'therapist', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+    { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
+    { path: 'secretary', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' }, children: [
       { path: 'therapists', component: TherapistsViewComponent },
       { path: 'rooms', component: RoomsViewComponent }
     ] },
-  // { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
-  // { path: 'patientList', component: PatientListComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
-  // { path: 'therapistDashboard', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
-  { path: 'secretary-dashboard', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' } },
-  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
-  //{ path: 'patient/:id', component: PatientDashboardComponent },
-  { path: 'patientList', component: PatientListComponent },
-  { path: 'therapistDashboard', component: TherapistDashboardComponent },
+    { path: 'admin', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } }
+  ]},
 ];
 
 @NgModule({
