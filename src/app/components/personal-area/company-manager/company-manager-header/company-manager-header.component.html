@@ -5,10 +5,14 @@
     <div class="buttonLink">
       <ul>
         <li><button>בית</button></li>
+        <li><button>רשימת עובדים</button></li>
+        <li><button>רשימת פניות</button></li>
         <li><button>רשימת מטופלים</button></li>
+        <li><button>מחלקת גברים</button></li>
+        <li><button>מחלקת נשים</button></li>
         <li><button>חדרים</button></li>
-        <li><button>דואר</button></li>
-        <li><button>הצהרות</button></li>
+        <li><button routerLink="contact">דואר</button></li>
+        <li><button>דוחות</button></li>
       </ul>
     </div>
     
@@ -23,7 +27,7 @@
           <div class="user-name">{{ userName }}</div>
         </div>
         <div class="menu-divider"></div>
-<ul class="profile-menu-items">
+        <ul class="profile-menu-items">
   <li (click)="goToSettings()">
     <mat-icon class="menu-icon">settings</mat-icon>
     <span>הגדרות</span>

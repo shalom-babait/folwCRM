@@ -68,7 +68,27 @@
           {{ getFieldError('password', 'סיסמה') }}
         </div>
     </div>
-    
+    <!-- שדה מין -->
+<div class="form-field">
+  <label for="gender">מין *</label>
+  <select id="gender" formControlName="gender">
+    <option value="male">זכר</option>
+    <option value="female">נקבה</option>
+    <option value="other">אחר</option>
+  </select>
+  <div class="error-message" *ngIf="isFieldInvalid('gender')">
+    {{ getFieldError('gender', 'מין') }}
+  </div>
+</div>
+
+<!-- שדה תאריך לידה -->
+<div class="form-field">
+  <label for="birth_date">תאריך לידה</label>
+  <input id="birth_date" formControlName="birth_date" type="date" />
+  <div class="error-message" *ngIf="isFieldInvalid('birth_date')">
+    {{ getFieldError('birth_date', 'תאריך לידה') }}
+  </div>
+</div>
     <!-- פרטי מטפל -->
     <div class="form-field">
       <label for="specialization">תחום התמחות *</label>

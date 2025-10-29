@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./log-in.component.css']
 })
 export class LogInComponent {
+  showPassword: boolean = false;
   enrollmentFormDisplayed: boolean = false;
   connectionFormDisplayed: boolean = true;
   forgatPassword: boolean = false;
@@ -36,6 +37,10 @@ export class LogInComponent {
       }
     });
   }
+  
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+   }
 
   showEnrollmentForm() {
     this.enrollmentFormDisplayed = true;

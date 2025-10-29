@@ -13,9 +13,11 @@ import { PatientDashboardComponent } from './components/personal-area/patient/pa
 import { PatientListComponent } from './components/personal-area/therapist/patient-list/patient-list.component';
 import { TherapistsViewComponent } from './components/personal-area/secretary/therapists-view/therapists-view.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
+import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'company-manager', component: CompanyManagerDashboardComponent },
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
   { path: 'personal-area', children: [

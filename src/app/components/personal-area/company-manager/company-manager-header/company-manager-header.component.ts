@@ -2,12 +2,12 @@ import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-therapist-header',
-  templateUrl: './therapist-header.component.html',
-  styleUrls: ['./therapist-header.component.css']
+  selector: 'app-company-manager-header',
+  templateUrl: './company-manager-header.component.html',
+  styleUrls: ['./company-manager-header.component.css']
 })
-export class TherapistHeaderComponent {
-showProfileMenu = false;
+export class CompanyManagerHeaderComponent {
+  showProfileMenu = false;
   userName = 'שם המשתמש'; // יש לשלוף מהשירות
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
@@ -35,7 +35,15 @@ showProfileMenu = false;
 
   logout() {
     this.showProfileMenu = false;
+    // לוגיקת התנתקות
+    console.log('Logout');
     this.router.navigate(['/']);
   }
-}
+  navigateToTherapists() {
+    this.router.navigate(['/secretary-dashboard/therapists']);
+  }
 
+  navigateToRooms() {
+    this.router.navigate(['/secretary-dashboard/rooms']);
+  }
+}
