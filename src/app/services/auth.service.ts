@@ -18,8 +18,6 @@ export class AuthService {
 
 
 login(email: string, password: string): Observable<{ success: boolean; token: string; user?: any }> {
-  console.log("auth service login called", email, password);
-  alert("email: " + email + " password: " + password);
   return this.http.post<{ success: boolean; token: string; user?: any }>(
     `${this.apiUrl}/login`,
     { email, password }

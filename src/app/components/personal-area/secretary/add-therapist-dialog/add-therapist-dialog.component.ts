@@ -26,10 +26,13 @@ export class AddTherapistDialogComponent implements OnInit {
       city: ['', Validators.required],
       address: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+        password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       specialization: ['', Validators.required],
       experience_years: ['', [Validators.required, Validators.min(0), Validators.max(50)]],
       agree: [false, Validators.requiredTrue]
+        ,
+        gender: ['other', Validators.required],
+        birth_date: ['']
     });
   }
 
@@ -54,7 +57,9 @@ export class AddTherapistDialogComponent implements OnInit {
           city: formValue.city.trim(),
           address: formValue.address?.trim() || undefined,
           role: 'therapist',
-          agree: formValue.agree ? 1 : 0
+          agree: formValue.agree ? 1 : 0 ,
+          gender: formValue.gender,
+          birth_date: formValue.birth_date
         },
         therapist: {
           specialization: formValue.specialization.trim(),

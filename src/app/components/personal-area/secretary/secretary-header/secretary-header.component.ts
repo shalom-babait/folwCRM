@@ -35,9 +35,7 @@ export class SecretaryHeaderComponent {
 
   logout() {
     this.showProfileMenu = false;
-    // לוגיקת התנתקות
-    console.log('Logout');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
   navigateToTherapists() {
     this.router.navigate(['/secretary-dashboard/therapists']);

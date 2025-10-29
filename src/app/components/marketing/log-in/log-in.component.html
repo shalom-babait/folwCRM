@@ -18,15 +18,25 @@
         <button class="submitButton">כניסה</button>
     </div>
     <div *ngIf="connectionFormDisplayed">
-        <label class="dialogTitle" [class.active]="connectionFormDisplayed" (click)="showConnectionForm()">התחברות</label>
-        <div class="connection">
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="email" placeholder="*כתובת מייל" required [(ngModel)]="email">
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="*סיסמה" required [(ngModel)]="password">
-            <a class="subtitle" (click)="showSendingPasswordToMail()">?שכחת סיסמה</a>
-            <label class="subtitle" (click)="showEnrollmentForm()">?עוד לא הצטרפת אלינו</label>
+    <label class="dialogTitle" [class.active]="connectionFormDisplayed" (click)="showConnectionForm()">התחברות</label>
+    <div class="connection">
+        <input class="WantToBeUpdatedTiteleInput" type="text" name="email" placeholder="*כתובת מייל" required [(ngModel)]="email">
+        
+        <div class="password-container">
+            <input class="WantToBeUpdatedTiteleInput" 
+                   [type]="showPassword ? 'text' : 'password'" 
+                   name="password" 
+                   placeholder="*סיסמה" 
+                   required 
+                   [(ngModel)]="password">
+            <span class="eye-icon" (click)="togglePasswordVisibility()" [class.visible]="showPassword"></span>
         </div>
-        <button class="submitButton" (click)="onLogin()">כניסה</button>
+        
+        <a class="subtitle" (click)="showSendingPasswordToMail()">?שכחת סיסמה</a>
+        <label class="subtitle" (click)="showEnrollmentForm()">?עוד לא הצטרפת אלינו</label>
     </div>
+    <button class="submitButton" (click)="onLogin()">כניסה</button>
+</div>
     <div *ngIf="SendingPasswordToMail">
         <div class="showSendingPasswordToMail">
             <label class="dialogTitle">שחזור סיסמה</label>
