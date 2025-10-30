@@ -1,0 +1,262 @@
+.view-container {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  height: calc(100vh - 100px);
+  direction: rtl;
+}
+
+.right-panel {
+  flex: 0 0 350px;
+}
+
+.left-panel {
+  flex: 1;
+  min-width: 0;
+}
+
+/* תצוגת סיכום */
+.summary-view {
+  height: 100%;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.summary-card h2 {
+  color: #022F39;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+  transform: translateX(-5px);
+  background: #e9ecef;
+}
+
+.stat-item mat-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #022F39;
+}
+
+.stat-item h3 {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: normal;
+}
+
+.stat-number {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #022F39;
+}
+
+.instruction {
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+/* תצוגת פרטים */
+.details-view {
+  height: 100%;
+}
+
+.details-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.details-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.close-btn mat-icon {
+  color: white;
+}
+
+.details-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.detail-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.8rem;
+  transition: background 0.2s ease;
+}
+
+.detail-section:hover {
+  background: #e9ecef;
+}
+
+.detail-section mat-icon {
+  color: #022F39;
+  font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-top: 0.2rem;
+}
+
+.detail-section label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.detail-section p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.details-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.action-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn.primary {
+  background: #022F39;
+  color: white;
+  border-color: #022F39;
+}
+
+.action-btn.primary:hover {
+  background: #034752;
+}
+
+.action-btn mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .view-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .right-panel {
+    flex: none;
+    width: 100%;
+  }
+  
+  .left-panel {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .view-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .details-content,
+  .summary-card {
+    padding: 1rem;
+  }
+  
+  .details-actions {
+    flex-direction: column;
+  }
+}

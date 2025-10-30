@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { TherapistData } from 'src/app/models/therapist.model';
+import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
 import { UserData } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { AddTherapistDialogComponent } from '../add-therapist-dialog/add-therapist-dialog.component';
@@ -12,7 +12,9 @@ import { AddTherapistDialogComponent } from '../add-therapist-dialog/add-therapi
   styleUrls: ['./therapist-list.component.css']
 })
 export class TherapistListComponent implements OnInit, OnDestroy {
-  therapists: TherapistData[] = [];
+  @Output() therapistSelected = new EventEmitter<TherapistCreationData>();
+  // להצגה: מערך מטפלים קיימים
+  therapists: TherapistCreationData[] = [];
   selectedTherapistId: number | null = null;
   secretaryId: number = 1; // שנה לפי המזכיר המחובר
   isLoading = false;
@@ -50,12 +52,15 @@ export class TherapistListComponent implements OnInit, OnDestroy {
       });
   }
 
-  viewTherapistDetails(therapist: TherapistData) {
+  openTherapistCalendar(therapist: TherapistData) {
     const therapist_id = therapist.therapist_id;
     if (therapist_id) {
-      this.selectedTherapistId = therapist_id;
-      console.log('Selected therapist:', therapist);
-      // כאן אפשר לפתוח דיאלוג של פרטי מטפל או לנווט לעמוד אחר
+      console.log('Opening calendar for therapist:', therapist);
+      // כאן תוסיף את הלוגיקה לפתיחת היומן
+      // לדוגמה: לנווט לעמוד יומן או לפתוח דיאלוג של יומן
+      // this.router.navigate(['/calendar', therapist_id]);
+      // או
+      // this.dialog.open(TherapistCalendarDialogComponent, { data: { therapist } });
     }
   }
 
@@ -70,7 +75,7 @@ export class TherapistListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
+      .subscribe((result: TherapistCreationData | null) => {
         if (result) {
           // המשתמש לחץ על "שמירה" - שומר את הנתונים
           this.onTherapistSave(result);
@@ -79,10 +84,13 @@ export class TherapistListComponent implements OnInit, OnDestroy {
       });
   }
 
-  onTherapistSave(event: { userData: UserData, therapistData: TherapistData }) {
-    alert('userData: ' + JSON.stringify(event.userData) + '\ntherapistData: ' + JSON.stringify(event.therapistData));
+  onTherapistSave(data: TherapistCreationData) {
     this.isLoading = true;
-    this.userService.createTherapist(event.userData, event.therapistData)
+    // ודא ש-agree הוא 0, 1 או undefined בלבד
+    const user = {
+      ...data.user,
+    };
+    this.userService.createTherapist(data.user, data.therapist)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
@@ -125,6 +133,15 @@ export class TherapistListComponent implements OnInit, OnDestroy {
             alert('שגיאה בחיפוש. אנא נסה שוב.');
           }
         });
+    }
+ }
+  viewTherapistDetails(therapist: TherapistCreationData) {
+    const therapist_id = therapist.therapist.therapist_id;
+    if (therapist_id) {
+      this.selectedTherapistId = therapist_id;
+      console.log('Selected therapist:', therapist);
+      // שלח את המטפל לקומפוננטת האב
+      this.therapistSelected.emit(therapist);
     }
   }
 }

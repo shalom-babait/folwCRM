@@ -1,12 +1,12 @@
 import { UserData } from './user.model';
 
-export interface TherapistCreationData {
+export interface SecretaryCreationData {
   user: UserData;
-  therapist:TherapistData
+  therapist:secretaryData
 }
 
 // נתונים ספציפיים למטפל
-export interface TherapistData {
+export interface secretaryData {
   // נתונים להצגת מטפל קיים
   therapist_id?: number;
   specialization?: string;

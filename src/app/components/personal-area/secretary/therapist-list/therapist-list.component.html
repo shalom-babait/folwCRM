@@ -34,11 +34,27 @@
       <div 
         class="therapist-card" 
         *ngFor="let therapist of therapists"
-        [class.selected]="selectedTherapistId === (therapist.therapist_id || therapist.therapist_id)"
-        (click)="viewTherapistDetails(therapist)">
-        <div class="therapist-info">
-          <!-- <span class="therapist-name">{{ therapist.firstName }} {{ therapist.lastName }}</span> -->
+        [class.selected]="selectedTherapistId === (therapist.therapist.therapist_id)">
+        <div class="therapist-info" (click)="viewTherapistDetails(therapist)">
+          <span class="therapist-name">{{ therapist.user.first_name }} {{ therapist.user.last_name }}</span>
         </div>
+        <button 
+          class="menu-button"
+          [matMenuTriggerFor]="therapistMenu"
+          (click)="$event.stopPropagation()"
+          matTooltip="פעולות">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #therapistMenu="matMenu" xPosition="before" [hasBackdrop]="false">
+          <button mat-menu-item (click)="viewTherapistDetails(therapist)">
+            <mat-icon>person</mat-icon>
+            <span>הצג פרטי מטפל</span>
+          </button>
+          <button mat-menu-item (click)="openTherapistCalendar(therapist.therapist)">
+            <mat-icon>calendar_today</mat-icon>
+            <span>יומן של מטפל</span>
+          </button>
+        </mat-menu>
       </div>
     </div>
 
@@ -49,4 +65,3 @@
     </div>
   </div>
 </div>
-

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TherapistCreationData } from 'src/app/models/therapist.model';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -25,10 +26,13 @@ export class AddTherapistDialogComponent implements OnInit {
       city: ['', Validators.required],
       address: [''],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+        password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       specialization: ['', Validators.required],
       experience_years: ['', [Validators.required, Validators.min(0), Validators.max(50)]],
       agree: [false, Validators.requiredTrue]
+        ,
+        gender: ['other', Validators.required],
+        birth_date: ['']
     });
   }
 
@@ -42,27 +46,29 @@ export class AddTherapistDialogComponent implements OnInit {
     if (this.therapistForm.valid) {
       const formValue = this.therapistForm.value;
       
-      const userData = {
-        first_name: formValue.first_name.trim(),
-        last_name: formValue.last_name.trim(),
-        teudat_zehut: formValue.teudat_zehut?.trim() || null,
-        email: formValue.email.trim(),
-        password: formValue.password,
-        phone: formValue.phone.trim(),
-        city: formValue.city.trim(),
-        address: formValue.address?.trim() || null,
-        role: 'מטפל',
-        agree: formValue.agree ? 1 : 0
+      const therapistCreationData: TherapistCreationData = {
+        user: {
+          first_name: formValue.first_name.trim(),
+          last_name: formValue.last_name.trim(),
+          teudat_zehut: formValue.teudat_zehut?.trim() || undefined,
+          email: formValue.email.trim(),
+          password: formValue.password,
+          phone: formValue.phone.trim(),
+          city: formValue.city.trim(),
+          address: formValue.address?.trim() || undefined,
+          role: 'therapist',
+          agree: formValue.agree ? 1 : 0 ,
+          gender: formValue.gender,
+          birth_date: formValue.birth_date
+        },
+        therapist: {
+          specialization: formValue.specialization.trim(),
+          experience_years: parseInt(formValue.experience_years, 10)
+        }
       };
-      alert('שמירת מטפל חדש: ' + JSON.stringify(userData));
-      
-      const therapistData = {
-        specialization: formValue.specialization.trim(),
-        experience_years: parseInt(formValue.experience_years, 10)
-      };
-      
-      // סוגר את הדיאלוג ומחזיר את הנתונים לקומפוננטה האב
-      this.dialogRef.close({ userData, therapistData });
+      // שליחת נתוני יצירה בלבד (לא נתוני הצגה)
+      alert('שמירת מטפל חדש: ' + JSON.stringify(therapistCreationData));
+      this.dialogRef.close(therapistCreationData);
     } else {
       // סימון כל השדות כנגועים כדי להציג שגיאות
       Object.keys(this.therapistForm.controls).forEach(key => {

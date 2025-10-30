@@ -10,15 +10,32 @@ import { ConsultationMeetingComponent } from '../../consultation-meeting/consult
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent{
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private router: Router) {}
 
   openLogInDialog() {
     const dialogRef = this.dialog.open(LogInComponent, {
        width: '50rem',
     });
-alert
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    // שמירה גלובלית כדי לאפשר סגירה מתוך הדיאלוג
+    (window as any).dialogRef = dialogRef;
+    dialogRef.afterClosed().subscribe(role => {
+      if (!role) return;
+      switch (role) {
+        case 'therapist':
+          this.router.navigate(['/personal-area/therapist']);
+          break;
+        case 'patient':
+          this.router.navigate(['/personal-area/patient']);
+          break;
+        case 'secretary':
+          this.router.navigate(['/personal-area/secretary/therapists']);
+          break;
+        case 'admin':
+          this.router.navigate(['/personal-area/admin']);
+          break;
+        default:
+          this.router.navigate(['/']);
+      }
     });
   }
   openConsultationMeetingDialog() {
