@@ -15,14 +15,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
  a {
-  color: white;
-  font-size: large;
+  color: black;
+  font-size: small;
 }
 
 a:hover {
   text-decoration: none;
-  color: white;
-  font-size: large;
+  /* color: white;
+  font-size: large; */
 }
 
 /* כרטיסים */

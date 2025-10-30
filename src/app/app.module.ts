@@ -1,3 +1,4 @@
+import { CalendarOverlayComponent } from './components/personal-area/patient/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // הוספת ReactiveFormsModule
@@ -52,6 +53,9 @@ import { TherapistDashboardComponent } from './components/personal-area/therapis
 import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
 import { CreateTreatmentDialogComponent } from './components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
+import { RoomCalendarComponent } from './components/room-calendar/room-calendar.component';
+import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
 import { PatientDetailsComponent } from './components/personal-area/patient/patient-details/patient-details.component';
 import { TherapistListComponent } from './components/personal-area/secretary/therapist-list/therapist-list.component';
@@ -93,6 +97,9 @@ import { TherapistHeaderComponent } from './components/personal-area/therapist/t
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
+    RoomCalendarComponent,
+  SelectTimeDialogComponent,
+  CalendarOverlayComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,7 +124,8 @@ import { TherapistHeaderComponent } from './components/personal-area/therapist/t
     MatCheckboxModule,
     MatCardModule, // הוספת MatCardModule
     MatProgressSpinnerModule,
-    MatSnackBarModule
+  MatSnackBarModule,
+  FullCalendarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

@@ -1,3 +1,4 @@
+
 import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
@@ -15,6 +16,27 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
 export class PatientService {
   getPatientOnly(patientId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
+  }
+
+  /**
+   * מחזיר את כל הפגישות של חדר מסוים
+   */
+  getAppointmentsByRoomId(roomId: number): Observable<Appointment[]> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`)
+      .pipe(
+        map((response: ApiResponse<Appointment[]>) => response.data || []),
+        catchError(() => of([]))
+      );
+  }
+
+  /**
+   * מחזיר פגישה בודדת לפי מזהה
+   */
+  getAppointmentById(appointmentId: number): Observable<Appointment> {
+    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`)
+      .pipe(
+        map((response: ApiResponse<Appointment>) => response.data as Appointment)
+      );
   }
   private apiUrl = environment.apiUrl;
 

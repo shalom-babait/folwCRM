@@ -18,6 +18,7 @@ export class TreatmentListComponent implements OnInit {
     }
   }
   @Input() appointments: Appointment[] = [];
+  @Input() patientId: number = 0;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
 
@@ -72,39 +73,16 @@ export class TreatmentListComponent implements OnInit {
   openCreateAppointmentDialog(): void {
     const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
       width: '500px',
-      direction: 'rtl'
+      direction: 'rtl',
+      data: { patient_id: this.patientId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // יצירת פגישה חדשה
-        const newAppointment: Appointment = {
-          appointment_id: this.appointments.length > 0 ? Math.max(...this.appointments.map(a => a.appointment_id || 0)) + 1 : 1,
-          appointment_date: result.date,
-          // שדות נוספים לפי הצורך
-          start_time: result.startTime,
-          end_time: result.endTime,
-          status: 'מתוזמנת',
-          patient_id: 0 // This should be set based on the current patient context
-        } as Appointment;
-//         // יצירת טיפול חדש
-//         const newTreatment: Treatment = {
-//           id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.id)) + 1 : 1,
-//           appointment_id: this.treatments.length > 0 ? Math.max(...this.treatments.map(t => t.appointment_id)) + 1 : 1,
-//           appointment_date: result.date,
-//           treatment_type: result.name || 'טיפול חדש',
-//           room: result.place || '',
-//           start_time: result.startTime,
-//           end_time: result.endTime,
-//           status: 'scheduled',
-//           patient_id: 0 // This should be set based on the current patient context
-//         };
-
-        // הוספה לרשימה המקומית
-        this.appointments.push(newAppointment);
-        
-        // שליחת האירוע לקומפוננטה האב
-        this.appointmentAdded.emit(newAppointment);
+        // רענון מלא של הרשימה מהשרת
+        this.patientService.getTreatments(this.patientId).subscribe(data => {
+          this.appointments = data;
+        });
       }
     });
   }

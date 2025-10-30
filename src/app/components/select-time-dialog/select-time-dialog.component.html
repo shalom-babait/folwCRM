@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>בחירת שעות לפגישה</h2>
+<form [formGroup]="timeForm" class="select-time-form">
+  <div>
+    <label for="startTime">שעת התחלה</label>
+    <input type="time" id="startTime" formControlName="startTime">
+  </div>
+  <div>
+    <label for="endTime">שעת סיום</label>
+    <input type="time" id="endTime" formControlName="endTime">
+  </div>
+  <div class="dialog-actions">
+    <button type="button" (click)="close()">ביטול</button>
+    <button type="button" (click)="save()" [disabled]="!timeForm.valid">אישור</button>
+  </div>
+<div *ngIf="conflictError" class="error-message" style="color: red; margin-top: 8px; text-align: center;">
+  {{ conflictError }}
+</div>
+</form>
