@@ -1,54 +1,90 @@
 <div class="create-treatment-dialog">
   <h2 class="dialog-title">טיפול חדש</h2>
   <div class="input-dialog">
-    <form [formGroup]="treatmentForm">
+  <form [formGroup]="treatmentForm">
+
+
+  <!-- מקום -->
+      <div class="form-field">
+        <label for="place">מקום</label>
+        <select id="place" formControlName="place">
+          <option [value]="null">בחר חדר</option>
+          <option *ngFor="let room of rooms" [value]="room.room_id">{{ room.room_name }}</option>
+        </select>
+        <div class="error-message" *ngIf="treatmentForm.get('place')?.invalid && treatmentForm.get('place')?.touched">
+          חובה לבחור חדר
+        </div>
+      </div>
+
+      <!-- יומן חדר ב-overlay -->
+      <app-calendar-overlay
+        *ngIf="showOverlay"
+        [showOverlay]="showOverlay"
+        [selectedRoomId]="selectedRoomId"
+        [roomEvents]="roomEvents"
+        (overlayDateSelected)="onOverlayDateSelected($event)"
+        (closeOverlayEvent)="closeOverlay()">
+      </app-calendar-overlay>
+
+
 
       <!-- תאריך -->
       <div class="form-field">
         <label for="date">תאריך</label>
         <input type="date" id="date" formControlName="date">
+        <div class="error-message" *ngIf="treatmentForm.get('date')?.invalid && treatmentForm.get('date')?.touched">
+          חובה לבחור תאריך
+        </div>
       </div>
 
       <!-- שעת התחלה -->
       <div class="form-field">
         <label for="startTime">שעת התחלה</label>
         <input type="time" id="startTime" formControlName="startTime">
+        <div class="error-message" *ngIf="treatmentForm.get('startTime')?.invalid && treatmentForm.get('startTime')?.touched">
+          חובה לבחור שעת התחלה תקינה
+        </div>
       </div>
 
       <!-- שעת סיום -->
       <div class="form-field">
         <label for="endTime">שעת סיום</label>
         <input type="time" id="endTime" formControlName="endTime">
+        <div class="error-message" *ngIf="treatmentForm.get('endTime')?.invalid && treatmentForm.get('endTime')?.touched">
+          חובה לבחור שעת סיום תקינה
+        </div>
       </div>
 
-      <!-- מקום -->
-      <div class="form-field">
-        <label for="place">מקום</label>
-        <select id="place" formControlName="place">
-          <option *ngFor="let room of rooms" [value]="room.room_id">{{ room.room_name }}</option>
-        </select>
-      </div>
-
+    
       <!-- סוג טיפול -->
       <div class="form-field">
         <label for="type">סוג טיפול</label>
         <select id="type" formControlName="type">
           <option *ngFor="let type of types" [value]="type.type_id">{{ type.type_name }}</option>
         </select>
+        <div class="error-message" *ngIf="treatmentForm.get('type')?.invalid && treatmentForm.get('type')?.touched">
+          חובה לבחור סוג טיפול
+        </div>
       </div>
+
+      <!-- מטופל (מוסתר, אוטומטי) -->
+      <input type="hidden" formControlName="patient_id">
 
       <!-- הערות -->
       <div class="form-field">
         <label for="notes">הערות</label>
         <textarea id="notes" formControlName="notes" rows="3"></textarea>
+        <div class="error-message" *ngIf="treatmentForm.get('notes')?.invalid && treatmentForm.get('notes')?.touched">
+          הערות ארוכות מדי (מקסימום 250 תווים)
+        </div>
       </div>
 
-    </form>
+    </form><div class="dialog-actions">
+  <button type="button" mat-dialog-close>ביטול</button>
+  <button type="button" (click)="save()" [disabled]="treatmentForm.invalid">שמור</button>
+  </div>
   </div>
 
   <!-- כפתורים -->
-  <div class="dialog-actions">
-    <button type="button" mat-dialog-close>ביטול</button>
-    <button type="button" (click)="save()">שמור</button>
-  </div>
+  
 </div>

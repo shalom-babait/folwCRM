@@ -1,3 +1,4 @@
+
 import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
@@ -15,6 +16,27 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
 export class PatientService {
   getPatientOnly(patientId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
+  }
+
+  /**
+   * מחזיר את כל הפגישות של חדר מסוים
+   */
+  getAppointmentsByRoomId(roomId: number): Observable<Appointment[]> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`)
+      .pipe(
+        map((response: ApiResponse<Appointment[]>) => response.data || []),
+        catchError(() => of([]))
+      );
+  }
+
+  /**
+   * מחזיר פגישה בודדת לפי מזהה
+   */
+  getAppointmentById(appointmentId: number): Observable<Appointment> {
+    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`)
+      .pipe(
+        map((response: ApiResponse<Appointment>) => response.data as Appointment)
+      );
   }
   private apiUrl = environment.apiUrl;
 
@@ -148,9 +170,8 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
 }
 
   private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-    console.log('Fetching all appointments');
-      const id = patient_id || 1;
-
+    const id = patient_id || 1;
+    console.log('Fetching appointments for patient_id:', id);
     return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
       tap(appointments => {
         console.log('Raw appointments:', appointments);
@@ -160,7 +181,7 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
           console.log('No appointments found');
           return [];
         }
-        return appointments; 
+        return appointments;
       }),
       catchError(error => {
         console.error('Error fetching appointments:', error);
@@ -221,11 +242,11 @@ deletePatient(patientId: number): Observable<any> {
 }
 
 getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-  return this.http.get<ApiResponse<Appointment[]>>(
-    `${this.apiUrl}/appointments/patient/${patientId}`
-  ).pipe(
-    map(response => response.data || []),
-    catchError(this.handleError.bind(this))
-  );
+  // שימוש במוק עבור סביבת פיתוח/טסט
+  const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
+  obs.subscribe(appointments => {
+    console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+  });
+  return obs;
 }
 }

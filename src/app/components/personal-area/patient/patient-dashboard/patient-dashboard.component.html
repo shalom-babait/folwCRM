@@ -29,11 +29,12 @@
   
       <!-- עמודה ימנית - רשימת טיפולים -->
       <div class="main-content">
-        <!-- <app-treatment-list
+        <app-treatment-list
           [appointments]="appointments"
+          [patientId]="patientId"
           (appointmentAdded)="onAppointmentAdded($event)"
           (appointmentDeleted)="onAppointmentDeleted($event)">
-        </app-treatment-list> -->
+        </app-treatment-list>
 
       </div>
 
