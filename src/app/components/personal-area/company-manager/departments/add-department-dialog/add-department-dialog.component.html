@@ -1,0 +1,41 @@
+<!-- <div class="create-department-dialog">
+	<div class="dialog-title">הוספת מחלקה חדשה</div>
+	<form class="input-dialog" [formGroup]="departmentForm" (ngSubmit)="onSave()">
+		<div class="form-field">
+			<label for="name">שם מחלקה *</label>
+			<input id="name" formControlName="name" />
+			<div class="error-message" *ngIf="isFieldInvalid('name')">
+				{{ getFieldError('name', 'שם מחלקה') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="description">תיאור</label>
+			<textarea id="description" formControlName="description"></textarea>
+		</div>
+		<div class="form-field">
+			<label for="treatmentType">סוג טיפול *</label>
+			<input id="treatmentType" formControlName="treatmentType" />
+			<div class="error-message" *ngIf="isFieldInvalid('treatmentType')">
+				{{ getFieldError('treatmentType', 'סוג טיפול') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="manager">מנהל מחלקה</label>
+			<input id="manager" formControlName="manager" />
+		</div>
+		<div class="form-field">
+			<label for="status">סטטוס *</label>
+			<select id="status" formControlName="status">
+				<option value="active">פעילה</option>
+				<option value="inactive">לא פעילה</option>
+			</select>
+			<div class="error-message" *ngIf="isFieldInvalid('status')">
+				{{ getFieldError('status', 'סטטוס') }}
+			</div>
+		</div>
+		<div class="dialog-actions">
+			<button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+			<button type="submit" class="save-button" [disabled]="!departmentForm.valid">שמירה</button>
+		</div>
+	</form>
+</div> -->

@@ -1,0 +1,92 @@
+<div class="patient-list-container">
+  <h1>רשימת מטופלים</h1>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+    <button class="icon-button" mat-icon-button>
+      <mat-icon style="color: #BB7E2B;">add</mat-icon>
+    </button>
+    <input 
+      type="text" 
+      placeholder="חיפוש לפי שם, עיר או מחלקה..."
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch(searchTerm)">
+  </div>
+
+  <!-- אינדיקטור טעינה -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- כותרות השדות -->
+    <div class="patient-row header-row">
+      <div class="patient-cell" (click)="sortBy('full_name')">שם מלא</div>
+      <div class="patient-cell" (click)="sortBy('status')">סטטוס</div>
+      <div class="patient-cell">מחלקות</div>
+      <div class="patient-cell" (click)="sortBy('marital_status')">מצב משפחתי</div>
+      <div class="patient-cell" (click)="sortBy('date_of_birth')">גיל</div>
+      <div class="patient-cell" (click)="sortBy('treatment_count')">טיפולים</div>
+      <div class="patient-cell" (click)="sortBy('city')">עיר מגורים</div>
+      <div class="patient-cell">פעולות</div>
+    </div>
+
+    <!-- רשימת מטופלים -->
+    <div 
+      class="patient-row data-row" 
+      *ngFor="let patient of filteredPatients"
+      [class.selected]="selectedPatientId === patient.patient_id"
+      (click)="selectPatient(patient)">
+      <div class="patient-cell patient-name-cell">
+        <mat-icon class="patient-icon">person</mat-icon>
+        {{ patient.first_name }} {{ patient.last_name }}
+      </div>
+      <div class="patient-cell">
+        <span class="status-badge" [class.active]="patient.status === 'פעיל'">
+          {{ getStatusLabel(patient.status) }}
+        </span>
+      </div>
+      <div class="patient-cell">
+        <div class="departments-list" *ngIf="patient.departments && patient.departments.length > 0">
+          <span class="department-tag" *ngFor="let dept of patient.departments">
+            {{ dept }}
+          </span>
+        </div>
+        <span *ngIf="!patient.departments || patient.departments.length === 0" class="empty-value">-</span>
+      </div>
+      <div class="patient-cell">{{ getMaritalStatusLabel(patient.marital_status) }}</div>
+      <div class="patient-cell">{{ getAge(patient.birth_date) || '-' }}</div>
+      <div class="patient-cell">
+        <span class="count-badge">{{ patient.treatment_count || 0 }}</span>
+      </div>
+      <div class="patient-cell">{{ patient.city || '-' }}</div>
+      <div class="patient-cell actions-cell">
+        <button 
+          class="action-btn edit-btn"
+          (click)="$event.stopPropagation()"
+          matTooltip="הצג פרטים">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button 
+          class="action-btn edit-btn"
+          (click)="$event.stopPropagation()"
+          matTooltip="ערוך">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button 
+          class="action-btn delete-btn"
+          (click)="$event.stopPropagation()"
+          matTooltip="היסטוריית טיפולים">
+          <mat-icon>history</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- הודעה אם אין מטופלים -->
+    <div *ngIf="filteredPatients.length === 0" class="no-results">
+      <p>לא נמצאו מטופלים</p>
+      <p>נסה לשנות את מילת החיפוש</p>
+    </div>
+  </div>
+</div>

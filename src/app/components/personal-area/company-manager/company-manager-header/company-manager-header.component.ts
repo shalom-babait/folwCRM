@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,13 +7,16 @@ import { Router } from '@angular/router';
   templateUrl: './company-manager-header.component.html',
   styleUrls: ['./company-manager-header.component.css']
 })
-export class CompanyManagerHeaderComponent {
+export class CompanyManagerHeaderComponent implements OnInit {
   showProfileMenu = false;
-  userName = 'שם המשתמש'; // יש לשלוף מהשירות
+  userName = ''; 
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
   constructor(private router: Router) {}
-
+  ngOnInit() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+  }
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
   }
@@ -45,5 +49,13 @@ export class CompanyManagerHeaderComponent {
 
   navigateToRooms() {
     this.router.navigate(['/secretary-dashboard/rooms']);
+  }
+
+  // תקשורת עם ההורה
+  @Output() showDepartments = new EventEmitter<void>();
+
+  navigateToDepartments() {
+    alert('Navigating to Departments');
+    this.showDepartments.emit();
   }
 }

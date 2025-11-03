@@ -1,2 +1,4 @@
-<app-company-manager-header></app-company-manager-header>
+<app-company-manager-header (showDepartments)="onShowDepartments()"></app-company-manager-header>
 <h1>ברוכים הבאים ללוח הבקרה של מנהל החברה</h1>
+<app-departments-view *ngIf="showDepartments"></app-departments-view>
+<router-outlet></router-outlet>

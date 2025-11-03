@@ -7,68 +7,127 @@
   
   <div class="left-panel">
     <!-- תצוגת ברירת מחדל - סיכומים -->
-    <div *ngIf="!showDetails" class="summary-view">
+    <div *ngIf="!selectedTherapist" class="summary-view">
       <div class="summary-card">
         <h2>סיכום מטפלים</h2> 
         <p class="instruction">בחר מטפל מהרשימה לצפייה בפרטים</p>
       </div>
     </div>
 
-    <!-- תצוגת פרטי מטפל -->
-    <div *ngIf="showDetails && selectedTherapist" class="details-view">
-      <div class="details-card">
-        <div class="details-header">
-          <h2>פרטי מטפל</h2>
-          <button class="close-btn" (click)="onCloseDetails()">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
+    <!-- תצוגה כאשר נבחר מטפל -->
+    <div *ngIf="selectedTherapist" class="therapist-view">
+      <!-- כותרת עם לינקים -->
+      <div class="header-tabs">
+        <span><p>{{ selectedTherapist.user.first_name }} {{ selectedTherapist.user.last_name }}</p>      </span>
+        <br />         
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'details'"
+          (click)="setActiveTab('details')">
+          <mat-icon>person</mat-icon>
+          <span>פרטי מטפל</span>
+        </button>
         
-        <div class="details-content">
-          <div class="detail-section">
-            <mat-icon>person</mat-icon>
-            <div>
-              <label>שם מלא:</label>
-              <p>{{ selectedTherapist.user.first_name }} {{ selectedTherapist.user.last_name }}</p>
-            </div>
-          </div>
-          
-          <div class="detail-section">
-            <mat-icon>email</mat-icon>
-            <div>
-              <label>אימייל:</label>
-              <p>{{ selectedTherapist.user.email }}</p>
-            </div>
-          </div>
-          
-          <div class="detail-section">
-            <mat-icon>phone</mat-icon>
-            <div>
-              <label>טלפון:</label>
-              <p>{{ selectedTherapist.user.phone || 'לא צוין' }}</p>
-            </div>
-          </div>
-          
-          <div class="detail-section">
-            <mat-icon>badge</mat-icon>
-            <div>
-              <label>מזהה מטפל:</label>
-              <p>{{ selectedTherapist.therapist.therapist_id }}</p>
-            </div>
-          </div>
-          
-          <!-- הוסף פרטים נוספים לפי הצורך -->
-        </div>
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'calendar'"
+          (click)="setActiveTab('calendar')">
+          <mat-icon>calendar_today</mat-icon>
+          <span>יומן</span>
+        </button>
         
-        <div class="details-actions">
-          <button class="action-btn primary">
-            <mat-icon>edit</mat-icon>
-            <span>ערוך פרטים</span>
-          </button>
-          <button class="action-btn">
-            <mat-icon>calendar_today</mat-icon>
-            <span>יומן</span>
-          </button>
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'mail'"
+          (click)="setActiveTab('mail')">
+          <mat-icon>mail</mat-icon>
+          <span>דואר</span>
+        </button>
+        
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'patients'"
+          (click)="setActiveTab('patients')">
+          <mat-icon>people</mat-icon>
+          <span>רשימת מטופלים</span>
+        </button>
+        
+        <button class="close-btn" (click)="onCloseDetails()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- תוכן לפי הטאב הפעיל -->
+      <div class="tab-content">
+        <!-- פרטי מטפל -->
+        <div *ngIf="activeTab === 'details'" class="details-view">
+          <div class="details-card">
+            <div class="details-content">
+              <div class="detail-section">
+                <mat-icon>person</mat-icon>
+                <div>
+                  <label>שם מלא:</label>
+                  <p>{{ selectedTherapist.user.first_name }} {{ selectedTherapist.user.last_name }}</p>
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <mat-icon>email</mat-icon>
+                <div>
+                  <label>אימייל:</label>
+                  <p>{{ selectedTherapist.user.email }}</p>
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <mat-icon>phone</mat-icon>
+                <div>
+                  <label>טלפון:</label>
+                  <p>{{ selectedTherapist.user.phone || 'לא צוין' }}</p>
+                </div>
+              </div>
+              
+              <div class="detail-section">
+                <mat-icon>badge</mat-icon>
+                <div>
+                  <label>מזהה מטפל:</label>
+                  <p>{{ selectedTherapist.therapist.therapist_id }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="details-actions">
+              <button class="action-btn primary">
+                <mat-icon>edit</mat-icon>
+                <span>ערוך פרטים</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- יומן -->
+        <div *ngIf="activeTab === 'calendar'" class="calendar-view">
+          <div class="calendar-card">
+            <h3>יומן פגישות</h3>
+            <p>כאן יוצג יומן הפגישות של המטפל</p>
+            <!-- הוסף כאן את הקומפוננטה של היומן -->
+          </div>
+        </div>
+
+        <!-- דואר -->
+        <div *ngIf="activeTab === 'mail'" class="mail-view">
+          <div class="mail-card">
+            <h3>התכתבויות</h3>
+            <p>כאן יוצגו ההתכתבויות עם המטפל</p>
+            <!-- הוסף כאן את הקומפוננטה של הדואר -->
+          </div>
+        </div>
+        <!-- מטופלים -->
+        <div *ngIf="activeTab === 'patients'" class="patients-view">
+          <div class="patients-card">
+          <!-- <app-patient-list></app-patient-list> -->
+          <app-patient-table></app-patient-table> 
+           </div>
         </div>
       </div>
     </div>
