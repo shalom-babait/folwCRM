@@ -4,9 +4,13 @@
 
   <!-- שדה חיפוש -->
   <div class="search-container">
-<button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
-  <mat-icon style="color: #BB7E2B;">add</mat-icon>
-</button>
+    <button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
+      <mat-icon style="color: #BB7E2B;">add</mat-icon>
+    </button>
+    <!-- כפתור הצגת פגישות ביומן -->
+    <button class="icon-button" mat-icon-button (click)="openCalendarDialog()" style="margin-right: 8px;">
+      <mat-icon style="color: #BB7E2B;">calendar_today</mat-icon>
+    </button>
     <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
 
   </div>
