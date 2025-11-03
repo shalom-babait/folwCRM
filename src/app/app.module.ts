@@ -64,6 +64,11 @@ import { TherapistsViewComponent } from './components/personal-area/secretary/th
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { SecretaryListComponent } from './components/personal-area/company-manager/secretary-list/secretary-list.component';
+import { DepartmentsListComponent } from './components/personal-area/company-manager/departments/departments-list/departments-list.component';
+import { DepartmentDetailsComponent } from './components/personal-area/company-manager/departments/department-details/department-details.component';
+import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
+import { AddDepartmentDialogComponent } from './components/personal-area/company-manager/departments/add-department-dialog/add-department-dialog.component';
+import { PatientTableComponent } from './components/personal-area/patient/patient-table/patient-table.component';
 
 
 @NgModule({
@@ -104,6 +109,11 @@ import { SecretaryListComponent } from './components/personal-area/company-manag
     CompanyManagerHeaderComponent,
     CompanyManagerDashboardComponent,
     SecretaryListComponent,
+    DepartmentsListComponent,
+    DepartmentDetailsComponent,
+    DepartmentsViewComponent,
+    AddDepartmentDialogComponent,
+    PatientTableComponent,
   ],
   imports: [
     MatMenuModule,

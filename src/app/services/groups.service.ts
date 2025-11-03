@@ -1,0 +1,39 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { Group, UserGroup } from '../models/department-group.model';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GroupsService {
+  private apiUrl = `${environment.apiUrl}/groups`;
+
+  constructor(private http: HttpClient) { }
+
+  // קבלת כל הקבוצות כולל שם המחלקה
+  getAllGroupsWithDepartment(): Observable<Group[]> {
+    return this.http.get<Group[]>(`${this.apiUrl}/all`);
+  }
+
+  // הוספת קבוצה חדשה
+  addGroup(group: Group): Observable<Group> {
+    return this.http.post<Group>(this.apiUrl, group);
+  }
+
+  // עריכת קבוצה קיימת
+  editGroup(group_id: number, group: Group): Observable<Group> {
+    return this.http.put<Group>(`${this.apiUrl}/${group_id}`, group);
+  }
+
+  // מחיקת קבוצה
+  deleteGroup(group_id: number): Observable<{ success: boolean }> {
+    return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${group_id}`);
+  }
+
+  // קבלת משתמשים בקבוצה
+  getGroupUsers(group_id: number): Observable<UserGroup[]> {
+    return this.http.get<UserGroup[]>(`${this.apiUrl}/${group_id}/users`);
+  }
+}

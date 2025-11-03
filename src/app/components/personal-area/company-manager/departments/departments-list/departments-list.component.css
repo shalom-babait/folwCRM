@@ -1,0 +1,445 @@
+.departments-list-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  font-family: Arial, sans-serif;
+  direction: rtl;
+  height: fit-content;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  background-color: #022F39;
+  color: white;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.card-header h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-department-btn,
+.search-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.add-department-btn:hover,
+.search-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.add-department-btn:disabled,
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-department-btn mat-icon,
+.search-btn mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.card-content {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(85vh - 160px);
+}
+
+.departments-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.department-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.department-card {
+  background-color: white;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.department-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  background-color: #f8f9fa;
+}
+
+.department-card.selected {
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
+  box-shadow: 0 6px 12px rgba(2, 47, 57, 0.3);
+}
+
+.department-card.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.expand-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.expand-button mat-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.department-card.selected .expand-button {
+  color: white;
+}
+
+.department-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  cursor: pointer;
+}
+
+.department-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.department-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.department-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #BB7E2B;
+}
+
+.department-card.selected .department-name {
+  color: white;
+}
+
+.department-card.selected .department-icon {
+  color: white;
+}
+
+.department-status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #e0e0e0;
+  color: #666;
+}
+
+.department-status.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.department-card.selected .department-status {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.department-treatment {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.department-card.selected .department-treatment {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groups-count {
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 500;
+}
+
+.department-card.selected .groups-count {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.menu-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.menu-button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.department-card.selected .menu-button {
+  color: white;
+}
+
+.department-card.selected .menu-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.menu-button mat-icon {
+  font-size: 1.3rem;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/* קבוצות */
+.groups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.5rem 0.5rem 0.5rem 2rem;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  border-bottom-left-radius: 0.6rem;
+  border-bottom-right-radius: 0.6rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.group-card {
+  background-color: white;
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-right: 3px solid transparent;
+}
+
+.group-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(-2px);
+  background-color: #f8f9fa;
+  border-right-color: #BB7E2B;
+}
+
+.group-card.selected {
+  background: linear-gradient(135deg, #BB7E2B 0%, #d89b3d 100%);
+  color: white;
+  box-shadow: 0 3px 8px rgba(187, 126, 43, 0.3);
+  border-right-color: #BB7E2B;
+}
+
+.group-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.group-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #666;
+}
+
+.group-card.selected .group-icon {
+  color: white;
+}
+
+.group-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.group-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.group-card.selected .group-name {
+  color: white;
+}
+
+.group-members {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.group-card.selected .group-members {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.group-status {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background-color: #e0e0e0;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.group-status.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.group-card.selected .group-status {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.no-departments {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* מובייל */
+@media (max-width: 768px) {
+  .departments-list-card {
+    max-width: 100%;
+    max-height: none;
+    margin-bottom: 1rem;
+  }
+  
+  .card-header {
+    padding: 1rem;
+  }
+  
+  .card-header h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  
+  .add-department-btn,
+  .search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-content {
+    max-height: 50vh;
+  }
+  
+  .department-card {
+    padding: 0.8rem;
+  }
+  
+  .groups-list {
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    padding: 0.8rem;
+  }
+  
+  .card-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .department-card {
+    padding: 0.7rem 0.8rem;
+  }
+  
+  .group-card {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .department-name,
+  .group-name {
+    font-size: 0.9rem;
+  }
+}

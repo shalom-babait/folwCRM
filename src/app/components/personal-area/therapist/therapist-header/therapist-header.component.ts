@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,12 +6,16 @@ import { Router } from '@angular/router';
   templateUrl: './therapist-header.component.html',
   styleUrls: ['./therapist-header.component.css']
 })
-export class TherapistHeaderComponent {
+export class TherapistHeaderComponent implements OnInit {
 showProfileMenu = false;
-  userName = 'שם המשתמש'; // יש לשלוף מהשירות
+  userName = ''; 
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
   constructor(private router: Router) {}
+ngOnInit() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+}
 
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
