@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
+import { TherapistCreationData } from 'src/app/models/therapist.model';
 
 @Component({
   selector: 'app-therapists-view',
@@ -8,15 +8,35 @@ import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.m
 })
 export class TherapistsViewComponent {
   selectedTherapist: TherapistCreationData | null = null;
-  showDetails: boolean = false;
+  activeTab: string = 'details';
 
+  /**
+   * מופעל כאשר נבחר מטפל מהרשימה
+   */
   onTherapistSelected(therapist: TherapistCreationData): void {
     this.selectedTherapist = therapist;
-    this.showDetails = true;
+    this.activeTab = 'details'; // חזרה לטאב הראשון בכל פעם שבוחרים מטפל חדש
   }
 
+  /**
+   * מחליף בין הטאבים השונים
+   */
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  /**
+   * סוגר את תצוגת הפרטים וחוזר לסיכום
+   */
   onCloseDetails(): void {
-    this.showDetails = false;
     this.selectedTherapist = null;
+    this.activeTab = 'details';
+  }
+
+  /**
+   * בודק אם הטאב הנוכחי הוא הפעיל
+   */
+  isActiveTab(tab: string): boolean {
+    return this.activeTab === tab;
   }
 }

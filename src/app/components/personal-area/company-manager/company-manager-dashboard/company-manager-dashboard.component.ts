@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./company-manager-dashboard.component.css']
 })
 export class CompanyManagerDashboardComponent {
+  showDepartments = false;
 
+  onShowDepartments() {
+    alert('Showing Departments');
+    this.showDepartments = true;
+  }
 }

@@ -17,6 +17,7 @@ export class LogInComponent {
 
   email: string = '';
   password: string = '';
+  userName: string = '';
 
   constructor(private authService: AuthService) {}
 
@@ -26,6 +27,7 @@ export class LogInComponent {
         localStorage.setItem('token', res.token);
         if (res.user) {
           localStorage.setItem('user', JSON.stringify(res.user));
+          this.userName = res.user.name || res.user.username || '';
         }
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const role = user.role;

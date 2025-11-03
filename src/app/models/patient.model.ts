@@ -16,6 +16,9 @@ export interface Patient {
   address?: string;
   teudat_zehut?: string;
   city?: string;
+  departments?: string[];
+  marital_status?: string;
+  treatment_count?: number;
 }
 // נתונים ספציפיים למטופל
 export interface PatientData {

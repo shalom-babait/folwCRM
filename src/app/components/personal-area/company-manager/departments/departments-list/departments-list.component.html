@@ -1,0 +1,24 @@
+<h1>רשימת מחלקות</h1>
+<div *ngIf="!isLoading && departmentsWithGroups.length > 0" class="departments-tree">
+  <div class="department-item" *ngFor="let item of departmentsWithGroups">
+    <div class="department-card">
+      <div class="department-info">
+        <span class="department-name">
+          <mat-icon class="department-icon">folder</mat-icon>
+          {{ item.department.department_name }}
+        </span>
+      </div>
+      <span class="groups-count" *ngIf="item.groups && item.groups.length > 0">
+        {{ item.groups.length }} קבוצות
+      </span>
+    </div>
+    <div class="groups-list" *ngIf="item.groups && item.groups.length > 0">
+      <div class="group-card" *ngFor="let group of item.groups">
+        <div class="group-info">
+          <mat-icon class="group-icon">group</mat-icon>
+          <span class="group-name">{{ group.group_name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
