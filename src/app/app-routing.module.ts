@@ -66,6 +66,16 @@ const routes: Routes = [
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
 
+
+   { path: 'secretary', component: SecretaryDashboardComponent },
+  // { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
+  // { path: 'patientList', component: PatientListComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+  // { path: 'therapistDashboard', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+  { path: 'secretary-dashboard', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' } },
+  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
+  { path: 'patient/:id', component: PatientDashboardComponent },
+  { path: 'patientList', component: PatientListComponent },
+  { path: 'therapistDashboard', component: TherapistDashboardComponent },
   
   
   { path: 'personal-area', children: [
