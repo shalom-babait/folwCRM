@@ -10,6 +10,7 @@ import { Department, Group, UserDepartment, DepartmentWithGroups } from 'src/app
   providedIn: 'root'
 })
 export class DepartmentService {
+  
   private apiUrl = `${environment.apiUrl}/departments`;
 
   constructor(private http: HttpClient) { }

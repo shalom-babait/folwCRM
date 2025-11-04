@@ -73,6 +73,7 @@ import { DepartmentDetailsComponent } from './components/personal-area/company-m
 import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
 import { AddDepartmentDialogComponent } from './components/personal-area/company-manager/departments/add-department-dialog/add-department-dialog.component';
 import { PatientTableComponent } from './components/personal-area/patient/patient-table/patient-table.component';
+import { AddGroupDialogComponent } from './components/personal-area/company-manager/departments/add-group-dialog/add-group-dialog.component';
 
 
 @NgModule({
@@ -121,6 +122,7 @@ import { PatientTableComponent } from './components/personal-area/patient/patien
     DepartmentsViewComponent,
     AddDepartmentDialogComponent,
     PatientTableComponent,
+    AddGroupDialogComponent,
   ],
   imports: [
     MatMenuModule,
