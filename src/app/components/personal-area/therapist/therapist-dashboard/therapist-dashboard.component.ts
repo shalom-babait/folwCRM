@@ -57,18 +57,41 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
 
   // טעינת פגישות של המטופל מהשרת
   loadPatientAppointments(patientId: number) {
-    this.patientService.getTreatments(patientId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (appointments) => {
-          this.appointments = appointments;
-          console.log('Appointments loaded:', this.appointments);
-        },
-        error: (error) => {
-          console.error('Error loading appointments:', error);
+    // שליפת user_id מה-localStorage
+    const userStr = localStorage.getItem('user');
+    let user_id: number | null = null;
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        user_id = userObj.user_id;
+      } catch (e) {
+        user_id = null;
+      }
+    }
+    if (user_id) {
+      this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+        if (therapistId) {
+          this.patientService.getTreatments(patientId, therapistId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (appointments) => {
+                this.appointments = appointments;
+                console.log('Appointments loaded:', this.appointments);
+              },
+              error: (error) => {
+                console.error('Error loading appointments:', error);
+                this.appointments = [];
+              }
+            });
+        } else {
+          console.error('No therapistId found for user_id:', user_id);
           this.appointments = [];
         }
       });
+    } else {
+      console.error('No user_id found in localStorage');
+      this.appointments = [];
+    }
   }
 
   // חישוב סך שעות טיפול

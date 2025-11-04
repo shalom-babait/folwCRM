@@ -1,4 +1,5 @@
 
+
 import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
@@ -92,9 +93,10 @@ export class PatientService {
       tap(() => this.setLoading(false))
     );
   }
-updatePatient(patientId: number, updatedPatient: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/patients/updatePatient/${patientId}`, updatedPatient);
-}
+  updatePatient(patientId: number, updatedPatient: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/patients/updatePatient/${patientId}`, updatedPatient);
+  }
+
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
 
@@ -107,17 +109,18 @@ updatePatient(patientId: number, updatedPatient: any): Observable<any> {
   }
 
 
-getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
-  this.setLoading(true);
+  getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
+    this.setLoading(true);
 
-  return this.http.get<Patient[]>(
-    `${this.apiUrl}/patients/byTherapist/${therapistId}`
-  ).pipe(
-    tap(patients => this.patientsListSubject.next(patients)),
-    catchError(this.handleError.bind(this)),
-    tap(() => this.setLoading(false))
-  );
-}
+    return this.http.get<Patient[]>(
+      `${this.apiUrl}/patients/byTherapist/${therapistId}`
+    ).pipe(
+      tap(patients => this.patientsListSubject.next(patients)),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
+  }
+
   getPatientById(patient_id: number): Observable<Patient> {
     this.setLoading(true);
 
@@ -156,23 +159,38 @@ getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     this.patientsListSubject.next([...currentList, patient]);
   }
 
-
-getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-  if (patient_id) {
-    return this.http.get<ApiResponse<AppointmentResponse[]>>(
-      `${environment.apiUrl}/treatments/patient/${patient_id}`
-    ).pipe(
-      map(response => response.data || []),
-      catchError(() => this.getMockTreatments(patient_id))
-    );
+  /**
+   * מביא את ה-therapistId לפי user_id (למשתמש שמחובר)
+   */
+  getTherapistIdByUserId(user_id: number): Observable<number | null> {
+    return this.http.get<{ therapist_id?: number }>(`${this.apiUrl}/therapists/byUser/${user_id}`)
+      .pipe(
+        map((response: { therapist_id?: number }) => response.therapist_id !== undefined ? response.therapist_id : null),
+        catchError(error => {
+          console.error('Error fetching therapistId by user_id:', error);
+          return of(null);
+        })
+      );
   }
-  return this.getMockTreatments(patient_id);
-}
+  getTreatments(patient_id?: number, therapistId?: number): Observable<AppointmentResponse[]> {
+    if (patient_id) {
+      return this.http.get<ApiResponse<AppointmentResponse[]>>(
+        `${environment.apiUrl}/treatments/patient/${patient_id}`
+      ).pipe(
+        map(response => response.data || []),
+        catchError(() => this.getMockTreatments(patient_id, therapistId))
+      );
+    }
+    return this.getMockTreatments(patient_id, therapistId);
+  }
 
-  private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+  private getMockTreatments(patient_id?: number, therapistId?: number): Observable<AppointmentResponse[]> {
     const id = patient_id || 1;
-    console.log('Fetching appointments for patient_id:', id);
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
+    if (!therapistId) {
+      throw new Error('therapistId is required for getMockTreatments');
+    }
+    console.log('Fetching appointments for patient_id:', id, 'therapist_id:', therapistId);
+    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/${therapistId}`).pipe(
       tap(appointments => {
         console.log('Raw appointments:', appointments);
       }),
@@ -237,16 +255,16 @@ getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
 
     return throwError(() => new Error(errorMessage));
   }
-deletePatient(patientId: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
-}
+  deletePatient(patientId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
+  }
 
-getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-  // שימוש במוק עבור סביבת פיתוח/טסט
-  const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
-  obs.subscribe(appointments => {
-    console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
-  });
-  return obs;
-}
+  getAppointmentsByPatientId(patientId: number, therapistId?: number): Observable<Appointment[]> {
+    // שימוש במוק עבור סביבת פיתוח/טסט
+    const obs = this.getMockTreatments(patientId, therapistId) as Observable<Appointment[]>;
+    obs.subscribe(appointments => {
+      console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+    });
+    return obs;
+  }
 }

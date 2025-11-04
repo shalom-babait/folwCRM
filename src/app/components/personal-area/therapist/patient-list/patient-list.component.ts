@@ -14,7 +14,7 @@ import { Patient } from 'src/app/models/patient.model';
 export class PatientListComponent implements OnInit, OnDestroy {
   patients: Patient[] = [];
   selectedPatientId: number | null = null;
-  therapistId: number = 1; // שנה לפי המטפל המחובר
+  therapistId: number = 1;
   isLoading = false;
   
   private destroy$ = new Subject<void>();
@@ -26,23 +26,39 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // טעינת רשימת מטופלים מהשרת
-    this.loadPatients();
-    
+    // קבלת ה-therapistId לפי user_id מה-localStorage והשרת
+    const userStr = localStorage.getItem('user');
+    let user_id: number | null = null;
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        user_id = userObj.user_id;
+      } catch (e) {
+        user_id = null;
+      }
+    }
+    if (user_id) {
+      this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+        if (therapistId) {
+          this.therapistId = therapistId;
+        }
+        this.loadPatients();
+      });
+    } else {
+      this.loadPatients();
+    }
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
       .subscribe(patients => {
         this.patients = patients;
       });
-
     // האזנה למצב טעינה
     this.patientService.loading$
       .pipe(takeUntil(this.destroy$))
       .subscribe(loading => {
         this.isLoading = loading;
       });
-
     // האזנה למטופל שנבחר
     this.patientService.selectedPatient$
       .pipe(takeUntil(this.destroy$))
@@ -57,7 +73,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   loadPatients() {
-    this.patientService.getPatientsByTherapist(this.therapistId)
+  this.patientService.getPatientsByTherapist(this.therapistId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
