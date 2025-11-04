@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>הוסף קבוצה למחלקה: {{ data.department.department_name }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="groupForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>שם הקבוצה</mat-label>
+      <input matInput formControlName="group_name" placeholder="הזן שם קבוצה">
+      <mat-error *ngIf="groupForm.get('group_name')?.hasError('required')">
+        שם הקבוצה הוא שדה חובה
+      </mat-error>
+      <mat-error *ngIf="groupForm.get('group_name')?.hasError('minlength')">
+        שם הקבוצה חייב להכיל לפחות 2 תווים
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isSubmitting">
+    ביטול
+  </button>
+  <button mat-raised-button color="primary" 
+          (click)="onSubmit()" 
+          [disabled]="!groupForm.valid || isSubmitting">
+    <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+    <span *ngIf="!isSubmitting">הוסף</span>
+  </button>
+</mat-dialog-actions>

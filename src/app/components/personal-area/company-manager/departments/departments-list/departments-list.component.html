@@ -1,24 +1,66 @@
-<h1>רשימת מחלקות</h1>
-<div *ngIf="!isLoading && departmentsWithGroups.length > 0" class="departments-tree">
-  <div class="department-item" *ngFor="let item of departmentsWithGroups">
-    <div class="department-card">
-      <div class="department-info">
-        <span class="department-name">
-          <mat-icon class="department-icon">folder</mat-icon>
-          {{ item.department.department_name }}
-        </span>
-      </div>
-      <span class="groups-count" *ngIf="item.groups && item.groups.length > 0">
-        {{ item.groups.length }} קבוצות
-      </span>
+<div class="departments-list-card">
+  <div class="card-header">
+    <h3>רשימת מחלקות</h3>
+    <div class="header-actions">
+      <button 
+        class="add-department-btn"
+        (click)="openAddDepartmentDialog()"
+        [disabled]="isLoading"
+        matTooltip="הוסף מחלקה חדשה"
+        matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף מחלקה</span>
+      </button>
+      <button 
+        class="search-btn"
+        (click)="openSearchDialog()"
+        [disabled]="isLoading"
+        matTooltip="חיפוש מטפל">
+        <mat-icon>search</mat-icon>
+        <span>חיפוש</span>
+      </button>
     </div>
-    <div class="groups-list" *ngIf="item.groups && item.groups.length > 0">
-      <div class="group-card" *ngFor="let group of item.groups">
-        <div class="group-info">
-          <mat-icon class="group-icon">group</mat-icon>
-          <span class="group-name">{{ group.group_name }}</span>
+  <!-- סגירת div מיותרת הוסרה כאן -->
+  </div>
+
+  <div class="card-content">
+    <!-- אינדיקטור טעינה -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- רשימת מחלקות -->
+    <div *ngIf="!isLoading && departmentsWithGroups.length > 0">
+      <div class="department-item" *ngFor="let item of departmentsWithGroups">
+        <div class="department-card">
+          <div class="department-info">
+            <mat-icon class="department-icon">folder</mat-icon>
+            <span class="department-name">{{ item.department.department_name }}</span>
+            <span class="groups-count" *ngIf="item.groups && item.groups.length > 0">
+              ({{ item.groups.length }} קבוצות)
+            </span>
+          </div>
+          <button 
+            class="add-group-btn"
+            (click)="openAddGroupDialog(item.department)"
+            matTooltip="הוסף קבוצה">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+        
+        <!-- רשימת קבוצות -->
+        <div class="groups-list" *ngIf="item.groups && item.groups.length > 0">
+          <div class="group-card" *ngFor="let group of item.groups">
+            <mat-icon class="group-icon">group</mat-icon>
+            <span class="group-name">{{ group.group_name }}</span>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- הודעה אם אין מחלקות -->
+    <div *ngIf="!isLoading && departmentsWithGroups.length === 0" class="no-departments">
+      <p>אין מחלקות כרגע</p>
     </div>
   </div>
 </div>

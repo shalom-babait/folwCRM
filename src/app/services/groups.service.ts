@@ -17,11 +17,11 @@ export class GroupsService {
     return this.http.get<Group[]>(`${this.apiUrl}/all`);
   }
 
-  // הוספת קבוצה חדשה
-  addGroup(group: Group): Observable<Group> {
-    return this.http.post<Group>(this.apiUrl, group);
+  // הוספת קבוצה חדשה למחלקה
+  addGroup(group: { group_name: string, department_id: number }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/add-group`, group);
   }
-
+  
   // עריכת קבוצה קיימת
   editGroup(group_id: number, group: Group): Observable<Group> {
     return this.http.put<Group>(`${this.apiUrl}/${group_id}`, group);
