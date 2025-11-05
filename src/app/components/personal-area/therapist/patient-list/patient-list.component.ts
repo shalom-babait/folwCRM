@@ -109,11 +109,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
       direction: 'rtl',
       data: {
         initialData: {
-          therapist_id: this.therapistId,
           status: 'פעיל'
         },
-        context: 'patient-list',
-        therapistId: this.therapistId
+        context: 'patient-list'
       }
     });
 

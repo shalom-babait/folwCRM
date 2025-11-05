@@ -1,3 +1,73 @@
+/* Make FullCalendar as compact as possible */
+.fc {
+  font-size: 0.8em !important;
+}
+.fc .fc-daygrid-day-frame, 
+.fc .fc-timegrid-col-frame {
+  min-width: 16px !important;
+  max-width: 32px !important;
+  padding: 0 !important;
+}
+.fc .fc-col-header-cell {
+  min-width: 16px !important;
+  max-width: 32px !important;
+  font-size: 0.75em !important;
+  padding: 1px 0 !important;
+}
+.fc .fc-scrollgrid-sync-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.fc .fc-daygrid-day {
+  padding: 0 !important;
+}
+/* Layout for therapist dashboard: patient list and calendar side by side */
+.therapist-area-content {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.patient-list-section {
+  flex: 0 0 320px;
+  max-width: 350px;
+  min-width: 250px;
+  background: #f7fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1rem;
+  margin-bottom: 0;
+}
+
+.calendar-section {
+  flex: 1 1 0%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1rem;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.welcome-section {
+  flex-basis: 100%;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .therapist-area-content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .patient-list-section, .calendar-section {
+    max-width: 100%;
+    min-width: 0;
+    padding: 1rem 0.5rem;
+  }
+}
 Header Styles
 header {
   display: flex;

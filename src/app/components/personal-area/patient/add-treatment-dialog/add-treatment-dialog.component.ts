@@ -223,33 +223,56 @@ getErrorMessage(field: string): string {
     if (endTime && endTime.length > 5) {
       endTime = endTime.substring(0,5);
     }
-    const appointment: any = {
-      therapist_id: this.data?.therapist_id || 1, // יש לעדכן לפי הלוגיקה שלך
-      patient_id: formValue.patient_id,
-      type_id: formValue.type,
-      room_id: formValue.place,
-      appointment_date: appointmentDate,
-      start_time: startTime,
-      end_time: endTime,
-      notes: formValue.notes || ''
-    };
-    console.log('appointment to send:', appointment);
-
-    this.patientService.createAppointment(appointment).subscribe({
-      next: (response) => {
-        console.log('response from server:', response);
-        if (response.success) {
-          alert('הפגישה נוספה בהצלחה!');
-          this.appointmentAdded.emit(response.data || appointment);
-          this.dialogRef.close(response.data || appointment);
-        } else {
-          alert('אירעה שגיאה בשמירת הפגישה');
-        }
-      },
-      error: (err) => {
-        console.error('error from server:', err);
-        alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+    // קבלת user_id מה-localStorage
+    const userStr = localStorage.getItem('user');
+    let user_id: number | null = null;
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        user_id = userObj.user_id;
+      } catch (e) {
+        user_id = null;
       }
+    }
+    if (!user_id) {
+      alert('לא נמצא משתמש מחובר.');
+      return;
+    }
+    // שליפת therapistId מהשרת
+    this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+      if (!therapistId) {
+        alert('לא נמצא מזהה מטפל עבור המשתמש.');
+        return;
+      }
+      const appointment: any = {
+        therapist_id: therapistId, // תמיד מספר מהמשתמש המחובר
+        patient_id: formValue.patient_id,
+        type_id: formValue.type,
+        room_id: formValue.place,
+        appointment_date: appointmentDate,
+        start_time: startTime,
+        end_time: endTime,
+        notes: formValue.notes || ''
+      };
+      console.log('therapist_id:', therapistId, typeof therapistId);
+      console.log('appointment to send:', appointment);
+
+      this.patientService.createAppointment(appointment).subscribe({
+        next: (response) => {
+          console.log('response from server:', response);
+          if (response.success) {
+            alert('הפגישה נוספה בהצלחה!');
+            this.appointmentAdded.emit(response.data || appointment);
+            this.dialogRef.close(response.data || appointment);
+          } else {
+            alert('אירעה שגיאה בשמירת הפגישה');
+          }
+        },
+        error: (err) => {
+          console.error('error from server:', err);
+          alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+        }
+      });
     });
   }
 

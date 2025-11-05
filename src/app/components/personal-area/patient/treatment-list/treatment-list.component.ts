@@ -31,19 +31,36 @@ export class TreatmentListComponent implements OnInit {
 
   ngOnInit(): void {
     // Load treatments from the server if none are provided through Input
-    if (this.appointments.length === 0) {
-      // נניח שמועבר מזהה מטופל בקומפוננטה האב (אם לא, אפשר להוסיף @Input patientId)
-      const patientId = this.appointments[0]?.patient_id;
-      if (patientId) {
-        this.patientService.getTreatments(patientId).subscribe(data => {
+    if (this.appointments.length === 0 && this.patientId) {
+      // שליפת user_id מה-localStorage
+      const userStr = localStorage.getItem('user');
+      let user_id: number | null = null;
+      if (userStr) {
+        try {
+          const userObj = JSON.parse(userStr);
+          user_id = userObj.user_id;
+        } catch (e) {
+          user_id = null;
+        }
+      }
+      if (!user_id) {
+        console.error('לא נמצא משתמש מחובר');
+        return;
+      }
+      this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+        if (!therapistId) {
+          console.error('לא נמצא מזהה מטפל עבור המשתמש');
+          return;
+        }
+        this.patientService.getTreatments(this.patientId, therapistId).subscribe(data => {
           this.showAppointments = data;
           this.appointments = this.showAppointments.map(appointment => ({
             ...appointment,
             id: appointment.appointment_id,
-            patient_id: patientId
+            patient_id: this.patientId
           }));
         });
-      }
+      });
     }
   }
 
@@ -107,9 +124,29 @@ export class TreatmentListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // רענון מלא של הרשימה מהשרת
-        this.patientService.getTreatments(this.patientId).subscribe(data => {
-          this.appointments = data;
+        // רענון מלא של הרשימה מהשרת עם therapistId
+        const userStr = localStorage.getItem('user');
+        let user_id: number | null = null;
+        if (userStr) {
+          try {
+            const userObj = JSON.parse(userStr);
+            user_id = userObj.user_id;
+          } catch (e) {
+            user_id = null;
+          }
+        }
+        if (!user_id) {
+          console.error('לא נמצא משתמש מחובר');
+          return;
+        }
+        this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+          if (!therapistId) {
+            console.error('לא נמצא מזהה מטפל עבור המשתמש');
+            return;
+          }
+          this.patientService.getTreatments(this.patientId, therapistId).subscribe(data => {
+            this.appointments = data;
+          });
         });
       }
     });

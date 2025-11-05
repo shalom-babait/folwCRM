@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -34,22 +34,22 @@ export class RoomCalendarComponent implements OnInit {
     }
   };
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data?: any) {
     // לוגים לאבחון
-    console.log('RoomCalendarComponent dialog data:', data);
-    if (data && data.events) {
-      this.events = data.events;
-      console.log('RoomCalendarComponent events:', this.events);
-      this.calendarOptions.events = this.events;
+    if (data) {
+      console.log('RoomCalendarComponent dialog data:', data);
+      if (data.events) {
+        this.events = data.events;
+        console.log('RoomCalendarComponent events:', this.events);
+        this.calendarOptions.events = this.events;
+      }
     }
   }
 
   ngOnInit(): void {
     // לוגים לאבחון
     console.log('RoomCalendarComponent ngOnInit events:', this.events);
-    if (this.events && this.events.length > 0) {
-      this.calendarOptions.events = this.events;
-    }
+    this.calendarOptions.events = this.events;
   }
 
   ngOnChanges(changes: SimpleChanges) {

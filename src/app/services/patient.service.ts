@@ -1,5 +1,4 @@
 
-
 import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
@@ -7,14 +6,38 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class PatientService {
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PatientService {
+  private apiUrl = environment.apiUrl;
+
+
+  /**
+   * מחזיר את כל הפגישות של מטפל לפי מזהה מטפל בלבד
+   */
+  
+  /**
+   * מחזיר את כל הפגישות של מטפל לפי מזהה מטפל בלבד
+   */
+  getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
+    if (!therapistId) {
+      console.error('getTreatmentsForTherapist: therapistId is missing!', therapistId);
+      return of([]);
+    }
+    const url = `${this.apiUrl}/appointments/therapist/${therapistId}`;
+    console.log('getTreatmentsForTherapist: GET', url, 'therapistId:', therapistId);
+    return this.http.get<ApiResponse<AppointmentResponse[]>>(url).pipe(
+      map((response: ApiResponse<AppointmentResponse[]>) => response.data || []),
+      catchError((error) => {
+        console.error('Error fetching appointments for therapist:', error);
+        return of([]);
+      })
+    );
+  }
   getPatientOnly(patientId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
   }
@@ -39,7 +62,6 @@ export class PatientService {
         map((response: ApiResponse<Appointment>) => response.data as Appointment)
       );
   }
-  private apiUrl = environment.apiUrl;
 
   // BehaviorSubjects לניהול מצב
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
