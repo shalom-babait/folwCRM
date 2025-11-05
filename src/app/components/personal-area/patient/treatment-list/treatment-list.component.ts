@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Patient } from 'src/app/models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
@@ -17,6 +18,7 @@ export class TreatmentListComponent implements OnInit {
   }
   @Input() appointments: Appointment[] = [];
   @Input() patientId: number = 0;
+  @Input() patient?: Patient;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
 

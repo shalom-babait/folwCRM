@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
 import { UserData } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { AddTherapistDialogComponent } from '../add-therapist-dialog/add-therapist-dialog.component';
+import { AddTherapistDialogComponent } from '../../secretary/add-therapist-dialog/add-therapist-dialog.component';
 
 @Component({
   selector: 'app-therapist-list',

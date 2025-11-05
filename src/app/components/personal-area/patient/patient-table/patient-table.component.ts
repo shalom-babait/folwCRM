@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Patient } from 'src/app/models/patient.model';
+import { PatientService } from 'src/app/services/patient.service';
 
 @Component({
   selector: 'app-patient-table',
@@ -16,10 +16,7 @@ export class PatientTableComponent implements OnInit {
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  // עדכני את ה-URL לפי השרת שלך
-  private apiUrl = 'http://localhost:3000/api'; // או כל URL אחר
-
-  constructor(private http: HttpClient) {}
+  constructor(private patientService: PatientService) {}
 
   ngOnInit(): void {
     this.loadPatients();
@@ -27,11 +24,8 @@ export class PatientTableComponent implements OnInit {
 
   loadPatients(): void {
     this.isLoading = true;
-    
-    // קבל את ה-therapist_id מהאחסון או מהשירות שלך
-    const therapistId = localStorage.getItem('therapist_id'); // או מתוך שירות אימות
-    
-    this.http.get<Patient[]>(`${this.apiUrl}/patients/therapist/${therapistId}`)
+    const therapistId = Number(localStorage.getItem('therapist_id'));
+    this.patientService.getPatientsByTherapist(therapistId)
       .subscribe({
         next: (data) => {
           this.patients = data;
@@ -54,8 +48,8 @@ export class PatientTableComponent implements OnInit {
     }
 
     this.filteredPatients = this.patients.filter(patient => {
-      const firstName = (patient.first_name || patient.firstName || '').toLowerCase();
-      const lastName = (patient.last_name || patient.lastName || '').toLowerCase();
+      const firstName = (patient.first_name || '').toLowerCase();
+      const lastName = (patient.last_name || '').toLowerCase();
       const fullName = `${firstName} ${lastName}`;
       const city = (patient.city || '').toLowerCase();
       
@@ -77,10 +71,10 @@ export class PatientTableComponent implements OnInit {
 
       switch (column) {
         case 'full_name':
-          const firstNameA = a.first_name || a.firstName || '';
-          const lastNameA = a.last_name || a.lastName || '';
-          const firstNameB = b.first_name || b.firstName || '';
-          const lastNameB = b.last_name || b.lastName || '';
+        const firstNameA = a.first_name || '';
+        const lastNameA = a.last_name || '';
+        const firstNameB = b.first_name || '';
+        const lastNameB = b.last_name || '';
           valueA = `${firstNameA} ${lastNameA}`.toLowerCase();
           valueB = `${firstNameB} ${lastNameB}`.toLowerCase();
           break;

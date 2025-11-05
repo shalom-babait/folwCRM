@@ -48,7 +48,7 @@ import { AdminDashboardComponent } from './components/personal-area/admin/admin-
 import { SecretaryDashboardComponent } from './components/personal-area/secretary/secretary-dashboard/secretary-dashboard.component';
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
 import { LinkContentComponent } from './components/marketing/link-content/link-content.component';
-import { PatientListComponent } from './components/personal-area/therapist/patient-list/patient-list.component';
+import { PatientListComponent } from './components/personal-area/patient/patient-list/patient-list.component';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component'
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
@@ -59,12 +59,12 @@ import { SelectTimeDialogComponent } from './components/select-time-dialog/selec
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
 import { PatientDetailsComponent } from './components/personal-area/patient/patient-details/patient-details.component';
-import { TherapistListComponent } from './components/personal-area/secretary/therapist-list/therapist-list.component';
+import { TherapistListComponent } from './components/personal-area/therapist/therapist-list/therapist-list.component';
 import { AddTherapistDialogComponent } from './components/personal-area/secretary/add-therapist-dialog/add-therapist-dialog.component';
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
-import { TherapistsViewComponent } from './components/personal-area/secretary/therapists-view/therapists-view.component';
+import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { SecretaryListComponent } from './components/personal-area/company-manager/secretary-list/secretary-list.component';
@@ -74,6 +74,8 @@ import { DepartmentsViewComponent } from './components/personal-area/company-man
 import { AddDepartmentDialogComponent } from './components/personal-area/company-manager/departments/add-department-dialog/add-department-dialog.component';
 import { PatientTableComponent } from './components/personal-area/patient/patient-table/patient-table.component';
 import { AddGroupDialogComponent } from './components/personal-area/company-manager/departments/add-group-dialog/add-group-dialog.component';
+import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
+import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 
 
 @NgModule({
@@ -123,9 +125,12 @@ import { AddGroupDialogComponent } from './components/personal-area/company-mana
     AddDepartmentDialogComponent,
     PatientTableComponent,
     AddGroupDialogComponent,
+    SecretaryHomeComponent,
+    PatientViewComponent,
   ],
   imports: [
-    MatMenuModule,
+  MatMenuModule,
+  MatIconModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
