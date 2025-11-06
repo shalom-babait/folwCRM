@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Patient } from 'src/app/models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
@@ -17,12 +18,14 @@ export class TreatmentListComponent implements OnInit {
   }
   @Input() appointments: Appointment[] = [];
   @Input() patientId: number = 0;
+  @Input() patient?: Patient;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
 
   searchTerm: string = '';
   showAppointments: Appointment[] = [];
-
+  editingAppointment: Appointment | null = null;
+  statusOptions: string[] = ['מתוזמנת', 'בוטלה', 'נדחתה', 'הושלמה'];
 
   constructor(
     private dialog: MatDialog,
@@ -81,8 +84,8 @@ export class TreatmentListComponent implements OnInit {
       return {
         id: app.appointment_id,
         title: app.treatment_type + (app.room ? ' - ' + app.room : ''),
-        start: startDate.toISOString().slice(0,16),
-        end: endDate.toISOString().slice(0,16),
+        start: startDate.toISOString().slice(0, 16),
+        end: endDate.toISOString().slice(0, 16),
         extendedProps: {
           patient_id: app.patient_id,
           total_minutes: app.total_minutes
@@ -109,7 +112,7 @@ export class TreatmentListComponent implements OnInit {
     if (!this.searchTerm.trim()) {
       return filtered;
     }
-    return filtered.filter(appointment => 
+    return filtered.filter(appointment =>
       appointment.appointment_date.includes(this.searchTerm)
     );
   }
@@ -150,6 +153,28 @@ export class TreatmentListComponent implements OnInit {
         });
       }
     });
+  }
+  //    עריכת סטטוס
+  startEditStatus(appointment: Appointment): void {
+    this.editingAppointment = appointment;
+  }
+  
+  saveStatus(appointment: Appointment): void {
+    const id = appointment.appointment_id;
+    if (id == null) {
+      console.warn('אין appointment_id לעדכון סטטוס', appointment);
+      this.editingAppointment = null;
+      return;
+    }
+
+    const status = appointment.status ?? '';
+    this.patientService.updateAppointmentStatus(id, status)
+      .subscribe({
+        next: () => console.log('סטטוס עודכן בהצלחה'),
+        error: err => console.error('שגיאה בעדכון סטטוס:', err)
+      });
+
+    this.editingAppointment = null;
   }
 
   // פורמט תאריך לתצוגה

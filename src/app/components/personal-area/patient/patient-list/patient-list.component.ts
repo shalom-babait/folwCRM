@@ -1,10 +1,10 @@
 // patient-list.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
-import { AddPatientDialogComponent } from '../../patient/add-patient-dialog/add-patient-dialog.component';
+import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
 import { Patient } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-list',
@@ -12,11 +12,11 @@ import { Patient } from 'src/app/models/patient.model';
   styleUrls: ['./patient-list.component.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  @Output() patientSelected = new EventEmitter<Patient>();
   patients: Patient[] = [];
   selectedPatientId: number | null = null;
   therapistId: number = 1;
   isLoading = false;
-  
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -26,6 +26,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+<<<<<<< HEAD:src/app/components/personal-area/therapist/patient-list/patient-list.component.ts
     // קבלת ה-therapistId לפי user_id מה-localStorage והשרת
     const userStr = localStorage.getItem('user');
     let user_id: number | null = null;
@@ -47,6 +48,10 @@ export class PatientListComponent implements OnInit, OnDestroy {
     } else {
       this.loadPatients();
     }
+=======
+    // טעינת רשימת מטופלים מהשרת
+    this.loadPatients();
+>>>>>>> c5da1fb811e7afc831f611bb0cd05aacb6ac0f5f:src/app/components/personal-area/patient/patient-list/patient-list.component.ts
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
@@ -87,13 +92,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   viewPatientDetails(patient: Patient) {
-    const patient_id = patient.patient_id;
-    if (patient_id) {
-      this.patientService.selectPatient(patient_id);
-      this.selectedPatientId = patient_id;
-      // ניווט תקני של Angular
-      this.router.navigate(['/patient', patient_id]);
-    }
+    this.patientSelected.emit(patient);
+    this.selectedPatientId = patient.patient_id ?? null;
   }
 
   openAddPatientDialog(): void {

@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors }
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PatientService } from '../../../../services/patient.service';
-import { Patient } from 'src/app/models/patient.model';import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { CreatePatientRequest } from 'src/app/models/patient.model';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
 @Component({
   selector: 'app-add-patient-dialog',
@@ -113,7 +114,8 @@ export class AddPatientDialogComponent implements OnInit {
         birth_date: birthDate,
         gender: formValue.gender || undefined,
         status: formValue.status || 'פעיל',
-        history_notes: formValue.history_notes || undefined
+        history_notes: formValue.history_notes || undefined,
+        user_id: this.data?.user_id // ודא שיש לך user_id ב-data
       };
 
       this.patientService.createPatient(patientData).subscribe({

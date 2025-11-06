@@ -44,7 +44,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
                   // map patientId to name
                   const patientMap: { [id: number]: string } = {};
                   patients.forEach(p => {
-                    patientMap[p.patient_id!] = (p.first_name || p.firstName || '') + ' ' + (p.last_name || p.lastName || '');
+                    patientMap[p.patient_id!] = (p.first_name ||  '') + ' ' + (p.last_name ||  '');
                   });
                   this.calendarEvents = appointments.map(app => {
                     const dateStr = app.appointment_date ? app.appointment_date.substring(0, 10) : '';

@@ -68,8 +68,8 @@
 
 .search-input::placeholder {
     color: #022F39;
-    opacity: 1; 
-    font-weight: bold; 
+    opacity: 1;
+    font-weight: bold;
 }
 
 /* שורה של כותרות */
@@ -90,7 +90,7 @@
     padding: 1rem;
     border-radius: 0.5rem;
     margin-bottom: 0.3rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     color: black;
     transition: all 0.2s ease;
 }
@@ -98,7 +98,7 @@
 .data-row:hover {
     background-color: #f8f9fa;
     transform: translateX(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* תאים בתוך השורה */
@@ -190,7 +190,8 @@
     }
 
     .header-row {
-        display: none; /* מסתיר כותרות במובייל */
+        display: none;
+        /* מסתיר כותרות במובייל */
     }
 
     .data-row {
@@ -213,12 +214,35 @@
     }
 
     /* הוספת תוויות במובייל */
-    .treatment-cell:nth-child(1)::before { content: "תאריך: "; font-weight: bold; }
-    .treatment-cell:nth-child(2)::before { content: "שם פגישה: "; font-weight: bold; }
-    .treatment-cell:nth-child(3)::before { content: "מקום: "; font-weight: bold; }
-    .treatment-cell:nth-child(4)::before { content: "שעת התחלה: "; font-weight: bold; }
-    .treatment-cell:nth-child(5)::before { content: "שעת סיום: "; font-weight: bold; }
-    .treatment-cell:nth-child(6)::before { content: "סה\"כ: "; font-weight: bold; }
+    .treatment-cell:nth-child(1)::before {
+        content: "תאריך: ";
+        font-weight: bold;
+    }
+
+    .treatment-cell:nth-child(2)::before {
+        content: "שם פגישה: ";
+        font-weight: bold;
+    }
+
+    .treatment-cell:nth-child(3)::before {
+        content: "מקום: ";
+        font-weight: bold;
+    }
+
+    .treatment-cell:nth-child(4)::before {
+        content: "שעת התחלה: ";
+        font-weight: bold;
+    }
+
+    .treatment-cell:nth-child(5)::before {
+        content: "שעת סיום: ";
+        font-weight: bold;
+    }
+
+    .treatment-cell:nth-child(6)::before {
+        content: "סה\"כ: ";
+        font-weight: bold;
+    }
 
     .actions-cell {
         justify-content: center;
@@ -242,3 +266,71 @@
         height: 5vh;
     }
 }
+
+.status-select {
+    width: 14% !important;
+}
+
+.mat-mdc-form-field {
+    display: inline-flex;
+    flex-direction: row-reverse
+}
+
+::ng-deep .status-select.mat-form-field-appearance-outline {
+    background: transparent;
+}
+
+::ng-deep .status-select.mat-form-field-appearance-outline .mat-mdc-text-field-wrapper {
+    background-color: transparent;
+    padding: 0;
+}
+
+::ng-deep .status-select.mat-form-field-appearance-outline .mdc-notched-outline {
+    display: none;
+}
+
+::ng-deep .status-select.mat-form-field-appearance-outline .mat-mdc-form-field-flex {
+    padding: 0;
+    height: 40px;
+    align-items: center;
+}
+
+::ng-deep .status-select .mat-mdc-select-trigger {
+    height: 40px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 35%;
+}
+
+::ng-deep .status-select .mat-mdc-select-arrow {
+    color: #022F39;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  border-radius: 12px !important; 
+  overflow: visible !important;  
+  direction: rtl;                 
+  padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-option {
+  display: flex;
+  flex-direction: row-reverse; 
+  justify-content: space-between;
+  align-items: center;
+  text-align: right;
+  color: #000 !important;
+  background: #fff !important;
+}
+
+::ng-deep .mat-mdc-option:first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+::ng-deep .mat-mdc-option:last-child {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+

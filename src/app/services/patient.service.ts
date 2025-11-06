@@ -1,5 +1,5 @@
 
-import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
+import { Patient, CreatePatientRequest } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -115,9 +115,43 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
       tap(() => this.setLoading(false))
     );
   }
-  updatePatient(patientId: number, updatedPatient: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/patients/updatePatient/${patientId}`, updatedPatient);
+
+
+
+
+
+  updatePatient(patientId: number, updatedPatient: any): Observable<ApiResponse<Patient>> {
+    this.setLoading(true);
+    return this.http.put<ApiResponse<Patient>>(
+      `${this.apiUrl}/patients/updatePatient/${patientId}`,
+      updatedPatient,
+      this.httpOptions
+    ).pipe(
+      tap(response => {
+        if (response && response.success && response.data) {
+          const updated = response.data as Patient;
+          const current = this.patientsListSubject.value || [];
+          const newList = current.map(p => {
+            // השוואה לפי patient_id או user_id אם קיים
+            if ((p as any).patient_id && (updated as any).patient_id && (p as any).patient_id === (updated as any).patient_id) {
+              return { ...p, ...updated };
+            }
+            if ((p as any).user_id && (updated as any).user_id && (p as any).user_id === (updated as any).user_id) {
+              return { ...p, ...updated };
+            }
+            return p;
+          });
+          this.patientsListSubject.next(newList);
+        }
+      }),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
   }
+
+
+
+
 
   getAllPatients(): Observable<Patient[]> {
     this.setLoading(true);
@@ -281,12 +315,29 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
     return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
   }
 
-  getAppointmentsByPatientId(patientId: number, therapistId?: number): Observable<Appointment[]> {
+  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
     // שימוש במוק עבור סביבת פיתוח/טסט
-    const obs = this.getMockTreatments(patientId, therapistId) as Observable<Appointment[]>;
+    const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
     obs.subscribe(appointments => {
       console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
     });
     return obs;
   }
+  updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
+    this.setLoading(true);
+    const body = { status };
+    return this.http.put<ApiResponse<any>>(
+      `${this.apiUrl}/appointments/${appointmentId}/status`,
+      body,
+      this.httpOptions
+    ).pipe(
+      tap(response => {
+        console.log('Appointment status updated:', response);
+      }),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
+  }
+
 }
+
