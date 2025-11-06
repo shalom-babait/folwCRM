@@ -11,6 +11,8 @@ import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { Room } from 'src/app/models/room.model';
+import { UserService } from 'src/app/services/user.service';
+import { TherapistCreationData } from 'src/app/models/therapist.model';
 //import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import { MatSnackBar } from '@angular/material/snack-bar';
 //import { PatientService } from '../../../../services/patient.service';
@@ -31,6 +33,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
   showCalendar: boolean = false;
   roomEvents: any[] = [];
   showOverlay: boolean = false;
+  therapists: TherapistCreationData[] = [];
   constructor(
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
@@ -39,10 +42,14 @@ export class CreateTreatmentDialogComponent implements OnInit {
   private roomsService: RoomsService,
   private typesService: TypesService,
   private patientService: PatientService,
-    private dialog: MatDialog
+  private dialog: MatDialog,
+  private userService: UserService
     // private treatmentService: TreatmentService
   ) {
     this.treatmentForm = this.createForm();
+    this.userService.getAllTherapists().subscribe((therapists) => {
+      this.therapists = therapists;
+    });
   }
 
   ngOnInit(): void {
@@ -74,6 +81,14 @@ export class CreateTreatmentDialogComponent implements OnInit {
     });
   }
 
+  getTherapistName(therapistId: number): string {
+    const therapist = this.therapists.find(t => t.therapist.therapist_id === therapistId);
+    if (therapist) {
+      return therapist.user.first_name + ' ' + therapist.user.last_name;
+    }
+    return '';
+  }
+
   loadRoomEvents(roomId: number) {
     // טוען פגישות מהשרת לפי roomId וממיר לאירועים של FullCalendar
     if (!roomId) {
@@ -94,9 +109,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
             // בנה תאריך מלא בפורמט ISO תקני ל-FullCalendar
             const start = `${localDate}T${app.start_time}`;
             const end = `${localDate}T${app.end_time}`;
+            const therapistName = this.getTherapistName(app.therapist_id);
             return {
               id: app.appointment_id,
-              title: app.patient_id ? `פגישה עם מטופל ${app.patient_id}` : 'פגישה',
+              title: therapistName ? therapistName : 'פגישה',
               start,
               end,
               color: '#1a237e',
@@ -223,33 +239,56 @@ getErrorMessage(field: string): string {
     if (endTime && endTime.length > 5) {
       endTime = endTime.substring(0,5);
     }
-    const appointment: any = {
-      therapist_id: this.data?.therapist_id || 1, // יש לעדכן לפי הלוגיקה שלך
-      patient_id: formValue.patient_id,
-      type_id: formValue.type,
-      room_id: formValue.place,
-      appointment_date: appointmentDate,
-      start_time: startTime,
-      end_time: endTime,
-      notes: formValue.notes || ''
-    };
-    console.log('appointment to send:', appointment);
-
-    this.patientService.createAppointment(appointment).subscribe({
-      next: (response) => {
-        console.log('response from server:', response);
-        if (response.success) {
-          alert('הפגישה נוספה בהצלחה!');
-          this.appointmentAdded.emit(response.data || appointment);
-          this.dialogRef.close(response.data || appointment);
-        } else {
-          alert('אירעה שגיאה בשמירת הפגישה');
-        }
-      },
-      error: (err) => {
-        console.error('error from server:', err);
-        alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+    // קבלת user_id מה-localStorage
+    const userStr = localStorage.getItem('user');
+    let user_id: number | null = null;
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        user_id = userObj.user_id;
+      } catch (e) {
+        user_id = null;
       }
+    }
+    if (!user_id) {
+      alert('לא נמצא משתמש מחובר.');
+      return;
+    }
+    // שליפת therapistId מהשרת
+    this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+      if (!therapistId) {
+        alert('לא נמצא מזהה מטפל עבור המשתמש.');
+        return;
+      }
+      const appointment: any = {
+        therapist_id: therapistId, // תמיד מספר מהמשתמש המחובר
+        patient_id: formValue.patient_id,
+        type_id: formValue.type,
+        room_id: formValue.place,
+        appointment_date: appointmentDate,
+        start_time: startTime,
+        end_time: endTime,
+        notes: formValue.notes || ''
+      };
+      console.log('therapist_id:', therapistId, typeof therapistId);
+      console.log('appointment to send:', appointment);
+
+      this.patientService.createAppointment(appointment).subscribe({
+        next: (response) => {
+          console.log('response from server:', response);
+          if (response.success) {
+            alert('הפגישה נוספה בהצלחה!');
+            this.appointmentAdded.emit(response.data || appointment);
+            this.dialogRef.close(response.data || appointment);
+          } else {
+            alert('אירעה שגיאה בשמירת הפגישה');
+          }
+        },
+        error: (err) => {
+          console.error('error from server:', err);
+          alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+        }
+      });
     });
   }
 

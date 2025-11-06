@@ -38,8 +38,6 @@ export class PatientDashboardComponent implements OnInit {
       if (id) {
         // שימוש ב-getPatientOnly שמחזיר את כל השדות מה-Users ומה-Patients
         this.patientService.getPatientOnly(id).subscribe(data => {
-          // ניתן להחזיר לוגים אם צריך דיבאג
-          // console.log('Patient data from server:', data);
           this.patient = {
             ...data,
             patient_id: data.patient_id ?? id ?? 0,
@@ -57,28 +55,46 @@ export class PatientDashboardComponent implements OnInit {
             therapist_id: data.therapist_id ?? undefined,
             user_id: data.user_id ?? undefined
           };
-          // קריאת הפגישות רק אחרי שהמטופל נטען
-          this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
-            // ניתן להחזיר לוגים אם צריך דיבאג
-            // console.log('Appointments raw from API:', data);
-            this.appointments = (data || []).map((a: any) => ({
-              ...a,
-              appointment_id: a.appointment_id ?? 0,
-              patient_id: a.patient_id ?? id,
-              room: a.room ?? '',
-              treatment_type: a.treatment_type ?? '',
-              total_minutes: a.total_minutes ?? 0,
-              status: a.status ?? 'מתוזמנת',
-              cost: a.cost ?? 0,
-              place: a.place ?? '',
-              notes: a.notes ?? '',
-              name: a.name ?? '',
-              therapist: a.therapist ?? '',
-              totalCost: a.totalCost ?? 0,
-            }));
-            // ניתן להחזיר לוגים אם צריך דיבאג
-            // console.log('Appointments array for child:', this.appointments);
-          });
+          // קריאת ה-therapistId מהשרת לפי user_id
+          const userStr = localStorage.getItem('user');
+          let user_id: number | null = null;
+          if (userStr) {
+            try {
+              const userObj = JSON.parse(userStr);
+              user_id = userObj.user_id;
+            } catch (e) {
+              user_id = null;
+            }
+          }
+          if (user_id) {
+            this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+              if (therapistId) {
+                this.patientService.getAppointmentsByPatientId(id, therapistId).subscribe(data => {
+                  this.appointments = (data || []).map((a: any) => ({
+                    ...a,
+                    appointment_id: a.appointment_id ?? 0,
+                    patient_id: a.patient_id ?? id,
+                    room: a.room ?? '',
+                    treatment_type: a.treatment_type ?? '',
+                    total_minutes: a.total_minutes ?? 0,
+                    status: a.status ?? 'מתוזמנת',
+                    cost: a.cost ?? 0,
+                    place: a.place ?? '',
+                    notes: a.notes ?? '',
+                    name: a.name ?? '',
+                    therapist: a.therapist ?? '',
+                    totalCost: a.totalCost ?? 0,
+                  }));
+                });
+              } else {
+                console.error('No therapistId found for user_id:', user_id);
+                this.appointments = [];
+              }
+            });
+          } else {
+            console.error('No user_id found in localStorage');
+            this.appointments = [];
+          }
         });
       }
     });

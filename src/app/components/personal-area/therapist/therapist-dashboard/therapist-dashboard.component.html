@@ -1,9 +1,26 @@
-<div class="dashboard-container">
- <app-therapist-header></app-therapist-header>
- <div class="therapist-area-header">
+<!-- therapist-dashboard.component.html -->
+<app-therapist-header></app-therapist-header>
+<div class="therapist-area-container">
+  <!-- <div class="therapist-area-header">
     <h1>אזור אישי מטפל</h1>
+  </div> -->
+  <div class="dashboard-section welcome-section">
+    <h2>ברוך הבא לאזור האישי שלך</h2>
+    <p>בחר מטופל מהרשימה כדי לצפות בפרטים ובטיפולים שלו</p>
   </div>
-  <div class="dashboard-content">
-    <router-outlet></router-outlet>
+  <div class="therapist-area-content">
+
+    <!-- רשימת מטופלים -->
+    <div class="dashboard-section patient-list-section">
+      <app-patient-list></app-patient-list>
+    </div>
+
+    <!-- יומן פגישות -->
+    <div class="dashboard-section calendar-section">
+      <app-therapist-calendar></app-therapist-calendar>
+    </div>
+
+
+
   </div>
 </div>

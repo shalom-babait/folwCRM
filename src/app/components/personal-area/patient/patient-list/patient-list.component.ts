@@ -15,7 +15,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   @Output() patientSelected = new EventEmitter<Patient>();
   patients: Patient[] = [];
   selectedPatientId: number | null = null;
-  therapistId: number = 1; // שנה לפי המטפל המחובר
+  therapistId: number = 1;
   isLoading = false;
   private destroy$ = new Subject<void>();
 
@@ -26,8 +26,32 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+<<<<<<< HEAD:src/app/components/personal-area/therapist/patient-list/patient-list.component.ts
+    // קבלת ה-therapistId לפי user_id מה-localStorage והשרת
+    const userStr = localStorage.getItem('user');
+    let user_id: number | null = null;
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        user_id = userObj.user_id;
+      } catch (e) {
+        user_id = null;
+      }
+    }
+    if (user_id) {
+      this.patientService.getTherapistIdByUserId(user_id).subscribe(therapistId => {
+        if (therapistId) {
+          this.therapistId = therapistId;
+        }
+        this.loadPatients();
+      });
+    } else {
+      this.loadPatients();
+    }
+=======
     // טעינת רשימת מטופלים מהשרת
     this.loadPatients();
+>>>>>>> c5da1fb811e7afc831f611bb0cd05aacb6ac0f5f:src/app/components/personal-area/patient/patient-list/patient-list.component.ts
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
@@ -40,7 +64,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe(loading => {
         this.isLoading = loading;
       });
-
     // האזנה למטופל שנבחר
     this.patientService.selectedPatient$
       .pipe(takeUntil(this.destroy$))
@@ -55,7 +78,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   loadPatients() {
-    this.patientService.getPatientsByTherapist(this.therapistId)
+  this.patientService.getPatientsByTherapist(this.therapistId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -86,11 +109,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
       direction: 'rtl',
       data: {
         initialData: {
-          therapist_id: this.therapistId,
           status: 'פעיל'
         },
-        context: 'patient-list',
-        therapistId: this.therapistId
+        context: 'patient-list'
       }
     });
 

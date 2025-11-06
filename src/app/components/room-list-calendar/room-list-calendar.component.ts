@@ -1,0 +1,65 @@
+import { Component, OnInit } from '@angular/core';
+import { Room } from '../../models/room.model';
+import { RoomsService } from '../../services/rooms.service';
+import { PatientService } from '../../services/patient.service';
+import { Appointment } from '../../models/appointment.model';
+import { UserService } from '../../services/user.service';
+import { TherapistCreationData } from '../../models/therapist.model';
+
+@Component({
+  selector: 'app-room-list-calendar',
+  templateUrl: './room-list-calendar.component.html',
+  styleUrls: ['./room-list-calendar.component.css']
+})
+export class RoomListCalendarComponent implements OnInit {
+  rooms: Room[] = [];
+  selectedRoomId: number | null = null;
+  roomEvents: Appointment[] = [];
+  therapists: TherapistCreationData[] = [];
+
+  constructor(
+    private roomsService: RoomsService,
+    private patientService: PatientService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.roomsService.getRooms().subscribe((rooms) => {
+      this.rooms = rooms;
+    });
+    this.userService.getAllTherapists().subscribe((therapists) => {
+      this.therapists = therapists;
+    });
+  }
+
+  getTherapistName(therapistId: number): string {
+    const therapist = this.therapists.find(t => t.therapist.therapist_id === therapistId);
+    if (therapist) {
+      return therapist.user.first_name + ' ' + therapist.user.last_name;
+    }
+    return '';
+  }
+
+  selectRoom(roomId: number) {
+    this.selectedRoomId = roomId;
+    this.patientService.getAppointmentsByRoomId(roomId).subscribe((appointments) => {
+      this.roomEvents = appointments.map(app => {
+        let dateStr = '';
+        if (app.appointment_date) {
+          const dateObj = new Date(app.appointment_date);
+          dateStr = dateObj.getFullYear() + '-' +
+            String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
+            String(dateObj.getDate()).padStart(2, '0');
+        }
+        const therapistName = this.getTherapistName(app.therapist_id);
+        return {
+          ...app,
+          title: therapistName ? therapistName : 'פגישה',
+          start: dateStr + 'T' + app.start_time,
+          end: dateStr + 'T' + app.end_time,
+          color: '#1a237e'
+        };
+      });
+    });
+  }
+}

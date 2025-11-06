@@ -1,10 +1,7 @@
 full-calendar {
-  width: 95vw;
-  min-width: 700px;
-  max-width: 1400px;
-  min-height: 600px;
-  max-height: 80vh;
-  height: 80vh;
+  width: 1000px;
+  height: 600px;
+  overflow: auto;
   margin: 0 auto 2rem auto;
   background: #fff;
   border-radius: 1.5rem;
@@ -12,6 +9,11 @@ full-calendar {
   border: 2px solid #1a237e;
   color: black;
   display: block;
-  overflow-y: auto;
   box-sizing: border-box;
 }
+
+::ng-deep .fc-event-main {
+  background: #1a237e !important;
+}
+
+

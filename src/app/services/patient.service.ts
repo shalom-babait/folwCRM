@@ -6,14 +6,38 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class PatientService {
 
-@Injectable({
-  providedIn: 'root'
-})
-export class PatientService {
+  private apiUrl = environment.apiUrl;
+
+
+  /**
+   * מחזיר את כל הפגישות של מטפל לפי מזהה מטפל בלבד
+   */
+  
+  /**
+   * מחזיר את כל הפגישות של מטפל לפי מזהה מטפל בלבד
+   */
+  getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
+    if (!therapistId) {
+      console.error('getTreatmentsForTherapist: therapistId is missing!', therapistId);
+      return of([]);
+    }
+    const url = `${this.apiUrl}/appointments/therapist/${therapistId}`;
+    console.log('getTreatmentsForTherapist: GET', url, 'therapistId:', therapistId);
+    return this.http.get<ApiResponse<AppointmentResponse[]>>(url).pipe(
+      map((response: ApiResponse<AppointmentResponse[]>) => response.data || []),
+      catchError((error) => {
+        console.error('Error fetching appointments for therapist:', error);
+        return of([]);
+      })
+    );
+  }
   getPatientOnly(patientId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
   }
@@ -38,7 +62,6 @@ export class PatientService {
         map((response: ApiResponse<Appointment>) => response.data as Appointment)
       );
   }
-  private apiUrl = environment.apiUrl;
 
   // BehaviorSubjects לניהול מצב
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
@@ -153,6 +176,7 @@ export class PatientService {
       tap(() => this.setLoading(false))
     );
   }
+
   getPatientById(patient_id: number): Observable<Patient> {
     this.setLoading(true);
 
@@ -191,23 +215,38 @@ export class PatientService {
     this.patientsListSubject.next([...currentList, patient]);
   }
 
-
-  getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+  /**
+   * מביא את ה-therapistId לפי user_id (למשתמש שמחובר)
+   */
+  getTherapistIdByUserId(user_id: number): Observable<number | null> {
+    return this.http.get<{ therapist_id?: number }>(`${this.apiUrl}/therapists/byUser/${user_id}`)
+      .pipe(
+        map((response: { therapist_id?: number }) => response.therapist_id !== undefined ? response.therapist_id : null),
+        catchError(error => {
+          console.error('Error fetching therapistId by user_id:', error);
+          return of(null);
+        })
+      );
+  }
+  getTreatments(patient_id?: number, therapistId?: number): Observable<AppointmentResponse[]> {
     if (patient_id) {
       return this.http.get<ApiResponse<AppointmentResponse[]>>(
         `${environment.apiUrl}/treatments/patient/${patient_id}`
       ).pipe(
         map(response => response.data || []),
-        catchError(() => this.getMockTreatments(patient_id))
+        catchError(() => this.getMockTreatments(patient_id, therapistId))
       );
     }
-    return this.getMockTreatments(patient_id);
+    return this.getMockTreatments(patient_id, therapistId);
   }
 
-  private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+  private getMockTreatments(patient_id?: number, therapistId?: number): Observable<AppointmentResponse[]> {
     const id = patient_id || 1;
-    console.log('Fetching appointments for patient_id:', id);
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
+    if (!therapistId) {
+      throw new Error('therapistId is required for getMockTreatments');
+    }
+    console.log('Fetching appointments for patient_id:', id, 'therapist_id:', therapistId);
+    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/${therapistId}`).pipe(
       tap(appointments => {
         console.log('Raw appointments:', appointments);
       }),
