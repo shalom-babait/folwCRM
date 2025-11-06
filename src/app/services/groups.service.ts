@@ -19,7 +19,7 @@ export class GroupsService {
 
   // הוספת קבוצה חדשה למחלקה
   addGroup(group: { group_name: string, department_id: number }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/add-group`, group);
+    return this.http.post<any>(`${this.apiUrl}/add_group`, group);
   }
   
   // עריכת קבוצה קיימת
