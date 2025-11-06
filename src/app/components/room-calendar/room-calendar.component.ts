@@ -29,7 +29,7 @@ export class RoomCalendarComponent implements OnInit {
     },
     eventContent: function(arg) {
       return {
-        html: `<span style='color:#1a237e;font-weight:bold;background:#fff;padding:2px 6px;border-radius:6px;border:1px solid #1a237e;'>${arg.event.title}</span>`
+        html: `<div style='background:#fff;text-align:center;'><span style='color:#1a237e;background:#fff;padding:2px 6px;border-radius:1.5rem;'>${arg.event.title}</span></div>`
       };
     }
   };

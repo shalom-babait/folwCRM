@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Patient } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-therapist-calendar',
@@ -34,18 +35,31 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
             .subscribe({
               next: (appointments) => {
                 this.allAppointments = appointments;
-                this.calendarEvents = appointments.map(app => {
-                  const dateStr = app.appointment_date ? app.appointment_date.substring(0, 10) : '';
-                  const start = dateStr + 'T' + (app.start_time ? app.start_time.substring(0,5) : '00:00');
-                  const end = dateStr + 'T' + (app.end_time ? app.end_time.substring(0,5) : '00:00');
-                  return {
-                    title: app.treatment_type || 'פגישה',
-                    start,
-                    end
-                  };
+                // get all unique patient ids
+                const patientIds = Array.from(new Set(appointments.map(app => app.patient_id)));
+                // fetch all patients in parallel
+                forkJoin(
+                  patientIds.map(pid => this.patientService.getPatientById(pid!))
+                ).subscribe((patients: Patient[]) => {
+                  // map patientId to name
+                  const patientMap: { [id: number]: string } = {};
+                  patients.forEach(p => {
+                    patientMap[p.patient_id!] = (p.first_name || p.firstName || '') + ' ' + (p.last_name || p.lastName || '');
+                  });
+                  this.calendarEvents = appointments.map(app => {
+                    const dateStr = app.appointment_date ? app.appointment_date.substring(0, 10) : '';
+                    const start = dateStr + 'T' + (app.start_time ? app.start_time.substring(0,5) : '00:00');
+                    const end = dateStr + 'T' + (app.end_time ? app.end_time.substring(0,5) : '00:00');
+                    return {
+                      title: patientMap[app.patient_id!] || 'פגישה',
+                      start,
+                      end,
+                      color: '#1a237e'
+                    };
+                  });
+                  console.log('All therapist appointments loaded:', this.allAppointments);
+                  console.log('calendarEvents:', this.calendarEvents);
                 });
-                console.log('All therapist appointments loaded:', this.allAppointments);
-                console.log('calendarEvents:', this.calendarEvents);
               },
               error: (error) => {
                 console.error('Error loading all therapist appointments:', error);

@@ -55,6 +55,7 @@ import { TreatmentListComponent } from './components/personal-area/patient/treat
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
 import { CreateTreatmentDialogComponent } from './components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
 import { RoomCalendarComponent } from './components/room-calendar/room-calendar.component';
+import { RoomListCalendarComponent } from './components/room-list-calendar/room-list-calendar.component';
 import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
@@ -109,7 +110,8 @@ import { AddGroupDialogComponent } from './components/personal-area/company-mana
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
-    RoomCalendarComponent,
+  RoomCalendarComponent,
+  RoomListCalendarComponent,
   SelectTimeDialogComponent,
   CalendarOverlayComponent,
     RoomsViewComponent,
