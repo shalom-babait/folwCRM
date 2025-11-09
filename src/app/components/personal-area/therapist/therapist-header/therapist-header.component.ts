@@ -17,8 +17,17 @@ ngOnInit() {
   this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
 }
 
+
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
+  }
+
+  goToTherapistsList() {
+    this.router.navigate(['/personal-area/therapist/patient']);
+  }
+
+  goToRooms() {
+    this.router.navigate(['/personal-area/secretary/rooms']);
   }
 
   // סגירת התפריט בלחיצה מחוץ לאזור

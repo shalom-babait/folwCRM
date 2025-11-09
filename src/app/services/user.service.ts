@@ -18,11 +18,15 @@ export class UserService {
     return this.http.post(`${this.apiUrl}`, userData);
   }
 
-  createTherapist(userData: UserData, therapistData: TherapistData): Observable<any> {
-    console.log("service front end!!!!!!!!!!!!!");
-    console.log(this.http.post(`${this.apiUrl}/therapists`, { user: userData, therapist: therapistData }));
-    return this.http.post(`${this.apiUrl}/therapists/create`, { user: userData, therapist: therapistData });
-  }
+  createTherapist(
+  userData: UserData,
+  therapistData: TherapistData,
+  selectedDepartments: Array<{ department_id: number; group_ids: number[] }>
+): Observable<any> {
+  console.log("service front end!!!!!!!!!!!!!");
+  console.log(this.http.post(`${this.apiUrl}/therapists`, { user: userData, therapist: therapistData, selectedDepartments }));
+  return this.http.post(`${this.apiUrl}/therapists/create`, { user: userData, therapist: therapistData, selectedDepartments });
+}
 
   createPatient(userData: UserData, patientData: PatientData): Observable<any> {
     return this.http.post(`${this.apiUrl}/patient`, { userData, patientData });

@@ -18,8 +18,6 @@
     <div *ngIf="selectedTherapist" class="therapist-view">
       <!-- כותרת עם לינקים -->
       <div class="header-tabs">
-        <span><p>{{ selectedTherapist.user.first_name }} {{ selectedTherapist.user.last_name }}</p>      </span>
-        <br />         
         <button 
           class="tab-link" 
           [class.active]="activeTab === 'details'"
@@ -121,13 +119,6 @@
             <p>כאן יוצגו ההתכתבויות עם המטפל</p>
             <!-- הוסף כאן את הקומפוננטה של הדואר -->
           </div>
-        </div>
-        <!-- מטופלים -->
-        <div *ngIf="activeTab === 'patients'" class="patients-view">
-          <div class="patients-card">
-          <!-- <app-patient-list></app-patient-list> -->
-          <app-patient-table></app-patient-table> 
-           </div>
         </div>
       </div>
     </div>

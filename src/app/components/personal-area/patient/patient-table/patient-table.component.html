@@ -36,31 +36,31 @@
     <div 
       class="patient-row data-row" 
       *ngFor="let patient of filteredPatients"
-      [class.selected]="selectedPatientId === patient.patient_id"
+      [class.selected]="selectedPatientId === patient.patient.patient_id"
       (click)="selectPatient(patient)">
       <div class="patient-cell patient-name-cell">
         <mat-icon class="patient-icon">person</mat-icon>
-        {{ patient.first_name }} {{ patient.last_name }}
+        {{ patient.user.first_name }} {{ patient.user.last_name }}
       </div>
       <div class="patient-cell">
-        <span class="status-badge" [class.active]="patient.status === 'פעיל'">
+        <!-- <span class="status-badge" [class.active]="patient.user.status === 'active'" [class.inactive]="patient.user.status !== 'active'">
           {{ getStatusLabel(patient.status) }}
-        </span>
+        </span> -->
       </div>
       <div class="patient-cell">
-        <div class="departments-list" *ngIf="patient.departments && patient.departments.length > 0">
-          <span class="department-tag" *ngFor="let dept of patient.departments">
+        <div class="departments-list" *ngIf="patient.selectedDepartments">
+          <span class="department-tag" *ngFor="let dept of patient.selectedDepartments">
             {{ dept }}
           </span>
         </div>
-        <span *ngIf="!patient.departments || patient.departments.length === 0" class="empty-value">-</span>
+        <span *ngIf="!patient.selectedDepartments || patient.selectedDepartments.length === 0" class="empty-value">-</span>
       </div>
-      <div class="patient-cell">{{ getMaritalStatusLabel(patient.marital_status) }}</div>
-      <div class="patient-cell">{{ getAge(patient.birth_date) || '-' }}</div>
+      <!-- <div class="patient-cell">{{ getMaritalStatusLabel(patient.marital_status) }}</div> -->
+      <div class="patient-cell">{{ getAge(patient.user.birth_date) || '-' }}</div>
       <div class="patient-cell">
-        <span class="count-badge">{{ patient.treatment_count || 0 }}</span>
+        <!-- <span class="count-badge">{{ patient.treatment_count || 0 }}</span> -->
       </div>
-      <div class="patient-cell">{{ patient.city || '-' }}</div>
+      <div class="patient-cell">{{ patient.user.city || '-' }}</div>
       <div class="patient-cell actions-cell">
         <button 
           class="action-btn edit-btn"

@@ -1,4 +1,4 @@
-import { Patient, CreatePatientRequest, UpdatePatientRequest } from 'src/app/models/patient.model';
+import { Patient, CreatePatientRequest, UpdatePatientRequest, PatientCreationData } from 'src/app/models/patient.model';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -13,14 +13,14 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
-  getPatientOnly(patientId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
+  getPatientOnly(patientId: number): Observable<PatientCreationData> {
+    return this.http.get<PatientCreationData>(`${this.apiUrl}/patients/only/${patientId}`);
   }
   private apiUrl = environment.apiUrl;
 
   // BehaviorSubjects לניהול מצב
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
-  private patientsListSubject = new BehaviorSubject<Patient[]>([]);
+  private patientsListSubject = new BehaviorSubject<PatientCreationData[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   // Observable streams
@@ -37,10 +37,10 @@ export class PatientService {
   constructor(private http: HttpClient) { }
 
 
-  createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<Patient>> {
+  createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<PatientCreationData>> {
     this.setLoading(true);
 
-    return this.http.post<ApiResponse<Patient>>(
+    return this.http.post<ApiResponse<PatientCreationData>>(
       this.apiUrl + '/patients',
       patientData,
       this.httpOptions
@@ -73,10 +73,10 @@ export class PatientService {
 updatePatient(patientId: number, updatedPatient: any): Observable<any> {
   return this.http.put(`${this.apiUrl}/patients/updatePatient/${patientId}`, updatedPatient);
 }
-  getAllPatients(): Observable<Patient[]> {
+  getAllPatients(): Observable<PatientCreationData[]> {
     this.setLoading(true);
 
-    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/patients`).pipe(
+    return this.http.get<ApiResponse<PatientCreationData[]>>(`${this.apiUrl}/patients`).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
       catchError(this.handleError.bind(this)),
@@ -85,10 +85,10 @@ updatePatient(patientId: number, updatedPatient: any): Observable<any> {
   }
 
 
-getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
+getPatientsByTherapist(therapistId: number): Observable<PatientCreationData[]> {
   this.setLoading(true);
 
-  return this.http.get<Patient[]>(
+  return this.http.get<PatientCreationData[]>(
     `${this.apiUrl}/patients/byTherapist/${therapistId}`
   ).pipe(
     tap(patients => this.patientsListSubject.next(patients)),
@@ -96,10 +96,10 @@ getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     tap(() => this.setLoading(false))
   );
 }
-  getPatientById(patient_id: number): Observable<Patient> {
+  getPatientById(patient_id: number): Observable<PatientCreationData> {
     this.setLoading(true);
 
-    return this.http.get<Patient>(
+    return this.http.get<PatientCreationData>(
       `${this.apiUrl}/patients/only/${patient_id}`
     ).pipe(
       catchError(this.handleError.bind(this)),
@@ -107,14 +107,14 @@ getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
     );
   }
 
-  searchPatients(searchTerm: string): Observable<Patient[]> {
+  searchPatients(searchTerm: string): Observable<PatientCreationData[]> {
     if (!searchTerm.trim()) {
       return of([]);
     }
 
     this.setLoading(true);
 
-    return this.http.get<ApiResponse<Patient[]>>(
+    return this.http.get<ApiResponse<PatientCreationData[]>>(
       `${this.apiUrl}/patients/search?q=${encodeURIComponent(searchTerm)}`
     ).pipe(
       map(response => response.data || []),
@@ -129,7 +129,7 @@ getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
   }
 
 
-  private addPatientToLocalList(patient: Patient): void {
+  private addPatientToLocalList(patient: PatientCreationData): void {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }

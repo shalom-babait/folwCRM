@@ -27,3 +27,18 @@ export interface DepartmentWithGroups {
   department: Department;
   groups: Group[];
 }
+
+// בחירה של מחלקה וקבוצות שנבחרו בה
+export interface SelectedDepartment {
+  department: Department;
+  selectedGroups: Group[];
+}
+export interface SelectedItem {
+  type: 'department' | 'group';
+  department: Department;
+  group?: Group;
+}
+export interface SelectedDepartmentForSave {
+  department_id: number;
+  group_ids: number[];
+}

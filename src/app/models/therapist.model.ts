@@ -1,8 +1,10 @@
+import { SelectedDepartmentForSave } from './department-group.model';
 import { UserData } from './user.model';
 
 export interface TherapistCreationData {
   user: UserData;
-  therapist:TherapistData
+  therapist: TherapistData;
+  selectedDepartments: SelectedDepartmentForSave[];
 }
 
 // נתונים ספציפיים למטפל

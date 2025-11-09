@@ -1,22 +1,23 @@
 // patient-list.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
-import { AddPatientDialogComponent } from '../../patient/add-patient-dialog/add-patient-dialog.component';
-import { Patient } from 'src/app/models/patient.model';
+import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
+import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
-  patients: Patient[] = [];
+  @Output() patientSelected = new EventEmitter<PatientCreationData>();
+  patients: PatientCreationData[] = [];
   selectedPatientId: number | null = null;
   therapistId: number = 1; // שנה לפי המטפל המחובר
   isLoading = false;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -70,13 +71,12 @@ export class PatientListComponent implements OnInit, OnDestroy {
       });
   }
 
-  viewPatientDetails(patient: Patient) {
-    const patient_id = patient.patient_id;
+  viewPatientDetails(patient: PatientCreationData) {
+    const patient_id = patient.patient.patient_id;
     if (patient_id) {
-      this.patientService.selectPatient(patient_id);
+      // this.patientService.selectPatient(patient_id);
       this.selectedPatientId = patient_id;
-      // ניווט תקני של Angular
-      this.router.navigate(['/patient', patient_id]);
+      this.patientSelected.emit(patient); // שליחת האירוע להורה
     }
   }
 

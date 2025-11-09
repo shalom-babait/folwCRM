@@ -10,11 +10,12 @@ import { authGuard } from './guard/auth.guard';
 import { SecretaryDashboardComponent } from './components/personal-area/secretary/secretary-dashboard/secretary-dashboard.component';
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
-import { PatientListComponent } from './components/personal-area/therapist/patient-list/patient-list.component';
-import { TherapistsViewComponent } from './components/personal-area/secretary/therapists-view/therapists-view.component';
+import { PatientListComponent } from './components/personal-area/patient/patient-list/patient-list.component';
+import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
+import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,7 +25,9 @@ const routes: Routes = [
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
   { path: 'personal-area', children: [
-    { path: 'therapist', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' } },
+    { path: 'therapist', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' }, children: [
+      { path: 'patient', component: PatientViewComponent }
+    ] },
     { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
     { path: 'secretary', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' }, children: [
       { path: 'therapists', component: TherapistsViewComponent },

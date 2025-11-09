@@ -34,10 +34,10 @@
       <div 
         class="patient-card" 
         *ngFor="let patient of patients"
-        [class.selected]="selectedPatientId === (patient.patient_id || patient.patient_id)"
+        [class.selected]="selectedPatientId === (patient.patient.patient_id)"
         (click)="viewPatientDetails(patient)">
         <div class="patient-info">
-          <span class="patient-name">{{ patient.first_name || patient.firstName }} {{ patient.last_name || patient.lastName }}</span>
+          <span class="patient-name">{{ patient.user.first_name || patient.user.last_name }} </span>
         </div>
       </div>
     </div>

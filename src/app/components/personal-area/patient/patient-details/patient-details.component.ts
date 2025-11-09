@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Patient } from 'src/app/models/patient.model';
+import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-patient-details',
@@ -8,8 +8,8 @@ import { Patient } from 'src/app/models/patient.model';
   styleUrls: ['./patient-details.component.css']
 })
 export class PatientDetailsComponent implements OnChanges {
-  @Input() patient!: Patient;
-  @Output() patientUpdated = new EventEmitter<Patient>();
+  @Input() patient!: PatientCreationData;
+  @Output() patientUpdated = new EventEmitter<PatientCreationData>();
   isEditing = false;
   patientForm: FormGroup;
 
@@ -42,7 +42,7 @@ export class PatientDetailsComponent implements OnChanges {
 
   saveChanges(): void {
     if (this.patientForm.valid) {
-      const updatedPatient: Patient = {
+      const updatedPatient: PatientCreationData = {
         ...this.patient,
         ...this.patientForm.value
       };
@@ -52,10 +52,10 @@ export class PatientDetailsComponent implements OnChanges {
   }
 
   calculateAge(): number {
-  if (!this.patient?.birth_date) return 0;
+  if (!this.patient?.user.birth_date) return 0;
     
     const today = new Date();
-  const birthDate = new Date(this.patient.birth_date);
+    const birthDate = new Date(this.patient.user.birth_date || '');
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     

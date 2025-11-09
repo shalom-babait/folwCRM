@@ -1,7 +1,7 @@
 <!-- patient-details.component.html -->
 <div class="patient-details-card">
   <div class="card-header">
-    <h3>מטופל: {{ patient.firstName }} {{ patient.lastName }}</h3>
+    <h3>מטופל: {{ patient.user.first_name }} {{ patient.user.last_name }}</h3>
     <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
       עריכה
     </button>
@@ -10,17 +10,17 @@
   <div class="card-content" *ngIf="!isEditing">
     <div class="detail-row">
       <span class="label">שם:</span>
-      <span class="value">{{ patient.firstName }} {{ patient.lastName }}</span>
+      <span class="value">{{ patient.user.first_name }} {{ patient.user.last_name }}</span>
     </div>
     
     <div class="detail-row">
       <span class="label">טלפון:</span>
-      <span class="value">{{ patient.phone }}</span>
+      <span class="value">{{ patient.user.phone }}</span>
     </div>
     
     <div class="detail-row">
       <span class="label">מייל:</span>
-      <span class="value">{{ patient.email }}</span>
+      <span class="value">{{ patient.user.email }}</span>
     </div>
     
     <div class="detail-row">
@@ -35,12 +35,12 @@
     
     <div class="detail-row">
       <span class="label">כתובת:</span>
-      <span class="value">{{ patient.address }}   {{ patient.city }}</span>
+      <span class="value">{{ patient.user.address }}</span>
     </div>
    
       <div class="detail-row">
         <span class="label">תעודת זהות:</span>
-        <span class="value">{{ patient.teudat_zehut }}</span>
+        <span class="value">{{ patient.user.teudat_zehut }}</span>
       </div>
       
   </div>

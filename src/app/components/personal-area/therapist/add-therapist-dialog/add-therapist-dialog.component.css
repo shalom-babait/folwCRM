@@ -1,17 +1,10 @@
-/* הודעות שגיאה */
-.error-message {
-  color: #e53935;
-  font-size: 0.95rem;
-  margin-top: 0.2rem;
-  font-weight: bold;
-}
 /* add-therapist-dialog.component.css */
 
 /* דיאלוג כללי */
 .create-treatment-dialog {
-  max-width: 800px;
+  max-width: 900px;
   background-color: #022F39;
-  color: white;
+  color: black;
   border-radius: 1rem;
   font-family: Arial, sans-serif;
   overflow: hidden;
@@ -36,6 +29,26 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling */
+.input-dialog::-webkit-scrollbar {
+  width: 8px;
+}
+
+.input-dialog::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.input-dialog::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.input-dialog::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* שדה טופס */
@@ -78,7 +91,15 @@
   box-shadow: 0 0 0 2px #022F39;
 }
 
-/* שדה checkbox - תופס שתי עמודות */
+/* הודעות שגיאה */
+.error-message {
+  color: #e53935;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  font-weight: normal;
+}
+
+/* שדה checkbox */
 .checkbox-field {
   margin-top: 0.5rem;
   grid-column: 1 / -1;
@@ -99,6 +120,12 @@
   transform: scale(1.2);
 }
 
+/* סקשן מחלקות - תופס שתי עמודות */
+.departments-section {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
 /* שגיאות ולידציה */
 .form-field input.ng-invalid.ng-touched,
 .form-field select.ng-invalid.ng-touched {
@@ -116,7 +143,7 @@
   margin: 0;
 }
 
-/* כפתורי פעולה - תופסים שתי עמודות */
+/* כפתורי פעולה */
 .dialog-actions {
   display: flex;
   justify-content: center;
@@ -124,6 +151,7 @@
   padding: 1rem 2rem;
   background-color: whitesmoke;
   grid-column: 1 / -1;
+  margin-top: 0.5rem;
 }
 
 .dialog-actions button {
@@ -137,7 +165,6 @@
   min-width: 100px;
 }
 
-/* כפתור ביטול */
 .cancel-button {
   background-color: white;
   color: #022F39;
@@ -148,7 +175,6 @@
   background-color: #e0e0e0;
 }
 
-/* כפתור שמירה */
 .save-button {
   background-color: #022F39;
   color: white;
@@ -175,6 +201,11 @@
     grid-template-columns: 1fr;
     padding: 1.5rem;
     gap: 1rem;
+    max-height: 65vh;
+  }
+  
+  .departments-section {
+    grid-column: 1;
   }
   
   .checkbox-field {
@@ -183,6 +214,11 @@
   
   .dialog-actions {
     grid-column: 1;
+    flex-direction: column;
+  }
+  
+  .dialog-actions button {
+    width: 100%;
   }
 }
 
@@ -199,6 +235,7 @@
   .input-dialog {
     padding: 1.5rem 1rem 1rem 1rem;
     gap: 0.9rem;
+    max-height: 60vh;
   }
 
   .form-field label {

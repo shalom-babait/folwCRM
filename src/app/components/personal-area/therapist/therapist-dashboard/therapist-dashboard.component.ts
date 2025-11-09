@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
-import { Patient } from 'src/app/models/patient.model';
+import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-therapist-dashboard',
@@ -11,7 +11,7 @@ import { Patient } from 'src/app/models/patient.model';
   styleUrls: ['./therapist-dashboard.component.css']
 })
 export class TherapistDashboardComponent implements OnInit, OnDestroy {
-  selectedPatient: Patient | null = null;
+  selectedPatient: PatientCreationData | null = null;
   appointments: Appointment[] = [];
   
   private destroy$ = new Subject<void>();
@@ -83,7 +83,7 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
   }
 
   // עדכון פרטי מטופל
-  onPatientUpdated(updatedPatient: Patient): void {
+  onPatientUpdated(updatedPatient: PatientCreationData): void {
     this.selectedPatient = { ...updatedPatient };
     // כאן ניתן להוסיף שמירה לשרת
     console.log('Patient updated:', updatedPatient);

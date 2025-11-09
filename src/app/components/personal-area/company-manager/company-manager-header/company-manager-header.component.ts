@@ -55,7 +55,6 @@ export class CompanyManagerHeaderComponent implements OnInit {
   @Output() showDepartments = new EventEmitter<void>();
 
   navigateToDepartments() {
-    alert('Navigating to Departments');
     this.showDepartments.emit();
   }
 }
