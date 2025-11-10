@@ -1,41 +1,51 @@
-// מייצג מטופל כולל נתוני משתמש (תואם למסד הנתונים)
+import { SelectedDepartmentForSave } from "./department-group.model";
+import { UserData } from "./user.model";
+
+// --- מודל מטופל (Patient) ---
+// מייצג רשומה מטבלת Patients במסד הנתונים
 export interface Patient {
   patient_id?: number;
-  user_id?: number;
+  user_id: number;
   therapist_id?: number;
-
-  first_name?: string;
-  last_name?: string;
   birth_date?: string; // YYYY-MM-DD
-  gender?: 'זכר' | 'נקבה' | 'אחר'; // זהה ל-ENUM במסד
-  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה'; // זהה ל-ENUM במסד
+  gender?: 'זכר' | 'נקבה' | 'אחר';
+  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
-
-  phone?: string;
-  email?: string;
-  address?: string;
-  teudat_zehut?: string;
-  city?: string;
-  departments?: string[];
-  marital_status?: string;
-  treatment_count?: number;
 }
 
-// נתונים בסיסיים של מטופל לצורך יצירה/עדכון
+// --- נתונים בסיסיים של מטופל לצורך יצירה/עדכון ---
 export interface PatientBase {
   therapist_id?: number;
-  birth_date?: string;
-  gender?: 'זכר' | 'נקבה' | 'אחר'; // ENUM זהה למסד
-  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה'; // ENUM זהה למסד
+  birth_date?: string; // YYYY-MM-DD
+  gender?: 'זכר' | 'נקבה' | 'אחר';
+  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
 }
 
-// בקשת יצירה של מטופל חדש
+// --- בקשת יצירה של מטופל חדש ---
 export interface CreatePatientRequest extends PatientBase {
   user_id: number; // חובה בעת יצירה
 }
 
-// בקשת עדכון של מטופל קיים
+// --- בקשת עדכון של מטופל קיים ---
 export interface UpdatePatientRequest extends Partial<PatientBase> {
   patient_id: number;
+}
+
+// --- נתוני מטופל מלאים (כפי שנשלחים/מתקבלים מהשרת) ---
+export interface PatientData {
+  patient_id?: number;
+  user_id: number;
+  therapist_id?: number;
+  birth_date?: string;
+  gender?: 'זכר' | 'נקבה' | 'אחר';
+  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
+  history_notes?: string;
+}
+
+// --- אובייקט ליצירת מטופל כולל נתוני משתמש ושיוך מחלקות ---
+export interface PatientCreationData {
+  user: UserData; // פרטי המשתמש מטבלת Users
+  patient: PatientData; // פרטי המטופל מטבלת Patients
+  selectedDepartments: SelectedDepartmentForSave[]; // שיוך למחלקות
 }

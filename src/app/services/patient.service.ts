@@ -1,51 +1,25 @@
-
-import { Patient, CreatePatientRequest } from 'src/app/models/patient.model';
-import { ApiResponse } from 'src/app/models/api-response.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
+import { ApiResponse } from 'src/app/models/api-response.model';
+import { Patient, CreatePatientRequest, UpdatePatientRequest, PatientCreationData } from 'src/app/models/patient.model';
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  getPatientOnly(patientId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/patients/only/${patientId}`);
-  }
-
-  /**
-   * מחזיר את כל הפגישות של חדר מסוים
-   */
-  getAppointmentsByRoomId(roomId: number): Observable<Appointment[]> {
-    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`)
-      .pipe(
-        map((response: ApiResponse<Appointment[]>) => response.data || []),
-        catchError(() => of([]))
-      );
-  }
-
-  /**
-   * מחזיר פגישה בודדת לפי מזהה
-   */
-  getAppointmentById(appointmentId: number): Observable<Appointment> {
-    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`)
-      .pipe(
-        map((response: ApiResponse<Appointment>) => response.data as Appointment)
-      );
-  }
   private apiUrl = environment.apiUrl;
 
-  // BehaviorSubjects לניהול מצב
+  // --- מצב פנימי ---
   private selectedPatientSubject = new BehaviorSubject<number | null>(null);
-  private patientsListSubject = new BehaviorSubject<Patient[]>([]);
+  private patientsListSubject = new BehaviorSubject<PatientCreationData[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
-  // Observable streams
+  // --- Observable streams ---
   selectedPatient$ = this.selectedPatientSubject.asObservable();
   patientsList$ = this.patientsListSubject.asObservable();
   loading$ = this.loadingSubject.asObservable();
@@ -56,14 +30,13 @@ export class PatientService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-
-  createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<Patient>> {
+  // --- יצירת מטופל חדש ---
+  createPatient(patientData: CreatePatientRequest): Observable<ApiResponse<PatientCreationData>> {
     this.setLoading(true);
-
-    return this.http.post<ApiResponse<Patient>>(
-      this.apiUrl + '/patients',
+    return this.http.post<ApiResponse<PatientCreationData>>(
+      `${this.apiUrl}/patients`,
       patientData,
       this.httpOptions
     ).pipe(
@@ -77,27 +50,8 @@ export class PatientService {
     );
   }
 
-  createAppointment(appointmentData: CreateAppointmentRequest): Observable<ApiResponse<Appointment>> {
-    this.setLoading(true);
-
-    return this.http.post<ApiResponse<Appointment>>(
-      this.apiUrl + '/appointments',
-      appointmentData,
-      this.httpOptions
-    ).pipe(
-      tap(response => {
-        console.log('Appointment created successfully:', response);
-      }),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
-    );
-  }
-
-
-
-
-
-  updatePatient(patientId: number, updatedPatient: any): Observable<ApiResponse<Patient>> {
+  // --- עדכון מטופל ---
+  updatePatient(patientId: number, updatedPatient: UpdatePatientRequest): Observable<ApiResponse<Patient>> {
     this.setLoading(true);
     return this.http.put<ApiResponse<Patient>>(
       `${this.apiUrl}/patients/updatePatient/${patientId}`,
@@ -106,18 +60,13 @@ export class PatientService {
     ).pipe(
       tap(response => {
         if (response && response.success && response.data) {
-          const updated = response.data as Patient;
+          const updated = response.data;
           const current = this.patientsListSubject.value || [];
-          const newList = current.map(p => {
-            // השוואה לפי patient_id או user_id אם קיים
-            if ((p as any).patient_id && (updated as any).patient_id && (p as any).patient_id === (updated as any).patient_id) {
-              return { ...p, ...updated };
-            }
-            if ((p as any).user_id && (updated as any).user_id && (p as any).user_id === (updated as any).user_id) {
-              return { ...p, ...updated };
-            }
-            return p;
-          });
+          const newList = current.map(p => 
+            p.patient.patient_id === updated.patient_id
+              ? { ...p, patient: { ...p.patient, ...updated } }
+              : p
+          );
           this.patientsListSubject.next(newList);
         }
       }),
@@ -126,14 +75,15 @@ export class PatientService {
     );
   }
 
+  // --- מחיקת מטופל ---
+  deletePatient(patientId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
+  }
 
-
-
-
-  getAllPatients(): Observable<Patient[]> {
+  // --- שליפת מטופלים ---
+  getAllPatients(): Observable<PatientCreationData[]> {
     this.setLoading(true);
-
-    return this.http.get<ApiResponse<Patient[]>>(`${this.apiUrl}/patients`).pipe(
+    return this.http.get<ApiResponse<PatientCreationData[]>>(`${this.apiUrl}/patients`).pipe(
       map(response => response.data || []),
       tap(patients => this.patientsListSubject.next(patients)),
       catchError(this.handleError.bind(this)),
@@ -141,37 +91,33 @@ export class PatientService {
     );
   }
 
-
-  getPatientsByTherapist(therapistId: number): Observable<Patient[]> {
+  getPatientsByTherapist(therapistId: number): Observable<PatientCreationData[]> {
     this.setLoading(true);
-
-    return this.http.get<Patient[]>(
-      `${this.apiUrl}/patients/byTherapist/${therapistId}`
-    ).pipe(
+    return this.http.get<PatientCreationData[]>(`${this.apiUrl}/patients/byTherapist/${therapistId}`).pipe(
       tap(patients => this.patientsListSubject.next(patients)),
       catchError(this.handleError.bind(this)),
       tap(() => this.setLoading(false))
     );
   }
-  getPatientById(patient_id: number): Observable<Patient> {
-    this.setLoading(true);
 
-    return this.http.get<Patient>(
-      `${this.apiUrl}/patients/only/${patient_id}`
-    ).pipe(
+  getPatientById(patient_id: number): Observable<PatientCreationData> {
+    this.setLoading(true);
+    return this.http.get<PatientCreationData>(`${this.apiUrl}/patients/only/${patient_id}`).pipe(
       catchError(this.handleError.bind(this)),
       tap(() => this.setLoading(false))
     );
   }
 
-  searchPatients(searchTerm: string): Observable<Patient[]> {
+  getPatientOnly(patientId: number): Observable<PatientCreationData> {
+    return this.http.get<PatientCreationData>(`${this.apiUrl}/patients/only/${patientId}`);
+  }
+
+  searchPatients(searchTerm: string): Observable<PatientCreationData[]> {
     if (!searchTerm.trim()) {
       return of([]);
     }
-
     this.setLoading(true);
-
-    return this.http.get<ApiResponse<Patient[]>>(
+    return this.http.get<ApiResponse<PatientCreationData[]>>(
       `${this.apiUrl}/patients/search?q=${encodeURIComponent(searchTerm)}`
     ).pipe(
       map(response => response.data || []),
@@ -180,22 +126,69 @@ export class PatientService {
     );
   }
 
-
+  // --- ניהול בחירה ---
   selectPatient(patient_id: number | null): void {
     this.selectedPatientSubject.next(patient_id);
   }
 
-
-  private addPatientToLocalList(patient: Patient): void {
+  private addPatientToLocalList(patient: PatientCreationData): void {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }
 
+  // --- פגישות ---
+  createAppointment(appointmentData: CreateAppointmentRequest): Observable<ApiResponse<Appointment>> {
+    this.setLoading(true);
+    return this.http.post<ApiResponse<Appointment>>(
+      `${this.apiUrl}/appointments`,
+      appointmentData,
+      this.httpOptions
+    ).pipe(
+      tap(response => console.log('Appointment created successfully:', response)),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
+  }
+
+  getAppointmentsByRoomId(roomId: number): Observable<Appointment[]> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`).pipe(
+      map(response => response.data || []),
+      catchError(() => of([]))
+    );
+  }
+
+  getAppointmentById(appointmentId: number): Observable<Appointment> {
+    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`).pipe(
+      map(response => response.data as Appointment)
+    );
+  }
+
+  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
+    const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
+    obs.subscribe(appointments => {
+      console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+    });
+    return obs;
+  }
+
+  updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
+    this.setLoading(true);
+    const body = { status };
+    return this.http.put<ApiResponse<any>>(
+      `${this.apiUrl}/appointments/${appointmentId}/status`,
+      body,
+      this.httpOptions
+    ).pipe(
+      tap(response => console.log('Appointment status updated:', response)),
+      catchError(this.handleError.bind(this)),
+      tap(() => this.setLoading(false))
+    );
+  }
 
   getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
     if (patient_id) {
       return this.http.get<ApiResponse<AppointmentResponse[]>>(
-        `${environment.apiUrl}/treatments/patient/${patient_id}`
+        `${this.apiUrl}/treatments/patient/${patient_id}`
       ).pipe(
         map(response => response.data || []),
         catchError(() => this.getMockTreatments(patient_id))
@@ -208,26 +201,19 @@ export class PatientService {
     const id = patient_id || 1;
     console.log('Fetching appointments for patient_id:', id);
     return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
-      tap(appointments => {
-        console.log('Raw appointments:', appointments);
-      }),
-      map(appointments => {
-        if (!appointments || appointments.length === 0) {
-          console.log('No appointments found');
-          return [];
-        }
-        return appointments;
-      }),
+      tap(appointments => console.log('Raw appointments:', appointments)),
+      map(appointments => appointments || []),
       catchError(error => {
         console.error('Error fetching appointments:', error);
         return of([]);
       })
     );
   }
+
+  // --- עזר לניהול טעינה ושגיאות ---
   private setLoading(loading: boolean): void {
     this.loadingSubject.next(loading);
   }
-
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('An error occurred:', error);
@@ -272,33 +258,4 @@ export class PatientService {
 
     return throwError(() => new Error(errorMessage));
   }
-  deletePatient(patientId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
-  }
-
-  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-    // שימוש במוק עבור סביבת פיתוח/טסט
-    const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
-    obs.subscribe(appointments => {
-      console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
-    });
-    return obs;
-  }
-  updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
-    this.setLoading(true);
-    const body = { status };
-    return this.http.put<ApiResponse<any>>(
-      `${this.apiUrl}/appointments/${appointmentId}/status`,
-      body,
-      this.httpOptions
-    ).pipe(
-      tap(response => {
-        console.log('Appointment status updated:', response);
-      }),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
-    );
-  }
-
 }
-

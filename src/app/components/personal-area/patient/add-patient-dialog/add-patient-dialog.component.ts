@@ -131,13 +131,13 @@ export class AddPatientDialogComponent implements OnInit {
             // בניית אובייקט מטופל מלא לשימוש ברשימה
             const user = (response.data as any).user || response.data;
             const patient = {
-              patient_id: response.data.patient_id,
-              therapist_id: response.data.therapist_id,
-              birth_date: response.data.birth_date,
-              gender: response.data.gender,
-              status: response.data.status,
-              history_notes: response.data.history_notes,
-              user_id: response.data.user_id,
+              patient_id: response.data.patient.patient_id,
+              therapist_id: response.data.patient.therapist_id,
+              birth_date: response.data.user.birth_date,
+              gender: response.data.user.gender,
+              // status: response.data.user.status,
+              // history_notes: response.data.user.history_notes,
+              user_id: response.data.user.user_id,
               first_name: user.first_name,
               last_name: user.last_name,
               teudat_zehut: user.teudat_zehut,

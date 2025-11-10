@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient } from '../../../../models/patient.model';
-import { PatientService } from '../../../../services/patient.service';
+import { PatientCreationData } from 'src/app/models/patient.model';
+import { PatientService } from 'src/app/services/patient.service';
 
 @Component({
   selector: 'app-patient-view',
@@ -8,50 +8,61 @@ import { PatientService } from '../../../../services/patient.service';
   styleUrls: ['./patient-view.component.css']
 })
 export class PatientViewComponent implements OnInit {
-  patients: Patient[] = [];
-  searchTerm: string = '';
-  selectedPatient: Patient | null = null;
+  patients: PatientCreationData[] = [];
+  selectedPatient: PatientCreationData | null = null;
   activeTab: string = 'details';
+  searchTerm: string = '';
   loading: boolean = false;
-
-  get filteredPatients() {
-    if (!this.searchTerm) return this.patients;
-return this.patients.filter(p =>
-  ((p.first_name || '') + ' ' + (p.last_name || '')).includes(this.searchTerm)
-);
-  }
-
-  selectPatient(patient: Patient) {
-    this.selectedPatient = patient;
-    this.activeTab = 'details';
-  }
-
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
-
-  onCloseDetails() {
-    this.selectedPatient = null;
-    this.activeTab = 'details';
-  }
-
-  onPatientSelected(patient: Patient) {
-    this.selectedPatient = patient;
-    this.activeTab = 'details';
-  }
 
   constructor(private patientService: PatientService) {}
 
   ngOnInit(): void {
+    this.loadPatients();
+  }
+
+  /** טוען את כל המטופלים מהשרת */
+  private loadPatients(): void {
     this.loading = true;
     this.patientService.getAllPatients().subscribe({
       next: (patients) => {
         this.patients = patients;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('שגיאה בטעינת מטופלים:', err);
         this.loading = false;
       }
     });
+  }
+
+  /** מחזיר רק את המטופלים שתואמים לחיפוש */
+  get filteredPatients(): PatientCreationData[] {
+    if (!this.searchTerm.trim()) return this.patients;
+    const term = this.searchTerm.toLowerCase();
+    return this.patients.filter(p =>
+      (p.user.first_name + ' ' + p.user.last_name).toLowerCase().includes(term)
+    );
+  }
+
+  /** כאשר נבחר מטופל מהרשימה */
+  onPatientSelected(patient: PatientCreationData): void {
+    this.selectedPatient = patient;
+    this.activeTab = 'details';
+  }
+
+  /** החלפת טאב פעיל */
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  /** בודק אם טאב מסוים פעיל */
+  isActiveTab(tab: string): boolean {
+    return this.activeTab === tab;
+  }
+
+  /** סגירת תצוגת פרטים וחזרה לרשימה */
+  onCloseDetails(): void {
+    this.selectedPatient = null;
+    this.activeTab = 'details';
   }
 }

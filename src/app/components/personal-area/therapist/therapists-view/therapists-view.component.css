@@ -145,13 +145,15 @@
 
 .details-view,
 .calendar-view,
-.mail-view {
+.mail-view,
+.patients-view {
   height: 100%;
 }
 
 .details-card,
 .calendar-card,
-.mail-card {
+.mail-card,
+.patients-card {
   background: #f8f9fa;
   padding: 2rem;
   border-radius: 0.8rem;
@@ -249,14 +251,16 @@
 
 /* עיצוב ליומן ודואר */
 .calendar-card h3,
-.mail-card h3 {
+.mail-card h3,
+.patients-card h3 {
   margin: 0 0 1.5rem 0;
   color: #022F39;
   font-size: 1.3rem;
 }
 
 .calendar-card p,
-.mail-card p {
+.mail-card p,
+.patients-card p {
   color: #666;
   font-size: 1rem;
 }
@@ -299,7 +303,8 @@
   
   .details-card,
   .calendar-card,
-  .mail-card {
+  .mail-card,
+  .patients-card {
     padding: 1rem;
   }
   

@@ -1,0 +1,133 @@
+<div class="department-selector">
+  
+  <!-- כותרת -->
+  <div class="selector-header">
+    <h3 class="selector-title">בחירת מחלקות וקבוצות</h3>
+    <button 
+      type="button" 
+      class="clear-all-btn" 
+      *ngIf="selectedItems.length > 0"
+      (click)="clearAll()">
+      נקה הכל
+    </button>
+  </div>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+    <input 
+      type="text"
+      [(ngModel)]="searchTerm"
+      (focus)="onSearchFocus()"
+      (input)="onSearchChange()"
+      [placeholder]="searchPlaceholder"
+      class="search-input"
+    />
+    
+    <!-- אייקון חיפוש -->
+    <span class="search-icon">🔍</span>
+    
+    <!-- רשימת מחלקות היררכית -->
+    <div class="dropdown" *ngIf="showDropdown">
+      <!-- טוען -->
+      <div class="loading-message" *ngIf="isLoading">
+        טוען מחלקות...
+      </div>
+
+      <!-- רשימת מחלקות -->
+      <div *ngIf="!isLoading && filteredDepartments.length > 0" class="departments-list">
+        <div 
+          class="department-item" 
+          *ngFor="let dept of filteredDepartments">
+          
+          <!-- כותרת המחלקה -->
+          <div class="department-header" (click)="toggleDepartment(dept.department.department_id!); $event.stopPropagation()">
+            <div class="department-info">
+              <span class="expand-icon" *ngIf="getFilteredGroupsForDepartment(dept).length > 0">
+                {{ isDepartmentExpanded(dept.department.department_id!) ? '▼' : '◀' }}
+              </span>
+              <span class="department-icon">📁</span>
+              <span class="department-name">{{ dept.department.department_name }}</span>
+              <span class="groups-badge" *ngIf="dept.groups.length > 0">
+                {{ getFilteredGroupsForDepartment(dept).length }} קבוצות
+              </span>
+            </div>
+            
+            <!-- כפתור בחירת מחלקה שלמה -->
+            <button 
+              type="button"
+              class="select-dept-btn"
+              *ngIf="!isDepartmentExpanded(dept.department.department_id!)"
+              (click)="$event.stopPropagation(); selectWholeDepartment(dept)"
+              title="בחר מחלקה שלמה">
+              בחר הכל
+            </button>
+          </div>
+
+          <!-- רשימת קבוצות (מורחבת) -->
+          <div 
+            class="groups-container" 
+            *ngIf="isDepartmentExpanded(dept.department.department_id!) && getFilteredGroupsForDepartment(dept).length > 0">
+            <div 
+              class="group-item" 
+              *ngFor="let group of getFilteredGroupsForDepartment(dept)"
+              (click)="selectGroup(dept, group); $event.stopPropagation()">
+              <span class="group-icon">👥</span>
+              <span class="group-name">{{ group.group_name }}</span>
+            </div>
+          </div>
+
+          <!-- הודעה אם אין קבוצות זמינות -->
+          <div 
+            class="no-groups-message" 
+            *ngIf="isDepartmentExpanded(dept.department.department_id!) && getFilteredGroupsForDepartment(dept).length === 0">
+            כל הקבוצות כבר נבחרו
+          </div>
+        </div>
+      </div>
+
+      <!-- אין תוצאות -->
+      <div class="no-results-message" *ngIf="!isLoading && filteredDepartments.length === 0">
+        {{ searchTerm ? 'לא נמצאו תוצאות' : 'כל המחלקות כבר נבחרו' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- רשימת פריטים שנבחרו -->
+  <div class="selected-list" *ngIf="selectedItems.length > 0">
+    <div class="selected-item" *ngFor="let item of selectedItems; let i = index">
+      <div class="item-content">
+        <!-- סוג הפריט -->
+        <span class="item-icon" [class.department-icon]="item.type === 'department'" [class.group-icon]="item.type === 'group'">
+          {{ item.type === 'department' ? '📁' : '👥' }}
+        </span>
+        
+        <!-- שם -->
+        <div class="item-text">
+          <div class="item-name">
+            {{ item.type === 'department' ? item.department.department_name : item.group?.group_name }}
+          </div>
+          <div class="item-subtitle" *ngIf="item.type === 'group'">
+            {{ item.department.department_name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- כפתור הסרה -->
+      <button 
+        type="button" 
+        class="remove-btn" 
+        (click)="removeItem(i)"
+        title="הסר">
+        ×
+      </button>
+    </div>
+  </div>
+
+  <!-- מצב ריק -->
+  <div class="empty-state" *ngIf="selectedItems.length === 0">
+    <div class="empty-icon">📋</div>
+    <div class="empty-message">לא נבחרו מחלקות או קבוצות</div>
+    <div class="empty-hint">לחץ על שדה החיפוש למעלה כדי לראות את רשימת המחלקות</div>
+  </div>
+
+</div>

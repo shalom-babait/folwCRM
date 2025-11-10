@@ -1,6 +1,7 @@
 <div class="view-container">
   <div class="right-panel">
-    <app-patient-list 
+    <app-patient-list
+
       (patientSelected)="onPatientSelected($event)">
     </app-patient-list>
   </div>
@@ -9,7 +10,7 @@
     <!-- תצוגת ברירת מחדל - סיכומים -->
     <div *ngIf="!selectedPatient" class="summary-view">
       <div class="summary-card">
-        <h2>סיכום מטופלים</h2> 
+        <h2>סיכום מטופלים</h2>
         <p class="instruction">בחר מטופל מהרשימה לצפייה בפרטים</p>
       </div>
     </div>
@@ -18,23 +19,16 @@
     <div *ngIf="selectedPatient" class="patient-view">
       <!-- כותרת עם לינקים -->
       <div class="header-tabs">
-<span><p>{{ selectedPatient.first_name }} {{ selectedPatient.last_name }}</p></span>        <br />         
+        <span><p>{{ selectedPatient.user.first_name }} {{ selectedPatient.user.last_name }}</p></span>
+        <br />
         <button 
           class="tab-link" 
           [class.active]="activeTab === 'details'"
           (click)="setActiveTab('details')">
           <mat-icon>person</mat-icon>
-          <span>פרטי מטפל</span>
+          <span>פרטי מטופל</span>
         </button>
-        
-        <button 
-          class="tab-link" 
-          [class.active]="activeTab === 'calendar'"
-          (click)="setActiveTab('calendar')">
-          <mat-icon>calendar_today</mat-icon>
-          <span>יומן</span>
-        </button>
-        
+
         <button 
           class="tab-link" 
           [class.active]="activeTab === 'mail'"
@@ -42,7 +36,15 @@
           <mat-icon>mail</mat-icon>
           <span>דואר</span>
         </button>
-        
+
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'patients'"
+          (click)="setActiveTab('patients')">
+          <mat-icon>people</mat-icon>
+          <span>רשימת מטופלים</span>
+        </button>
+
         <button 
           class="tab-link" 
           [class.active]="activeTab === 'treatments'"
@@ -58,10 +60,11 @@
 
       <!-- תוכן לפי הטאב הפעיל -->
       <div class="tab-content">
+
         <!-- רשימת טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list [patient]="selectedPatient"></app-treatment-list>
+            <app-treatment-list [patient]="selectedPatient.patient"></app-treatment-list>
           </div>
         </div>
 

@@ -60,7 +60,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
 import { PatientDetailsComponent } from './components/personal-area/patient/patient-details/patient-details.component';
 import { TherapistListComponent } from './components/personal-area/therapist/therapist-list/therapist-list.component';
-import { AddTherapistDialogComponent } from './components/personal-area/secretary/add-therapist-dialog/add-therapist-dialog.component';
+import { AddTherapistDialogComponent } from './components/personal-area/therapist/add-therapist-dialog/add-therapist-dialog.component';
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
@@ -74,6 +74,7 @@ import { DepartmentsViewComponent } from './components/personal-area/company-man
 import { AddDepartmentDialogComponent } from './components/personal-area/company-manager/departments/add-department-dialog/add-department-dialog.component';
 import { PatientTableComponent } from './components/personal-area/patient/patient-table/patient-table.component';
 import { AddGroupDialogComponent } from './components/personal-area/company-manager/departments/add-group-dialog/add-group-dialog.component';
+import { DepartmentSelectorComponent } from './components/personal-area/company-manager/departments/department-selector/department-selector.component';
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 
@@ -125,7 +126,7 @@ import { PatientViewComponent } from './components/personal-area/patient/patient
     AddDepartmentDialogComponent,
     PatientTableComponent,
     AddGroupDialogComponent,
-    SecretaryHomeComponent,
+    DepartmentSelectorComponent,
     PatientViewComponent,
   ],
   imports: [
