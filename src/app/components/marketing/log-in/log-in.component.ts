@@ -1,6 +1,8 @@
+// log-in.component.ts
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-log-in',
@@ -44,6 +46,7 @@ export class LogInComponent {
     this.showPassword = !this.showPassword;
    }
 
+
   showEnrollmentForm() {
     this.enrollmentFormDisplayed = true;
     this.connectionFormDisplayed = false;
@@ -59,6 +62,7 @@ export class LogInComponent {
     this.passwordHasBeenSent = false;
     this.SendingPasswordToMail = false;
   }
+
   showSendingPasswordToMail() {
     this.enrollmentFormDisplayed = false;
     this.connectionFormDisplayed = false;
@@ -66,13 +70,15 @@ export class LogInComponent {
     this.passwordHasBeenSent = false;
     this.SendingPasswordToMail = true;
   }
+
   showPasswordHasBeenSent() {
     this.enrollmentFormDisplayed = false;
     this.connectionFormDisplayed = false;
     this.forgatPassword = false;
     this.passwordHasBeenSent = true;
     this.SendingPasswordToMail = false;
-  }
+
+
   showForgotPassword() {
     this.enrollmentFormDisplayed = false;
     this.connectionFormDisplayed = false;
@@ -80,4 +86,5 @@ export class LogInComponent {
     this.passwordHasBeenSent = false;
     this.SendingPasswordToMail = false;
   }
+
 }
