@@ -1,38 +1,21 @@
 <div class="logInComponent">
     <div class="titleContainer">
-        <!-- הודעות שגיאה והצלחה -->
-        <div *ngIf="loginError" class="error-message">{{ loginError }}</div>
-        <div *ngIf="registrationError" class="error-message">{{ registrationError }}</div>
-        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
     </div>
     <div *ngIf="enrollmentFormDisplayed">
         <label class="dialogTitle" [class.active]="enrollmentFormDisplayed" (click)="showEnrollmentForm()">הרשמה</label>
-        <div class="enrollment">
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="firstName"
-                [(ngModel)]="registrationData.firstName" placeholder="*שם פרטי" required>
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="lastName"
-                [(ngModel)]="registrationData.lastName" placeholder="*שם משפחה" required>
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="id" [(ngModel)]="registrationData.id"
-                placeholder="תז">
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="phone" [(ngModel)]="registrationData.phone"
-                placeholder="*טלפון" required>
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="city" [(ngModel)]="registrationData.city"
-                placeholder="*עיר" required>
-            <input class="WantToBeUpdatedTiteleInput" type="text" name="address" [(ngModel)]="registrationData.address"
-                placeholder="כתובת">
-            <input class="WantToBeUpdatedTiteleInput fullWidth" type="email" name="email"
-                [(ngModel)]="registrationData.email" placeholder="*מייל" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password"
-                [(ngModel)]="registrationData.password" placeholder="*סיסמה" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="confirmPassword"
-                [(ngModel)]="registrationData.confirmPassword" placeholder="*אימות סיסמה" required>
-            <label class="fullWidth"><input type="checkbox" name="agree" [(ngModel)]="registrationData.agree"
-                    required>אני מאשר קבלת עידכונים ותכנים של "שלום
-                בבית"</label>
+        <div class="enrollment">      
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="firstName" placeholder="*שם פרטי" required>
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="lastName" placeholder="*שם משפחה" required>
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="id" placeholder="תז">
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="phone" placeholder="*טלפון" required>
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="city" placeholder="*עיר" required>
+            <input class="WantToBeUpdatedTiteleInput" type="text" name="address" placeholder="כתובת">
+            <input class="WantToBeUpdatedTiteleInput fullWidth" type="text" name="email" placeholder="*מייל" required>
+            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="*סיסמה" required>
+            <input class="WantToBeUpdatedTiteleInput" type="password" name="confirmPassword" placeholder="*אימות סיסמה" required>
+            <label class="fullWidth"><input type="checkbox" name="agree" required>אני מאשר קבלת עידכונים ותכנים של "שלום בבית"</label>
         </div>
-        <!-- <button class="submitButton">כניסה</button> -->
-        <button class="submitButton" (click)="register()">הרשמה</button>
-
+        <button class="submitButton">כניסה</button>
     </div>
     <div *ngIf="connectionFormDisplayed">
     <label class="dialogTitle" [class.active]="connectionFormDisplayed" (click)="showConnectionForm()">התחברות</label>
@@ -51,7 +34,6 @@
         
         <a class="subtitle" (click)="showSendingPasswordToMail()">?שכחת סיסמה</a>
         <label class="subtitle" (click)="showEnrollmentForm()">?עוד לא הצטרפת אלינו</label>
-
     </div>
     <button class="submitButton" (click)="onLogin()">כניסה</button>
 </div>
@@ -59,8 +41,7 @@
         <div class="showSendingPasswordToMail">
             <label class="dialogTitle">שחזור סיסמה</label>
             <input class="WantToBeUpdatedTiteleInput" type="email" name="email" placeholder="מייל" required>
-            <button class="submitButton SubmitNewPasswordButton" (click)="showPasswordHasBeenSent()">שלח למייל סיסמה
-                חדשה</button>
+            <button class="submitButton SubmitNewPasswordButton" (click)="showPasswordHasBeenSent()">שלח למייל סיסימה חדשה</button>
         </div>
     </div>
     <div *ngIf="passwordHasBeenSent">
@@ -73,10 +54,8 @@
         <div class="showForgotPassword">
             <label class="dialogTitle">שחזור סיסמה</label>
             <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="סיסמה" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="בחר סיסמה חדשה"
-                required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="אימות סיסמה חדשה"
-                required>
+            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="בחר סיסמה חדשה" required>
+            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="אימות סיסמה חדשה" required>
             <button class="submitButton">כניסה</button>
         </div>
     </div>
