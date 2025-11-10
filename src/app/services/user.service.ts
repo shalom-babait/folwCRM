@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserData } from '../models/user.model';
-import { PatientData } from '../models/patient.model';
+import { PatientBase  } from '../models/patient.model';
 import { TherapistCreationData, TherapistData } from '../models/therapist.model';
 import { environment } from '../../environments/environment';
 
@@ -28,7 +28,7 @@ export class UserService {
   return this.http.post(`${this.apiUrl}/therapists/create`, { user: userData, therapist: therapistData, selectedDepartments });
 }
 
-  createPatient(userData: UserData, patientData: PatientData): Observable<any> {
+  createPatient(userData: UserData, patientData: PatientBase): Observable<any> {
     return this.http.post(`${this.apiUrl}/patient`, { userData, patientData });
   }
 

@@ -1,108 +1,17 @@
-/* עיצוב דיאלוג הוספת טיפול - מודרני, נעים, רספונסיבי */
-:host {
-  display: block;
-  padding: 24px 16px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-.mat-dialog-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2a3b4c;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-.mat-form-field-appearance-fill .mat-form-field-flex {
-  background: #f7f9fa;
-  border-radius: 8px;
-}
-
-.mat-form-field-label {
-  color: #2a3b4c;
-  font-weight: 500;
-}
-
-.mat-input-element {
-  font-size: 1rem;
-}
-
-.mat-radio-group {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.mat-radio-button {
-  font-size: 1rem;
-}
-
-.button-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-button.mat-raised-button {
-  min-width: 100px;
-  font-weight: 500;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-}
-
-button.mat-raised-button[color="primary"] {
-  background: linear-gradient(90deg, #4f8cff 0%, #2a3b4c 100%);
-  color: #fff;
-}
-
-button.mat-raised-button[color="warn"] {
-  background: #e57373;
-  color: #fff;
-}
-
-.mat-error {
-  color: #e57373;
-  font-size: 0.95rem;
-  margin-top: 4px;
-}
-
-@media (max-width: 600px) {
-  :host {
-    padding: 12px 4px;
-    max-width: 98vw;
-  }
-  .mat-dialog-title {
-    font-size: 1.2rem;
-  }
-  .button-row {
-    flex-direction: column;
-    gap: 8px;
-    align-items: stretch;
-  }
-}
 /* דיאלוג כללי */
+/* דיאלוג עם גלילה וגובה מוגבל */
 .create-treatment-dialog {
-  max-width: 500px; /* רוחב קבוע לדיאלוג */
-  background-color: #022F39; /* טורכיז כהה לכותרת */
+  max-width: 900px;
+  min-width: 400px;
+  min-height: 600px;
+  max-height: 90vh;
+  background-color: #022F39;
   color: white;
   border-radius: 1rem;
   font-family: Arial, sans-serif;
-  overflow: hidden;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* כותרת הדיאלוג */
@@ -116,8 +25,14 @@ button.mat-raised-button[color="warn"] {
 }
 
 /* תוכן הדיאלוג */
+/* תוכן הדיאלוג עם גלילה פנימית */
 .input-dialog {
   background-color: whitesmoke;
+  color: #222;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  max-height: 90vh;
+  padding-bottom: 1rem;
   padding: 2rem 2rem 1rem 2rem;
   display: flex;
   flex-direction: column;
@@ -155,12 +70,16 @@ button.mat-raised-button[color="warn"] {
   background-color: white;  /* רקע לבן כדי להבליט את השדה */
 }
 
+/* כפתורים תמיד בתחתית הדיאלוג */
 .dialog-actions {
   display: flex;
-  justify-content: center; /* מרכז את הכפתורים */
-  gap: 1rem;              /* רווח בין הכפתורים */
+  justify-content: center;
+  gap: 1rem;
   padding: 1rem 0;
   background-color: whitesmoke;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
 }
 
 .dialog-actions button {

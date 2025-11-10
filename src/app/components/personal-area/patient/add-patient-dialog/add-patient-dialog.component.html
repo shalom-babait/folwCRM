@@ -6,10 +6,34 @@
     <div class="input-dialog">
       <form [formGroup]="patientForm" class="patient-form">
   
-        <!-- מזהה משתמש -->
+        <!-- פרטי משתמש חדשים -->
         <div class="form-field">
-          <label for="user_id">מזהה משתמש</label>
-          <input type="number" id="user_id" formControlName="user_id" placeholder="הכנס מזהה משתמש" required>
+          <label for="first_name">שם פרטי</label>
+          <input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי" required>
+        </div>
+        <div class="form-field">
+          <label for="last_name">שם משפחה</label>
+          <input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה" required>
+        </div>
+        <div class="form-field">
+          <label for="teudat_zehut">תעודת זהות</label>
+          <input type="text" id="teudat_zehut" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות">
+        </div>
+        <div class="form-field">
+          <label for="phone">טלפון</label>
+          <input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון">
+        </div>
+        <div class="form-field">
+          <label for="city">עיר</label>
+          <input type="text" id="city" formControlName="city" placeholder="הכנס עיר">
+        </div>
+        <div class="form-field">
+          <label for="address">כתובת</label>
+          <input type="text" id="address" formControlName="address" placeholder="הכנס כתובת">
+        </div>
+        <div class="form-field">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל" required>
         </div>
   
         <!-- מזהה מטפל (אופציונלי) -->

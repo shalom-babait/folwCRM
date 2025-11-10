@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PatientDashboardComponent implements OnInit {
   patient: PatientCreationData | null = null;
+
   appointments: Appointment[] = [];
 
   patientId: number = 0;
@@ -29,8 +30,10 @@ export class PatientDashboardComponent implements OnInit {
       const id = Number(params.get('id'));
       this.patientId = id;
       if (id) {
-        this.patientService.getPatientById(id).subscribe(data => {
-          console.log('Patient data from server:', data);
+        // שימוש ב-getPatientOnly שמחזיר את כל השדות מה-Users ומה-Patients
+        this.patientService.getPatientOnly(id).subscribe(data => {
+          // ניתן להחזיר לוגים אם צריך דיבאג
+          // console.log('Patient data from server:', data);
           this.patient = {
             user: {
               first_name: data.user?.first_name ?? '',
@@ -55,7 +58,28 @@ export class PatientDashboardComponent implements OnInit {
             },
             selectedDepartments: []
           };
-          console.log('Patient object for details:', this.patient);
+          // קריאת הפגישות רק אחרי שהמטופל נטען
+          this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+            // ניתן להחזיר לוגים אם צריך דיבאג
+            // console.log('Appointments raw from API:', data);
+            this.appointments = (data || []).map((a: any) => ({
+              ...a,
+              appointment_id: a.appointment_id ?? 0,
+              patient_id: a.patient_id ?? id,
+              room: a.room ?? '',
+              treatment_type: a.treatment_type ?? '',
+              total_minutes: a.total_minutes ?? 0,
+              status: a.status ?? 'מתוזמנת',
+              cost: a.cost ?? 0,
+              place: a.place ?? '',
+              notes: a.notes ?? '',
+              name: a.name ?? '',
+              therapist: a.therapist ?? '',
+              totalCost: a.totalCost ?? 0,
+            }));
+            // ניתן להחזיר לוגים אם צריך דיבאג
+            // console.log('Appointments array for child:', this.appointments);
+          });
         });
             this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
               this.appointments = (data || []).map((a: any) => ({
@@ -80,20 +104,39 @@ export class PatientDashboardComponent implements OnInit {
 
   onPatientUpdated(updatedPatient: PatientCreationData) {
     if (!this.patient) return;
+    // Convert gender from 'male'|'female'|'other' to 'זכר'|'נקבה'|'אחר'
+    let gender: 'זכר' | 'נקבה' | 'אחר' = 'אחר';
+    switch (updatedPatient.user.gender) {
+      case 'male':
+        gender = 'זכר';
+        break;
+      case 'female':
+        gender = 'נקבה';
+        break;
+      case 'other':
+        gender = 'אחר';
+        break;
+      default:
+        gender = 'אחר';
+    }
     const backendPatient = {
+      patient_id: this.patient?.patient.patient_id ?? 0,
+      user_id: updatedPatient.user.user_id ?? undefined,
       first_name: updatedPatient.user.first_name ?? '',
       last_name: updatedPatient.user.last_name ?? '',
-      phone: updatedPatient.user.phone ?? '',
-      email: updatedPatient.user.email ?? '',
-      birth_date: updatedPatient.user.birth_date ?? '',
-      address: updatedPatient.user.address ?? '',
       teudat_zehut: updatedPatient.user.teudat_zehut ?? '',
+      phone: updatedPatient.user.phone ?? '',
       city: updatedPatient.user.city ?? '',
-      gender: updatedPatient.user.gender ?? undefined,
-      // status: updatedPatient.user.status ?? undefined,
-      // history_notes: updatedPatient.user.history_notes ?? undefined,
+      address: updatedPatient.user.address ?? '',
+      email: updatedPatient.user.email ?? '',
+      password: updatedPatient.user.password ?? undefined,
+      role: updatedPatient.user.role ?? undefined,
+      agree: updatedPatient.user.agree ?? undefined,
+      created_at: updatedPatient.user.created_at ?? undefined,
+      gender: gender,
+      birth_date: updatedPatient.user.birth_date ?? '',
     };
-  this.patientService.updatePatient(this.patient?.patient.patient_id ?? 0, backendPatient).subscribe(
+    this.patientService.updatePatient(this.patient?.patient.patient_id ?? 0, backendPatient).subscribe(
       (res) => {
         console.log('Update response:', res);
         // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
@@ -130,12 +173,33 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   get totalHours(): number {
-    const totalMinutes = this.appointments.reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
-
-    return Math.round((totalMinutes / 60) * 10) / 10;
+  const totalMinutes = (this.appointments || []).reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+  return Math.round((totalMinutes / 60) * 10) / 10;
   }
 
   get totalCost(): number {
     return 0;
+  }
+  
+  // Added to resolve template errors
+  onAppointmentAdded(event: any) {
+    // Optionally, reload appointments or push to this.appointments
+    // Example: this.appointments.push(event);
+    // You can implement logic as needed
+    this.snackBar.open('פגישה נוספה בהצלחה!', 'סגור', {
+      duration: 2500,
+      panelClass: 'custom-snackbar',
+      direction: 'rtl'
+    });
+  }
+
+  onAppointmentDeleted(event: any) {
+    // Optionally, remove from this.appointments or reload
+    // Example: this.appointments = this.appointments.filter(a => a.appointment_id !== event);
+    this.snackBar.open('פגישה נמחקה בהצלחה!', 'סגור', {
+      duration: 2500,
+      panelClass: 'custom-snackbar',
+      direction: 'rtl'
+    });
   }
 }

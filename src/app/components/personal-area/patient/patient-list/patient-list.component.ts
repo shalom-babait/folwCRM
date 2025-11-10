@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
+
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',
@@ -27,9 +28,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // טעינת רשימת מטופלים מהשרת
     this.loadPatients();
-    
+
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
@@ -72,9 +72,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   viewPatientDetails(patient: PatientCreationData) {
-    const patient_id = patient.patient.patient_id;
+    const patient_id = patient.patient?.patient_id;
     if (patient_id) {
-      // this.patientService.selectPatient(patient_id);
       this.selectedPatientId = patient_id;
       this.patientSelected.emit(patient); // שליחת האירוע להורה
     }
@@ -104,15 +103,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
-        if (result && result.success) {
+        if (result && result.success && result.data) {
           console.log('מטופל חדש נוסף:', result.data);
-          this.refreshPatientsList();
-          
-          if (result.data?.patient_id) {
-            const newPatientId = result.data.patient_id;
+          this.patients = [...this.patients, result.data];
+          if (result.data.patient?.patient_id) {
+            const newPatientId = result.data.patient.patient_id;
             setTimeout(() => {
               this.patientService.selectPatient(newPatientId);
-            }, 500); 
+            }, 500);
           }
         }
       });
@@ -130,7 +128,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (results) => {
             console.log('תוצאות חיפוש:', results);
-            // ניתן להציג את התוצאות בדיאלוג או לעדכן את הרשימה
             if (results.length > 0) {
               this.patients = results;
             } else {

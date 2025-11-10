@@ -15,6 +15,7 @@ import { TherapistsViewComponent } from './components/personal-area/therapist/th
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
+import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 
 const routes: Routes = [
@@ -24,14 +25,20 @@ const routes: Routes = [
   ] },
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
+  // { path: 'patient/:id', component: PatientDashboardComponent },
+  { path: 'patientList', component: PatientListComponent },  
+  
   { path: 'personal-area', children: [
     { path: 'therapist', component: TherapistDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'therapist' }, children: [
       { path: 'patient', component: PatientViewComponent }
     ] },
     { path: 'patient', component: PatientDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'patient' } },
+
     { path: 'secretary', component: SecretaryDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'secretary' }, children: [
-      { path: 'therapists', component: TherapistsViewComponent },
-      { path: 'rooms', component: RoomsViewComponent }
+          { path: '', component: SecretaryHomeComponent },
+          { path: 'rooms', component: RoomsViewComponent },
+          { path: 'therapists', component: TherapistsViewComponent },
     ] },
     { path: 'admin', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } }
   ]},

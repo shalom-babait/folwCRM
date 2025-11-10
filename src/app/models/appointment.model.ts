@@ -24,9 +24,11 @@ export interface Appointment {
   start_time: string;        // HH:MM:SS
   end_time: string;          // HH:MM:SS
   total_minutes?: number;
-  status?: 'מתוזמנת' | 'הושלמה' | 'בוטלה';
+  status?: 'מתוזמנת' | 'הושלמה' | 'בוטלה' | 'נדחתה';
   notes?: string;
   cost?: number;
+  treatment_type?: string;
+  room?: string;
 }
 export interface AppointmentFormInput {
   therapist_id: number;

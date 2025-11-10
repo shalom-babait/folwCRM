@@ -12,7 +12,7 @@
       <span class="label">שם:</span>
       <span class="value">{{ patient.user.first_name }} {{ patient.user.last_name }}</span>
     </div>
-    
+
     <div class="detail-row">
       <span class="label">טלפון:</span>
       <span class="value">{{ patient.user.phone }}</span>
@@ -30,7 +30,7 @@
     
     <div class="detail-row">
       <span class="label">תאריך לידה:</span>
-      <!-- <span class="value">{{ formatDate(patient.birthDate) }}</span> -->
+      <span class="value">{{ patient.user.birth_date| date:'dd/MM/yyyy' }}</span>
     </div>
     
     <div class="detail-row">
@@ -49,8 +49,12 @@
   <form *ngIf="isEditing" [formGroup]="patientForm" class="edit-form">
     
     <div class="form-field">
-      <label>שם:</label>
-      <input type="text" formControlName="name" placeholder="הכנס שם מלא">
+      <label>שם פרטי:</label>
+      <input type="text" formControlName="first_name" placeholder="הכנס שם פרטי">
+    </div>
+    <div class="form-field">
+      <label>שם משפחה:</label>
+      <input type="text" formControlName="last_name" placeholder="הכנס שם משפחה">
     </div>
     
     <div class="form-field">
@@ -65,7 +69,7 @@
     
     <div class="form-field">
       <label>תאריך לידה:</label>
-      <input type="date" formControlName="birthDate">
+      <input type="date" formControlName="birth_date">
     </div>
     
     <div class="form-field">

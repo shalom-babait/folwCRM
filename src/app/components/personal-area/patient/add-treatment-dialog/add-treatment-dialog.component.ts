@@ -1,4 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators ,AbstractControl} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -7,6 +9,7 @@ import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 // import { TreatmentData } from 'src/app/classes/treatment'; // לשימוש עתידי
 import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
+import { PatientService } from 'src/app/services/patient.service';
 import { Room } from 'src/app/models/room.model';
 //import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,30 +23,37 @@ import { Room } from 'src/app/models/room.model';
   styleUrls: ['./add-treatment-dialog.component.css']
 })
 export class CreateTreatmentDialogComponent implements OnInit {
+  @Output() appointmentAdded = new EventEmitter<any>();
   treatmentForm!: FormGroup;
   rooms: Room[] = [];
   types: any[] = [];
+  selectedRoomId: number | null = null;
+  showCalendar: boolean = false;
+  roomEvents: any[] = [];
+  showOverlay: boolean = false;
   constructor(
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
     public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private roomsService: RoomsService,
-    private typesService: TypesService
+  private roomsService: RoomsService,
+  private typesService: TypesService,
+  private patientService: PatientService,
+    private dialog: MatDialog
     // private treatmentService: TreatmentService
   ) {
     this.treatmentForm = this.createForm();
   }
 
   ngOnInit(): void {
-this.roomsService.getRooms().subscribe({
-  next: (rooms) => {
-    this.rooms = rooms;
-  },
-  error: (error) => {
-    console.error('Error fetching rooms:', error);
-  }
-});
+    this.roomsService.getRooms().subscribe({
+      next: (rooms) => {
+        this.rooms = rooms;
+      },
+      error: (error) => {
+        console.error('Error fetching rooms:', error);
+      }
+    });
     this.typesService.getTypes().subscribe({
       next: (type) => {
         this.types = type;
@@ -52,11 +62,93 @@ this.roomsService.getRooms().subscribe({
         console.error('Error fetching rooms:', error);
       }
     });
-    // this.loadTypes();
-    // אם יש נתונים ראשוניים, נכניס אותם לטופס
     if (this.data && this.data.initialData) {
       this.treatmentForm.patchValue(this.data.initialData);
     }
+    this.treatmentForm.get('place')?.valueChanges.subscribe(roomId => {
+      this.selectedRoomId = roomId;
+      this.showCalendar = !!roomId;
+      this.loadRoomEvents(roomId);
+      // פתח overlay ליומן בכל בחירת חדר
+      this.showOverlay = !!roomId;
+    });
+  }
+
+  loadRoomEvents(roomId: number) {
+    // טוען פגישות מהשרת לפי roomId וממיר לאירועים של FullCalendar
+    if (!roomId) {
+      this.roomEvents = [];
+      return;
+    }
+    this.patientService.getAppointmentsByRoomId(roomId).subscribe({
+      next: (appointments) => {
+        this.roomEvents = appointments
+          .filter(app => app.status !== 'בוטלה')
+          .map(app => {
+            // המרת appointment_date מ-UTC לתאריך מקומי
+            let localDateObj = new Date(app.appointment_date);
+            const yyyy = localDateObj.getFullYear();
+            const mm = String(localDateObj.getMonth() + 1).padStart(2, '0');
+            const dd = String(localDateObj.getDate()).padStart(2, '0');
+            const localDate = `${yyyy}-${mm}-${dd}`;
+            // בנה תאריך מלא בפורמט ISO תקני ל-FullCalendar
+            const start = `${localDate}T${app.start_time}`;
+            const end = `${localDate}T${app.end_time}`;
+            return {
+              id: app.appointment_id,
+              title: app.patient_id ? `פגישה עם מטופל ${app.patient_id}` : 'פגישה',
+              start,
+              end,
+              color: '#1a237e',
+              allDay: false
+            };
+          });
+      },
+      error: (err) => {
+        this.roomEvents = [];
+      }
+    });
+  }
+
+  onOverlayDateSelected(event: any) {
+    // פותח דיאלוג לבחירת שעות לאחר בחירת תאריך ביומן הגדול
+    this.showOverlay = false;
+    if (event?.dateStr) {
+      const dateObj = new Date(event.dateStr);
+      const yyyy = dateObj.getFullYear();
+      const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const dd = String(dateObj.getDate()).padStart(2, '0');
+      const formattedDate = `${yyyy}-${mm}-${dd}`;
+      this.treatmentForm.patchValue({ date: formattedDate });
+    }
+    const dialogRef = this.dialog.open(SelectTimeDialogComponent, {
+      width: '350px',
+      data: { date: event.dateStr, roomEvents: this.roomEvents }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const selectedDate = this.treatmentForm.value.date || (event?.dateStr ? event.dateStr.split('T')[0] : null);
+        const overlap = this.roomEvents.some(ev => {
+          const evDate = ev.start.split('T')[0];
+          if (evDate !== selectedDate) return false;
+          const evStart = ev.start.split('T')[1];
+          const evEnd = ev.end.split('T')[1];
+          return (result.startTime < evEnd && result.endTime > evStart);
+        });
+        if (overlap) {
+          alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
+          return;
+        }
+        this.treatmentForm.patchValue({
+          startTime: result.startTime,
+          endTime: result.endTime
+        });
+      }
+    });
+  }
+
+  closeOverlay() {
+    this.showOverlay = false;
   }
 
   private createForm(): FormGroup {
@@ -65,6 +157,8 @@ this.roomsService.getRooms().subscribe({
       startTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       endTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       place: [null, Validators.required],
+      type: [null, Validators.required],
+      patient_id: [this.data?.patient_id || null, Validators.required],
       notes: ['', [Validators.maxLength(250)]]
     });
   }
@@ -90,17 +184,73 @@ getErrorMessage(field: string): string {
       Object.keys(this.treatmentForm.controls).forEach(field => {
         this.treatmentForm.get(field)?.markAsTouched();
       });
+      console.log('Form invalid:', this.treatmentForm.value);
       return;
-
     }
-    // שמירה לשרת (דוגמה)
-    // try {
-    //   await this.treatmentService.addTreatment(this.treatmentForm.value as TreatmentData);
-    //   this.dialogRef.close(true);
-    // } catch (error) {
-    //   this.errorHandler.handleServerError(error);
-    // }
-    this.dialogRef.close(this.treatmentForm.value); // דוגמה לסגירה עם ערך
+
+    // בדיקת תפוסה לפני שמירה
+    const formValue = this.treatmentForm.value;
+    const newStart = formValue.startTime;
+    const newEnd = formValue.endTime;
+    const newDate = formValue.date;
+    const roomId = formValue.place;
+    // בדוק חפיפה עם roomEvents
+    const overlap = this.roomEvents.some(ev => {
+      // השווה תאריך
+      const evDate = ev.start.split('T')[0];
+      if (evDate !== newDate) return false;
+      // השווה שעות
+      const evStart = ev.start.split('T')[1];
+      const evEnd = ev.end.split('T')[1];
+      return (newStart < evEnd && newEnd > evStart);
+    });
+    if (overlap) {
+      alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
+      return;
+    }
+
+    // תיקון פורמט שדות לפני שליחה לשרת
+    let appointmentDate = formValue.date;
+    if (appointmentDate && appointmentDate.includes('T')) {
+      appointmentDate = appointmentDate.split('T')[0];
+    }
+    let startTime = formValue.startTime;
+    let endTime = formValue.endTime;
+    // הסר שניות אם קיימות
+    if (startTime && startTime.length > 5) {
+      startTime = startTime.substring(0,5);
+    }
+    if (endTime && endTime.length > 5) {
+      endTime = endTime.substring(0,5);
+    }
+    const appointment: any = {
+      therapist_id: this.data?.therapist_id || 1, // יש לעדכן לפי הלוגיקה שלך
+      patient_id: formValue.patient_id,
+      type_id: formValue.type,
+      room_id: formValue.place,
+      appointment_date: appointmentDate,
+      start_time: startTime,
+      end_time: endTime,
+      notes: formValue.notes || ''
+    };
+    console.log('appointment to send:', appointment);
+
+    this.patientService.createAppointment(appointment).subscribe({
+      next: (response) => {
+        console.log('response from server:', response);
+        if (response.success) {
+          alert('הפגישה נוספה בהצלחה!');
+          this.appointmentAdded.emit(response.data || appointment);
+          this.dialogRef.close(response.data || appointment);
+        } else {
+          alert('אירעה שגיאה בשמירת הפגישה');
+        }
+      },
+      error: (err) => {
+        console.error('error from server:', err);
+        alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+      }
+    });
   }
 
   close() {

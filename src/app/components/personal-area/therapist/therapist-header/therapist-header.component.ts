@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./therapist-header.component.css']
 })
 export class TherapistHeaderComponent implements OnInit {
+ 
 showProfileMenu = false;
   userName = ''; 
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
@@ -40,7 +41,9 @@ ngOnInit() {
       this.showProfileMenu = false;
     }
   }
-
+  navigateToPatientsList() {
+    this.router.navigate(['/personal-area/therapist/patients']);
+  }
   goToSettings() {
     this.showProfileMenu = false;
     this.router.navigate(['/settings']);

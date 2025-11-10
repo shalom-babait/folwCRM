@@ -23,7 +23,6 @@ export class PatientDetailsComponent implements OnChanges {
       address: ['', Validators.required]
     });
   }
-
   ngOnChanges(): void {
     if (this.patient && this.patientForm) {
       this.patientForm.patchValue(this.patient);
@@ -52,23 +51,17 @@ export class PatientDetailsComponent implements OnChanges {
   }
 
   calculateAge(): number {
-  if (!this.patient?.user.birth_date) return 0;
-    
+
+    if (!this.patient?.user.birth_date) return 0;
     const today = new Date();
-    const birthDate = new Date(this.patient.user.birth_date || '');
+    // טיפול בפורמט תאריך לידה
+    const birthDate = new Date(this.patient.user.birth_date);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    
     return age;
   }
-
-  formatDate(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('he-IL');
-  }
 }
+  
