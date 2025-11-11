@@ -110,11 +110,11 @@
 
     <!-- בחירת מחלקות וקבוצות - תופס שתי עמודות -->
     <div class="form-field departments-section">
-      <app-department-selector
+      <app-department-group-selector
         [initialSelections]="initialSelections"
         [searchPlaceholder]="'חפש מחלקה או קבוצה להוספה...'"
         (selectionsChanged)="onSelectionsChanged($event)">
-      </app-department-selector>
+      </app-department-group-selector>
     </div>
     
     <!-- הסכמה -->
