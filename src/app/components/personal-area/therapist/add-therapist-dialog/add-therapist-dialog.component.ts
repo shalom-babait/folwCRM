@@ -1,3 +1,4 @@
+import { SelectedDepartmentForSave } from 'src/app/models/department-group.model';
 // add-therapist-dialog.component.ts
 import { Component, OnInit } from '@angular/core';
 import { TherapistCreationData } from 'src/app/models/therapist.model';
@@ -12,6 +13,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./add-therapist-dialog.component.css']
 })
 export class AddTherapistDialogComponent implements OnInit {
+  // בחירות מחלקות וקבוצות לשיוך למחלקות
+  selectedDepartments: SelectedDepartmentForSave[] = [];
+
+  // עדכון מחלקות נבחרות מהקומפוננטה הבת
+  onDepartmentsSelected(selected: SelectedDepartmentForSave[]) {
+    this.selectedDepartments = selected;
+  }
   therapistForm: FormGroup;
   hidePassword = true;
 
@@ -58,10 +66,8 @@ export class AddTherapistDialogComponent implements OnInit {
       const formValue = this.therapistForm.value;
       console.log('Form value:', formValue);
 
-      // איסוף מחלקות וקבוצות מהבחירות
-      console.log('Selected items before extract:', this.selectedItems);
-      const selectedDepartments = this.buildSelectedDepartmentsForSave();
-      console.log('SelectedDepartmentsForSave:', selectedDepartments);
+      // שימוש במחלקות שנבחרו מהקומפוננטה הבת
+      console.log('SelectedDepartmentsForSave:', this.selectedDepartments);
 
       const therapistCreationData = {
         user: {
@@ -82,7 +88,7 @@ export class AddTherapistDialogComponent implements OnInit {
           specialization: formValue.specialization.trim(),
           experience_years: parseInt(formValue.experience_years, 10)
         },
-        selectedDepartments
+        selectedDepartments: this.selectedDepartments
       };
 
       console.log('TherapistCreationData to save:', therapistCreationData);
@@ -97,20 +103,6 @@ export class AddTherapistDialogComponent implements OnInit {
     }
   }
 
-  // בניית מערך שיוכים למחלקות וקבוצות לשמירה
-  private buildSelectedDepartmentsForSave(): Array<{ department_id: number; group_ids: number[] }> {
-    const map = new Map<number, number[]>();
-    this.selectedItems.forEach(item => {
-      const depId = item.department.department_id!;
-      if (!map.has(depId)) {
-        map.set(depId, []);
-      }
-      if (item.type === 'group' && item.group?.group_id) {
-        map.get(depId)!.push(item.group.group_id);
-      }
-    });
-    return Array.from(map.entries()).map(([department_id, group_ids]) => ({ department_id, group_ids }));
-  }
 
   // מחלץ מזהי מחלקות וקבוצות מהבחירות
   private extractDepartmentAndGroupIds(): { departmentIds: number[], groupIds: number[] } {

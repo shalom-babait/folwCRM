@@ -50,8 +50,9 @@ ngOnInit() {
   }
 
   logout() {
-    this.showProfileMenu = false;
-    this.router.navigate(['/']);
+  this.showProfileMenu = false;
+  localStorage.clear();
+  this.router.navigate(['/']);
   }
 }
 

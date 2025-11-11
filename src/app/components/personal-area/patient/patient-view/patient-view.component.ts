@@ -7,7 +7,7 @@ import { PatientService } from 'src/app/services/patient.service';
   templateUrl: './patient-view.component.html',
   styleUrls: ['./patient-view.component.css']
 })
-export class PatientViewComponent  {
+export class PatientViewComponent {
   selectedPatient: PatientCreationData | null = null;
   activeTab: string = 'details';
   searchTerm: string = '';
