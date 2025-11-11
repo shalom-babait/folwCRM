@@ -21,24 +21,36 @@ export class LogInComponent {
 
   constructor(private authService: AuthService) {}
 
-  onLogin() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (res: any) => {
-        localStorage.setItem('token', res.token);
-        if (res.user) {
-          localStorage.setItem('user', JSON.stringify(res.user));
-          this.userName = res.user.name || res.user.username || '';
-        }
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const role = user.role;
-        // סגירת הדיאלוג והחזרת התפקיד באנגלית
-        (window as any).dialogRef?.close(role);
-      },
-      error: (err) => {
-        alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
+onLogin() {
+  this.authService.login(this.email, this.password).subscribe({
+    next: (res: any) => {
+      console.log('Login successful:', res);
+      localStorage.setItem('token', res.token);
+      if (res.user) {
+        localStorage.setItem('user', JSON.stringify(res.user));
+        this.userName = res.user.name || res.user.username || '';
       }
-    });
-  }
+      // שמירת מזהה לפי תפקיד
+      if (res.therapist_id) {
+        localStorage.setItem('therapist_id', res.therapist_id.toString());
+        // שמירה כאובייקט therapist
+        localStorage.setItem('therapist', JSON.stringify({ therapist_id: res.therapist_id }));
+      }
+      if (res.patient_id) {
+        localStorage.setItem('patient_id', res.patient_id.toString());
+      }
+      if (res.secretary_id) {
+        localStorage.setItem('secretary_id', res.secretary_id.toString());
+      }
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const role = user.role;
+      (window as any).dialogRef?.close(role);
+    },
+    error: (err) => {
+      alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
+    }
+  });
+}
   
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;

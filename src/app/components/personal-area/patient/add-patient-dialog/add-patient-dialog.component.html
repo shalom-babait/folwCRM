@@ -1,99 +1,133 @@
+<!-- add-patient-dialog.component.html -->
 <div class="create-treatment-dialog" dir="rtl">
-    <h2 class="dialog-title">
-      הוספת מטופל חדש
-    </h2>
-  
-    <div class="input-dialog">
-      <form [formGroup]="patientForm" class="patient-form">
-  
-        <!-- פרטי משתמש חדשים -->
-        <div class="form-field">
-          <label for="first_name">שם פרטי</label>
-          <input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי" required>
-        </div>
-        <div class="form-field">
-          <label for="last_name">שם משפחה</label>
-          <input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה" required>
-        </div>
-        <div class="form-field">
-          <label for="teudat_zehut">תעודת זהות</label>
-          <input type="text" id="teudat_zehut" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות">
-        </div>
-        <div class="form-field">
-          <label for="phone">טלפון</label>
-          <input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון">
-        </div>
-        <div class="form-field">
-          <label for="city">עיר</label>
-          <input type="text" id="city" formControlName="city" placeholder="הכנס עיר">
-        </div>
-        <div class="form-field">
-          <label for="address">כתובת</label>
-          <input type="text" id="address" formControlName="address" placeholder="הכנס כתובת">
-        </div>
-        <div class="form-field">
-          <label for="email">אימייל</label>
-          <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל" required>
-        </div>
-  
-        <!-- מזהה מטפל (אופציונלי) -->
-        <div class="form-field">
-          <label for="therapist_id">מזהה מטפל (אופציונלי)</label>
-          <input type="number" id="therapist_id" formControlName="therapist_id" placeholder="הכנס מזהה מטפל">
-        </div>
-  
-        <!-- תאריך לידה -->
-        <div class="form-field">
-          <label for="birth_date">תאריך לידה</label>
-          <input type="date" id="birth_date" formControlName="birth_date" [max]="maxDate">
-        </div>
-  <!-- מין -->
-<div class="form-field">
-    <label for="gender">מין</label>
-    <select id="gender" formControlName="gender">
-        <option *ngFor="let gender of genderOptions" [value]="gender.value">
-            {{ gender.label }}
-        </option>
-    </select>
-</div>
+  <h2 class="dialog-title">הוספת מטופל חדש</h2>
 
-<!-- סטטוס -->
-<div class="form-field">
-    <label for="status">סטטוס</label>
-    <select id="status" formControlName="status" required>
-        <option *ngFor="let status of statusOptions" [value]="status.value">
-            {{ status.label }}
-        </option>
-    </select>
-    <div *ngIf="f['status'].invalid && f['status'].touched">
-        {{ getErrorMessage('status') }}
-    </div>
-</div>
+  <form class="input-dialog" [formGroup]="patientForm" (ngSubmit)="onSubmit()">
 
-        <!-- הערות היסטוריה -->
-        <div class="form-field">
-          <label for="history_notes">הערות היסטוריה</label>
-          <textarea id="history_notes" formControlName="history_notes" rows="3" maxlength="500"
-                    placeholder="הכנס הערות היסטוריה רלוונטיות"></textarea>
-          <div class="hint">
-            {{ patientForm.get('history_notes')?.value?.length || 0 }}/500
-          </div>
-        </div>
-  
-      </form>
-  
-      <!-- כפתורים -->
-      <div class="dialog-actions">
-        <button type="button" class="reset-button" (click)="onReset()" [disabled]="isSubmitting">
-          איפוס
-        </button>
-        <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
-          ביטול
-        </button>
-        <button type="button" class="save-button" (click)="onSubmit()" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'שומר...' : 'שמור מטופל' }}
-        </button>
+    <!-- שם פרטי -->
+    <div class="form-field">
+      <label for="first_name">שם פרטי *</label>
+      <input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי">
+      <div class="error-message" *ngIf="isFieldInvalid('first_name')">
+        {{ getFieldError('first_name', 'שם פרטי') }}
       </div>
     </div>
-  </div>
-  
+
+    <!-- שם משפחה -->
+    <div class="form-field">
+      <label for="last_name">שם משפחה *</label>
+      <input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה">
+      <div class="error-message" *ngIf="isFieldInvalid('last_name')">
+        {{ getFieldError('last_name', 'שם משפחה') }}
+      </div>
+    </div>
+
+    <!-- תעודת זהות -->
+    <div class="form-field">
+      <label for="teudat_zehut">תעודת זהות</label>
+      <input type="text" id="teudat_zehut" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות" maxlength="9">
+      <div class="error-message" *ngIf="isFieldInvalid('teudat_zehut')">
+        {{ getFieldError('teudat_zehut', 'תעודת זהות') }}
+      </div>
+    </div>
+
+    <!-- טלפון -->
+    <div class="form-field">
+      <label for="phone">טלפון *</label>
+      <input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון" maxlength="10">
+      <div class="error-message" *ngIf="isFieldInvalid('phone')">
+        {{ getFieldError('phone', 'טלפון') }}
+      </div>
+    </div>
+
+    <!-- עיר -->
+    <div class="form-field">
+      <label for="city">עיר *</label>
+      <input type="text" id="city" formControlName="city" placeholder="הכנס עיר">
+      <div class="error-message" *ngIf="isFieldInvalid('city')">
+        {{ getFieldError('city', 'עיר') }}
+      </div>
+    </div>
+
+    <!-- כתובת -->
+    <div class="form-field">
+      <label for="address">כתובת</label>
+      <input type="text" id="address" formControlName="address" placeholder="הכנס כתובת">
+      <div class="error-message" *ngIf="isFieldInvalid('address')">
+        {{ getFieldError('address', 'כתובת') }}
+      </div>
+    </div>
+
+    <!-- אימייל -->
+    <div class="form-field">
+      <label for="email">אימייל *</label>
+      <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל">
+      <div class="error-message" *ngIf="isFieldInvalid('email')">
+        {{ getFieldError('email', 'אימייל') }}
+      </div>
+    </div>
+
+    <!-- תאריך לידה -->
+    <div class="form-field">
+      <label for="birth_date">תאריך לידה</label>
+      <input type="date" id="birth_date" formControlName="birth_date" [max]="maxDate">
+      <div class="error-message" *ngIf="isFieldInvalid('birth_date')">
+        {{ getFieldError('birth_date', 'תאריך לידה') }}
+      </div>
+    </div>
+
+    <!-- מין -->
+    <div class="form-field">
+      <label for="gender">מין *</label>
+      <select id="gender" formControlName="gender">
+        <option *ngFor="let gender of genderOptions" [value]="gender.value">
+          {{ gender.label }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="isFieldInvalid('gender')">
+        {{ getFieldError('gender', 'מין') }}
+      </div>
+    </div>
+
+    <!-- סטטוס -->
+    <div class="form-field">
+      <label for="status">סטטוס *</label>
+      <select id="status" formControlName="status">
+        <option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.label }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="isFieldInvalid('status')">
+        {{ getFieldError('status', 'סטטוס') }}
+      </div>
+    </div>
+
+    <!-- הערות היסטוריה - תופס שתי עמודות -->
+    <div class="form-field" style="grid-column: 1 / -1;">
+      <label for="history_notes">הערות היסטוריה</label>
+      <textarea id="history_notes" formControlName="history_notes" rows="3" maxlength="500"
+                placeholder="הכנס הערות היסטוריה רלוונטיות"></textarea>
+      <div class="hint">
+        {{ patientForm.get('history_notes')?.value?.length || 0 }}/500
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('history_notes')">
+        {{ getFieldError('history_notes', 'הערות היסטוריה') }}
+      </div>
+    </div>
+
+    <!-- בחירת מחלקות - תופס שתי עמודות -->
+    <div class="form-field departments-section">
+  <app-department-selector (departmentsSelected)="onDepartmentsSelected($event)"></app-department-selector>
+    </div>
+
+    <!-- כפתורי פעולה -->
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+        ביטול
+      </button>
+      <button type="submit" class="save-button" [disabled]="!patientForm.valid || isSubmitting">
+        {{ isSubmitting ? 'שומר...' : 'שמור מטופל' }}
+      </button>
+    </div>
+  </form>
+</div>

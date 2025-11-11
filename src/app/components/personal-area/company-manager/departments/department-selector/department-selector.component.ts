@@ -1,6 +1,6 @@
 // department-selector.component.ts
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { Department, Group, DepartmentWithGroups, SelectedItem } from 'src/app/models/department-group.model';
+import { Department, Group, DepartmentWithGroups, SelectedItem, SelectedDepartmentForSave } from 'src/app/models/department-group.model';
 import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class DepartmentSelectorComponent implements OnInit, OnDestroy {
   @Input() searchPlaceholder: string = 'חפש מחלקה או קבוצה להוספה...';
   
   // פלט - שינויים בבחירות
-  @Output() selectionsChanged = new EventEmitter<SelectedItem[]>();
+  @Output() departmentsSelected = new EventEmitter<SelectedDepartmentForSave[]>();
 
   // מצב פנימי
   departments: DepartmentWithGroups[] = [];
@@ -224,19 +224,32 @@ export class DepartmentSelectorComponent implements OnInit, OnDestroy {
 
   // שליחת שינויים להורה
   private emitChanges(): void {
-    this.selectionsChanged.emit([...this.selectedItems]);
+    const departmentsMap = new Map<number, number[]>();
+    this.selectedItems.forEach(item => {
+      const depId = item.department.department_id;
+      if (depId === undefined) return;
+      if (item.type === 'department') {
+        departmentsMap.set(depId, []);
+      } else if (item.type === 'group' && item.group) {
+        const groupId = item.group.group_id;
+        if (groupId === undefined) return;
+        if (!departmentsMap.has(depId)) {
+          departmentsMap.set(depId, []);
+        }
+        departmentsMap.get(depId)!.push(groupId);
+      }
+    });
+    const selectedDepartments: SelectedDepartmentForSave[] = Array.from(departmentsMap.entries()).map(([department_id, group_ids]) => ({
+      department_id,
+      group_ids
+    }));
+    this.departmentsSelected.emit(selectedDepartments);
   }
 
   // פתיחת dropdown
   onSearchFocus(): void {
     this.showDropdown = true;
     this.expandedDepartmentId = null;
-  }
-
-  // סגירת dropdown
-  onSearchBlur(): void {
-    // לא סוגרים את הדרופדאון אוטומטית
-    // הוא ייסגר רק אם לוחצים מחוץ לאזור הקומפוננטה
   }
 
   // עדכון טקסט החיפוש
