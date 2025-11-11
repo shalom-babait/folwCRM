@@ -107,11 +107,11 @@
         {{ getFieldError('experience_years', 'שנות ניסיון') }}
       </div>
     </div>
-<app-department-selector
+<app-department-group-selector
   [initialSelections]="initialSelections"
   [searchPlaceholder]="'חפש מחלקה או קבוצה להוספה...'"
   (departmentsSelected)="onDepartmentsSelected($event)">
-</app-department-selector>
+</app-department-group-selector>
 
     <!-- הסכמה -->
     <div class="form-field checkbox-field">
