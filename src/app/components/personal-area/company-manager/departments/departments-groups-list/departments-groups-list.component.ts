@@ -5,11 +5,11 @@ import { DepartmentWithGroups } from 'src/app/models/department-group.model';
 import { AddGroupDialogComponent } from '../add-group-dialog/add-group-dialog.component';
 
 @Component({
-  selector: 'app-departments-list',
-  templateUrl: './departments-list.component.html',
-  styleUrls: ['./departments-list.component.css']
+  selector: 'app-departments-groups-list',
+  templateUrl: './departments-groups-list.component.html',
+  styleUrls: ['./departments-groups-list.component.css']
 })
-export class DepartmentsListComponent implements OnInit {
+export class DepartmentsGroupsListComponent implements OnInit {
   departmentsWithGroups: DepartmentWithGroups[] = [];
   isLoading = false;
 

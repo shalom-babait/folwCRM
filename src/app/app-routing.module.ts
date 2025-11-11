@@ -14,14 +14,14 @@ import { PatientListComponent } from './components/personal-area/patient/patient
 import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
-import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
+import { DepartmentsGroupViewComponent } from './components/personal-area/company-manager/departments/departments-groups-view/departments-groups-view.component';
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'company-manager', component: CompanyManagerDashboardComponent, children: [
-    { path: 'departments', component: DepartmentsViewComponent }
+    { path: 'departments', component: DepartmentsGroupViewComponent }
   ] },
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },

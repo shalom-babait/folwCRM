@@ -4,11 +4,11 @@ import { Department, Group, DepartmentWithGroups, SelectedItem } from 'src/app/m
 import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
-  selector: 'app-department-selector',
-  templateUrl: './department-selector.component.html',
-  styleUrls: ['./department-selector.component.css']
+  selector: 'app-department-group-selector',
+  templateUrl: './department-group-selector.component.html',
+  styleUrls: ['./department-group-selector.component.css']
 })
-export class DepartmentSelectorComponent implements OnInit, OnDestroy {
+export class DepartmentGroupSelectorComponent implements OnInit, OnDestroy {
   // קלט - מחלקות שכבר נבחרו (לעריכה)
   @Input() initialSelections: SelectedItem[] = [];
   
