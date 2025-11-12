@@ -4,7 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-add-department-dialog',
   templateUrl: './add-department-dialog.component.html',
-  styleUrls: ['./add-department-dialog.component.css']
+  styleUrls: ['./add-department-dialog.component.css'
+    , '../../../../../styles/dialog-forms.css'
+  ]
 })
 export class AddDepartmentDialogComponent {
   departmentForm: FormGroup;

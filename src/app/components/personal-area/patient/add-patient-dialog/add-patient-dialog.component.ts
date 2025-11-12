@@ -11,7 +11,9 @@ import { SelectedDepartmentForSave } from 'src/app/models/department-group.model
 @Component({
   selector: 'app-add-patient-dialog',
   templateUrl: './add-patient-dialog.component.html',
-  styleUrls: ['./add-patient-dialog.component.css']
+  styleUrls: [
+    '../../../../styles/dialog-forms.css'
+      ]
 })
 export class AddPatientDialogComponent implements OnInit {
   selectedDepartments: SelectedDepartmentForSave[] = [];

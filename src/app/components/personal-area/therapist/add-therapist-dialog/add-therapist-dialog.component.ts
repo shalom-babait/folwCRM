@@ -10,7 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-add-therapist-dialog',
   templateUrl: './add-therapist-dialog.component.html',
-  styleUrls: ['./add-therapist-dialog.component.css']
+  styleUrls: [
+    '../../../../styles/dialog-forms.css'
+      ]
 })
 export class AddTherapistDialogComponent implements OnInit {
   // בחירות מחלקות וקבוצות לשיוך למחלקות

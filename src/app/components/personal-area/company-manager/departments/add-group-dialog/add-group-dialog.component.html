@@ -1,28 +1,24 @@
-<h2 mat-dialog-title>הוסף קבוצה למחלקה: {{ data.department.department_name }}</h2>
-
-<mat-dialog-content>
-  <form [formGroup]="groupForm">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>שם הקבוצה</mat-label>
-      <input matInput formControlName="group_name" placeholder="הזן שם קבוצה">
-      <mat-error *ngIf="groupForm.get('group_name')?.hasError('required')">
-        שם הקבוצה הוא שדה חובה
-      </mat-error>
-      <mat-error *ngIf="groupForm.get('group_name')?.hasError('minlength')">
-        שם הקבוצה חייב להכיל לפחות 2 תווים
-      </mat-error>
-    </mat-form-field>
+<div class="create-treatment-dialog">
+  <h2 class="dialog-title">הוספת מחלקה חדשה</h2>
+  <form class="input-dialog" [formGroup]="groupForm">
+    <div class="form-field">
+      <label for="group_name">שם מחלקה</label>
+      <input id="group_name" type="text" formControlName="group_name" placeholder="הזן שם מחלקה">
+      <div class="error-message" *ngIf="groupForm.get('group_name')?.hasError('required')">
+        שם המחלקה הוא שדה חובה
+      </div>
+      <div class="error-message" *ngIf="groupForm.get('group_name')?.hasError('minlength')">
+        שם המחלקה חייב להכיל לפחות 2 תווים
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+        ביטול
+      </button>
+      <button type="submit" class="save-button" (click)="onSubmit()" [disabled]="!groupForm.valid || isSubmitting">
+        <span *ngIf="!isSubmitting">הוסף</span>
+        <span *ngIf="isSubmitting">מוסיף...</span>
+      </button>
+    </div>
   </form>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()" [disabled]="isSubmitting">
-    ביטול
-  </button>
-  <button mat-raised-button color="primary" 
-          (click)="onSubmit()" 
-          [disabled]="!groupForm.valid || isSubmitting">
-    <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
-    <span *ngIf="!isSubmitting">הוסף</span>
-  </button>
-</mat-dialog-actions>
+</div>

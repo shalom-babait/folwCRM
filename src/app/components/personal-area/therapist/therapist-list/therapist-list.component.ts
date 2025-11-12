@@ -9,7 +9,9 @@ import { AddTherapistDialogComponent } from '../../therapist/add-therapist-dialo
 @Component({
   selector: 'app-therapist-list',
   templateUrl: './therapist-list.component.html',
-  styleUrls: ['./therapist-list.component.css']
+  styleUrls: ['./therapist-list.component.css'
+    , '../../../../styles/list-cards.css'
+  ]
 })
 export class TherapistListComponent implements OnInit, OnDestroy {
   @Output() therapistSelected = new EventEmitter<TherapistCreationData>();
