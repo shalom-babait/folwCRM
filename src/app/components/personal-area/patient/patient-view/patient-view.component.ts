@@ -5,7 +5,9 @@ import { PatientService } from 'src/app/services/patient.service';
 @Component({
   selector: 'app-patient-view',
   templateUrl: './patient-view.component.html',
-  styleUrls: ['./patient-view.component.css']
+  styleUrls: ['./patient-view.component.css',
+    '../../../../styles/views.css'
+  ]
 })
 export class PatientViewComponent {
   selectedPatient: PatientCreationData | null = null;

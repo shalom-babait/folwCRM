@@ -5,7 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-secretary-list',
   templateUrl: './secretary-list.component.html',
-  styleUrls: ['./secretary-list.component.css']
+  styleUrls: ['./secretary-list.component.css'
+    , '../../../../styles/list-cards.css'
+  ]
 })
 export class SecretaryListComponent {
 

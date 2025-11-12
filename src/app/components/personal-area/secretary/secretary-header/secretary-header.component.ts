@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-secretary-header',
   templateUrl: './secretary-header.component.html',
-  styleUrls: ['./secretary-header.component.css']
+  styleUrls: ['./secretary-header.component.css'
+    , '../../../../styles/header.css'
+  ]
 })
 export class SecretaryHeaderComponent implements OnInit {
   showProfileMenu = false;
@@ -38,6 +40,7 @@ export class SecretaryHeaderComponent implements OnInit {
 
   logout() {
     this.showProfileMenu = false;
+    localStorage.clear();
     this.router.navigate(['/']);
   }
   navigateToTherapists() {

@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-company-manager-header',
   templateUrl: './company-manager-header.component.html',
-  styleUrls: ['./company-manager-header.component.css']
+  styleUrls: ['./company-manager-header.component.css'
+    , '../../../../styles/header.css'
+  ]
 })
 export class CompanyManagerHeaderComponent implements OnInit {
   showProfileMenu = false;
