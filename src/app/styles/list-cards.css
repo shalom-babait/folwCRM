@@ -1,0 +1,373 @@
+/* ============================================
+   SHARED STYLES - Ultra Compact Version
+   ============================================ */
+
+/* === LIST CARDS === */
+.patient-list-card, .therapist-list-card, .room-list-card,
+.create-treatment-dialog, .create-patient-dialog, .create-therapist-dialog {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  direction: rtl;
+}
+
+.patient-list-card, .therapist-list-card, .room-list-card {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  max-width: 350px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  background-color: #022F39;
+  color: white;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.card-header h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.add-patient-btn, .add-therapist-btn, .add-room-btn, .search-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.add-patient-btn:hover, .add-therapist-btn:hover, .add-room-btn:hover, .search-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.add-patient-btn:disabled, .add-therapist-btn:disabled, .add-room-btn:disabled, .search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-patient-btn mat-icon, .add-therapist-btn mat-icon, .add-room-btn mat-icon, .search-btn mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.card-content {
+  background-color: #f5f5f5;
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(80vh - 160px);
+}
+
+.card-content::-webkit-scrollbar { width: 8px; }
+.card-content::-webkit-scrollbar-track { background: #f1f1f1; }
+.card-content::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+.card-content::-webkit-scrollbar-thumb:hover { background: #555; }
+
+.patient-card, .therapist-card, .room-card {
+  background: white;
+  border-radius: 0.6rem;
+  margin-bottom: 0.8rem;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.patient-card:hover, .therapist-card:hover, .room-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  background-color: #f8f9fa;
+}
+
+.patient-card:active, .therapist-card:active, .room-card:active {
+  transform: translateY(0);
+}
+
+.patient-card:last-child, .therapist-card:last-child, .room-card:last-child {
+  margin-bottom: 0;
+}
+
+.patient-card.selected, .therapist-card.selected, .room-card.selected {
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
+  box-shadow: 0 6px 12px rgba(2,47,57,0.3);
+}
+
+.patient-info, .therapist-info, .room-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+}
+
+.patient-name, .therapist-name, .room-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.patient-card.selected .patient-name, .therapist-card.selected .therapist-name, .room-card.selected .room-name {
+  color: white;
+}
+
+.menu-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.menu-button:hover {
+  background-color: rgba(0,0,0,0.08);
+}
+
+.patient-card.selected .menu-button, .therapist-card.selected .menu-button, .room-card.selected .menu-button {
+  color: white;
+}
+
+.patient-card.selected .menu-button:hover, .therapist-card.selected .menu-button:hover, .room-card.selected .menu-button:hover {
+  background-color: rgba(255,255,255,0.15);
+}
+
+.menu-button mat-icon {
+  font-size: 1.3rem;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.no-patients, .no-therapists, .no-rooms {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* === DIALOG FORMS === */
+.create-treatment-dialog, .create-patient-dialog, .create-therapist-dialog {
+  max-width: 900px;
+  background-color: #022F39;
+  color: black;
+}
+
+.dialog-title {
+  background-color: #022F39;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+  margin: 0;
+}
+
+.input-dialog {
+  background-color: whitesmoke;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.input-dialog::-webkit-scrollbar { width: 8px; }
+.input-dialog::-webkit-scrollbar-track { background: #f1f1f1; }
+.input-dialog::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+.input-dialog::-webkit-scrollbar-thumb:hover { background: #555; }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.form-field input, .form-field select, .form-field textarea {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+  transition: box-shadow 0.2s;
+}
+
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #022F39;
+}
+
+.form-field input.ng-invalid.ng-touched, .form-field select.ng-invalid.ng-touched, .form-field textarea.ng-invalid.ng-touched {
+  border: 2px solid #e57373;
+}
+
+.form-field input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.form-field input[type="number"]::-webkit-outer-spin-button,
+.form-field input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  font-weight: normal;
+}
+
+.hint {
+  text-align: left;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.full-width-section, .departments-section {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background-color: whitesmoke;
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+.dialog-actions button {
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  min-width: 100px;
+}
+
+.cancel-button {
+  background-color: white;
+  color: #022F39;
+  border: 1px solid #022F39 !important;
+}
+
+.cancel-button:hover { background-color: #e0e0e0; }
+
+.save-button {
+  background-color: #022F39;
+  color: white;
+}
+
+.save-button:hover:not(:disabled) { background-color: #034752; }
+
+.save-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .patient-list-card, .therapist-list-card, .room-list-card {
+    max-width: 100%;
+    max-height: none;
+    margin-bottom: 1rem;
+  }
+  
+  .patient-card, .therapist-card, .room-card { padding: 0.8rem 1rem; }
+  
+  .create-treatment-dialog, .create-patient-dialog, .create-therapist-dialog { max-width: 95vw; }
+  
+  .input-dialog {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+    gap: 1rem;
+    max-height: 65vh;
+  }
+  
+  .full-width-section, .departments-section { grid-column: 1; }
+  
+  .dialog-actions { flex-direction: column; }
+  .dialog-actions button { width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .card-header { padding: 1rem; }
+  .card-header h3 { font-size: 1.2rem; margin-bottom: 0.8rem; }
+  .header-actions { flex-direction: column; gap: 0.6rem; }
+  .add-patient-btn, .add-therapist-btn, .add-room-btn, .search-btn { width: 100%; justify-content: center; }
+  .card-content { max-height: 50vh; }
+  
+  .create-treatment-dialog, .create-patient-dialog, .create-therapist-dialog { border-radius: 0.8rem; }
+  .dialog-title { font-size: 1.3rem; padding: 0.8rem; }
+  .input-dialog { padding: 1.5rem 1rem; gap: 0.9rem; max-height: 60vh; }
+  .form-field label { font-size: 0.85rem; }
+  .form-field input, .form-field select, .form-field textarea { font-size: 0.95rem; padding: 0.5rem 0.7rem; }
+  .dialog-actions { padding: 1rem; gap: 0.8rem; }
+  .dialog-actions button { padding: 0.7rem; }
+}
+
+@media (max-width: 480px) {
+  .card-header { padding: 0.8rem; }
+  .card-header h3 { font-size: 1.1rem; }
+  .patient-card, .therapist-card, .room-card { padding: 0.7rem 0.8rem; }
+  .patient-name, .therapist-name, .room-name { font-size: 0.95rem; }
+}
+
+@media (max-width: 400px) {
+  .input-dialog { padding: 1rem 0.8rem; }
+  .dialog-title { font-size: 1.2rem; }
+  .form-field input, .form-field select { font-size: 0.9rem; }
+}

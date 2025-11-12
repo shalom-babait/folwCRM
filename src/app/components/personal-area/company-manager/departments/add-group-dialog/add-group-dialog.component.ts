@@ -6,7 +6,9 @@ import { GroupsService } from 'src/app/services/groups.service';
 @Component({
   selector: 'app-add-group-dialog',
   templateUrl: './add-group-dialog.component.html',
-  styleUrls: ['./add-group-dialog.component.css']
+  styleUrls: ['./add-group-dialog.component.css'
+    , '../../../../../styles/dialog-forms.css'
+  ]
 })
 export class AddGroupDialogComponent {
   groupForm: FormGroup;

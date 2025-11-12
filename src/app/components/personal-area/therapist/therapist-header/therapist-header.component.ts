@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-therapist-header',
   templateUrl: './therapist-header.component.html',
-  styleUrls: ['./therapist-header.component.css']
+  styleUrls: ['./therapist-header.component.css'
+    , '../../../../styles/header.css'
+  ]
 })
 export class TherapistHeaderComponent implements OnInit {
  

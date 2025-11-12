@@ -4,7 +4,9 @@ import { TherapistCreationData } from 'src/app/models/therapist.model';
 @Component({
   selector: 'app-therapists-view',
   templateUrl: './therapists-view.component.html',
-  styleUrls: ['./therapists-view.component.css']
+  styleUrls: ['./therapists-view.component.css'
+    , '../../../../styles/views.css'
+  ]
 })
 export class TherapistsViewComponent {
   selectedTherapist: TherapistCreationData | null = null;
