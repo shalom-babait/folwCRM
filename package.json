@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "http-server ./dist/ssd -p $PORT",
-    "build": "ng build --configuration production",
+    "start": "http-server dist/ssd -p $PORT -a 0.0.0.0",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
