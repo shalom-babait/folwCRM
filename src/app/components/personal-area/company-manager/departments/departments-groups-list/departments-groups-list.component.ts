@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DepartmentService } from 'src/app/services/department.service';
+import { GroupsService } from 'src/app/services/groups.service';
 import { DepartmentWithGroups } from 'src/app/models/department-group.model';
 import { AddGroupDialogComponent } from '../add-group-dialog/add-group-dialog.component';
+import { forkJoin } from 'rxjs'; // נשתמש כדי לבצע כמה בקשות במקביל
 
 @Component({
   selector: 'app-departments-groups-list',
@@ -15,8 +17,9 @@ export class DepartmentsGroupsListComponent implements OnInit {
 
   constructor(
     private departmentService: DepartmentService,
+    private groupsService: GroupsService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadDepartmentsWithGroups();
@@ -28,7 +31,38 @@ export class DepartmentsGroupsListComponent implements OnInit {
       .subscribe({
         next: (departments) => {
           this.departmentsWithGroups = departments;
-          this.isLoading = false;
+          const allGroups = departments.flatMap(dep => dep.groups || []);
+
+          if (allGroups.length === 0) {
+            this.isLoading = false;
+            return;
+          }
+
+          const requests = allGroups
+            .filter(g => g.group_id !== undefined)
+            .map(g => this.groupsService.getGroupUsers(g.group_id!));
+          console.log(requests, "request");
+          forkJoin(requests).subscribe({
+            next: (results) => {
+              results.forEach((users, i) => {
+                console.log(users.data?.length, "  users in component");
+
+                // אם users הוא מערך של UserGroup, תוכל להשתמש בו ישירות
+                if (users && users.data) {
+                  allGroups[i].userCount = users.data.length;
+                } else {
+                  allGroups[i].userCount = 0; // או טיפול אחר במקרה ש-data אינו קיים
+                }
+              });
+              this.isLoading = false;
+            },
+            error: (err) => {
+              console.error('Error loading users per group', err);
+              this.isLoading = false;
+            }
+          });
+
+
         },
         error: (error) => {
           this.isLoading = false;
@@ -36,6 +70,7 @@ export class DepartmentsGroupsListComponent implements OnInit {
         }
       });
   }
+
 
   openAddGroupDialog(department: any) {
     const dialogRef = this.dialog.open(AddGroupDialogComponent, {
@@ -45,18 +80,19 @@ export class DepartmentsGroupsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // רענון הרשימה אחרי הוספה מוצלחת
         this.loadDepartmentsWithGroups();
       }
     });
   }
+
   openSearchDialog() {
     const dialogRef = this.dialog.open(AddGroupDialogComponent, {
       width: '400px',
       data: {}
     });
-}
-openAddDepartmentDialog() {
+  }
+
+  openAddDepartmentDialog() {
     const dialogRef = this.dialog.open(AddGroupDialogComponent, {
       width: '400px',
       data: {}
@@ -64,7 +100,6 @@ openAddDepartmentDialog() {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // רענון הרשימה אחרי הוספה מוצלחת
         this.loadDepartmentsWithGroups();
       }
     });
