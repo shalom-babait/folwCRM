@@ -4,14 +4,15 @@
   </div>
     <div class="buttonLink">
       <ul>
-  <li><button>בית</button></li>
-  <li><button>רשימת עובדים</button></li>
-  <li><button>רשימת פניות</button></li>
-  <li><button>רשימת מטופלים</button></li>
-  <li><button (click)="navigateToDepartments()">מחלקות</button></li>
-  <li><button>חדרים</button></li>
+  <li><button (click)="showSection('home')">בית</button></li>
+  <li><button (click)="showSection('employees')">רשימת עובדים</button></li>
+  <li><button (click)="showSection('requests')">רשימת פניות</button></li>
+  <li><button (click)="showSection('patients')">רשימת מטופלים</button></li>
+  <li><button (click)="showSection('prospects')">לקוחות</button></li>
+  <li><button (click)="showSection('departments'); navigateToDepartments()">מחלקות</button></li>
+  <li><button (click)="showSection('rooms')">חדרים</button></li>
   <li><button routerLink="contact">דואר</button></li>
-  <li><button>דוחות</button></li>
+  <li><button (click)="showSection('reports')">דוחות</button></li>
       </ul>
     </div>
     
@@ -39,3 +40,21 @@
       </div>
     </div>
 </header>
+<div class="dynamic-section-container" *ngIf="selectedSection">
+  <ng-container [ngSwitch]="selectedSection">
+    <ng-container *ngSwitchCase="'prospects'">
+      <app-prospect-view></app-prospect-view>
+    </ng-container>
+    <ng-container *ngSwitchCase="'patients'">
+      <app-patient-table></app-patient-table>
+    </ng-container>
+    <!-- דוגמאות נוספות, ניתן להוסיף קומפוננטות נוספות -->
+    <ng-container *ngSwitchCase="'employees'">
+      <!-- <app-employee-table></app-employee-table> -->
+    </ng-container>
+    <ng-container *ngSwitchCase="'departments'">
+      <app-departments-groups-view></app-departments-groups-view>
+    </ng-container>
+    <!-- אפשר להמשיך להוסיף cases נוספים -->
+  </ng-container>
+</div>

@@ -1,0 +1,112 @@
+<!-- add-prospect-dialog.component.html -->
+<div class="create-treatment-dialog" dir="rtl">
+  <h2 class="dialog-title">הוספת מתעניין חדש</h2>
+
+  <form class="input-dialog" [formGroup]="prospectForm" (ngSubmit)="onSubmit()">
+
+    <!-- שם פרטי -->
+    <div class="form-field">
+      <label for="first_name">שם פרטי *</label>
+      <input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי" maxlength="15">
+      <div class="error-message" *ngIf="isFieldInvalid('first_name')">
+        {{ getFieldError('first_name', 'שם פרטי') }}
+      </div>
+    </div>
+
+    <!-- שם משפחה -->
+    <div class="form-field">
+      <label for="last_name">שם משפחה *</label>
+      <input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה" maxlength="20">
+      <div class="error-message" *ngIf="isFieldInvalid('last_name')">
+        {{ getFieldError('last_name', 'שם משפחה') }}
+      </div>
+    </div>
+
+    <!-- טלפון -->
+    <div class="form-field">
+      <label for="phone">טלפון *</label>
+      <input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון" maxlength="10">
+      <div class="error-message" *ngIf="isFieldInvalid('phone')">
+        {{ getFieldError('phone', 'טלפון') }}
+      </div>
+    </div>
+
+    <!-- טלפון נוסף -->
+    <div class="form-field">
+      <label for="phone_alt">טלפון נוסף</label>
+      <input type="text" id="phone_alt" formControlName="phone_alt" placeholder="הכנס טלפון נוסף" maxlength="10">
+      <div class="error-message" *ngIf="isFieldInvalid('phone_alt')">
+        {{ getFieldError('phone_alt', 'טלפון נוסף') }}
+      </div>
+    </div>
+
+    <!-- אימייל -->
+    <div class="form-field">
+      <label for="email">אימייל</label>
+      <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל" maxlength="30">
+      <div class="error-message" *ngIf="isFieldInvalid('email')">
+        {{ getFieldError('email', 'אימייל') }}
+      </div>
+    </div>
+
+    <!-- עיר -->
+    <div class="form-field">
+      <label for="city">עיר</label>
+      <input type="text" id="city" formControlName="city" placeholder="הכנס עיר" maxlength="15">
+      <div class="error-message" *ngIf="isFieldInvalid('city')">
+        {{ getFieldError('city', 'עיר') }}
+      </div>
+    </div>
+
+    <!-- מקור הפניה -->
+    <div class="form-field">
+      <label for="referral_source">מקור הפניה</label>
+      <input type="text" id="referral_source" formControlName="referral_source" placeholder="הכנס מקור הפניה" maxlength="50">
+      <div class="error-message" *ngIf="isFieldInvalid('referral_source')">
+        {{ getFieldError('referral_source', 'מקור הפניה') }}
+      </div>
+    </div>
+
+    <!-- סיבת הביקור -->
+    <div class="form-field">
+      <label for="reason_for_visit">סיבת הביקור</label>
+      <input type="text" id="reason_for_visit" formControlName="reason_for_visit" placeholder="הכנס סיבת הביקור" maxlength="200">
+      <div class="error-message" *ngIf="isFieldInvalid('reason_for_visit')">
+        {{ getFieldError('reason_for_visit', 'סיבת הביקור') }}
+      </div>
+    </div>
+
+    <!-- סטטוס -->
+    <div class="form-field">
+      <label for="status">סטטוס *</label>
+      <select id="status" formControlName="status">
+        <option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.label }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="isFieldInvalid('status')">
+        {{ getFieldError('status', 'סטטוס') }}
+      </div>
+    </div>
+
+    <!-- הערות - תופס שתי עמודות -->
+    <div class="form-field" style="grid-column: 1 / -1;">
+      <label for="notes">הערות</label>
+      <textarea id="notes" formControlName="notes" rows="4"
+                placeholder="הכנס הערות נוספות"></textarea>
+      <div class="error-message" *ngIf="isFieldInvalid('notes')">
+        {{ getFieldError('notes', 'הערות') }}
+      </div>
+    </div>
+
+    <!-- כפתורי פעולה -->
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+        ביטול
+      </button>
+      <button type="submit" class="save-button" [disabled]="!prospectForm.valid || isSubmitting">
+        {{ isSubmitting ? 'שומר...' : 'שמור מתעניין' }}
+      </button>
+    </div>
+  </form>
+</div>
