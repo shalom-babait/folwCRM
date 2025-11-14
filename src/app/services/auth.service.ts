@@ -8,14 +8,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
+    private apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) {
     window.addEventListener('unload', () => {
       localStorage.clear();
     });
   }
-
-  private apiUrl = environment.apiUrl;
-
 
 login(email: string, password: string): Observable<{ success: boolean; token: string; user?: any }> {
   return this.http.post<{ success: boolean; token: string; user?: any }>(
