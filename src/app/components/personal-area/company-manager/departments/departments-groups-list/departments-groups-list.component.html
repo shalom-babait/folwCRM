@@ -2,25 +2,17 @@
   <div class="card-header">
     <h3>רשימת מחלקות</h3>
     <div class="header-actions">
-      <button 
-        class="add-department-btn"
-        (click)="openAddDepartmentDialog()"
-        [disabled]="isLoading"
-        matTooltip="הוסף מחלקה חדשה"
-        matTooltipPosition="below">
+      <button class="add-department-btn" (click)="openAddDepartmentDialog()" [disabled]="isLoading"
+        matTooltip="הוסף מחלקה חדשה" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
         <span>הוסף מחלקה</span>
       </button>
-      <button 
-        class="search-btn"
-        (click)="openSearchDialog()"
-        [disabled]="isLoading"
-        matTooltip="חיפוש מטפל">
+      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטפל">
         <mat-icon>search</mat-icon>
         <span>חיפוש</span>
       </button>
     </div>
-  <!-- סגירת div מיותרת הוסרה כאן -->
+    <!-- סגירת div מיותרת הוסרה כאן -->
   </div>
 
   <div class="card-content">
@@ -40,21 +32,22 @@
               ({{ item.groups.length }} קבוצות)
             </span>
           </div>
-          <button 
-            class="add-group-btn"
-            (click)="openAddGroupDialog(item.department)"
-            matTooltip="הוסף קבוצה">
+          <button class="add-group-btn" (click)="openAddGroupDialog(item.department)" matTooltip="הוסף קבוצה">
             <mat-icon>add_circle</mat-icon>
           </button>
         </div>
-        
+
         <!-- רשימת קבוצות -->
         <div class="groups-list" *ngIf="item.groups && item.groups.length > 0">
           <div class="group-card" *ngFor="let group of item.groups">
             <mat-icon class="group-icon">group</mat-icon>
             <span class="group-name">{{ group.group_name }}</span>
+            <span class="user-count" *ngIf="group.userCount !== undefined">
+              ({{ group.userCount }} מטופלים)
+            </span>
           </div>
         </div>
+
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Group, UserGroup } from '../models/department-group.model';
+import { ApiResponseGroup, Group, UserGroup } from '../models/department-group.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class GroupsService {
   addGroup(group: { group_name: string, department_id: number }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/add_group`, group);
   }
-  
+
   // עריכת קבוצה קיימת
   editGroup(group_id: number, group: Group): Observable<Group> {
     return this.http.put<Group>(`${this.apiUrl}/${group_id}`, group);
@@ -33,7 +33,9 @@ export class GroupsService {
   }
 
   // קבלת משתמשים בקבוצה
-  getGroupUsers(group_id: number): Observable<UserGroup[]> {
-    return this.http.get<UserGroup[]>(`${this.apiUrl}/${group_id}/users`);
+
+  getGroupUsers(group_id: number): Observable<ApiResponseGroup<UserGroup[]>> {
+    return this.http.get<ApiResponseGroup<UserGroup[]>>(`${this.apiUrl}/group_users/${group_id}`);
   }
+
 }

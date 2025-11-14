@@ -1,0 +1,151 @@
+
+<div class="prospect-list-container">
+  <h1>רשימת מתעניינים</h1>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+    <button class="icon-button" mat-icon-button (click)="openAddProspectDialog()">
+      <mat-icon style="color: #BB7E2B;">add</mat-icon>
+    </button>
+    <input 
+      type="text" 
+      placeholder="חיפוש לפי שם, טלפון, עיר או מקור הפניה..."
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()">
+  </div>
+
+  <!-- אינדיקטור טעינה -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- כותרות השדות -->
+    <div class="prospect-row header-row">
+      <div class="prospect-cell" (click)="sortBy('prospect_id')">#</div>
+      <div class="prospect-cell" (click)="sortBy('full_name')">שם מלא</div>
+      <div class="prospect-cell" (click)="sortBy('phone')">טלפון</div>
+      <div class="prospect-cell">טלפון נוסף</div>
+      <div class="prospect-cell" (click)="sortBy('email')">אימייל</div>
+      <div class="prospect-cell" (click)="sortBy('city')">עיר</div>
+      <div class="prospect-cell" (click)="sortBy('referral_source')">מקור הפניה</div>
+      <div class="prospect-cell">סיבת ביקור</div>
+      <div class="prospect-cell" (click)="sortBy('status')">סטטוס</div>
+      <div class="prospect-cell">הערות</div>
+      <div class="prospect-cell" (click)="sortBy('created_at')">תאריך יצירה</div>
+      <div class="prospect-cell">הומר למטופל</div>
+      <div class="prospect-cell actions-header">פעולות</div>
+    </div>
+
+    <!-- רשימת מתעניינים -->
+    <div 
+      class="prospect-row data-row" 
+      *ngFor="let prospect of filteredProspects"
+      [class.selected]="selectedProspectId === prospect.prospect_id"
+      (click)="selectProspect(prospect)">
+      <!-- מזהה -->
+      <div class="prospect-cell id-cell">{{ prospect.prospect_id }}</div>
+      <!-- שם מלא -->
+      <div class="prospect-cell prospect-name-cell">
+        <mat-icon class="prospect-icon">person_outline</mat-icon>
+        {{ prospect.first_name }} {{ prospect.last_name }}
+      </div>
+      <!-- טלפון ראשי -->
+      <div class="prospect-cell phone-cell">
+        <mat-icon class="mini-icon">phone</mat-icon>
+        {{ prospect.phone || '-' }}
+      </div>
+      <!-- טלפון נוסף -->
+      <div class="prospect-cell phone-cell">
+        <mat-icon class="mini-icon" *ngIf="prospect.phone_alt">phone</mat-icon>
+        {{ prospect.phone_alt || '-' }}
+      </div>
+      <!-- אימייל -->
+      <div class="prospect-cell email-cell">
+        <mat-icon class="mini-icon" *ngIf="prospect.email">email</mat-icon>
+        <span class="truncate">
+          {{ prospect.email || '-' }}
+        </span>
+      </div>
+      <!-- עיר -->
+      <div class="prospect-cell">
+        <mat-icon class="mini-icon" *ngIf="prospect.city">location_on</mat-icon>
+        {{ prospect.city || '-' }}
+      </div>
+      <!-- מקור הפניה -->
+      <div class="prospect-cell">
+        <span class="truncate">
+          {{ prospect.referral_source || '-' }}
+        </span>
+      </div>
+      <!-- סיבת ביקור -->
+      <div class="prospect-cell reason-cell">
+        <span class="truncate">
+          {{ (prospect.reason_for_visit | slice:0:30) || '-' }}
+          <span *ngIf="prospect.reason_for_visit && prospect.reason_for_visit.length > 30">...</span>
+        </span>
+      </div>
+      <!-- סטטוס -->
+      <div class="prospect-cell">
+     <span class="status-badge" [ngClass]="getStatusClass(prospect.status || '')">
+        {{ getStatusLabel(prospect.status || '') }}
+      </span>
+      </div>
+      <!-- הערות -->
+      <div class="prospect-cell notes-cell">
+        <span *ngIf="prospect.notes" class="truncate">
+          {{ (prospect.notes | slice:0:30) }}<span *ngIf="prospect.notes.length > 30">...</span>
+        </span>
+        <span *ngIf="!prospect.notes">-</span>
+      </div>
+      <!-- תאריך יצירה -->
+      <div class="prospect-cell date-cell">
+        <mat-icon class="mini-icon">event</mat-icon>
+        {{ prospect.created_at ? formatDate(prospect.created_at) : '-' }}
+      </div>
+      <!-- הומר למטופל -->
+      <div class="prospect-cell converted-cell">
+        <mat-icon *ngIf="prospect.converted_to_patient_id" class="converted-icon">check_circle</mat-icon>
+        <span *ngIf="prospect.converted_to_patient_id" class="patient-link">
+          מטופל #{{ prospect.converted_to_patient_id }}
+        </span>
+        <span *ngIf="!prospect.converted_to_patient_id">-</span>
+      </div>
+      <!-- פעולות -->
+      <div class="prospect-cell actions-cell">
+        <button 
+          class="action-btn view-btn"
+          (click)="viewProspect($event, prospect)"
+          matTooltip="הצג פרטים">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button 
+          class="action-btn edit-btn"
+          (click)="editProspect($event, prospect)"
+          matTooltip="ערוך">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button 
+          class="action-btn convert-btn"
+          (click)="convertToPatient($event, prospect)"
+          matTooltip="המר למטופל"
+          *ngIf="!prospect.converted_to_patient_id">
+          <mat-icon>person_add</mat-icon>
+        </button>
+        <button 
+          class="action-btn delete-btn"
+          (click)="deleteProspect($event, prospect)"
+          matTooltip="מחק">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- הודעה אם אין מתעניינים -->
+    <div *ngIf="filteredProspects.length === 0" class="no-results">
+      <p>לא נמצאו מתעניינים</p>
+      <p *ngIf="searchTerm">נסה לשנות את מילת החיפוש</p>
+    </div>
+  </div>
+</div>
