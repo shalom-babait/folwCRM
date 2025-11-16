@@ -107,16 +107,12 @@
         {{ getFieldError('experience_years', 'שנות ניסיון') }}
       </div>
     </div>
+<app-department-group-selector
+  [initialSelections]="initialSelections"
+  [searchPlaceholder]="'חפש מחלקה או קבוצה להוספה...'"
+  (departmentsSelected)="onDepartmentsSelected($event)">
+</app-department-group-selector>
 
-    <!-- בחירת מחלקות וקבוצות - תופס שתי עמודות -->
-    <div class="form-field departments-section">
-      <app-department-selector
-        [initialSelections]="initialSelections"
-        [searchPlaceholder]="'חפש מחלקה או קבוצה להוספה...'"
-        (selectionsChanged)="onSelectionsChanged($event)">
-      </app-department-selector>
-    </div>
-    
     <!-- הסכמה -->
     <div class="form-field checkbox-field">
       <label>

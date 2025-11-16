@@ -8,7 +8,8 @@ import { RoomCalendarComponent } from '../../../room-calendar/room-calendar.comp
 @Component({
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
-  styleUrls: ['./treatment-list.component.css']
+  styleUrls: ['./treatment-list.component.css',
+    '../../../../styles/list-cards.css']
 })
 export class TreatmentListComponent implements OnInit {
   ngOnChanges(changes: any): void {

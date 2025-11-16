@@ -1,60 +1,63 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-company-manager-header',
-  templateUrl: './company-manager-header.component.html',
-  styleUrls: ['./company-manager-header.component.css']
-})
-export class CompanyManagerHeaderComponent implements OnInit {
-  showProfileMenu = false;
-  userName = ''; 
-  userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
+    selector: 'app-company-manager-header',
+    templateUrl: './company-manager-header.component.html',
+    styleUrls: ['./company-manager-header.component.css', '../../../../styles/header.css']
+  })
+  export class CompanyManagerHeaderComponent implements OnInit {
+    showProfileMenu = false;
+    userName = '';
+    userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
-  constructor(private router: Router) {}
-  ngOnInit() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
-  }
-  toggleProfileMenu() {
-    this.showProfileMenu = !this.showProfileMenu;
-  }
+    selectedSection: string | null = null;
 
-  // סגירת התפריט בלחיצה מחוץ לאזור
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    const profileContainer = target.closest('.user-profile-container');
-    
-    if (!profileContainer && this.showProfileMenu) {
-      this.showProfileMenu = false;
+    showSection(section: string) {
+      this.selectedSection = this.selectedSection === section ? null : section;
     }
-  }
 
-  goToSettings() {
-    this.showProfileMenu = false;
-    this.router.navigate(['/settings']);
-  }
+    constructor(private router: Router) {}
+    ngOnInit() {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+    }
+    toggleProfileMenu() {
+      this.showProfileMenu = !this.showProfileMenu;
+    }
 
-  logout() {
-    this.showProfileMenu = false;
-    // לוגיקת התנתקות
-    console.log('Logout');
-    this.router.navigate(['/']);
-  }
-  navigateToTherapists() {
-    this.router.navigate(['/secretary-dashboard/therapists']);
-  }
+    // סגירת התפריט בלחיצה מחוץ לאזור
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      const profileContainer = target.closest('.user-profile-container');
+      if (!profileContainer && this.showProfileMenu) {
+        this.showProfileMenu = false;
+      }
+    }
 
-  navigateToRooms() {
-    this.router.navigate(['/secretary-dashboard/rooms']);
-  }
+    goToSettings() {
+      this.showProfileMenu = false;
+      this.router.navigate(['/settings']);
+    }
 
-  // תקשורת עם ההורה
-  @Output() showDepartments = new EventEmitter<void>();
+    logout() {
+      this.showProfileMenu = false;
+      console.log('Logout');
+      this.router.navigate(['/']);
+    }
+    navigateToTherapists() {
+      this.router.navigate(['/secretary-dashboard/therapists']);
+    }
 
-  navigateToDepartments() {
-    this.showDepartments.emit();
+    navigateToRooms() {
+      this.router.navigate(['/secretary-dashboard/rooms']);
+    }
+
+    // תקשורת עם ההורה
+    @Output() showDepartments = new EventEmitter<void>();
+
+    navigateToDepartments() {
+      this.showDepartments.emit();
   }
 }

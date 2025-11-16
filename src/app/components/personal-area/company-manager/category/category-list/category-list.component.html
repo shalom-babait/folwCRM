@@ -1,0 +1,131 @@
+<!-- category-list.component.html -->
+<div class="category-list-card">
+  <div class="card-header">
+    <h3>ניהול קטגוריות</h3>
+    <div class="header-actions">
+      <button 
+        class="add-category-btn"
+        (click)="openAddCategoryDialog()"
+        [disabled]="isLoading"
+        matTooltip="הוסף קטגוריה חדשה"
+        matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף קטגוריה</span>
+      </button>
+      <button 
+        class="filter-btn"
+        [matMenuTriggerFor]="filterMenu"
+        [disabled]="isLoading"
+        matTooltip="סנן לפי סוג">
+        <mat-icon>filter_list</mat-icon>
+        <span>סנן</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- תפריט סינון -->
+  <mat-menu #filterMenu="matMenu">
+    <button mat-menu-item (click)="filterByType('all')">
+      <mat-icon [class.active]="selectedType === 'all'">check_circle</mat-icon>
+      <span>הכל</span>
+    </button>
+    <button mat-menu-item (click)="filterByType('prospect')">
+      <mat-icon [class.active]="selectedType === 'prospect'">check_circle</mat-icon>
+      <span>מתעניינים</span>
+    </button>
+    <button mat-menu-item (click)="filterByType('patient')">
+      <mat-icon [class.active]="selectedType === 'patient'">check_circle</mat-icon>
+      <span>מטופלים</span>
+    </button>
+    <button mat-menu-item (click)="filterByType('employee')">
+      <mat-icon [class.active]="selectedType === 'employee'">check_circle</mat-icon>
+      <span>עובדים</span>
+    </button>
+  </mat-menu>
+
+  <div class="card-content">
+    <!-- סינון נוכחי -->
+    <div class="filter-chips" *ngIf="selectedType !== 'all'">
+      <mat-chip-set>
+        <mat-chip (removed)="filterByType('all')">
+          {{ getTypeLabel(selectedType) }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <!-- אינדיקטור טעינה -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- רשימת קטגוריות -->
+    <div *ngIf="!isLoading && filteredCategories.length > 0" class="categories-grid">
+      <div 
+        class="category-card" 
+        *ngFor="let category of filteredCategories"
+        [class.selected]="selectedCategoryId === category.category_id"
+        [style.border-color]="category.color">
+        
+        <div class="category-header" [style.background-color]="category.color">
+          <mat-icon *ngIf="category.icon" class="category-icon">{{ category.icon }}</mat-icon>
+          <span class="category-label">{{ category.category_label }}</span>
+        </div>
+
+        <div class="category-body" (click)="selectCategory(category)">
+          <div class="category-info">
+            <span class="category-type-badge">{{ getTypeLabel(category.category_type) }}</span>
+            <span class="category-name">{{ category.category_name }}</span>
+          </div>
+          <p class="category-description" *ngIf="category.description">
+            {{ category.description }}
+          </p>
+          <div class="category-meta">
+            <span class="meta-item">
+              <mat-icon>sort</mat-icon>
+              סדר: {{ category.display_order }}
+            </span>
+            <span class="meta-item" [class.inactive]="!category.is_active">
+              <mat-icon>{{ category.is_active ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ category.is_active ? 'פעיל' : 'לא פעיל' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="category-actions">
+          <button 
+            class="action-btn edit-btn"
+            (click)="editCategory($event, category)"
+            matTooltip="עריכה">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button 
+            class="action-btn toggle-btn"
+            (click)="toggleCategoryStatus($event, category)"
+            [matTooltip]="category.is_active ? 'השבת' : 'הפעל'">
+            <mat-icon>{{ category.is_active ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <button 
+            class="action-btn delete-btn"
+            (click)="deleteCategory($event, category)"
+            matTooltip="מחיקה">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- הודעה אם אין קטגוריות -->
+    <div *ngIf="!isLoading && filteredCategories.length === 0" class="no-categories">
+      <mat-icon class="empty-icon">category</mat-icon>
+      <p *ngIf="selectedType === 'all'">אין קטגוריות כרגע</p>
+      <p *ngIf="selectedType !== 'all'">אין קטגוריות מסוג {{ getTypeLabel(selectedType) }}</p>
+      <button class="empty-action-btn" (click)="openAddCategoryDialog()">
+        <mat-icon>add</mat-icon>
+        הוסף קטגוריה ראשונה
+      </button>
+    </div>
+  </div>
+</div>

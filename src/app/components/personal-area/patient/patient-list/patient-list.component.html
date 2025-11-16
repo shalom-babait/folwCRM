@@ -24,26 +24,38 @@
   </div>
 
   <div class="card-content">
-    <!-- אינדיקטור טעינה -->
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
 
-    <!-- רשימת מטופלים -->
     <div *ngIf="!isLoading && patients.length > 0">
       <div 
         class="patient-card" 
         *ngFor="let patient of patients"
-        [class.selected]="selectedPatientId === (patient.patient.patient_id)"
-        (click)="viewPatientDetails(patient)">
-        <div class="patient-info">
-          <span class="patient-name">{{ patient.user.first_name || patient.user.last_name }} </span>
+        [class.selected]="selectedPatientId === (patient.patient.patient_id)">
+        <div class="patient-info" (click)="viewPatientDetails(patient)">
+          <span class="patient-name">{{ patient.user.first_name }} {{ patient.user.last_name }}</span>
         </div>
-
+        <button 
+          class="menu-button"
+          [matMenuTriggerFor]="patientMenu"
+          (click)="$event.stopPropagation()"
+          matTooltip="פעולות">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #patientMenu="matMenu" xPosition="before" [hasBackdrop]="false">
+          <button mat-menu-item (click)="viewPatientDetails(patient)">
+            <mat-icon>person</mat-icon>
+            <span>הצג פרטי מטופל</span>
+          </button>
+          <!-- <button mat-menu-item (click)="openPatientCalendar(patient.patient)">
+            <mat-icon>calendar_today</mat-icon>
+            <span>יומן של מטופל</span>
+          </button> -->
+        </mat-menu>
       </div>
     </div>
 
-    <!-- הודעה אם אין מטופלים -->
     <div *ngIf="!isLoading && patients.length === 0" class="no-patients">
       <p>אין מטופלים כרגע</p>
       <p>לחץ על "הוסף מטופל" כדי להתחיל</p>

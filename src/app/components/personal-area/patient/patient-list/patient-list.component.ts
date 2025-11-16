@@ -10,13 +10,13 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',
-  styleUrls: ['./patient-list.component.css']
+  styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
   @Output() patientSelected = new EventEmitter<PatientCreationData>();
   patients: PatientCreationData[] = [];
   selectedPatientId: number | null = null;
-  therapistId: number = 1; // שנה לפי המטפל המחובר
+  therapist_id: number = 0; 
   isLoading = false;
 
   private destroy$ = new Subject<void>();
@@ -28,7 +28,18 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.loadPatients();
+  // קבלת המטפל המחובר מה-localStorage (TherapistData)
+  const therapistStr = localStorage.getItem('therapist');
+  let therapistObj: any = {};
+  if (therapistStr) {
+    try {
+      therapistObj = JSON.parse(therapistStr);
+    } catch (e) {
+      therapistObj = {};
+    }
+  }
+  this.therapist_id = therapistObj.therapist_id || 0;
+  this.loadPatients();
 
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
@@ -58,15 +69,15 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   loadPatients() {
-    this.patientService.getPatientsByTherapist(this.therapistId)
+    this.patientService.getPatientsByTherapist(this.therapist_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.patients = data;
-          console.log('Patients loaded:', data);
+          // ...existing code...
         },
         error: (error) => {
-          console.error('Error loading patients:', error);
+          // ...existing code...
         }
       });
   }
@@ -92,11 +103,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
       direction: 'rtl',
       data: {
         initialData: {
-          therapist_id: this.therapistId,
+          therapist_id: this.therapist_id,
           status: 'פעיל'
         },
         context: 'patient-list',
-        therapistId: this.therapistId
+        therapistId: this.therapist_id
       }
     });
 

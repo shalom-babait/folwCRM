@@ -20,6 +20,7 @@ import { WeNumbersComponent } from "./components/marketing/we-numbers/we-numbers
 import { ContactComponent } from "./components/marketing/contact/contact.component";
 import { TheySayAboutUsComponent } from './components/marketing/they-say-about-us/they-say-about-us.component';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -35,7 +36,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card'; // הוספת MatCardModule
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -68,15 +69,20 @@ import { TherapistsViewComponent } from './components/personal-area/therapist/th
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { SecretaryListComponent } from './components/personal-area/company-manager/secretary-list/secretary-list.component';
-import { DepartmentsListComponent } from './components/personal-area/company-manager/departments/departments-list/departments-list.component';
+import { DepartmentsGroupsListComponent } from './components/personal-area/company-manager/departments/departments-groups-list/departments-groups-list.component';
 import { DepartmentDetailsComponent } from './components/personal-area/company-manager/departments/department-details/department-details.component';
-import { DepartmentsViewComponent } from './components/personal-area/company-manager/departments/departments-view/departments-view.component';
+import { DepartmentsGroupViewComponent } from './components/personal-area/company-manager/departments/departments-groups-view/departments-groups-view.component';
 import { AddDepartmentDialogComponent } from './components/personal-area/company-manager/departments/add-department-dialog/add-department-dialog.component';
 import { PatientTableComponent } from './components/personal-area/patient/patient-table/patient-table.component';
 import { AddGroupDialogComponent } from './components/personal-area/company-manager/departments/add-group-dialog/add-group-dialog.component';
-import { DepartmentSelectorComponent } from './components/personal-area/company-manager/departments/department-selector/department-selector.component';
+import { DepartmentGroupSelectorComponent } from './components/personal-area/company-manager/departments/department-group-selector/department-group-selector.component';
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
+import { AddProspectDialogComponent } from './components/personal-area/company-manager/prospects/add-prospect-dialog/add-prospect-dialog.component';
+import { ProspectViewComponent } from './components/personal-area/company-manager/prospects/prospect-view/prospect-view.component';
+import { ProspectTableComponent } from './components/personal-area/company-manager/prospects/prospect-table/prospect-table.component';
+import { CategoryListComponent } from './components/personal-area/company-manager/category/category-list/category-list.component';
+import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
 
 
 @NgModule({
@@ -113,26 +119,32 @@ import { PatientViewComponent } from './components/personal-area/patient/patient
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
     RoomCalendarComponent,
-  SelectTimeDialogComponent,
-  CalendarOverlayComponent,
+    SelectTimeDialogComponent,
+    CalendarOverlayComponent,
     RoomsViewComponent,
     TherapistsViewComponent,
     CompanyManagerHeaderComponent,
     CompanyManagerDashboardComponent,
     SecretaryListComponent,
-    DepartmentsListComponent,
+    DepartmentsGroupsListComponent,
     DepartmentDetailsComponent,
-    DepartmentsViewComponent,
+    DepartmentsGroupViewComponent,
     AddDepartmentDialogComponent,
     PatientTableComponent,
     AddGroupDialogComponent,
-    DepartmentSelectorComponent,
+    DepartmentGroupSelectorComponent,
     PatientViewComponent,
+    AddProspectDialogComponent,
+    ProspectViewComponent,
+    ProspectTableComponent,
+    CategoryListComponent,
+    AddCategoryDialogComponent,
   ],
   imports: [
-  MatMenuModule,
-  MatIconModule,
+    MatMenuModule,
+    MatIconModule,
     BrowserModule,
+    MatTooltipModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -154,8 +166,8 @@ import { PatientViewComponent } from './components/personal-area/patient/patient
     MatCheckboxModule,
     MatCardModule, // הוספת MatCardModule
     MatProgressSpinnerModule,
-  MatSnackBarModule,
-  FullCalendarModule
+    MatSnackBarModule,
+    FullCalendarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
