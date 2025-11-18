@@ -27,4 +27,12 @@ createProspect(prospectData: Prospect): Observable<Prospect> {
   deleteProspect(prospectId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${prospectId}`);
   }
+  
+  /**
+   * Assign categories to a prospect. Sends an array of category IDs.
+   * Endpoint: POST /prospects/:id/categories  (adjust if your backend uses a different route)
+   */
+  assignCategories(prospectId: number, categoryIds: number[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${prospectId}/categories`, { category_ids: categoryIds });
+  }
 }

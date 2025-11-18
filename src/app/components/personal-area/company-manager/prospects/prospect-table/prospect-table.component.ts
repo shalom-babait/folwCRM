@@ -1,17 +1,18 @@
-// prospect-table.component.ts
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProspectService } from 'src/app/services/prospect.service';
-
-import { Prospect, ProspectStatus } from 'src/app/models/Prospect.model';
-
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { Prospect } from 'src/app/models/Prospect.model';
+import { Category } from 'src/app/models/category.model';
 import { AddProspectDialogComponent } from 'src/app/components/personal-area/company-manager/prospects/add-prospect-dialog/add-prospect-dialog.component';
+import { ProspectDetailsComponent } from 'src/app/components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
 
 @Component({
   selector: 'app-prospect-table',
   templateUrl: './prospect-table.component.html',
-  styleUrls: ['./prospect-table.component.css'
-    , '../../../../../styles/shared-table.css'
+  styleUrls: [
+    './prospect-table.component.css',
+    '../../../../../styles/shared-table.css'
   ]
 })
 export class ProspectTableComponent implements OnInit {
@@ -22,10 +23,17 @@ export class ProspectTableComponent implements OnInit {
   isLoading: boolean = false;
   sortColumn: string = 'created_at';
   sortDirection: 'asc' | 'desc' = 'desc';
+  // Category selector UI state
+  showCategorySelector: boolean = false;
+  selectedItemForCategory: Prospect | null = null;
+  selectedCategories: Category[] = [];
+  isSavingCategories: boolean = false;
 
   constructor(
     private prospectService: ProspectService,
     private dialog: MatDialog
+    ,
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -35,8 +43,8 @@ export class ProspectTableComponent implements OnInit {
   loadProspects(): void {
     this.isLoading = true;
     this.prospectService.getAllProspects().subscribe({
-      next: (data) => {
-        this.prospects = data;
+      next: (data: Prospect[]) => {
+        this.prospects = data || [];
         this.filteredProspects = [...this.prospects];
         this.applySort();
         this.isLoading = false;
@@ -50,27 +58,19 @@ export class ProspectTableComponent implements OnInit {
 
   onSearch(): void {
     const term = this.searchTerm.toLowerCase().trim();
-    
     if (!term) {
       this.filteredProspects = [...this.prospects];
     } else {
       this.filteredProspects = this.prospects.filter(prospect => {
         const fullName = `${prospect.first_name} ${prospect.last_name}`.toLowerCase();
-        const phone = prospect.phone?.toLowerCase() || '';
-        const phoneAlt = prospect.phone_alt?.toLowerCase() || '';
-        const city = prospect.city?.toLowerCase() || '';
-        const referralSource = prospect.referral_source?.toLowerCase() || '';
-        const reasonForVisit = prospect.reason_for_visit?.toLowerCase() || '';
-        
         return fullName.includes(term) ||
-               phone.includes(term) ||
-               phoneAlt.includes(term) ||
-               city.includes(term) ||
-               referralSource.includes(term) ||
-               reasonForVisit.includes(term);
+               (prospect.phone?.toLowerCase().includes(term)) ||
+               (prospect.phone_alt?.toLowerCase().includes(term)) ||
+               (prospect.city?.toLowerCase().includes(term)) ||
+               (prospect.referral_source?.toLowerCase().includes(term)) ||
+               (prospect.reason_for_visit?.toLowerCase().includes(term));
       });
     }
-    
     this.applySort();
   }
 
@@ -107,8 +107,8 @@ export class ProspectTableComponent implements OnInit {
           valueB = b.referral_source?.toLowerCase() || '';
           break;
         case 'status':
-          valueA = a.status;
-          valueB = b.status;
+          valueA = a.status || '';
+          valueB = b.status || '';
           break;
         case 'created_at':
           valueA = a.created_at ? new Date(a.created_at).getTime() : 0;
@@ -125,24 +125,24 @@ export class ProspectTableComponent implements OnInit {
   }
 
   selectProspect(prospect: Prospect): void {
-  this.selectedProspectId = prospect.prospect_id ?? null;
+    this.selectedProspectId = prospect.prospect_id ?? null;
   }
 
   getStatusLabel(status: string): string {
-    const statusLabels: { [key: string]: string } = {
-      'new': 'חדש',
-      'contacted': 'נוצר קשר',
-      'converted': 'הומר למטופל',
-      'not_relevant': 'לא רלוונטי'
+    const labels: { [key: string]: string } = {
+      new: 'חדש',
+      contacted: 'נוצר קשר',
+      converted: 'הומר למטופל',
+      not_relevant: 'לא רלוונטי'
     };
-    return statusLabels[status] || status;
+    return labels[status] || status;
   }
 
   getStatusClass(status: string): string {
     return `status-${status}`;
   }
 
-  formatDate(dateString: string): string {
+  formatDate(dateString: string | undefined): string {
     if (!dateString) return '-';
     const date = new Date(dateString);
     return date.toLocaleDateString('he-IL', {
@@ -169,20 +169,17 @@ export class ProspectTableComponent implements OnInit {
 
   viewProspect(event: Event, prospect: Prospect): void {
     event.stopPropagation();
-    // TODO: פתיחת דיאלוג לצפייה בפרטים
     console.log('View prospect:', prospect);
   }
 
   editProspect(event: Event, prospect: Prospect): void {
     event.stopPropagation();
-    // TODO: פתיחת דיאלוג לעריכה
     console.log('Edit prospect:', prospect);
   }
 
   convertToPatient(event: Event, prospect: Prospect): void {
     event.stopPropagation();
     if (confirm(`האם להמיר את ${prospect.first_name} ${prospect.last_name} למטופל?`)) {
-      // TODO: לוגיקת המרה למטופל
       console.log('Convert to patient:', prospect);
     }
   }
@@ -190,19 +187,27 @@ export class ProspectTableComponent implements OnInit {
   deleteProspect(event: Event, prospect: Prospect): void {
     event.stopPropagation();
     if (confirm(`האם למחוק את ${prospect.first_name} ${prospect.last_name}?`)) {
-      if (prospect.prospect_id === undefined) {
-        alert('לא ניתן למחוק: מזהה מתעניין חסר');
-        return;
-      }
+      if (prospect.prospect_id === undefined) return;
       this.prospectService.deleteProspect(prospect.prospect_id).subscribe({
-        next: () => {
-          this.loadProspects();
-        },
+        next: () => this.loadProspects(),
         error: (error) => {
           console.error('Error deleting prospect:', error);
           alert('שגיאה במחיקת המתעניין');
         }
       });
     }
+    
   }
+
+  openProspectDetails(prospect: Prospect): void {
+    // Open details as dialog and pass the prospect object so the details component
+    // can display it without re-fetching.
+    this.dialog.open(ProspectDetailsComponent, {
+      width: '800px',
+      maxHeight: '90vh',
+      data: { prospect },
+      direction: 'rtl'
+    });
+  }
+
 }

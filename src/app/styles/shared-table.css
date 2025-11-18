@@ -1,14 +1,16 @@
-/* prospect-table.component.css - עיצוב מלא */
-
 /* ==================== קונטיינר ראשי ==================== */
 .table-container {
-  margin: 2rem;
   background: whitesmoke;
   padding: 2rem;
   border-radius: 2rem;
   font-family: Arial, sans-serif;
   direction: rtl;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* הוסרו margin ו-height כדי לאפשר גלילה טבעית */
+  /* אפשר גלילה פנימית אך שומרים על עיצוב הקונטיינר (rounded corners, shadow) */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+  background-clip: padding-box; /* ensures rounded corners are preserved when content scrolls */
 }
 
 /* ==================== כותרת ראשית ==================== */
@@ -85,19 +87,8 @@
 .header-row {
   display: grid;
   grid-template-columns: 
-    50px                /* # */
-    minmax(150px, 1fr)  /* שם מלא */
-    120px               /* טלפון */
-    120px               /* טלפון נוסף */
-    minmax(150px, 1fr)  /* אימייל */
-    100px               /* עיר */
-    120px               /* מקור הפניה */
-    minmax(150px, 1fr)  /* סיבת ביקור */
-    120px               /* סטטוס */
-    80px                /* הערות */
-    120px               /* תאריך */
-    120px               /* הומר */
-    150px;              /* פעולות */
+    50px minmax(150px, 1fr) 120px 120px minmax(150px, 1fr)
+    100px 120px minmax(150px, 1fr) 120px 80px 120px 120px 150px;
   background-color: #022F39;
   color: white;
   font-weight: bold;
@@ -106,6 +97,11 @@
   margin-bottom: 0.5rem;
   gap: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* ensure header keeps its intrinsic width so horizontal scrolling works */
+  min-width: max-content;
 }
 
 .header-row .cell {
@@ -136,19 +132,8 @@
 .data-row {
   display: grid;
   grid-template-columns: 
-    50px                /* # */
-    minmax(150px, 1fr)  /* שם מלא */
-    120px               /* טלפון */
-    120px               /* טלפון נוסף */
-    minmax(150px, 1fr)  /* אימייל */
-    100px               /* עיר */
-    120px               /* מקור הפניה */
-    minmax(150px, 1fr)  /* סיבת ביקור */
-    120px               /* סטטוס */
-    80px                /* הערות */
-    120px               /* תאריך */
-    120px               /* הומר */
-    150px;              /* פעולות */
+    50px minmax(150px, 1fr) 120px 120px minmax(150px, 1fr)
+    100px 120px minmax(150px, 1fr) 120px 80px 120px 120px 150px;
   background-color: #ffffff;
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
@@ -159,6 +144,9 @@
   cursor: pointer;
   gap: 0.5rem;
   align-items: center;
+  animation: fadeIn 0.3s ease-in-out;
+  /* make each data row take its intrinsic width so the container can scroll horizontally */
+  min-width: max-content;
 }
 
 .data-row:hover {
@@ -181,21 +169,37 @@
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  /* prevent cells from forcing the grid to wrap; allow truncation */
+  min-width: 0;
 }
 
-/* ==================== מזהה (ID) ==================== */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.empty-value {
+  color: #999;
+  font-style: italic;
+}
+
+.data-row.selected .empty-value {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ==================== עמודות ספציפיות ==================== */
 .id-cell {
   font-weight: bold;
   color: #666;
   font-size: 0.9rem;
-  justify-content: center;
 }
 
 .data-row.selected .id-cell {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* ==================== שם מלא ==================== */
 .name-cell {
   justify-content: flex-start;
   font-weight: 600;
@@ -214,7 +218,6 @@
   color: white;
 }
 
-/* ==================== אייקונים קטנים ==================== */
 .mini-icon {
   font-size: 1rem;
   width: 1rem;
@@ -228,7 +231,6 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* ==================== טלפון ואימייל ==================== */
 .phone-cell,
 .email-cell {
   justify-content: flex-start;
@@ -241,19 +243,17 @@
   font-family: 'Courier New', monospace;
 }
 
-/* ==================== טקסט עם קיצוץ ==================== */
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-/* ==================== סיבת ביקור ==================== */
 .reason-cell {
   justify-content: flex-start;
   text-align: right;
   font-size: 0.9rem;
+}
+
+.date-cell {
+  font-size: 0.85rem;
+  justify-content: flex-start;
+  direction: ltr;
+  text-align: left;
 }
 
 /* ==================== תגיות סטטוס ==================== */
@@ -267,40 +267,13 @@
   transition: all 0.2s ease;
 }
 
-.status-badge.status-new {
-  background-color: #2196F3;
-  color: white;
-}
-
-.status-badge.status-contacted {
-  background-color: #FF9800;
-  color: white;
-}
-
-.status-badge.status-interested_groom {
-  background-color: #9C27B0;
-  color: white;
-}
-
-.status-badge.status-waiting_consultant {
-  background-color: #FFC107;
-  color: #333;
-}
-
-.status-badge.status-in_treatment {
-  background-color: #00BCD4;
-  color: white;
-}
-
-.status-badge.status-converted {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.status-badge.status-not_relevant {
-  background-color: #9E9E9E;
-  color: white;
-}
+.status-badge.status-new { background-color: #2196F3; color: white; }
+.status-badge.status-contacted { background-color: #FF9800; color: white; }
+.status-badge.status-interested_groom { background-color: #9C27B0; color: white; }
+.status-badge.status-waiting_consultant { background-color: #FFC107; color: #333; }
+.status-badge.status-in_treatment { background-color: #00BCD4; color: white; }
+.status-badge.status-converted { background-color: #4CAF50; color: white; }
+.status-badge.status-not_relevant { background-color: #9E9E9E; color: white; }
 
 .data-row.selected .status-badge {
   border: 1px solid white;
@@ -340,14 +313,6 @@
 
 .data-row.selected .notes-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* ==================== תאריך ==================== */
-.date-cell {
-  font-size: 0.85rem;
-  justify-content: flex-start;
-  direction: ltr;
-  text-align: left;
 }
 
 /* ==================== הומר למטופל ==================== */
@@ -416,65 +381,22 @@
   height: 1.1rem;
 }
 
-.action-btn:active {
-  transform: scale(0.9);
-}
+.action-btn:active { transform: scale(0.9); }
 
-.action-btn.view {
-  color: #2196F3;
-}
+.action-btn.view { color: #2196F3; }
+.action-btn.view:hover { background-color: #2196F3; color: white; }
+.action-btn.edit { color: #4CAF50; }
+.action-btn.edit:hover { background-color: #4CAF50; color: white; }
+.action-btn.convert { color: #FF9800; }
+.action-btn.convert:hover { background-color: #FF9800; color: white; }
+.action-btn.delete { color: #F44336; }
+.action-btn.delete:hover { background-color: #F44336; color: white; }
 
-.action-btn.view:hover {
-  background-color: #2196F3;
-  color: white;
-}
-
-.action-btn.edit {
-  color: #4CAF50;
-}
-
-.action-btn.edit:hover {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.action-btn.convert {
-  color: #FF9800;
-}
-
-.action-btn.convert:hover {
-  background-color: #FF9800;
-  color: white;
-}
-
-.action-btn.delete {
-  color: #F44336;
-}
-
-.action-btn.delete:hover {
-  background-color: #F44336;
-  color: white;
-}
-
-.data-row.selected .action-btn {
-  color: white;
-}
-
-.data-row.selected .action-btn.view:hover {
-  background-color: rgba(33, 150, 243, 0.5);
-}
-
-.data-row.selected .action-btn.edit:hover {
-  background-color: rgba(76, 175, 80, 0.5);
-}
-
-.data-row.selected .action-btn.convert:hover {
-  background-color: rgba(255, 152, 0, 0.5);
-}
-
-.data-row.selected .action-btn.delete:hover {
-  background-color: rgba(244, 67, 54, 0.5);
-}
+.data-row.selected .action-btn { color: white; }
+.data-row.selected .action-btn.view:hover { background-color: rgba(33, 150, 243, 0.5); }
+.data-row.selected .action-btn.edit:hover { background-color: rgba(76, 175, 80, 0.5); }
+.data-row.selected .action-btn.convert:hover { background-color: rgba(255, 152, 0, 0.5); }
+.data-row.selected .action-btn.delete:hover { background-color: rgba(244, 67, 54, 0.5); }
 
 /* ==================== הודעות ריקות ==================== */
 .no-results {
@@ -511,47 +433,27 @@
   min-height: 200px;
 }
 
-/* ==================== Tooltip מותאם להערות ==================== */
-::ng-deep .notes-tooltip {
-  max-width: 300px !important;
-  white-space: pre-wrap;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  background-color: #333 !important;
-  padding: 0.75rem !important;
+/* ==================== נגישות ==================== */
+.action-btn:focus,
+.icon-button:focus,
+.search-input:focus {
+  outline: 2px solid #2196F3;
+  outline-offset: 2px;
 }
 
-/* ==================== ערך ריק ==================== */
-.empty-value {
-  color: #999;
-  font-style: italic;
+/* ==================== אנימציות ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.data-row.selected .empty-value {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ==================== Scrollbar מותאם ==================== */
-.table-container::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* ==================== רספונסיביות - טאבלט ==================== */
+/* ==================== רספונסיביות ==================== */
 @media screen and (max-width: 1400px) {
   .header-row,
   .data-row {
@@ -576,7 +478,6 @@
 @media screen and (max-width: 1200px) {
   .table-container {
     padding: 1rem;
-    margin: 1rem;
   }
 
   .table-container h1 {
@@ -588,12 +489,9 @@
   }
 }
 
-/* ==================== רספונסיביות - מובייל ==================== */
 @media screen and (max-width: 768px) {
   .table-container {
-    width: 98%;
     padding: 1rem;
-    margin: 0.5rem auto;
     border-radius: 1rem;
   }
 
@@ -618,12 +516,10 @@
     height: 45px;
   }
 
-  /* הסתרת כותרות בטבלה */
   .header-row {
     display: none;
   }
 
-  /* שורות נתונים במובייל */
   .data-row {
     display: flex;
     flex-direction: column;
@@ -643,7 +539,6 @@
     border-bottom: none;
   }
 
-  /* תוויות לשדות במובייל */
   .id-cell::before { content: "מזהה: "; font-weight: bold; }
   .phone-cell::before { content: "טלפון: "; font-weight: bold; }
   .email-cell::before { content: "אימייל: "; font-weight: bold; }
@@ -675,7 +570,6 @@
     content: none;
   }
 
-  /* כפתורי פעולה במובייל */
   .action-btn {
     min-width: 36px;
     height: 36px;
@@ -687,7 +581,6 @@
     height: 1.2rem;
   }
 
-  /* הערות במובייל */
   .notes-cell {
     justify-content: space-between;
   }
@@ -697,7 +590,6 @@
     font-weight: bold;
   }
 
-  /* סטטוס במובייל */
   .cell:has(.status-badge) {
     justify-content: space-between;
   }
@@ -707,18 +599,15 @@
     font-weight: bold;
   }
 
-  /* קישור למטופל במובייל */
   .converted-cell {
     flex-direction: row;
     justify-content: space-between;
   }
 }
 
-/* ==================== רספונסיביות - מובייל קטן ==================== */
 @media screen and (max-width: 480px) {
   .table-container {
     padding: 0.5rem;
-    margin: 0.25rem auto;
   }
 
   .table-container h1 {
@@ -726,7 +615,6 @@
   }
 
   .search-input {
-    width: 100%;
     height: 50px;
     font-size: 14px;
   }
@@ -771,7 +659,6 @@
   .table-container {
     background: white;
     box-shadow: none;
-    margin: 0;
     padding: 1rem;
   }
 
@@ -791,38 +678,4 @@
     color: black !important;
     border: 1px solid #ddd;
   }
-}
-
-/* ==================== אנימציות ==================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.data-row {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-/* ==================== גלילה חלקה ==================== */
-* {
-  scroll-behavior: smooth;
-}
-
-/* ==================== נגישות ==================== */
-.action-btn:focus,
-.icon-button:focus,
-.search-input:focus {
-  outline: 2px solid #2196F3;
-  outline-offset: 2px;
-}
-
-/* ==================== מצב כהה (אופציונלי) ==================== */
-@media (prefers-color-scheme: dark) {
-  /* ניתן להוסיף כאן סגנונות למצב כהה אם נדרש */
 }

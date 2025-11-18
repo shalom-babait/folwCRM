@@ -1,0 +1,105 @@
+<div class="prospect-details-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Prospect Details -->
+  <div *ngIf="!isLoading && prospect" class="details-content">
+    <!-- Header with breadcrumb -->
+    <div class="header-section">
+      <div class="breadcrumb">
+        <a (click)="goBack()" class="breadcrumb-link">רשימת מתעניינים</a>
+        <span class="breadcrumb-separator">></span>
+        <span class="breadcrumb-current">{{ prospect.first_name }} {{ prospect.last_name }}</span>
+      </div>
+    </div>
+
+    <!-- Main Info Section -->
+    <div class="info-card">
+      <h2 class="prospect-name">{{ prospect.first_name }} {{ prospect.last_name }}</h2>
+      
+      <div class="info-grid">
+        <div class="info-row">
+          <span class="info-label">מספר מזהה:</span>
+          <span class="info-value">{{ prospect.prospect_id }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">טלפון:</span>
+          <span class="info-value">{{ prospect.phone || '-' }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.phone_alt">
+          <span class="info-label">טלפון נוסף:</span>
+          <span class="info-value">{{ prospect.phone_alt }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.email">
+          <span class="info-label">אימייל:</span>
+          <span class="info-value">{{ prospect.email }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.city">
+          <span class="info-label">עיר:</span>
+          <span class="info-value">{{ prospect.city }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.referral_source">
+          <span class="info-label">מקור הפניה:</span>
+          <span class="info-value">{{ prospect.referral_source }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.reason_for_visit">
+          <span class="info-label">סיבת ביקור:</span>
+          <span class="info-value">{{ prospect.reason_for_visit }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">סטטוס:</span>
+          <span class="info-value status-badge" [class]="'status-' + prospect.status">
+            {{ getStatusLabel(prospect.status || '') }}
+          </span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.notes">
+          <span class="info-label">הערות:</span>
+          <span class="info-value">{{ prospect.notes }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">תאריך יצירה:</span>
+          <span class="info-value">{{ formatDate(prospect.created_at) }}</span>
+        </div>
+
+        <div class="info-row" *ngIf="prospect.converted_to_patient_id">
+          <span class="info-label">הומר למטופל:</span>
+          <span class="info-value">#{{ prospect.converted_to_patient_id }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Categories Section -->
+    <div class="categories-section">
+      <h3>קטגוריות</h3>
+
+      <div *ngIf="!showCategorySelector">
+        <div *ngIf="prospectCategories.length; else noCats">
+          <div class="category-pill" *ngFor="let cat of prospectCategories">{{ cat.category_name }}</div>
+        </div>
+        <ng-template #noCats>
+          <div class="no-categories">עדיין לא הוקצו קטגוריות</div>
+        </ng-template>
+
+        <button mat-stroked-button color="primary" (click)="openCategorySelector()">ערוך קטגוריות</button>
+      </div>
+
+      <div *ngIf="showCategorySelector">
+        <app-category-selector [type]="'prospect'" [initialSelected]="prospectCategories" (selectionChange)="onCategoriesSelected($event)"></app-category-selector>
+        <div class="selector-actions">
+          <button mat-button (click)="showCategorySelector = false">ביטול</button>
+        </div>
+      </div>
+    </div>
+
+</div>

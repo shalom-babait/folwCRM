@@ -43,7 +43,7 @@
           matTooltip="פעולות">
           <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #patientMenu="matMenu" xPosition="before" [hasBackdrop]="false">
+        <mat-menu #patientMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
           <button mat-menu-item (click)="viewPatientDetails(patient)">
             <mat-icon>person</mat-icon>
             <span>הצג פרטי מטופל</span>

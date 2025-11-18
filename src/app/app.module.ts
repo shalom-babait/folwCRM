@@ -83,6 +83,8 @@ import { ProspectViewComponent } from './components/personal-area/company-manage
 import { ProspectTableComponent } from './components/personal-area/company-manager/prospects/prospect-table/prospect-table.component';
 import { CategoryListComponent } from './components/personal-area/company-manager/category/category-list/category-list.component';
 import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
+import { CategorySelectorComponent } from './components/personal-area/company-manager/category/category-selector/category-selector.component';
+import { ProspectDetailsComponent } from './components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
 
 
 @NgModule({
@@ -139,6 +141,8 @@ import { AddCategoryDialogComponent } from './components/personal-area/company-m
     ProspectTableComponent,
     CategoryListComponent,
     AddCategoryDialogComponent,
+    CategorySelectorComponent,
+    ProspectDetailsComponent,
   ],
   imports: [
     MatMenuModule,

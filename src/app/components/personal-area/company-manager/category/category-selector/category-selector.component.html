@@ -1,0 +1,76 @@
+<div class="category-selector">
+  <!-- כותרת -->
+  <div class="selector-header">
+    <h3 class="selector-title">בחירת קטגוריות</h3>
+    <button 
+      type="button" 
+      class="clear-all-btn" 
+      *ngIf="selectedItems.length > 0"
+      (click)="clearAll()">
+      נקה הכל
+    </button>
+  </div>
+
+  <!-- שדה חיפוש -->
+  <div class="search-container">
+    <input 
+      type="text"
+      [(ngModel)]="searchTerm"
+      (focus)="onSearchFocus()"
+      (input)="onSearchChange()"
+      [placeholder]="searchPlaceholder"
+      class="search-input"
+    />
+    <span class="search-icon">🔍</span>
+
+    <!-- דרופדאון - רשימת קטגוריות ישר -->
+    <div class="dropdown" *ngIf="showDropdown">
+      <div class="loading-message" *ngIf="isLoading">טוען קטגוריות...</div>
+
+      <div *ngIf="!isLoading && filteredCategories.length > 0" class="categories-list">
+        <div 
+          class="category-item" 
+          *ngFor="let cat of filteredCategories"
+          (click)="toggleCategory(cat); $event.stopPropagation()">
+          <div class="category-info">
+            <span class="category-icon">🏷️</span>
+            <span class="category-name">{{ cat.category_name }}</span>
+            <span class="badge" *ngIf="cat.category_label">{{ cat.category_label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-results-message" *ngIf="!isLoading && filteredCategories.length === 0">
+        {{ searchTerm ? 'לא נמצאו תוצאות' : 'כל הקטגוריות כבר נבחרו' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- רשימת פריטים שנבחרו -->
+  <div class="selected-list" *ngIf="selectedItems.length > 0">
+    <div class="selected-item" *ngFor="let item of selectedItems; let i = index">
+      <div class="item-content">
+        <span class="item-icon">🏷️</span>
+        <div class="item-text">
+          <div class="item-name">{{ item.category_name }}</div>
+        </div>
+      </div>
+
+      <button 
+        type="button" 
+        class="remove-btn" 
+        (click)="toggleCategory(item); $event.stopPropagation()"
+        title="הסר">
+        ×
+      </button>
+    </div>
+  </div>
+
+  <!-- מצב ריק -->
+  <div class="empty-state" *ngIf="selectedItems.length === 0">
+    <div class="empty-icon">📋</div>
+    <div class="empty-message">לא נבחרו קטגוריות</div>
+    <div class="empty-hint">לחץ על שדה החיפוש למעלה כדי לראות את רשימת הקטגוריות</div>
+  </div>
+
+</div>
