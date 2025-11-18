@@ -1,1 +1,103 @@
-<p>add-category-dialog works!</p>
+<!-- add-category-dialog.component.html -->
+<div class="create-treatment-dialog">
+  <div class="dialog-title">הוספת קטגוריה חדשה</div>
+  <form class="input-dialog" [formGroup]="categoryForm" (ngSubmit)="onSave()">
+    
+    <!-- סוג קטגוריה -->
+    <div class="form-field">
+      <label for="category_type">סוג קטגוריה *</label>
+      <select id="category_type" formControlName="category_type">
+        <option *ngFor="let type of categoryTypes" [value]="type.value">
+          {{ type.label }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="isFieldInvalid('category_type')">
+        {{ getFieldError('category_type', 'סוג קטגוריה') }}
+      </div>
+    </div>
+
+    <!-- שם קטגוריה -->
+    <div class="form-field">
+      <label for="category_name">שם קטגוריה *</label>
+      <input id="category_name" formControlName="category_name" placeholder="צרכים מיוחדים" />
+      <div class="error-message" *ngIf="isFieldInvalid('category_name')">
+        {{ getFieldError('category_name', 'שם קטגוריה') }}
+      </div>
+    </div>
+
+    <!-- תיאור -->
+    <div class="form-field">
+      <label for="description">תיאור</label>
+      <textarea id="description" formControlName="description" rows="3" 
+                placeholder="תיאור קצר של הקטגוריה..."></textarea>
+      <div class="error-message" *ngIf="isFieldInvalid('description')">
+        {{ getFieldError('description', 'תיאור') }}
+      </div>
+    </div>
+
+    <!-- צבע -->
+    <div class="form-field">
+      <label for="color">צבע *</label>
+      <div class="color-picker-container">
+        <div class="color-input-wrapper">
+          <input id="color" formControlName="color" type="color" />
+          <div class="color-preview" 
+               *ngIf="getColorPreview()"
+               [style.background-color]="getColorPreview()"></div>
+          <input type="text" 
+                 [value]="getColorPreview()" 
+                 (input)="categoryForm.patchValue({color: $any($event.target).value})"
+                 class="color-text-input"
+                 placeholder="#2196F3"
+                 maxlength="7" />
+        </div>
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('color')">
+        {{ getFieldError('color', 'צבע') }}
+      </div>
+    </div>
+
+    <!-- אייקון -->
+    <div class="form-field">
+      <label for="icon">אייקון</label>
+      <select id="icon" formControlName="icon">
+        <option value="">ללא אייקון</option>
+        <option *ngFor="let icon of iconOptions" [value]="icon">
+          {{ icon }}
+        </option>
+      </select>
+      <div class="icon-preview" *ngIf="categoryForm.get('icon')?.value">
+        <mat-icon>{{ categoryForm.get('icon')?.value }}</mat-icon>
+      </div>
+      <div class="error-message" *ngIf="isFieldInvalid('icon')">
+        {{ getFieldError('icon', 'אייקון') }}
+      </div>
+    </div>
+
+    <!-- סדר תצוגה -->
+    <div class="form-field">
+      <label for="display_order">סדר תצוגה *</label>
+      <input id="display_order" formControlName="display_order" type="number" min="0" />
+      <div class="error-message" *ngIf="isFieldInvalid('display_order')">
+        {{ getFieldError('display_order', 'סדר תצוגה') }}
+      </div>
+    </div>
+
+    <!-- פעיל -->
+    <div class="form-field checkbox-field">
+      <label>
+        <input type="checkbox" formControlName="is_active" />
+        קטגוריה פעילה
+      </label>
+    </div>
+
+    <!-- כפתורי פעולה -->
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+      <button type="submit" class="save-button" [disabled]="!categoryForm.valid || isSaving">
+        <span *ngIf="!isSaving">שמירה</span>
+        <span *ngIf="isSaving">שומר...</span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -3,28 +3,61 @@
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem;
-  height: calc(100vh - 100px);
+  height: 100vh;
   direction: rtl;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.right-panel { flex: 0 0 350px; }
-.left-panel { flex: 1; min-width: 0; }
+.right-panel { 
+  flex: 0 0 350px;
+  /* ביטול גלילה פנימית */
+  overflow-y: hidden;
+}
 
-.summary-view { height: 100%; }
+.left-panel { 
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* שמירת ביטול גלילה */
+  overflow: hidden;
+}
+
+/* === תצוגת סיכום ברירת מחדל === */
+.summary-view { 
+  height: 100%;
+  /* אין גלילה פנימית */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
 .summary-card {
   background: white;
   border-radius: 1rem;
-  padding: 2rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   height: 100%;
+  /* אין גלילה בתוך כרטיס הסיכום */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .summary-card h2 {
   color: #022F39;
-  margin-bottom: 2rem;
+  margin: 0;
+  padding: 2rem 2rem 1rem 2rem;
   font-size: 1.5rem;
   text-align: center;
+  flex-shrink: 0;
+}
+
+.summary-card app-prospect-table {
+  flex: 1;
+  /* מונע גלילה פנימית של הטבלה המשולבת */
+  overflow: auto;
+  display: block;
 }
 
 .instruction {
@@ -37,22 +70,26 @@
   border-radius: 0.5rem;
 }
 
-.patient-view, .therapist-view, .room-view {
-  height: 100%;
+/* === תצוגות פרטים === */
+.patient-view, 
+.therapist-view, 
+.room-view,
+.prospect-view {
+  flex: 1;
   display: flex;
   flex-direction: column;
   background: white;
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  overflow: hidden;
+  overflow: auto;
 }
 
+/* === כותרת עם טאבים === */
 .header-tabs {
   display: flex;
   align-items: center;
   background: linear-gradient(135deg, #022F39 0%, #034752 100%);
-  padding: 0;
-  position: relative;
+  flex-shrink: 0;
 }
 
 .header-tabs > span {
@@ -62,9 +99,7 @@
   font-size: 1.1rem;
 }
 
-.header-tabs > span p {
-  margin: 0;
-}
+.header-tabs > span p { margin: 0; }
 
 .tab-link {
   display: flex;
@@ -76,7 +111,6 @@
   cursor: pointer;
   font-size: 1rem;
   color: rgba(255,255,255,0.7);
-  border-bottom: 3px solid transparent;
   transition: all 0.3s;
   position: relative;
 }
@@ -133,28 +167,63 @@
 
 .close-btn mat-icon { color: white; }
 
+/* === תוכן הטאבים - עם גלילה === */
 .tab-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 2rem;
 }
 
-.details-view, .calendar-view, .mail-view, .patients-view, .treatments-view {
+/* === כרטיסיות תוכן === */
+.details-view, 
+.calendar-view, 
+.mail-view, 
+.patients-view, 
+.treatments-view,
+.history-view,
+.notes-view {
   height: 100%;
 }
 
-.details-card, .calendar-card, .mail-card, .patients-card, .treatments-card {
+.details-card, 
+.calendar-card, 
+.mail-card, 
+.patients-card,
+.history-card,
+.notes-card {
   background: #f8f9fa;
   padding: 2rem;
   border-radius: 0.8rem;
-  height: 100%;
+  min-height: 100%;
 }
 
 .treatments-card {
   background: transparent;
   padding: 0;
+  min-height: 100%;
 }
 
+.details-card h3,
+.calendar-card h3, 
+.mail-card h3, 
+.patients-card h3,
+.history-card h3,
+.notes-card h3 {
+  margin: 0 0 1.5rem 0;
+  color: #022F39;
+  font-size: 1.3rem;
+}
+
+.calendar-card p, 
+.mail-card p, 
+.patients-card p,
+.history-card p,
+.notes-card p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* === תוכן פרטים === */
 .details-content {
   display: flex;
   flex-direction: column;
@@ -201,6 +270,7 @@
   font-weight: 500;
 }
 
+/* === כפתורי פעולה === */
 .details-actions {
   display: flex;
   gap: 1rem;
@@ -242,13 +312,84 @@
   height: 1.2rem;
 }
 
-.calendar-card h3, .mail-card h3, .patients-card h3 {
-  margin: 0 0 1.5rem 0;
-  color: #022F39;
-  font-size: 1.3rem;
+/* === Scrollbar מותאם === */
+.tab-content::-webkit-scrollbar,
+.right-panel::-webkit-scrollbar,
+.table-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-.calendar-card p, .mail-card p, .patients-card p {
-  color: #666;
-  font-size: 1rem;
+.tab-content::-webkit-scrollbar-track,
+.right-panel::-webkit-scrollbar-track,
+.table-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.tab-content::-webkit-scrollbar-thumb,
+.right-panel::-webkit-scrollbar-thumb,
+.table-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tab-content::-webkit-scrollbar-thumb:hover,
+.right-panel::-webkit-scrollbar-thumb:hover,
+.table-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* הסתרת scrollbar מהקונטיינר הראשי */
+.view-container::-webkit-scrollbar {
+  display: none;
+}
+
+.view-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* === רספונסיביות === */
+@media screen and (max-width: 1024px) {
+  .view-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .right-panel {
+    flex: 0 0 auto;
+    max-height: 300px;
+  }
+
+  .left-panel {
+    flex: 1;
+    min-height: 500px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .view-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .header-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-link {
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .tab-content {
+    padding: 1rem;
+  }
+
+  .detail-section {
+    padding: 1rem;
+  }
+
+  .details-actions {
+    flex-direction: column;
+  }
 }
