@@ -5,6 +5,7 @@ export interface Department {
 }
 
 export interface Group {
+  userCount: number;
   group_id?: number;
   group_name: string;
   department_id?: number;
@@ -21,6 +22,10 @@ export interface UserGroup {
   user_group_id?: number;
   user_id: number;
   group_id: number;
+}
+export interface ApiResponseGroup<T> {
+  success: boolean;
+  data: T;
 }
 // מודל למחלקה עם קבוצות
 export interface DepartmentWithGroups {

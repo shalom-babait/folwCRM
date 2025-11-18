@@ -20,6 +20,7 @@ import { WeNumbersComponent } from "./components/marketing/we-numbers/we-numbers
 import { ContactComponent } from "./components/marketing/contact/contact.component";
 import { TheySayAboutUsComponent } from './components/marketing/they-say-about-us/they-say-about-us.component';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -78,6 +79,11 @@ import { AddGroupDialogComponent } from './components/personal-area/company-mana
 import { DepartmentGroupSelectorComponent } from './components/personal-area/company-manager/departments/department-group-selector/department-group-selector.component';
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
+import { AddProspectDialogComponent } from './components/personal-area/company-manager/prospects/add-prospect-dialog/add-prospect-dialog.component';
+import { ProspectViewComponent } from './components/personal-area/company-manager/prospects/prospect-view/prospect-view.component';
+import { ProspectTableComponent } from './components/personal-area/company-manager/prospects/prospect-table/prospect-table.component';
+import { CategoryListComponent } from './components/personal-area/company-manager/category/category-list/category-list.component';
+import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
 
 
 @NgModule({
@@ -129,12 +135,18 @@ import { PatientViewComponent } from './components/personal-area/patient/patient
     AddGroupDialogComponent,
     DepartmentGroupSelectorComponent,
     PatientViewComponent,
+    AddProspectDialogComponent,
+    ProspectViewComponent,
+    ProspectTableComponent,
+    CategoryListComponent,
+    AddCategoryDialogComponent,
     RoomListCalendarComponent
   ],
   imports: [
     MatMenuModule,
     MatIconModule,
     BrowserModule,
+    MatTooltipModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,

@@ -148,6 +148,12 @@
   color: #555;
 }
 
+.user-count {
+  color: #666;
+  font-size: 0.95rem;
+
+}
+
 .no-departments {
   text-align: center;
   padding: 2rem 1rem;
@@ -168,23 +174,23 @@
     max-height: none;
     margin-bottom: 1rem;
   }
-  
+
   .card-header {
     padding: 1rem;
   }
-  
+
   .card-header h3 {
     font-size: 1.2rem;
   }
-  
+
   .card-content {
     max-height: 50vh;
   }
-  
+
   .department-card {
     padding: 0.8rem 1rem;
   }
-  
+
   .groups-list {
     padding-right: 1.5rem;
   }
@@ -194,27 +200,27 @@
   .card-header {
     padding: 0.8rem;
   }
-  
+
   .card-header h3 {
     font-size: 1.1rem;
   }
-  
+
   .department-card {
     padding: 0.7rem 0.8rem;
   }
-  
+
   .department-name {
     font-size: 0.95rem;
   }
-  
+
   .groups-list {
     padding-right: 1rem;
   }
-  
+
   .group-card {
     padding: 0.5rem 0.8rem;
   }
-  
+
   .group-name {
     font-size: 0.85rem;
   }
