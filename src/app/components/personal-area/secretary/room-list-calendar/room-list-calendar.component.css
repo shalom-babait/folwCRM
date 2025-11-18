@@ -1,0 +1,110 @@
+.room-list-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+  font-family: Arial, sans-serif;
+  direction: rtl;
+  height: fit-content;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.card-header {
+  background-color: #022F39;
+  color: white;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.card-header h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.card-content {
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+}
+.room-card {
+  background: #f7f7f7;
+  border-radius: 0.5rem;
+  margin-bottom: 0.7rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+}
+.room-card.selected {
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 6px 12px rgba(2, 47, 57, 0.3);
+}
+.room-card.selected .room-name {
+  color: white;
+}
+.room-info {
+  flex: 1;
+}
+.room-name {
+  font-size: 1.1rem;
+  color: #022F39;
+  font-weight: 500;
+}
+.no-rooms {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.room-list-calendar-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+}
+.room-list-card {
+  flex: 0 0 25%;
+  max-width: 350px;
+  min-width: 220px;
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  direction: rtl;
+  height: fit-content;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.calendar-panel {
+  flex: 1 1 75%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+.calendar-placeholder {
+  background: #e3eaf2;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px rgba(2,47,57,0.07);
+  padding: 2.5rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 1.2rem;
+}

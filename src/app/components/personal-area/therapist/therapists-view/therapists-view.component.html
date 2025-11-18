@@ -107,8 +107,10 @@
         <div *ngIf="activeTab === 'calendar'" class="calendar-view">
           <div class="calendar-card">
             <h3>יומן פגישות</h3>
-            <p>כאן יוצג יומן הפגישות של המטפל</p>
-            <!-- הוסף כאן את הקומפוננטה של היומן -->
+              <app-therapist-calendar 
+                *ngIf="selectedTherapist?.therapist?.therapist_id"
+                [therapistId]="selectedTherapist.therapist.therapist_id">
+              </app-therapist-calendar>
           </div>
         </div>
 

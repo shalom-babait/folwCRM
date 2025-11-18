@@ -64,6 +64,7 @@ import { AddTherapistDialogComponent } from './components/personal-area/therapis
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
+import { RoomListCalendarComponent } from './components/personal-area/secretary/room-list-calendar/room-list-calendar.component';
 import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
@@ -128,6 +129,7 @@ import { PatientViewComponent } from './components/personal-area/patient/patient
     AddGroupDialogComponent,
     DepartmentGroupSelectorComponent,
     PatientViewComponent,
+    RoomListCalendarComponent
   ],
   imports: [
     MatMenuModule,

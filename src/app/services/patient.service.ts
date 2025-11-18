@@ -198,9 +198,12 @@ export class PatientService {
   }
 
   private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+    // קבלת ה-therapist_id מה-localStorage
+    const therapistIdStr = localStorage.getItem('therapist_id');
+    const therapistId = therapistIdStr ? Number(therapistIdStr) : 1;
     const id = patient_id || 1;
-    console.log('Fetching appointments for patient_id:', id);
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/1`).pipe(
+    console.log('Fetching appointments for patient_id:', id, 'and therapist_id:', therapistId);
+    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/${therapistId}`).pipe(
       tap(appointments => console.log('Raw appointments:', appointments)),
       map(appointments => appointments || []),
       catchError(error => {
@@ -258,4 +261,31 @@ export class PatientService {
 
     return throwError(() => new Error(errorMessage));
   }
+   getTherapistIdByUserId(user_id: number): Observable<number | null> {
+    return this.http.get<{ therapist_id?: number }>(`${this.apiUrl}/therapists/byUser/${user_id}`)
+      .pipe(
+        map((response: { therapist_id?: number }) => response.therapist_id !== undefined ? response.therapist_id : null),
+        catchError(error => {
+          console.error('Error fetching therapistId by user_id:', error);
+          return of(null);
+        })
+      );
+  }
+
+   getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
+    if (!therapistId) {
+      console.error('getTreatmentsForTherapist: therapistId is missing!', therapistId);
+      return of([]);
+    }
+    const url = `${this.apiUrl}/appointments/therapist/${therapistId}`;
+    console.log('getTreatmentsForTherapist: GET', url, 'therapistId:', therapistId);
+    return this.http.get<ApiResponse<AppointmentResponse[]>>(url).pipe(
+      map((response: ApiResponse<AppointmentResponse[]>) => response.data || []),
+      catchError((error) => {
+        console.error('Error fetching appointments for therapist:', error);
+        return of([]);
+      })
+    );
+  }
 }
+
