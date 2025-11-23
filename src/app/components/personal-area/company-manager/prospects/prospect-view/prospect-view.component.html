@@ -1,7 +1,7 @@
 <div class="view-container">
   <div class="right-panel">
     <app-category-list
-      (prospectSelected)="onProspectSelected($event)">
+      (categorySelected)="onCategorySelected($event)">
     </app-category-list>
   </div>
   
@@ -9,7 +9,7 @@
     <!-- תצוגת ברירת מחדל - טבלה -->
     <div *ngIf="!selectedProspect" class="summary-view">
       <div class="summary-card">
-        <app-prospect-table></app-prospect-table>
+  <app-prospect-table [selectedCategoryId]="selectedCategoryId"></app-prospect-table>
       </div>
     </div>
 

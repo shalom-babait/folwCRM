@@ -1,3 +1,29 @@
+/* קטגוריות במצב תצוגה */
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.category-tag {
+  display: flex;
+  align-items: center;
+  background: #F5F5F5;
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 15px;
+  color: #333;
+  border: 1px solid #E0E0E0;
+  font-weight: 500;
+  min-width: 60px;
+  justify-content: center;
+}
+
+.category-name {
+  font-weight: 500;
+  color: #333;
+}
 .prospect-details-container {
   padding: 20px;
   max-width: 1200px;
@@ -313,5 +339,65 @@
   .selector-modal {
     width: 95%;
     max-height: 90vh;
+  }
+}
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+
+.edit-btn {
+  background: transparent;
+  border: 2px solid #022F39;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.edit-btn:hover {
+  background: #022F39;
+  color: white;
+}
+
+
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-input {
+  border: 1.5px solid #1976D2;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  width: 100%;
+  background: #f7fbff;
+  font-size: 15px;
+  color: #222;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px #c8e6c9;
+  background: #fff;
+}
+
+@media (max-width: 768px) {
+  .edit-input {
+    font-size: 14px;
+    padding: 0.3rem 0.4rem;
   }
 }

@@ -132,10 +132,5 @@ a:hover {
   opacity: 80%;
   background-color: #022F39;
 }
-/* Backdrop variant that is fully transparent (used by some menus to close on outside click without dimming) */
-.transparent-backdrop.cdk-overlay-backdrop-showing {
-  background-color: transparent !important;
-  opacity: 0 !important;
-}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

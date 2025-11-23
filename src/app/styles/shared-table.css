@@ -1,3 +1,8 @@
+/* Utility class for centering content in table cells */
+.centered-cell {
+  justify-content: center !important;
+  text-align: center !important;
+}
 /* ==================== קונטיינר ראשי ==================== */
 .table-container {
   background: whitesmoke;
@@ -8,7 +13,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   /* הוסרו margin ו-height כדי לאפשר גלילה טבעית */
   /* אפשר גלילה פנימית אך שומרים על עיצוב הקונטיינר (rounded corners, shadow) */
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
   background-clip: padding-box; /* ensures rounded corners are preserved when content scrolls */
 }
@@ -20,11 +26,6 @@
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: bold;
-}
-
-/* ==================== שדה חיפוש ==================== */
-.search-container {
-  display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1.5rem;
@@ -101,6 +102,7 @@
   top: 0;
   z-index: 10;
   /* ensure header keeps its intrinsic width so horizontal scrolling works */
+  min-width: 0;
   min-width: max-content;
 }
 
@@ -146,6 +148,7 @@
   align-items: center;
   animation: fadeIn 0.3s ease-in-out;
   /* make each data row take its intrinsic width so the container can scroll horizontally */
+  min-width: 0;
   min-width: max-content;
 }
 
@@ -167,10 +170,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  /* prevent cells from forcing the grid to wrap; allow truncation */
+  text-align: inherit;
   min-width: 0;
+  flex: 1 1 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .truncate {
@@ -201,10 +208,14 @@
 }
 
 .name-cell {
-  justify-content: flex-start;
   font-weight: 600;
   gap: 0.5rem;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 
 .cell-icon {
   font-size: 1.2rem;
@@ -233,10 +244,8 @@
 
 .phone-cell,
 .email-cell {
-  justify-content: flex-start;
   font-size: 0.9rem;
   direction: ltr;
-  text-align: left;
 }
 
 .phone-cell {
@@ -244,16 +253,12 @@
 }
 
 .reason-cell {
-  justify-content: flex-start;
-  text-align: right;
   font-size: 0.9rem;
 }
 
 .date-cell {
   font-size: 0.85rem;
-  justify-content: flex-start;
   direction: ltr;
-  text-align: left;
 }
 
 /* ==================== תגיות סטטוס ==================== */
@@ -678,4 +683,15 @@
     color: black !important;
     border: 1px solid #ddd;
   }
+}
+.cell {
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  min-width: 0;
+  word-wrap: break-word; /* הוספה */
+  word-break: break-word; /* הוספה */
 }

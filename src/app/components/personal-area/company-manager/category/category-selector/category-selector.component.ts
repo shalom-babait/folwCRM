@@ -7,11 +7,14 @@ import { CategoryService } from 'src/app/services/category.service';
   templateUrl: './category-selector.component.html',
   styleUrls: ['./category-selector.component.css']
 })
+
 export class CategorySelectorComponent implements OnInit {
   @Input() type: 'prospect' | 'patient' | 'employee' | 'treatment' = 'prospect';
-  selectedItems: Category[] = [];
+  @Input() readonly: boolean = false;
   @Input() initialSelected: Category[] = [];
   @Output() selectionChange = new EventEmitter<Category[]>();
+  selectedItems: Category[] = [];
+
 
   // internal state similar to department-group-selector
   categories: Category[] = [];
@@ -21,6 +24,7 @@ export class CategorySelectorComponent implements OnInit {
   isLoading = false;
   searchPlaceholder: string = 'חפש קטגוריות...';
   private clickListener: any;
+
 
   constructor(private categoryService: CategoryService) {}
 
