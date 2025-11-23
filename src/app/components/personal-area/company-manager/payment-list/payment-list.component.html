@@ -1,0 +1,81 @@
+<div class="payment-container">
+  <h2>כרטיס לקוח - היסטוריית תשלומים</h2>
+  
+  <div class="table-wrapper">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+  <button class="btn-details" (click)="openAddTransaction()">הוסף פעולה חדשה</button>
+    </div>
+    <table class="payment-table">
+      <thead>
+        <tr>
+          <th>תאריך</th>
+          <th>תיאור</th>
+          <th>חובה</th>
+          <th>זכות</th>
+          <th>יתרה</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactions">
+          <td>{{ formatDate(transaction.date) }}</td>
+          <td>{{ transaction.description }}</td>
+          <td class="debit">
+            <span *ngIf="transaction.debit > 0">₪{{ transaction.debit }}</span>
+          </td>
+          <td class="credit">
+            <span *ngIf="transaction.credit > 0">₪{{ transaction.credit }}</span>
+          </td>
+          <td [ngClass]="getBalanceClass(transaction.balance)">
+            ₪{{ transaction.balance }}
+          </td>
+          <td class="actions">
+            <button class="btn-details" (click)="showDetails(transaction)">
+              פרטים
+            </button>
+            <button class="btn-assign" (click)="assignPayment(transaction)" 
+                    *ngIf="transaction.debit > 0">
+              שייך תשלום
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <div class="summary-row">
+      <span class="label">סה"כ חובות:</span>
+      <span class="value debit">₪{{ totalDebits }}</span>
+    </div>
+    <div class="summary-row">
+      <span class="label">סה"כ תשלומים:</span>
+      <span class="value credit">₪{{ totalCredits }}</span>
+    </div>
+    <div class="summary-row final">
+      <span class="label">יתרה כוללת:</span>
+      <span class="value" [ngClass]="getBalanceClass(finalBalance)">
+        ₪{{ finalBalance }}
+      </span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <span class="legend-dot debit"></span>
+      <span>חובה פתוחה</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot credit"></span>
+      <span>תשלום</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot balance-positive"></span>
+      <span>חוב</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot balance-negative"></span>
+      <span>עודף תשלום</span>
+    </div>
+  </div>
+</div>
