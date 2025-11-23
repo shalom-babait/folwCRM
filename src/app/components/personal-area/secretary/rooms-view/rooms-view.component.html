@@ -1,2 +1,71 @@
-<p>rooms-view works!</p>
-<app-room-list-calendar></app-room-list-calendar>
+<div class="view-container">
+	<div class="right-panel">
+		<app-room-list-calendar (roomSelected)="onRoomSelected($event)"></app-room-list-calendar>
+	</div>
+	<div class="left-panel">
+		<!-- תצוגת סיכום ברירת מחדל -->
+		<div *ngIf="!selectedRoom" class="summary-view">
+			<div class="summary-card">
+				<h2>סיכום חדרים</h2>
+				<p class="instruction">בחר חדר מהרשימה לצפייה ביומן או בפרטים</p>
+			</div>
+		</div>
+
+		<!-- תצוגה כאשר נבחר חדר -->
+		<div *ngIf="selectedRoom" class="room-view">
+			<div class="header-tabs">
+				<button 
+					class="tab-link" 
+					[class.active]="activeTab === 'calendar'"
+					(click)="setActiveTab('calendar')">
+					<mat-icon>calendar_today</mat-icon>
+					<span>יומן</span>
+				</button>
+				<button 
+					class="tab-link" 
+					[class.active]="activeTab === 'details'"
+					(click)="setActiveTab('details')">
+					<mat-icon>info</mat-icon>
+					<span>פרטי חדר</span>
+				</button>
+				<button class="close-btn" (click)="onCloseDetails()">
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+			<div class="tab-content">
+				<!-- יומן -->
+				<div *ngIf="activeTab === 'calendar'" class="calendar-view">
+					<div class="calendar-card">
+						<h3>יומן חדר</h3>
+						<app-room-calendar 
+							*ngIf="selectedRoom?.room_id"
+							[roomId]="selectedRoom.room_id"
+							[events]="selectedRoomEvents">
+						</app-room-calendar>
+					</div>
+				</div>
+				<!-- פרטי חדר -->
+				<div *ngIf="activeTab === 'details'" class="details-view">
+					<div class="details-card">
+						<div class="details-content">
+							<div class="detail-section">
+								<mat-icon>meeting_room</mat-icon>
+								<div>
+									<label>שם חדר:</label>
+									<p>{{ selectedRoom.room_name }}</p>
+								</div>
+							</div>
+							<div class="detail-section">
+								<mat-icon>badge</mat-icon>
+								<div>
+									<label>מזהה חדר:</label>
+									<p>{{ selectedRoom.room_id }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
