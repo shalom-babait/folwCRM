@@ -13,6 +13,17 @@
         <span class="breadcrumb-separator">></span>
         <span class="breadcrumb-current">{{ prospect.first_name }} {{ prospect.last_name }}</span>
       </div>
+      <button class="edit-btn" (click)="toggleEditMode()" *ngIf="!isEditMode">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <div class="edit-actions dialog-actions" *ngIf="isEditMode">
+        <button class="save-button" (click)="saveChanges()">
+           שמירה  
+        </button>
+        <button class="cancel-button" (click)="cancelEdit()">
+            ביטול 
+        </button>
+      </div>
     </div>
 
     <!-- Main Info Section -->
@@ -25,34 +36,46 @@
           <span class="info-value">{{ prospect.prospect_id }}</span>
         </div>
 
+
         <div class="info-row">
           <span class="info-label">טלפון:</span>
-          <span class="info-value">{{ prospect.phone || '-' }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.phone || '-' }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.phone" />
         </div>
 
-        <div class="info-row" *ngIf="prospect.phone_alt">
+
+        <div class="info-row" *ngIf="prospect.phone_alt || isEditMode">
           <span class="info-label">טלפון נוסף:</span>
-          <span class="info-value">{{ prospect.phone_alt }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.phone_alt }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.phone_alt" />
         </div>
 
-        <div class="info-row" *ngIf="prospect.email">
+
+        <div class="info-row" *ngIf="prospect.email || isEditMode">
           <span class="info-label">אימייל:</span>
-          <span class="info-value">{{ prospect.email }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.email }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.email" />
         </div>
 
-        <div class="info-row" *ngIf="prospect.city">
+
+        <div class="info-row" *ngIf="prospect.city || isEditMode">
           <span class="info-label">עיר:</span>
-          <span class="info-value">{{ prospect.city }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.city }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.city" />
         </div>
 
-        <div class="info-row" *ngIf="prospect.referral_source">
+
+        <div class="info-row" *ngIf="prospect.referral_source || isEditMode">
           <span class="info-label">מקור הפניה:</span>
-          <span class="info-value">{{ prospect.referral_source }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.referral_source }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.referral_source" />
         </div>
 
-        <div class="info-row" *ngIf="prospect.reason_for_visit">
+
+        <div class="info-row" *ngIf="prospect.reason_for_visit || isEditMode">
           <span class="info-label">סיבת ביקור:</span>
-          <span class="info-value">{{ prospect.reason_for_visit }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.reason_for_visit }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.reason_for_visit" />
         </div>
 
         <div class="info-row">
@@ -62,9 +85,11 @@
           </span>
         </div>
 
-        <div class="info-row" *ngIf="prospect.notes">
+
+        <div class="info-row" *ngIf="prospect.notes || isEditMode">
           <span class="info-label">הערות:</span>
-          <span class="info-value">{{ prospect.notes }}</span>
+          <span class="info-value" *ngIf="!isEditMode">{{ prospect.notes }}</span>
+          <input class="edit-input" *ngIf="isEditMode" [(ngModel)]="editedProspect!.notes" />
         </div>
 
         <div class="info-row">
@@ -81,25 +106,12 @@
     
     <!-- Categories Section -->
     <div class="categories-section">
-      <h3>קטגוריות</h3>
-
-      <div *ngIf="!showCategorySelector">
-        <div *ngIf="prospectCategories.length; else noCats">
-          <div class="category-pill" *ngFor="let cat of prospectCategories">{{ cat.category_name }}</div>
-        </div>
-        <ng-template #noCats>
-          <div class="no-categories">עדיין לא הוקצו קטגוריות</div>
-        </ng-template>
-
-        <button mat-stroked-button color="primary" (click)="openCategorySelector()">ערוך קטגוריות</button>
-      </div>
-
-      <div *ngIf="showCategorySelector">
-        <app-category-selector [type]="'prospect'" [initialSelected]="prospectCategories" (selectionChange)="onCategoriesSelected($event)"></app-category-selector>
-        <div class="selector-actions">
-          <button mat-button (click)="showCategorySelector = false">ביטול</button>
-        </div>
-      </div>
+      <app-category-selector 
+        [type]="'prospect'" 
+        [initialSelected]="prospectCategories" 
+        (selectionChange)="onCategoriesSelected($event)"
+        [readonly]="!isEditMode"
+      ></app-category-selector>
     </div>
 
 </div>

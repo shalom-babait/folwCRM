@@ -12,6 +12,12 @@ export class ProspectViewComponent {
   activeTab: string = 'details';
   searchTerm: string = '';
   loading: boolean = false;
+  selectedCategoryId: number | null = null;
+
+  /** כאשר נבחרה קטגוריה לסינון */
+  onCategorySelected(categoryId: number | null): void {
+    this.selectedCategoryId = categoryId;
+  }
 
   /** כאשר נבחר פרוספקט מהרשימה */
   onProspectSelected(prospect: any): void {

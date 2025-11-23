@@ -5,14 +5,14 @@
     <button 
       type="button" 
       class="clear-all-btn" 
-      *ngIf="selectedItems.length > 0"
+      *ngIf="selectedItems.length > 0 && !readonly"
       (click)="clearAll()">
       נקה הכל
     </button>
   </div>
 
   <!-- שדה חיפוש -->
-  <div class="search-container">
+  <div class="search-container" *ngIf="!readonly">
     <input 
       type="text"
       [(ngModel)]="searchTerm"
@@ -60,7 +60,9 @@
         type="button" 
         class="remove-btn" 
         (click)="toggleCategory(item); $event.stopPropagation()"
-        title="הסר">
+        title="הסר"
+        *ngIf="!readonly"
+      >
         ×
       </button>
     </div>

@@ -1,5 +1,5 @@
 // category-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/services/category.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
@@ -13,12 +13,34 @@ import { Category } from 'src/app/models/category.model';
     , '../../../../../styles/list-cards.css'
   ]
 })
+
 export class CategoryListComponent implements OnInit {
   categories: Category[] = [];
   filteredCategories: Category[] = [];
   selectedCategoryId: number | null = null;
   selectedType: string = 'all';
   isLoading: boolean = false;
+
+  /**
+   * Emits the selected category id for filtering prospects in parent
+   */
+  @Output() categorySelected = new EventEmitter<number|null>();
+  /**
+   * When a filter chip is clicked, select the category and emit to parent
+   */
+filterByCategory(categoryId: number | null) {
+  console.log('Filtering by category ID:', categoryId);
+  this.selectedCategoryId = categoryId;
+  this.categorySelected.emit(categoryId);
+}
+
+  filterTypes = [
+    { value: 'all', label: 'הכל' },
+    { value: 'prospect', label: 'מתעניינים' },
+    { value: 'patient', label: 'מטופלים' },
+    { value: 'employee', label: 'עובדים' }
+    // ניתן להוסיף כאן סוגים נוספים במידת הצורך
+  ];
 
   constructor(
     private categoryService: CategoryService,
@@ -75,6 +97,7 @@ export class CategoryListComponent implements OnInit {
 
   selectCategory(category: Category): void {
     this.selectedCategoryId = category.category_id;
+    this.categorySelected.emit(this.selectedCategoryId);
   }
 
   openAddCategoryDialog(): void {
