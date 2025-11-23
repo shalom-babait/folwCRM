@@ -1,31 +1,39 @@
-<div class="room-list-calendar-container">
-  <div class="room-list-card">
-    <div class="card-header">
-      <h3>רשימת חדרים</h3>
-    </div>
-    <div class="card-content">
-      <div *ngIf="rooms.length === 0" class="no-rooms">
-        <p>אין חדרים להצגה</p>
-      </div>
-      <div *ngIf="rooms.length > 0">
-        <div 
-          class="room-card" 
-          *ngFor="let room of rooms"
-          [class.selected]="room.room_id === selectedRoomId"
-          (click)="selectRoom(room.room_id)">
-          <div class="room-info">
-            <span class="room-name">{{ room.room_name }}</span>
-          </div>
+<div class="room-list-card">
+  <div class="card-header">
+    <h3>רשימת חדרים</h3>
+  </div>
+  <div class="card-content">
+    <!-- אינדיקטור טעינה (אם תרצה להוסיף בעתיד) -->
+    <!-- <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div> -->
+
+    <!-- רשימת חדרים -->
+    <div *ngIf="rooms.length > 0">
+      <div 
+        class="room-card" 
+        *ngFor="let room of rooms"
+        [class.selected]="room.room_id === selectedRoomId"
+        (click)="selectRoom(room.room_id)">
+        <div class="room-info">
+          <span class="room-name">{{ room.room_name }}</span>
         </div>
       </div>
     </div>
+
+    <!-- הודעה אם אין חדרים -->
+    <div *ngIf="rooms.length === 0" class="no-rooms">
+      <p>אין חדרים כרגע</p>
+      <p>לחץ על "הוסף חדר" כדי להתחיל</p>
+    </div>
   </div>
+  <!-- פאנל יומן -->
   <div class="calendar-panel">
-    <div *ngIf="selectedRoomId">
+    <!-- <div *ngIf="selectedRoomId">
       <app-room-calendar [roomId]="selectedRoomId" [events]="roomEvents"></app-room-calendar>
-    </div>
-    <div *ngIf="!selectedRoomId" class="calendar-placeholder">
+    </div> -->
+    <!-- <div *ngIf="!selectedRoomId" class="calendar-placeholder">
       <p>בחר חדר להצגת היומן</p>
-    </div>
+    </div> -->
   </div>
 </div>
