@@ -65,6 +65,7 @@ import { AddTherapistDialogComponent } from './components/personal-area/therapis
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
 import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
+import { RoomListCalendarComponent } from './components/personal-area/secretary/room-list-calendar/room-list-calendar.component';
 import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
@@ -83,6 +84,10 @@ import { ProspectViewComponent } from './components/personal-area/company-manage
 import { ProspectTableComponent } from './components/personal-area/company-manager/prospects/prospect-table/prospect-table.component';
 import { CategoryListComponent } from './components/personal-area/company-manager/category/category-list/category-list.component';
 import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
+import { CategorySelectorComponent } from './components/personal-area/company-manager/category/category-selector/category-selector.component';
+import { ProspectDetailsComponent } from './components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
+import { PaymentListComponent } from './components/personal-area/company-manager/payment-list/payment-list.component';
+import { AddTransactionComponent } from './components/personal-area/company-manager/payment/add-transaction/add-transaction.component';
 
 
 @NgModule({
@@ -139,6 +144,11 @@ import { AddCategoryDialogComponent } from './components/personal-area/company-m
     ProspectTableComponent,
     CategoryListComponent,
     AddCategoryDialogComponent,
+    RoomListCalendarComponent,
+    CategorySelectorComponent,
+    ProspectDetailsComponent,
+    PaymentListComponent,
+    AddTransactionComponent,
   ],
   imports: [
     MatMenuModule,

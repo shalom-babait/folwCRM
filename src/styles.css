@@ -1,7 +1,7 @@
 @import "~@fortawesome/fontawesome-free/css/all.css";
 html, body {
   background-color:#022F39;
-  color: white;
+  /* color: white; */
    direction: rtl;
    font-family: "Noto Sans Hebrew", sans-serif;
   }

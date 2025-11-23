@@ -1,7 +1,6 @@
 <div class="view-container">
   <div class="right-panel">
     <app-patient-list
-
       (patientSelected)="onPatientSelected($event)">
     </app-patient-list>
   </div>
@@ -44,6 +43,14 @@
           <mat-icon>medical_services</mat-icon>
           <span>רשימת טיפולים</span>
         </button>
+
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'payments'"
+          (click)="setActiveTab('payments')">
+          <mat-icon>payment</mat-icon>
+          <span>תשלומים</span>
+        </button>
         
         <button class="close-btn" (click)="onCloseDetails()">
           <mat-icon>close</mat-icon>
@@ -56,11 +63,14 @@
         <!-- רשימת טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list [patient]="selectedPatient.patient"></app-treatment-list>
+            <app-treatment-list 
+              [patient]="selectedPatient.patient" 
+              [patientId]="selectedPatient.patient.patient_id">
+            </app-treatment-list>
           </div>
         </div>
 
-        <!-- פרטי מטפל -->
+        <!-- פרטי מטופל -->
         <div *ngIf="activeTab === 'details'" class="details-view">
           <app-patient-details [patient]="selectedPatient"></app-patient-details>
         </div>
@@ -82,6 +92,18 @@
             <!-- הוסף כאן את הקומפוננטה של הדואר -->
           </div>
         </div>
+
+        <!-- תשלומים -->
+        <div *ngIf="activeTab === 'payments'" class="payments-view">
+          <div class="payments-card">
+            <!-- אם יש קומפוננטה קיימת עבור תשלומים -->
+            <!-- <app-payment-list 
+              [patientId]="selectedPatient.patient.patient_id">
+            </app-payment-list> -->
+            <app-payment-list></app-payment-list>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

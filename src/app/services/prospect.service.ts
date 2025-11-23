@@ -17,14 +17,25 @@ export class ProspectService {
 
 createProspect(prospectData: Prospect): Observable<Prospect> {
   console.log('Creating prospect with data:', prospectData);
-  return this.http.post<Prospect>(this.apiUrl, prospectData);
+  return this.http.post<Prospect>(this.apiUrl + '/create', prospectData);
 }
 
   getAllProspects(): Observable<Prospect[]> {
-    return this.http.get<Prospect[]>(this.apiUrl);
+    return this.http.get<Prospect[]>(this.apiUrl + '/getAll');
   }
 
   deleteProspect(prospectId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${prospectId}`);
   }
+  
+  assignCategories(prospectId: number, categoryIds: number[]): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${prospectId}/categories`, { category_ids: categoryIds });
+  }
+  updateProspect(prospectId: number, prospectData: Partial<Prospect>): Observable<Prospect> {
+    console.log('Updating prospect with ID:', prospectId, 'and data:', prospectData);
+    return this.http.put<Prospect>(`${this.apiUrl}/updateWithCategories/${prospectId}`, prospectData); 
+   }
+   updateProspectWithCategories(prospectId: number, prospectData: Partial<Prospect> & { category_ids: number[] }): Observable<Prospect> {
+  return this.http.put<Prospect>(`${this.apiUrl}/updateWithCategories/${prospectId}`, prospectData);
+}
 }

@@ -223,8 +223,11 @@ getErrorMessage(field: string): string {
     if (endTime && endTime.length > 5) {
       endTime = endTime.substring(0,5);
     }
+    // שליפת therapist_id מתוך localStorage
+    const therapistIdStr = localStorage.getItem('therapist_id');
+    const therapist_id = therapistIdStr ? Number(therapistIdStr) : (this.data?.therapist_id || 1);
     const appointment: any = {
-      therapist_id: this.data?.therapist_id || 1, // יש לעדכן לפי הלוגיקה שלך
+      therapist_id,
       patient_id: formValue.patient_id,
       type_id: formValue.type,
       room_id: formValue.place,

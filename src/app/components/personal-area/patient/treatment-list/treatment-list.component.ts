@@ -18,7 +18,7 @@ export class TreatmentListComponent implements OnInit {
     }
   }
   @Input() appointments: Appointment[] = [];
-  @Input() patientId: number = 0;
+  @Input() patientId: number | undefined;
   @Input() patient?: Patient;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
@@ -34,20 +34,11 @@ export class TreatmentListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Load treatments from the server if none are provided through Input
-    if (this.appointments.length === 0) {
-      // נניח שמועבר מזהה מטופל בקומפוננטה האב (אם לא, אפשר להוסיף @Input patientId)
-      const patientId = this.appointments[0]?.patient_id;
-      if (patientId) {
-        this.patientService.getTreatments(patientId).subscribe(data => {
-          this.showAppointments = data;
-          this.appointments = this.showAppointments.map(appointment => ({
-            ...appointment,
-            id: appointment.appointment_id,
-            patient_id: patientId
-          }));
-        });
-      }
+    // טען טיפולים מהשרת אם לא מועבר מערך טיפולים
+    if (this.appointments.length === 0 && this.patientId) {
+      this.patientService.getTreatments(this.patientId).subscribe(data => {
+        this.appointments = data;
+      });
     }
   }
 

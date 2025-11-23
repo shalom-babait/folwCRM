@@ -88,6 +88,14 @@
         {{ getFieldError('status', 'סטטוס') }}
       </div>
     </div>
+    <!-- Categories Section -->
+    <div class="categories-section">
+      <app-category-selector
+       [type]="'prospect'"
+         [initialSelected]="prospectForm.get('categories')!.value"
+          (selectionChange)="prospectForm.get('categories')!.setValue($event)">
+      </app-category-selector>
+    </div>
 
     <!-- הערות - תופס שתי עמודות -->
     <div class="form-field" style="grid-column: 1 / -1;">

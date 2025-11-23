@@ -1,3 +1,6 @@
+// Prospect with categories
+import { Category } from './category.model';
+
 export type ProspectStatus = 'new' | 'contacted' | 'converted' | 'not_relevant';
 
 export interface Prospect {
@@ -14,4 +17,5 @@ export interface Prospect {
   status?: ProspectStatus;
   created_at?: string; // ISO date string
   converted_to_patient_id?: number | null;
+  categories?: Category[];
 }

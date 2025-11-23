@@ -1,2 +1,100 @@
-<app-category-list></app-category-list>
-<app-prospect-table></app-prospect-table>
+<div class="view-container">
+  <div class="right-panel">
+    <app-category-list
+      (categorySelected)="onCategorySelected($event)">
+    </app-category-list>
+  </div>
+  
+  <div class="left-panel">
+    <!-- תצוגת ברירת מחדל - טבלה -->
+    <div *ngIf="!selectedProspect" class="summary-view">
+      <div class="summary-card">
+  <app-prospect-table [selectedCategoryId]="selectedCategoryId"></app-prospect-table>
+      </div>
+    </div>
+
+    <!-- תצוגה כאשר נבחר פרוספקט -->
+    <div *ngIf="selectedProspect" class="prospect-view">
+      <!-- כותרת עם לינקים -->
+      <div class="header-tabs">
+        <span><p>{{ selectedProspect.name }}</p></span>
+        <br />
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'details'"
+          (click)="setActiveTab('details')">
+          <mat-icon>person</mat-icon>
+          <span>פרטי פרוספקט</span>
+        </button>
+
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'mail'"
+          (click)="setActiveTab('mail')">
+          <mat-icon>mail</mat-icon>
+          <span>דואר</span>
+        </button>
+
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'history'"
+          (click)="setActiveTab('history')">
+          <mat-icon>history</mat-icon>
+          <span>היסטוריית פעילות</span>
+        </button>
+
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'notes'"
+          (click)="setActiveTab('notes')">
+          <mat-icon>note</mat-icon>
+          <span>הערות</span>
+        </button>
+        
+        <button class="close-btn" (click)="onCloseDetails()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- תוכן לפי הטאב הפעיל -->
+      <div class="tab-content">
+
+        <!-- פרטי פרוספקט -->
+        <div *ngIf="activeTab === 'details'" class="details-view">
+          <div class="details-card">
+            <h3>פרטים אישיים</h3>
+            <p>כאן יוצגו פרטי הפרוספקט</p>
+            <!-- הוסף כאן את הקומפוננטה של פרטי פרוספקט -->
+          </div>
+        </div>
+
+        <!-- דואר -->
+        <div *ngIf="activeTab === 'mail'" class="mail-view">
+          <div class="mail-card">
+            <h3>התכתבויות</h3>
+            <p>כאן יוצגו ההתכתבויות עם הפרוספקט</p>
+            <!-- הוסף כאן את הקומפוננטה של הדואר -->
+          </div>
+        </div>
+
+        <!-- היסטוריית פעילות -->
+        <div *ngIf="activeTab === 'history'" class="history-view">
+          <div class="history-card">
+            <h3>היסטוריית פעילות</h3>
+            <p>כאן תוצג היסטוריית הפעילות של הפרוספקט</p>
+            <!-- הוסף כאן את הקומפוננטה של היסטוריה -->
+          </div>
+        </div>
+
+        <!-- הערות -->
+        <div *ngIf="activeTab === 'notes'" class="notes-view">
+          <div class="notes-card">
+            <h3>הערות</h3>
+            <p>כאן יוצגו ההערות על הפרוספקט</p>
+            <!-- הוסף כאן את הקומפוננטה של הערות -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

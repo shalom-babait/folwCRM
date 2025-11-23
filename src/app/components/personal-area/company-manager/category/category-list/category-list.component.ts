@@ -1,7 +1,8 @@
 // category-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/services/category.service';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { AddCategoryDialogComponent } from '../add-category-dialog/add-category-dialog.component';
 import { Category } from 'src/app/models/category.model';
 
@@ -12,6 +13,7 @@ import { Category } from 'src/app/models/category.model';
     , '../../../../../styles/list-cards.css'
   ]
 })
+
 export class CategoryListComponent implements OnInit {
   categories: Category[] = [];
   filteredCategories: Category[] = [];
@@ -19,9 +21,31 @@ export class CategoryListComponent implements OnInit {
   selectedType: string = 'all';
   isLoading: boolean = false;
 
+  /**
+   * Emits the selected category id for filtering prospects in parent
+   */
+  @Output() categorySelected = new EventEmitter<number|null>();
+  /**
+   * When a filter chip is clicked, select the category and emit to parent
+   */
+filterByCategory(categoryId: number | null) {
+  console.log('Filtering by category ID:', categoryId);
+  this.selectedCategoryId = categoryId;
+  this.categorySelected.emit(categoryId);
+}
+
+  filterTypes = [
+    { value: 'all', label: 'הכל' },
+    { value: 'prospect', label: 'מתעניינים' },
+    { value: 'patient', label: 'מטופלים' },
+    { value: 'employee', label: 'עובדים' }
+    // ניתן להוסיף כאן סוגים נוספים במידת הצורך
+  ];
+
   constructor(
     private categoryService: CategoryService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +97,7 @@ export class CategoryListComponent implements OnInit {
 
   selectCategory(category: Category): void {
     this.selectedCategoryId = category.category_id;
+    this.categorySelected.emit(this.selectedCategoryId);
   }
 
   openAddCategoryDialog(): void {
@@ -84,8 +109,12 @@ export class CategoryListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadCategories();
+      // result will be the created Category (or undefined if cancelled)
+      if (result && (result as Category).category_id) {
+        const created = result as Category;
+        // add locally and reapply filter/sort
+        this.categories.unshift(created);
+        this.applyFilter();
       }
     });
   }
@@ -100,8 +129,16 @@ export class CategoryListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadCategories();
+      // result will be the updated Category (or undefined if cancelled)
+      if (result && (result as Category).category_id) {
+        const updated = result as Category;
+        const idx = this.categories.findIndex(c => c.category_id === updated.category_id);
+        if (idx !== -1) {
+          this.categories[idx] = updated;
+        } else {
+          this.categories.unshift(updated);
+        }
+        this.applyFilter();
       }
     });
   }
@@ -112,16 +149,26 @@ export class CategoryListComponent implements OnInit {
     const action = newStatus ? 'הפעלת' : 'השבתת';
     
     if (confirm(`האם לבצע ${action} של הקטגוריה "${category.category_label}"?`)) {
-      this.categoryService.updateCategory(category.category_id, {
-        ...category,
+      const payload = {
+        category_type: category.category_type,
+        category_name: category.category_name,
+        category_label: category.category_label,
+        description: category.description,
+        color: category.color,
+        icon: category.icon,
+        display_order: category.display_order,
         is_active: newStatus
-      }).subscribe({
-        next: () => {
-          this.loadCategories();
+      };
+      this.categoryService.updateCategory(category.category_id, payload).subscribe({
+        next: (updated) => {
+          // update locally
+          const idx = this.categories.findIndex(c => c.category_id === updated.category_id);
+          if (idx !== -1) this.categories[idx] = updated;
+          this.applyFilter();
         },
         error: (error) => {
           console.error('Error toggling category:', error);
-          alert('שגיאה בעדכון הקטגוריה');
+          this.errorHandler.handleApiError(error);
         }
       });
     }
@@ -132,12 +179,14 @@ export class CategoryListComponent implements OnInit {
     if (confirm(`האם למחוק את הקטגוריה "${category.category_label}"?\n\nשים לב: הקטגוריה תוסר מכל הרשומות המשוייכות אליה.`)) {
       this.categoryService.deleteCategory(category.category_id).subscribe({
         next: () => {
-          this.loadCategories();
+          // remove locally
+          this.categories = this.categories.filter(c => c.category_id !== category.category_id);
+          this.applyFilter();
           this.selectedCategoryId = null;
         },
         error: (error) => {
           console.error('Error deleting category:', error);
-          alert('שגיאה במחיקת הקטגוריה. ייתכן שהיא בשימוש.');
+          this.errorHandler.handleApiError(error);
         }
       });
     }
