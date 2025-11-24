@@ -11,7 +11,7 @@ import { TherapistCreationData } from 'src/app/models/therapist.model';
   templateUrl: './room-list-calendar.component.html',
   styleUrls: [
     './room-list-calendar.component.css',
-    '../../../../styles/list-cards.css'
+    '../../../../../styles/list-cards.css'
   ]
 })
 export class RoomListCalendarComponent implements OnInit {

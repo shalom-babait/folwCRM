@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class SecretaryHeaderComponent implements OnInit {
+  selectedSection: string = 'home';
   showProfileMenu = false;
   userName = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
@@ -43,11 +44,5 @@ export class SecretaryHeaderComponent implements OnInit {
     localStorage.clear();
     this.router.navigate(['/']);
   }
-  navigateToTherapists() {
-    this.router.navigate(['/secretary-dashboard/therapists']);
-  }
 
-  navigateToRooms() {
-    this.router.navigate(['/secretary-dashboard/rooms']);
-  }
 }

@@ -8,7 +8,7 @@ import { PatientService } from 'src/app/services/patient.service';
   templateUrl: './rooms-view.component.html',
   styleUrls: [
     './rooms-view.component.css',
-    '../../../../styles/views.css'
+    '../../../../../styles/views.css',
   ]
 })
 export class RoomsViewComponent {
