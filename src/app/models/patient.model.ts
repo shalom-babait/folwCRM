@@ -6,7 +6,7 @@ import { UserData } from "./user.model";
 export interface Patient {
   patient_id?: number;
   user_id: number;
-  therapist_id?: number;
+  therapist_id?: number | null | undefined;
   birth_date?: string; // YYYY-MM-DD
   gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
@@ -15,7 +15,7 @@ export interface Patient {
 
 // --- נתונים בסיסיים של מטופל לצורך יצירה/עדכון ---
 export interface PatientBase {
-  therapist_id?: number;
+  therapist_id?: number | null | undefined;
   birth_date?: string; // YYYY-MM-DD
   gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
@@ -29,14 +29,14 @@ export interface CreatePatientRequest extends PatientBase {
 
 // --- בקשת עדכון של מטופל קיים ---
 export interface UpdatePatientRequest extends Partial<PatientBase> {
-  patient_id: number;
+  therapist_id?: number | null | undefined;
 }
 
 // --- נתוני מטופל מלאים (כפי שנשלחים/מתקבלים מהשרת) ---
 export interface PatientData {
   patient_id?: number;
   user_id: number;
-  therapist_id?: number;
+  therapist_id?: number | null | undefined;
   birth_date?: string;
   gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';

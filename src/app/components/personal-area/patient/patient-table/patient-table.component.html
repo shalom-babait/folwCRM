@@ -3,14 +3,11 @@
 
   <!-- שדה חיפוש -->
   <div class="search-container">
-    <button class="icon-button" mat-icon-button>
+    <button class="icon-button" mat-icon-button (click)="openAddPatientDialog()">
       <mat-icon style="color: #BB7E2B;">add</mat-icon>
     </button>
-    <input 
-      type="text" 
-      placeholder="חיפוש לפי שם, עיר או מחלקה..."
-      class="search-input"
-      [(ngModel)]="searchTerm"
+
+    <input type="text" placeholder="חיפוש לפי שם או עיר  ..." class="search-input" [(ngModel)]="searchTerm"
       (input)="onSearch(searchTerm)">
   </div>
 
@@ -21,67 +18,66 @@
 
   <div *ngIf="!isLoading">
     <!-- כותרות השדות -->
-    <div class="patient-row header-row">
+    <div class="patient-row header-row" [style.gridTemplateColumns]="gridTemplate">
       <div class="patient-cell" (click)="sortBy('full_name')">שם מלא</div>
       <div class="patient-cell" (click)="sortBy('status')">סטטוס</div>
-      <div class="patient-cell">מחלקות</div>
-      <div class="patient-cell" (click)="sortBy('marital_status')">מצב משפחתי</div>
-      <div class="patient-cell" (click)="sortBy('date_of_birth')">גיל</div>
+      <div class="patient-cell" (click)="sortBy('birth_date')">גיל</div>
       <div class="patient-cell" (click)="sortBy('treatment_count')">טיפולים</div>
       <div class="patient-cell" (click)="sortBy('city')">עיר מגורים</div>
       <div class="patient-cell">פעולות</div>
     </div>
 
     <!-- רשימת מטופלים -->
-    <div 
-      class="patient-row data-row" 
-      *ngFor="let patient of filteredPatients"
-      [class.selected]="selectedPatientId === patient.patient.patient_id"
+    <div class="patient-row data-row" *ngFor="let patient of filteredPatients"
+      [style.gridTemplateColumns]="gridTemplate" [class.selected]="selectedPatientId === patient.patient.patient_id"
       (click)="selectPatient(patient)">
       <div class="patient-cell patient-name-cell">
         <mat-icon class="patient-icon">person</mat-icon>
         {{ patient.user.first_name }} {{ patient.user.last_name }}
       </div>
       <div class="patient-cell">
-        <!-- <span class="status-badge" [class.active]="patient.user.status === 'active'" [class.inactive]="patient.user.status !== 'active'">
-          {{ getStatusLabel(patient.status) }}
-        </span> -->
+        <span class="status-badge" [class.active]="patient.patient.status === 'פעיל'"
+          [class.inactive]="patient.patient.status !== 'פעיל'">
+          {{ getStatusLabel(patient.patient.status) }}
+        </span>
       </div>
-      <div class="patient-cell">
+
+      <!-- <div class="patient-cell">
         <div class="departments-list" *ngIf="patient.selectedDepartments">
           <span class="department-tag" *ngFor="let dept of patient.selectedDepartments">
             {{ dept }}
           </span>
         </div>
-        <span *ngIf="!patient.selectedDepartments || patient.selectedDepartments.length === 0" class="empty-value">-</span>
-      </div>
+        <span *ngIf="!patient.selectedDepartments || patient.selectedDepartments.length === 0"
+          class="empty-value">-</span>
+      </div> -->
       <!-- <div class="patient-cell">{{ getMaritalStatusLabel(patient.marital_status) }}</div> -->
-      <div class="patient-cell">{{ getAge(patient.user.birth_date) || '-' }}</div>
+      <div class="patient-cell">{{ getAge(patient?.user?.birth_date) }}
+      </div>
       <div class="patient-cell">
-        <!-- <span class="count-badge">{{ patient.treatment_count || 0 }}</span> -->
+        <!-- <span class="count-badge">{{ patient.user.email }}</span> -->
       </div>
       <div class="patient-cell">{{ patient.user.city || '-' }}</div>
       <div class="patient-cell actions-cell">
-        <button 
-          class="action-btn edit-btn"
-          (click)="$event.stopPropagation()"
-          matTooltip="הצג פרטים">
+        <button class="action-btn view-btn" (click)="openPatientDetails(patient, false)" matTooltip="הצג פרטים">
           <mat-icon>visibility</mat-icon>
         </button>
-        <button 
-          class="action-btn edit-btn"
-          (click)="$event.stopPropagation()"
+
+        <button class="action-btn edit-btn"
+          (click)="selectPatient(patient); openPatientDetails(patient, true); $event.stopPropagation()"
           matTooltip="ערוך">
           <mat-icon>edit</mat-icon>
         </button>
-        <button 
-          class="action-btn delete-btn"
-          (click)="$event.stopPropagation()"
-          matTooltip="היסטוריית טיפולים">
+
+
+        <button class="action-btn delete-btn" (click)="$event.stopPropagation()" matTooltip="היסטוריית טיפולים">
           <mat-icon>history</mat-icon>
         </button>
       </div>
     </div>
+
+    <app-patient-details *ngIf="selectedPatient" [patient]="selectedPatient" [openInEditMode]="isEditModeOnOpen">
+    </app-patient-details>
 
     <!-- הודעה אם אין מטופלים -->
     <div *ngIf="filteredPatients.length === 0" class="no-results">

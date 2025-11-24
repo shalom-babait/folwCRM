@@ -13,7 +13,7 @@ import { SelectedDepartmentForSave } from 'src/app/models/department-group.model
   templateUrl: './add-patient-dialog.component.html',
   styleUrls: [
     '../../../../styles/dialog-forms.css'
-      ]
+  ]
 })
 export class AddPatientDialogComponent implements OnInit {
   selectedDepartments: SelectedDepartmentForSave[] = [];
@@ -26,8 +26,7 @@ export class AddPatientDialogComponent implements OnInit {
   // פונקציה עזר לבניית אובייקט PatientCreationData
   private buildPatientCreationData(formValue: any, user_id: number, selectedDepartments: SelectedDepartmentForSave[]): PatientCreationData {
     const birthDate = formValue.birth_date ? new Date(formValue.birth_date).toISOString().split('T')[0] : undefined;
-    // שליפת therapist_id מ-localStorage
-    let therapist_id: number | undefined = undefined;
+    let therapist_id: number | null = null;
     try {
       const therapistStr = localStorage.getItem('therapist');
       if (therapistStr) {
@@ -37,8 +36,9 @@ export class AddPatientDialogComponent implements OnInit {
         }
       }
     } catch (e) {
-      therapist_id = undefined;
+      therapist_id = null;
     }
+
     return {
       user: {
         user_id: user_id,

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'; // ← הוספתי Output + EventEmitter
 import { MatDialog } from '@angular/material/dialog';
 import { DepartmentService } from 'src/app/services/department.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { DepartmentWithGroups } from 'src/app/models/department-group.model';
 import { AddGroupDialogComponent } from '../add-group-dialog/add-group-dialog.component';
-import { forkJoin } from 'rxjs'; // נשתמש כדי לבצע כמה בקשות במקביל
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-departments-groups-list',
@@ -14,6 +14,14 @@ import { forkJoin } from 'rxjs'; // נשתמש כדי לבצע כמה בקשות
 export class DepartmentsGroupsListComponent implements OnInit {
   departmentsWithGroups: DepartmentWithGroups[] = [];
   isLoading = false;
+  selectedGroupId: number | null = null;
+
+  selectGroup(group: any) {
+    this.selectedGroupId = group.group_id;
+    this.groupSelected.emit(group);
+  }
+
+  @Output() groupSelected = new EventEmitter<any>();
 
   constructor(
     private departmentService: DepartmentService,
@@ -41,17 +49,13 @@ export class DepartmentsGroupsListComponent implements OnInit {
           const requests = allGroups
             .filter(g => g.group_id !== undefined)
             .map(g => this.groupsService.getGroupUsers(g.group_id!));
-          console.log(requests, "request");
           forkJoin(requests).subscribe({
             next: (results) => {
               results.forEach((users, i) => {
-                console.log(users.data?.length, "  users in component");
-
-                // אם users הוא מערך של UserGroup, תוכל להשתמש בו ישירות
                 if (users && users.data) {
                   allGroups[i].userCount = users.data.length;
                 } else {
-                  allGroups[i].userCount = 0; // או טיפול אחר במקרה ש-data אינו קיים
+                  allGroups[i].userCount = 0;
                 }
               });
               this.isLoading = false;
@@ -61,7 +65,6 @@ export class DepartmentsGroupsListComponent implements OnInit {
               this.isLoading = false;
             }
           });
-
 
         },
         error: (error) => {

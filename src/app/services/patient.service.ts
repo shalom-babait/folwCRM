@@ -38,10 +38,10 @@ export class PatientService {
     })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // --- יצירת מטופל חדש ---
-  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
+  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {    
     this.setLoading(true);
     return this.http.post<ApiResponse<PatientCreationData>>(
       `${this.apiUrl}/patients`,
@@ -70,7 +70,7 @@ export class PatientService {
         if (response && response.success && response.data) {
           const updated = response.data;
           const current = this.patientsListSubject.value || [];
-          const newList = current.map(p => 
+          const newList = current.map(p =>
             p.patient.patient_id === updated.patient_id
               ? { ...p, patient: { ...p.patient, ...updated } }
               : p
@@ -116,7 +116,7 @@ export class PatientService {
     );
   }
 
-  getPatientOnly(patientId: number): Observable<PatientCreationData> {
+  getPatientOnly(patientId: number): Observable<PatientCreationData> {    
     return this.http.get<PatientCreationData>(`${this.apiUrl}/patients/only/${patientId}`);
   }
 
@@ -269,7 +269,7 @@ export class PatientService {
 
     return throwError(() => new Error(errorMessage));
   }
-   getTherapistIdByUserId(user_id: number): Observable<number | null> {
+  getTherapistIdByUserId(user_id: number): Observable<number | null> {
     return this.http.get<{ therapist_id?: number }>(`${this.apiUrl}/therapists/byUser/${user_id}`)
       .pipe(
         map((response: { therapist_id?: number }) => response.therapist_id !== undefined ? response.therapist_id : null),
@@ -280,7 +280,7 @@ export class PatientService {
       );
   }
 
-   getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
+  getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
     if (!therapistId) {
       console.error('getTreatmentsForTherapist: therapistId is missing!', therapistId);
       return of([]);
