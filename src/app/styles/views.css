@@ -10,7 +10,7 @@
 }
 
 .right-panel { 
-  flex: 0 0 350px;
+  flex: 0 0 250px;
   /* ביטול גלילה פנימית */
   overflow-y: hidden;
 }

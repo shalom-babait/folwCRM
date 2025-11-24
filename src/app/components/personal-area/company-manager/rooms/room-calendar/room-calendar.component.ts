@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild } from '@angular/core';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -11,28 +12,52 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   styleUrls: ['./room-calendar.component.css']
 })
 export class RoomCalendarComponent implements OnInit {
+  @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
   @Input() roomId!: number;
   @Input() events: any[] = [];
   @Output() dateSelected = new EventEmitter<any>();
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
-    initialView: 'timeGridWeek',
+    initialView: 'timeGridWeek', // ברירת מחדל שבועי
+    headerToolbar: {
+      left: 'prev,next',
+      center: 'title',
+      right: 'heMonth,heWeek,heDay'
+    },
+    customButtons: {
+      heMonth: {
+        text: 'חודש',
+        click: () => this.changeView('dayGridMonth')
+      },
+      heWeek: {
+        text: 'שבוע',
+        click: () => this.changeView('timeGridWeek')
+      },
+      heDay: {
+        text: 'יום',
+        click: () => this.changeView('timeGridDay')
+      }
+    },
     events: [],
     dateClick: (arg) => this.onDateClick(arg),
     locale: 'he',
     timeZone: 'local',
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: ''
-    },
+    direction: 'rtl',
+    dayHeaders: true,
+    firstDay: 0,
     eventContent: function(arg) {
       return {
-        html: `<div style='background:#fff;text-align:center;'><span style='color:#1a237e;background:#fff;padding:2px 6px;border-radius:1.5rem;'>${arg.event.title}</span></div>`
+        html: `<div class='custom-event'><span class='custom-event-text'>${arg.event.title}</span></div>`
       };
     }
   };
+
+  changeView(viewName: string) {
+    if (this.calendarComponent && this.calendarComponent.getApi) {
+      this.calendarComponent.getApi().changeView(viewName);
+    }
+  }
 
   constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data?: any) {
     // לוגים לאבחון

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProspectService } from 'src/app/services/prospect.service';
 import { Prospect } from 'src/app/models/Prospect.model';
+import { Category } from 'src/app/models/category.model';
 @Component({
   selector: 'app-add-prospect-dialog',
   templateUrl: './add-prospect-dialog.component.html',
@@ -14,6 +15,7 @@ import { Prospect } from 'src/app/models/Prospect.model';
 export class AddProspectDialogComponent implements OnInit {
   prospectForm!: FormGroup;
   isSubmitting = false;
+  
 
   statusOptions = [
     { value: 'new', label: 'חדש' },
@@ -50,6 +52,7 @@ export class AddProspectDialogComponent implements OnInit {
       referral_source: ['', [Validators.maxLength(50)]],
       reason_for_visit: ['', [Validators.maxLength(200)]],
       status: ['new', Validators.required],
+      categories: [[]],
       notes: ['']
     });
   }

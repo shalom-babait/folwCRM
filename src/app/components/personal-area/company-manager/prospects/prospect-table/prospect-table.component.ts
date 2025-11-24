@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProspectService } from 'src/app/services/prospect.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
@@ -15,7 +15,30 @@ import { ProspectDetailsComponent } from 'src/app/components/personal-area/compa
     '../../../../../styles/shared-table.css'
   ]
 })
-export class ProspectTableComponent implements OnInit {
+export class ProspectTableComponent implements OnInit, OnChanges {
+  /**
+   * categoryId selected for filtering prospects (from parent)
+   */
+  @Input() selectedCategoryId: number | null = null;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedCategoryId']) {
+      this.applyCategoryFilter();
+    }
+  }
+
+  /**
+   * Filters prospects by selected categoryId
+   */
+  applyCategoryFilter(): void {
+    if (!this.selectedCategoryId) {
+      this.filteredProspects = [...this.prospects];
+    } else {
+      this.filteredProspects = this.prospects.filter(p =>
+        p.categories && p.categories.some(c => c.category_id === this.selectedCategoryId)
+      );
+    }
+    this.applySort();
+  }
   prospects: Prospect[] = [];
   filteredProspects: Prospect[] = [];
   selectedProspectId: number | null = null;
@@ -31,8 +54,7 @@ export class ProspectTableComponent implements OnInit {
 
   constructor(
     private prospectService: ProspectService,
-    private dialog: MatDialog
-    ,
+    private dialog: MatDialog,
     private errorHandler: ErrorHandlerService
   ) {}
 
@@ -45,8 +67,7 @@ export class ProspectTableComponent implements OnInit {
     this.prospectService.getAllProspects().subscribe({
       next: (data: Prospect[]) => {
         this.prospects = data || [];
-        this.filteredProspects = [...this.prospects];
-        this.applySort();
+        this.applyCategoryFilter();
         this.isLoading = false;
       },
       error: (error) => {

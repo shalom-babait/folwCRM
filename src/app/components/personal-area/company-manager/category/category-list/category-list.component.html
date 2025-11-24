@@ -24,22 +24,10 @@
   </div>
 
   <!-- תפריט סינון -->
-  <mat-menu #filterMenu="matMenu">
-    <button mat-menu-item (click)="filterByType('all')">
-      <mat-icon [class.active]="selectedType === 'all'">check_circle</mat-icon>
-      <span>הכל</span>
-    </button>
-    <button mat-menu-item (click)="filterByType('prospect')">
-      <mat-icon [class.active]="selectedType === 'prospect'">check_circle</mat-icon>
-      <span>מתעניינים</span>
-    </button>
-    <button mat-menu-item (click)="filterByType('patient')">
-      <mat-icon [class.active]="selectedType === 'patient'">check_circle</mat-icon>
-      <span>מטופלים</span>
-    </button>
-    <button mat-menu-item (click)="filterByType('employee')">
-      <mat-icon [class.active]="selectedType === 'employee'">check_circle</mat-icon>
-      <span>עובדים</span>
+  <mat-menu #filterMenu="matMenu" [backdropClass]="'transparent-backdrop'">
+    <button mat-menu-item *ngFor="let type of filterTypes" (click)="filterByType(type.value)">
+      <mat-icon [class.active]="selectedType === type.value">check_circle</mat-icon>
+      <span>{{ type.label }}</span>
     </button>
   </mat-menu>
 
@@ -59,6 +47,16 @@
     <!-- אינדיקטור טעינה -->
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- קטגוריות לסינון (כפתורי פילטר) -->
+    <div *ngIf="!isLoading && filteredCategories.length > 0" class="category-filter-chips" style="margin-bottom: 1rem;">
+      <span *ngFor="let cat of filteredCategories" 
+            (click)="filterByCategory(cat.category_id)" 
+            [class.selected]="selectedCategoryId === cat.category_id"
+            class="category-filter-chip">
+        {{ cat.category_label }}
+      </span>
     </div>
 
     <!-- רשימת קטגוריות -->

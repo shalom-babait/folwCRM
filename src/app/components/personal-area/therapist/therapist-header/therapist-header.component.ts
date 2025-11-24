@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class TherapistHeaderComponent implements OnInit {
- 
+  selectedSection: string = 'home';
 showProfileMenu = false;
   userName = ''; 
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
@@ -20,17 +20,8 @@ ngOnInit() {
   this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
 }
 
-
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
-  }
-
-  goToTherapistsList() {
-    this.router.navigate(['/personal-area/therapist/patient']);
-  }
-
-  goToRooms() {
-    this.router.navigate(['/personal-area/secretary/rooms']);
   }
 
   // סגירת התפריט בלחיצה מחוץ לאזור
@@ -43,9 +34,7 @@ ngOnInit() {
       this.showProfileMenu = false;
     }
   }
-  navigateToPatientsList() {
-    this.router.navigate(['/personal-area/therapist/patients']);
-  }
+  
   goToSettings() {
     this.showProfileMenu = false;
     this.router.navigate(['/settings']);

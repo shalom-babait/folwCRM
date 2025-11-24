@@ -12,6 +12,14 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
+    /** עדכון פציינט ברשימה המקומית */
+    updatePatientInList(updatedPatient: PatientCreationData): void {
+      const current = this.patientsListSubject.value || [];
+      const newList = current.map(p =>
+        p.patient.patient_id === updatedPatient.patient.patient_id ? updatedPatient : p
+      );
+      this.patientsListSubject.next(newList);
+    }
   private apiUrl = environment.apiUrl;
 
   // --- מצב פנימי ---
