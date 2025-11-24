@@ -41,9 +41,7 @@ export class PatientService {
   constructor(private http: HttpClient) { }
 
   // --- יצירת מטופל חדש ---
-  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
-    console.log(patientData,"   patientData");
-    
+  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {    
     this.setLoading(true);
     return this.http.post<ApiResponse<PatientCreationData>>(
       `${this.apiUrl}/patients`,
