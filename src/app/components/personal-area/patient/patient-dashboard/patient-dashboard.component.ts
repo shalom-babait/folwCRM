@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from 'src/app/services/patient.service';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
-import { Appointment } from 'src/app/models/appointment.model';import { ActivatedRoute } from '@angular/router';
+import { Appointment } from 'src/app/models/appointment.model'; import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ActivatedRoute } from '@angular/router';
 //import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,10 +20,10 @@ export class PatientDashboardComponent implements OnInit {
   patientId: number = 0;
 
   constructor(
-  private patientService: PatientService,
-  private route: ActivatedRoute,
-  private snackBar: MatSnackBar
-  ) {}
+    private patientService: PatientService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -81,23 +81,23 @@ export class PatientDashboardComponent implements OnInit {
             // console.log('Appointments array for child:', this.appointments);
           });
         });
-            this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
-              this.appointments = (data || []).map((a: any) => ({
-                ...a,
-                appointment_id: a.appointment_id ?? 0,
-                patient_id: a.patient_id ?? this.patientId,
-                room: a.room ?? '',
-                treatment_type: a.treatment_type ?? '',
-                total_minutes: a.total_minutes ?? 0,
-                status: a.status ?? 'מתוזמנת',
-                cost: a.cost ?? 0,
-                place: a.place ?? '',
-                notes: a.notes ?? '',
-                name: a.name ?? '',
-                therapist: a.therapist ?? '',
-                totalCost: a.totalCost ?? 0,
-              }));
-            });
+        this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+          this.appointments = (data || []).map((a: any) => ({
+            ...a,
+            appointment_id: a.appointment_id ?? 0,
+            patient_id: a.patient_id ?? this.patientId,
+            room: a.room ?? '',
+            treatment_type: a.treatment_type ?? '',
+            total_minutes: a.total_minutes ?? 0,
+            status: a.status ?? 'מתוזמנת',
+            cost: a.cost ?? 0,
+            place: a.place ?? '',
+            notes: a.notes ?? '',
+            name: a.name ?? '',
+            therapist: a.therapist ?? '',
+            totalCost: a.totalCost ?? 0,
+          }));
+        });
       }
     });
   }
@@ -173,14 +173,14 @@ export class PatientDashboardComponent implements OnInit {
   }
 
   get totalHours(): number {
-  const totalMinutes = (this.appointments || []).reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
-  return Math.round((totalMinutes / 60) * 10) / 10;
+    const totalMinutes = (this.appointments || []).reduce((sum, appointment) => sum + (appointment.total_minutes || 0), 0);
+    return Math.round((totalMinutes / 60) * 10) / 10;
   }
 
   get totalCost(): number {
     return 0;
   }
-  
+
   // Added to resolve template errors
   onAppointmentAdded(event: any) {
     // Optionally, reload appointments or push to this.appointments

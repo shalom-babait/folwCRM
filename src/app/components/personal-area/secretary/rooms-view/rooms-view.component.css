@@ -1,0 +1,9 @@
+.calendar-view {
+	overflow-x: auto;
+}
+
+.calendar-card full-calendar {
+	min-width: 900px !important;
+	width: 900px !important;
+	display: inline-block;
+}

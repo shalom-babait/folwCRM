@@ -8,6 +8,20 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['./patient-details.component.css']
 })
 export class PatientDetailsComponent implements OnChanges {
+      private getBirthDate(): string | undefined {
+        // עדיפות ל-user, אם לא קיים ניקח מה-patient
+        return this.patient?.user?.birth_date || this.patient?.patient?.birth_date;
+      }
+    private formatDateForInput(dateString?: string): string {
+      if (!dateString) return '';
+      // תומך בפורמטים עם שעה או תאריך מלא
+      const d = new Date(dateString);
+      if (isNaN(d.getTime())) return '';
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
   @Input() patient!: PatientCreationData;
   @Output() patientUpdated = new EventEmitter<PatientCreationData>();
   isEditing = false;
@@ -24,26 +38,59 @@ export class PatientDetailsComponent implements OnChanges {
     });
   }
   ngOnChanges(): void {
-    if (this.patient && this.patientForm) {
-      this.patientForm.patchValue(this.patient);
+    if (this.patient && this.patientForm && this.patient.user) {
+      this.patientForm.patchValue({
+        first_name: this.patient.user.first_name,
+        last_name: this.patient.user.last_name,
+        phone: this.patient.user.phone,
+        email: this.patient.user.email,
+        birth_date: this.formatDateForInput(this.getBirthDate()),
+        address: this.patient.user.address
+      }, { emitEvent: false });
     }
   }
 
   startEdit(): void {
     this.isEditing = true;
-    this.patientForm.patchValue(this.patient);
+    if (this.patient && this.patient.user) {
+      this.patientForm.patchValue({
+        first_name: this.patient.user.first_name,
+        last_name: this.patient.user.last_name,
+        phone: this.patient.user.phone,
+        email: this.patient.user.email,
+        birth_date: this.formatDateForInput(this.getBirthDate()),
+        address: this.patient.user.address
+      }, { emitEvent: false });
+    }
   }
 
   cancelEdit(): void {
     this.isEditing = false;
-    this.patientForm.patchValue(this.patient);
+    if (this.patient && this.patient.user) {
+      this.patientForm.patchValue({
+        first_name: this.patient.user.first_name,
+        last_name: this.patient.user.last_name,
+        phone: this.patient.user.phone,
+        email: this.patient.user.email,
+        birth_date: this.formatDateForInput(this.getBirthDate()),
+        address: this.patient.user.address
+      }, { emitEvent: false });
+    }
   }
 
   saveChanges(): void {
     if (this.patientForm.valid) {
+      // בניית אובייקט עדכון מלא (gender נשאר בעברית)
       const updatedPatient: PatientCreationData = {
         ...this.patient,
-        ...this.patientForm.value
+        user: {
+          ...this.patient.user,
+          ...this.patientForm.value
+        },
+        patient: {
+          ...this.patient.patient,
+          ...this.patientForm.value
+        }
       };
       this.patientUpdated.emit(updatedPatient);
       this.isEditing = false;
@@ -51,11 +98,10 @@ export class PatientDetailsComponent implements OnChanges {
   }
 
   calculateAge(): number {
-
-    if (!this.patient?.user.birth_date) return 0;
+    const birthDateStr = this.getBirthDate();
+    if (!birthDateStr) return 0;
     const today = new Date();
-    // טיפול בפורמט תאריך לידה
-    const birthDate = new Date(this.patient.user.birth_date);
+    const birthDate = new Date(birthDateStr);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {

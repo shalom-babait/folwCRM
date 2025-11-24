@@ -72,7 +72,7 @@
 
         <!-- פרטי מטופל -->
         <div *ngIf="activeTab === 'details'" class="details-view">
-          <app-patient-details [patient]="selectedPatient"></app-patient-details>
+          <app-patient-details [patient]="selectedPatient" (patientUpdated)="onPatientUpdated($event)"></app-patient-details>
         </div>
 
         <!-- יומן -->
