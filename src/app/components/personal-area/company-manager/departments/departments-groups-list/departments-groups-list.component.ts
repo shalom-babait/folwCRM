@@ -14,11 +14,13 @@ import { forkJoin } from 'rxjs';
 export class DepartmentsGroupsListComponent implements OnInit {
   departmentsWithGroups: DepartmentWithGroups[] = [];
   isLoading = false;
-
+  selectedGroupId: number | null = null;
 
   selectGroup(group: any) {
+    this.selectedGroupId = group.group_id;
     this.groupSelected.emit(group);
   }
+
   @Output() groupSelected = new EventEmitter<any>();
 
   constructor(
@@ -48,7 +50,7 @@ export class DepartmentsGroupsListComponent implements OnInit {
             .filter(g => g.group_id !== undefined)
             .map(g => this.groupsService.getGroupUsers(g.group_id!));
           forkJoin(requests).subscribe({
-            next: (results) => {              
+            next: (results) => {
               results.forEach((users, i) => {
                 if (users && users.data) {
                   allGroups[i].userCount = users.data.length;
