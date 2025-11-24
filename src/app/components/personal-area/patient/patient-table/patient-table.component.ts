@@ -23,6 +23,7 @@ export class PatientTableComponent implements OnInit, OnChanges {
   showPatientDetails = false;
   selectedPatient: any = null;
   showAddPatientDialog: boolean = false;
+  isEditModeOnOpen: boolean = false;
 
 
   constructor(private patientService: PatientService, private groupservice: GroupsService, private dialog: MatDialog
@@ -56,7 +57,7 @@ export class PatientTableComponent implements OnInit, OnChanges {
     this.patients = []; // אתחול המערכים לרשימה ריקה
     this.filteredPatients = [];
     this.selectedPatientId = null; // אתחול של selectedPatientId ל-null
-
+    this.selectedPatient = null;
     if (this.group?.group_id) {
       this.groupservice.getGroupUsers(this.group.group_id).subscribe({
         next: (response) => {
@@ -119,7 +120,8 @@ export class PatientTableComponent implements OnInit, OnChanges {
   /** סינון לפי שם או עיר */
   onSearch(term: string): void {
     const searchLower = term.toLowerCase().trim();
-
+    this.selectedPatient = null;
+    this.selectedPatientId = null;
     if (!searchLower) {
       this.filteredPatients = [...this.patients];
       return;
@@ -136,6 +138,8 @@ export class PatientTableComponent implements OnInit, OnChanges {
 
   /** מיון לפי עמודה */
   sortBy(column: string): void {
+    this.selectedPatient = null;
+    this.selectedPatientId = null;
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -181,8 +185,12 @@ export class PatientTableComponent implements OnInit, OnChanges {
   /** בחירת מטופל */
   selectPatient(patient: PatientCreationData): void {
     this.selectedPatientId = patient.patient.patient_id || null;
-    console.log('נבחר מטופל:', patient);
+    // אם בחרו מטופל אחר — לסגור תצוגה קודמת
+    if (!this.selectedPatient || this.selectedPatient.patient.patient_id !== patient.patient.patient_id) {
+      this.selectedPatient = null;
+    }
   }
+
 
   /** חישוב גיל לפי תאריך לידה */
   getAge(dateOfBirth?: string): number | null {
@@ -220,10 +228,26 @@ export class PatientTableComponent implements OnInit, OnChanges {
   }
 
 
-  openPatientDetails(patient: any) {
+
+  openPatientDetails(patient: any, editMode: boolean) {
+    // אם אותו מטופל כבר פתוח — אל תסגור!
+    if (this.selectedPatient && this.selectedPatient.patient.patient_id === patient.patient.patient_id) {
+      // רק עדכן מצב עריכה
+      this.isEditModeOnOpen = editMode;
+      return; // אל תסגור אותו
+    }
+
+    // אם זה מטופל חדש — פתח אותו
     this.selectedPatient = patient;
-    this.showPatientDetails = true;
+    this.isEditModeOnOpen = editMode;
   }
+
+
+
+  closePatientDetails() {
+    this.selectedPatient = null;
+  }
+
 
   openAddPatientDialog(): void {
     const dialogRef = this.dialog.open(AddPatientDialogComponent, {

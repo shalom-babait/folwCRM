@@ -59,21 +59,26 @@
       </div>
       <div class="patient-cell">{{ patient.user.city || '-' }}</div>
       <div class="patient-cell actions-cell">
-        <button class="action-btn edit-btn" (click)="openPatientDetails(patient); $event.stopPropagation()"
-          matTooltip="הצג פרטים">
+        <button class="action-btn view-btn" (click)="openPatientDetails(patient, false)" matTooltip="הצג פרטים">
           <mat-icon>visibility</mat-icon>
         </button>
-        <button class="action-btn edit-btn" (click)="$event.stopPropagation()" matTooltip="ערוך">
+
+        <button class="action-btn edit-btn"
+          (click)="selectPatient(patient); openPatientDetails(patient, true); $event.stopPropagation()"
+          matTooltip="ערוך">
           <mat-icon>edit</mat-icon>
         </button>
+
+
         <button class="action-btn delete-btn" (click)="$event.stopPropagation()" matTooltip="היסטוריית טיפולים">
           <mat-icon>history</mat-icon>
         </button>
       </div>
     </div>
 
-    <!-- הצגת פרטי המטופל הנבחר -->
-    <app-patient-details *ngIf="selectedPatient" [patient]="selectedPatient"></app-patient-details>
+    <app-patient-details *ngIf="selectedPatient" [patient]="selectedPatient" [openInEditMode]="isEditModeOnOpen">
+    </app-patient-details>
+
     <!-- הודעה אם אין מטופלים -->
     <div *ngIf="filteredPatients.length === 0" class="no-results">
       <p>לא נמצאו מטופלים</p>

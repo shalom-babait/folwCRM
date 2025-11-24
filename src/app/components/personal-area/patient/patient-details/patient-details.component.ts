@@ -8,36 +8,47 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['./patient-details.component.css']
 })
 export class PatientDetailsComponent implements OnChanges {
-      private getBirthDate(): string | undefined {
-        // עדיפות ל-user, אם לא קיים ניקח מה-patient
-        return this.patient?.user?.birth_date || this.patient?.patient?.birth_date;
-      }
-    private formatDateForInput(dateString?: string): string {
-      if (!dateString) return '';
-      // תומך בפורמטים עם שעה או תאריך מלא
-      const d = new Date(dateString);
-      if (isNaN(d.getTime())) return '';
-      const year = d.getFullYear();
-      const month = (d.getMonth() + 1).toString().padStart(2, '0');
-      const day = d.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+
+  private getBirthDate(): string | undefined {
+    // עדיפות ל-user, אם לא קיים ניקח מה-patient
+    return this.patient?.user?.birth_date || this.patient?.patient?.birth_date;
+  }
+  private formatDateForInput(dateString?: string): string {
+    if (!dateString) return '';
+    // תומך בפורמטים עם שעה או תאריך מלא
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return '';
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   @Input() patient!: PatientCreationData;
   @Output() patientUpdated = new EventEmitter<PatientCreationData>();
   isEditing = false;
   patientForm: FormGroup;
+  @Input() openInEditMode: boolean = false;
 
   constructor(private fb: FormBuilder) {
     this.patientForm = this.fb.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone: ['', Validators.required], 
+      phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       birth_date: ['', Validators.required],
       address: ['', Validators.required]
     });
   }
   ngOnChanges(): void {
+
+    // אם צריך לפתוח ישירות לעריכה
+    if (this.openInEditMode) {
+      this.startEdit();
+    } else {
+      this.isEditing = false;
+    }
+
+    // טוען נתונים לטופס
     if (this.patient && this.patientForm && this.patient.user) {
       this.patientForm.patchValue({
         first_name: this.patient.user.first_name,
@@ -110,4 +121,4 @@ export class PatientDetailsComponent implements OnChanges {
     return age;
   }
 }
-  
+
