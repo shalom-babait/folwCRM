@@ -55,7 +55,7 @@ import { TherapistDashboardComponent } from './components/personal-area/therapis
 import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
 import { CreateTreatmentDialogComponent } from './components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
-import { RoomCalendarComponent } from './components/room-calendar/room-calendar.component';
+import { RoomCalendarComponent } from './components/personal-area/company-manager/rooms/room-calendar/room-calendar.component';
 import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
@@ -64,8 +64,8 @@ import { TherapistListComponent } from './components/personal-area/therapist/the
 import { AddTherapistDialogComponent } from './components/personal-area/therapist/add-therapist-dialog/add-therapist-dialog.component';
 import { SecretaryHeaderComponent } from './components/personal-area/secretary/secretary-header/secretary-header.component';
 import { TherapistHeaderComponent } from './components/personal-area/therapist/therapist-header/therapist-header.component';
-import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
-import { RoomListCalendarComponent } from './components/personal-area/secretary/room-list-calendar/room-list-calendar.component';
+import { RoomsViewComponent } from './components/personal-area/company-manager/rooms/rooms-view/rooms-view.component';
+import { RoomListCalendarComponent } from './components/personal-area/company-manager/rooms/room-list-calendar/room-list-calendar.component';
 import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
 import { CompanyManagerHeaderComponent } from './components/personal-area/company-manager/company-manager-header/company-manager-header.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';

@@ -12,7 +12,7 @@ import { TherapistDashboardComponent } from './components/personal-area/therapis
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
 import { PatientListComponent } from './components/personal-area/patient/patient-list/patient-list.component';
 import { TherapistsViewComponent } from './components/personal-area/therapist/therapists-view/therapists-view.component';
-import { RoomsViewComponent } from './components/personal-area/secretary/rooms-view/rooms-view.component';
+import { RoomsViewComponent } from './components/personal-area/company-manager/rooms/rooms-view/rooms-view.component';
 import { CompanyManagerDashboardComponent } from './components/personal-area/company-manager/company-manager-dashboard/company-manager-dashboard.component';
 import { DepartmentsGroupViewComponent } from './components/personal-area/company-manager/departments/departments-groups-view/departments-groups-view.component';
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
