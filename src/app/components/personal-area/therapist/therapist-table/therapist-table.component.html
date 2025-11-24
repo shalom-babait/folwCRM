@@ -1,0 +1,42 @@
+<div class="therapist-list-container">
+    <h1>רשימת מטפלים</h1>
+
+<div class="search-container">
+    <input 
+        type="text"
+        class="search-input"
+        placeholder="חיפוש לפי שם או עיר ..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch(searchTerm)">
+</div>
+
+
+
+    <div *ngIf="isLoading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading">
+        <div class="therapist-row header-row" [style.gridTemplateColumns]="gridTemplate">
+            <div class="therapist-cell">שם מלא</div>
+            <div class="therapist-cell">טלפון</div>
+            <div class="therapist-cell">אימייל</div>
+        </div>
+
+        <div class="therapist-row data-row" *ngFor="let t of filteredTherapists"
+            [style.gridTemplateColumns]="gridTemplate">
+
+            <div class="therapist-cell">
+                <mat-icon>person</mat-icon>
+                {{ t.first_name }} {{ t.last_name }}
+            </div>
+
+            <div class="therapist-cell">{{ t.phone }}</div>
+            <div class="therapist-cell">{{ t.email }}</div>
+        </div>
+
+        <div *ngIf="filteredTherapists.length === 0" class="no-results">
+            אין מטפלים בקבוצה
+        </div>
+    </div>
+</div>

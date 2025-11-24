@@ -1,2 +1,49 @@
+<div class="view-container">
+    <div class="right-panel">
+        <app-departments-groups-list (groupSelected)="onGroupSelected($event)">
+        </app-departments-groups-list>
+    </div>
 
-<app-departments-groups-list></app-departments-groups-list>
+    <div class="left-panel" *ngIf="selectedGroup">
+        <div class="header-tabs">
+            <button class="tab-link" [class.active]="isActiveTab('patients')" (click)="setActiveTab('patients')">
+                <mat-icon>people</mat-icon>
+                מטופלים
+            </button>
+
+            <button class="tab-link" [class.active]="isActiveTab('staff')" (click)="setActiveTab('staff')">
+                <mat-icon>badge</mat-icon>
+                מטפלים
+            </button>
+
+            <button class="tab-link" [class.active]="isActiveTab('calendar')" (click)="setActiveTab('calendar')">
+                <mat-icon>calendar_month</mat-icon>
+                יומן
+            </button>
+
+            <button class="tab-link" [class.active]="isActiveTab('payments')" (click)="setActiveTab('payments')">
+                <mat-icon>payments</mat-icon>
+                תשלומים
+            </button>
+
+            <button class="close-btn" (click)="onCloseDetails()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class="tab-content">
+            <div *ngIf="activeTab === 'patients'" class="tab-item">
+                <app-patient-table [group]="selectedGroup"></app-patient-table>
+            </div>
+            <div *ngIf="activeTab === 'staff'" class="tab-item">
+                <app-therapist-table [group]="selectedGroup"></app-therapist-table>
+            </div>
+            <div *ngIf="activeTab === 'calendar'" class="tab-item">
+                <h3>יומן פגישות</h3>
+            </div>
+            <div *ngIf="activeTab === 'payments'" class="tab-item">
+                <h3>תשלומים</h3>
+            </div>
+        </div>
+    </div>
+</div>

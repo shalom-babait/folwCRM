@@ -1,0 +1,200 @@
+/* therapist-table.component.css */
+
+.therapist-list-container {
+  margin: 2rem;
+  background: whitesmoke;
+  padding: 2rem;
+  border-radius: 2rem;
+  font-family: Arial, sans-serif;
+  direction: rtl;
+}
+
+.therapist-list-container h1 {
+  color: #022F39;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.search-input {
+  width: 70%;
+  height: 4vh;
+  border: none;
+  border-radius: 1rem;
+  padding: 0 1rem;
+  font-size: 16px;
+  background: rgb(167 195 201);
+  color: #022F39;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #022F39;
+}
+
+.search-input::placeholder {
+  color: #022F39;
+  opacity: 1;
+  font-weight: bold;
+}
+
+.header-row {
+  background-color: #022F39;
+  color: white;
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-row .therapist-cell {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.header-row .therapist-cell:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.data-row {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  color: black;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.data-row:hover {
+  background-color: #f8f9fa;
+  transform: translateX(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.data-row.selected {
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
+}
+
+.therapist-cell {
+  text-align: center;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.therapist-name-cell {
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.therapist-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #022F39;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.no-results p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .therapist-list-container {
+    width: 98%;
+    padding: 1rem;
+    margin: 1rem auto 0 auto;
+  }
+
+  .therapist-list-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .search-input {
+    width: 90%;
+  }
+
+  .header-row {
+    display: none;
+  }
+
+  .data-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .therapist-cell {
+    flex: 1 1 100%;
+    text-align: right;
+    margin-bottom: 0.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+
+  .therapist-cell:last-child {
+    border-bottom: none;
+  }
+
+  .therapist-cell:nth-child(1)::before { content: "שם מלא: "; font-weight: bold; }
+  .therapist-cell:nth-child(2)::before { content: "טלפון: "; font-weight: bold; }
+  .therapist-cell:nth-child(3)::before { content: "אימייל: "; font-weight: bold; }
+  .therapist-cell:nth-child(4)::before { content: "תפקיד: "; font-weight: bold; }
+
+  .therapist-name-cell::before {
+    content: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .therapist-list-container {
+    padding: 0.5rem;
+  }
+
+  .search-input {
+    width: 95%;
+    height: 5vh;
+  }
+}
+
+.header-row,
+.data-row {
+  display: grid;
+  align-items: center;
+  text-align: center;
+}

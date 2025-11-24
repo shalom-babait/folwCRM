@@ -1,5 +1,5 @@
 // patient-list.component.ts
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -14,9 +14,10 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 })
 export class PatientListComponent implements OnInit, OnDestroy {
   @Output() patientSelected = new EventEmitter<PatientCreationData>();
+  @Input() group: any;
   patients: PatientCreationData[] = [];
   selectedPatientId: number | null = null;
-  therapist_id: number = 0; 
+  therapist_id: number = 0;
   isLoading = false;
 
   private destroy$ = new Subject<void>();
@@ -25,21 +26,21 @@ export class PatientListComponent implements OnInit, OnDestroy {
     private patientService: PatientService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-  // קבלת המטפל המחובר מה-localStorage (TherapistData)
-  const therapistStr = localStorage.getItem('therapist');
-  let therapistObj: any = {};
-  if (therapistStr) {
-    try {
-      therapistObj = JSON.parse(therapistStr);
-    } catch (e) {
-      therapistObj = {};
+    // קבלת המטפל המחובר מה-localStorage (TherapistData)
+    const therapistStr = localStorage.getItem('therapist');
+    let therapistObj: any = {};
+    if (therapistStr) {
+      try {
+        therapistObj = JSON.parse(therapistStr);
+      } catch (e) {
+        therapistObj = {};
+      }
     }
-  }
-  this.therapist_id = therapistObj.therapist_id || 0;
-  this.loadPatients();
+    this.therapist_id = therapistObj.therapist_id || 0;
+    this.loadPatients();
 
     // האזנה לשינויים ברשימת המטופלים
     this.patientService.patientsList$
@@ -61,6 +62,10 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe(patient_id => {
         this.selectedPatientId = patient_id;
       });
+    if (this.group) {
+      console.log("Group received:", this.group);
+      // כאן תטעני את המטופלים של הקבוצה
+    }
   }
 
   ngOnDestroy() {

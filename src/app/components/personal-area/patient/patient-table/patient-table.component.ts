@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { PatientCreationData } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/patient.service';
-
+import { GroupsService } from 'src/app/services/groups.service';
+import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AddPatientDialogComponent } from '../../patient/add-patient-dialog/add-patient-dialog.component';
 @Component({
   selector: 'app-patient-table',
   templateUrl: './patient-table.component.html',
   styleUrls: ['./patient-table.component.css']
 })
-export class PatientTableComponent implements OnInit {
+export class PatientTableComponent implements OnInit, OnChanges {
+  @Input() group: any;
   patients: PatientCreationData[] = [];
   filteredPatients: PatientCreationData[] = [];
   searchTerm: string = '';
@@ -15,36 +19,102 @@ export class PatientTableComponent implements OnInit {
   selectedPatientId: number | null = null;
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  gridTemplate: string = '';
+  showPatientDetails = false;
+  selectedPatient: any = null;
+  showAddPatientDialog: boolean = false;
 
-  constructor(private patientService: PatientService) {}
+
+  constructor(private patientService: PatientService, private groupservice: GroupsService, private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.loadPatients();
+    this.setupGrid();
+
   }
 
-  /** טוען מטופלים לפי המטפל המחובר */
+  setupGrid(): void {//עיצוב תוכן השדות מתחת לעמודות
+    const numberOfColumns = 7;
+    const templateParts: string[] = [];
+    for (let i = 0; i < numberOfColumns; i++) {
+      if (i === 0) {
+        templateParts.push('2fr');
+      } else {
+        templateParts.push('1fr');
+      }
+    }
+    this.gridTemplate = templateParts.join(' ');
+  }
+
+  ngOnChanges(): void {
+    if (this.group) this.loadPatients();
+  }
+
   loadPatients(): void {
     this.isLoading = true;
-    const therapistId = localStorage.getItem('therapist_id'); // או משירות אימות
+    this.patients = []; // אתחול המערכים לרשימה ריקה
+    this.filteredPatients = [];
+    this.selectedPatientId = null; // אתחול של selectedPatientId ל-null
 
-    if (!therapistId) {
-      console.error('לא נמצא therapist_id');
+    if (this.group?.group_id) {
+      this.groupservice.getGroupUsers(this.group.group_id).subscribe({
+        next: (response) => {
+          const users = response.data;
+          if (users.length === 0) {
+            // אם אין משתמשים בקבוצה, אתחל את isLoading ל-false
+            this.isLoading = false;
+            return;
+          }
+
+          const patientRequests = users.map(u => this.patientService.getPatientOnly(u.user_id));
+          forkJoin(patientRequests).subscribe({
+            next: (patients: any) => {
+
+              this.patients = patients.map((p: any) => ({
+                user: {
+                  user_id: p.user_id,
+                  first_name: p.first_name ?? "-",
+                  last_name: p.last_name ?? "-",
+                  email: p.email ?? "-",
+                  phone: p.phone ?? "-",
+                  city: p.city ?? "-",
+                  birth_date: p.birth_date ?? "-",
+                  address: p.address ?? "-",
+                  teudat_zehut: p.teudat_zehut ?? "-"
+                },
+                patient: {
+                  patient_id: p.patient_id,
+                  user_id: p.user_id,
+                  therapist_id: p.therapist_id,
+                  gender: p.gender ?? "אחר",
+                  status: p.status ?? "-",
+                  history_notes: p.history_notes ?? ""
+                },
+                selectedDepartments: []
+              }));
+              this.filteredPatients = [...this.patients];
+              this.isLoading = false;
+            },
+            error: (error: any) => {
+              console.error('שגיאה בטעינת מטופלים:', error);
+              this.isLoading = false;
+            }
+          });
+        },
+        error: (error) => {
+          console.error('שגיאה בטעינת משתמשי קבוצה:', error);
+          this.isLoading = false;
+        }
+      });
+    } else {
+      // במקרה שאין group_id, יש לאתחל את המערכים
+      this.patients = [];
+      this.filteredPatients = [];
       this.isLoading = false;
-      return;
     }
-
-    this.patientService.getPatientsByTherapist(+therapistId).subscribe({
-      next: (data) => {
-        this.patients = data;
-        this.filteredPatients = [...this.patients];
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('שגיאה בטעינת מטופלים:', error);
-        this.isLoading = false;
-      }
-    });
   }
+
 
   /** סינון לפי שם או עיר */
   onSearch(term: string): void {
@@ -148,4 +218,24 @@ export class PatientTableComponent implements OnInit {
       default: return '-';
     }
   }
+
+
+  openPatientDetails(patient: any) {
+    this.selectedPatient = patient;
+    this.showPatientDetails = true;
+  }
+
+  openAddPatientDialog(): void {
+    const dialogRef = this.dialog.open(AddPatientDialogComponent, {
+      width: '600px',
+      data: { user_id: 0 }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPatients(); // טעינה מחדש אחרי הוספה
+      }
+    });
+  }
+
 }

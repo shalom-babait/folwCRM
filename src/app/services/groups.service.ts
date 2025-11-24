@@ -38,4 +38,9 @@ export class GroupsService {
     return this.http.get<ApiResponseGroup<UserGroup[]>>(`${this.apiUrl}/group_users/${group_id}`);
   }
 
+  getTherapistsByGroup(group_id: number): Observable<ApiResponseGroup<UserGroup[]>> {
+    console.log(group_id, " group_idddddddd");
+    return this.http.get<ApiResponseGroup<UserGroup[]>>(`${this.apiUrl}/group_therapists/${group_id}`);
+  }
+
 }

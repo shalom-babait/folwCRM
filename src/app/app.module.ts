@@ -86,6 +86,8 @@ import { CategoryListComponent } from './components/personal-area/company-manage
 import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
 import { CategorySelectorComponent } from './components/personal-area/company-manager/category/category-selector/category-selector.component';
 import { ProspectDetailsComponent } from './components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
+import { GroupTherapistsComponent } from './components/personal-area/company-manager/departments/group-therapists/group-therapists.component';
+import { TherapistTableComponent } from './components/personal-area/therapist/therapist-table/therapist-table.component';
 
 
 @NgModule({
@@ -145,6 +147,8 @@ import { ProspectDetailsComponent } from './components/personal-area/company-man
     RoomListCalendarComponent,
     CategorySelectorComponent,
     ProspectDetailsComponent,
+    GroupTherapistsComponent,
+    TherapistTableComponent,
   ],
   imports: [
     MatMenuModule,

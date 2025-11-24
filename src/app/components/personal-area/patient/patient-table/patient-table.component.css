@@ -74,7 +74,7 @@
 
 /* שורה של כותרות */
 .header-row {
-  display: flex;
+  /* display: flex; */
   background-color: #022F39;
   color: white;
   font-weight: bold;
@@ -93,9 +93,8 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* שורות עם נתונים */
 .data-row {
-  display: flex;
+  /* display: flex; */
   background-color: #ffffff;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -137,7 +136,7 @@
   flex: 1 1 12.5%;
   text-align: center;
   padding: 0 0.5rem;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
 }
@@ -315,8 +314,8 @@
   /* הוספת תוויות במובייל */
   .patient-cell:nth-child(1)::before { content: "שם מלא: "; font-weight: bold; }
   .patient-cell:nth-child(2)::before { content: "סטטוס: "; font-weight: bold; }
-  .patient-cell:nth-child(3)::before { content: "מחלקות: "; font-weight: bold; }
-  .patient-cell:nth-child(4)::before { content: "מצב משפחתי: "; font-weight: bold; }
+  /* .patient-cell:nth-child(3)::before { content: "מחלקות: "; font-weight: bold; } */
+  /* .patient-cell:nth-child(4)::before { content: "מצב משפחתי: "; font-weight: bold; } */
   .patient-cell:nth-child(5)::before { content: "גיל: "; font-weight: bold; }
   .patient-cell:nth-child(6)::before { content: "טיפולים: "; font-weight: bold; }
   .patient-cell:nth-child(7)::before { content: "עיר מגורים: "; font-weight: bold; }
@@ -347,3 +346,11 @@
     height: 5vh;
   }
 }
+
+.header-row,
+.data-row {
+  display: grid;
+  align-items: center;
+  text-align: center;
+}
+
