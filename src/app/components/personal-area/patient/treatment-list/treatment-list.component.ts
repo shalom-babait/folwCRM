@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
-import { RoomCalendarComponent } from '../../../room-calendar/room-calendar.component';
+import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
 @Component({
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
