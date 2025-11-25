@@ -1,14 +1,14 @@
 <div class="create-treatment-dialog">
-  <h2 class="dialog-title">הוספת מחלקה חדשה</h2>
+  <h2 class="dialog-title">הוספת קבוצה חדשה</h2>
   <form class="input-dialog" [formGroup]="groupForm">
     <div class="form-field">
-      <label for="group_name">שם מחלקה</label>
-      <input id="group_name" type="text" formControlName="group_name" placeholder="הזן שם מחלקה">
+      <label for="group_name">שם קבוצה</label>
+      <input id="group_name" type="text" formControlName="group_name" placeholder="הזן שם קבוצה">
       <div class="error-message" *ngIf="groupForm.get('group_name')?.hasError('required')">
-        שם המחלקה הוא שדה חובה
+        שם הקבוצה הוא שדה חובה
       </div>
       <div class="error-message" *ngIf="groupForm.get('group_name')?.hasError('minlength')">
-        שם המחלקה חייב להכיל לפחות 2 תווים
+        שם הקבוצה חייב להכיל לפחות 2 תווים
       </div>
     </div>
     <div class="dialog-actions">
