@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { MatDialogRef } from '@angular/material/dialog';
+import { DepartmentService } from 'src/app/services/department.service';
 @Component({
   selector: 'app-add-department-dialog',
   templateUrl: './add-department-dialog.component.html',
@@ -10,13 +11,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddDepartmentDialogComponent {
   departmentForm: FormGroup;
+  isSubmitting = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    public dialogRef: MatDialogRef<AddDepartmentDialogComponent>,
+    private fb: FormBuilder,
+    private departmentService: DepartmentService
+  ) {
+
     this.departmentForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
       treatmentType: ['', Validators.required],
-      targetAudience: ['', Validators.required],
+      // targetAudience: ['', Validators.required],
       manager: [''],
       therapists: [''],
       status: ['active', Validators.required],
@@ -24,10 +31,24 @@ export class AddDepartmentDialogComponent {
     });
   }
 
-  onSave() {
-    if (this.departmentForm.valid) {
-      console.log('Department Data:', this.departmentForm.value);
-      // כאן אפשר להוסיף קריאה לשרת
+  onSubmit(): void {
+    if (this.departmentForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+
+      const newDepartment = {
+        department_name: this.departmentForm.value.name
+      };
+
+      this.departmentService.addDepartment(newDepartment).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          console.error('Error adding department:', error);
+        }
+      });
     }
   }
 

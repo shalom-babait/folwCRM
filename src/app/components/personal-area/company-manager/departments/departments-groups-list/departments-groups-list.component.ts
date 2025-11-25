@@ -5,6 +5,7 @@ import { GroupsService } from 'src/app/services/groups.service';
 import { DepartmentWithGroups } from 'src/app/models/department-group.model';
 import { AddGroupDialogComponent } from '../add-group-dialog/add-group-dialog.component';
 import { forkJoin } from 'rxjs';
+import { AddDepartmentDialogComponent } from '../add-department-dialog/add-department-dialog.component';
 
 @Component({
   selector: 'app-departments-groups-list',
@@ -96,7 +97,7 @@ export class DepartmentsGroupsListComponent implements OnInit {
   }
 
   openAddDepartmentDialog() {
-    const dialogRef = this.dialog.open(AddGroupDialogComponent, {
+    const dialogRef = this.dialog.open(AddDepartmentDialogComponent, {
       width: '400px',
       data: {}
     });
