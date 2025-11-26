@@ -4,7 +4,7 @@
       (patientSelected)="onPatientSelected($event)">
     </app-patient-list>
   </div>
-  
+
   <div class="left-panel">
     <!-- תצוגת ברירת מחדל - סיכומים -->
     <div *ngIf="!selectedPatient" class="summary-view">
@@ -18,28 +18,21 @@
     <div *ngIf="selectedPatient" class="patient-view">
       <!-- כותרת עם לינקים -->
       <div class="header-tabs">
-        <span><p>{{ selectedPatient.user.first_name }} {{ selectedPatient.user.last_name }}</p></span>
+        <span>
+          <p>{{ selectedPatient.user.first_name }} {{ selectedPatient.user.last_name }}</p>
+        </span>
         <br />
-        <button 
-          class="tab-link" 
-          [class.active]="activeTab === 'details'"
-          (click)="setActiveTab('details')">
+        <button class="tab-link" [class.active]="activeTab === 'details'" (click)="setActiveTab('details')">
           <mat-icon>person</mat-icon>
           <span>פרטי מטופל</span>
         </button>
 
-        <button 
-          class="tab-link" 
-          [class.active]="activeTab === 'mail'"
-          (click)="setActiveTab('mail')">
+        <button class="tab-link" [class.active]="activeTab === 'mail'" (click)="setActiveTab('mail')">
           <mat-icon>mail</mat-icon>
           <span>דואר</span>
         </button>
 
-        <button 
-          class="tab-link" 
-          [class.active]="activeTab === 'treatments'"
-          (click)="setActiveTab('treatments')">
+        <button class="tab-link" [class.active]="activeTab === 'treatments'" (click)="setActiveTab('treatments')">
           <mat-icon>medical_services</mat-icon>
           <span>רשימת טיפולים</span>
         </button>

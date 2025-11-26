@@ -1,0 +1,14 @@
+<div *ngIf="loading">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<div *ngIf="!loading && therapists.length === 0">
+  אין מטפלים בקבוצה
+</div>
+
+<div *ngIf="!loading && therapists.length > 0">
+  <div class="therapist-card" *ngFor="let t of therapists">
+    <mat-icon>person</mat-icon>
+    {{ t.user_id }} – {{ t.group_id }}
+  </div>
+</div>

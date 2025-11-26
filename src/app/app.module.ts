@@ -86,6 +86,8 @@ import { CategoryListComponent } from './components/personal-area/company-manage
 import { AddCategoryDialogComponent } from './components/personal-area/company-manager/category/add-category-dialog/add-category-dialog.component';
 import { CategorySelectorComponent } from './components/personal-area/company-manager/category/category-selector/category-selector.component';
 import { ProspectDetailsComponent } from './components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
+import { GroupTherapistsComponent } from './components/personal-area/company-manager/departments/group-therapists/group-therapists.component';
+import { TherapistTableComponent } from './components/personal-area/therapist/therapist-table/therapist-table.component';
 import { PaymentListComponent } from './components/personal-area/company-manager/payment-list/payment-list.component';
 import { AddTransactionComponent } from './components/personal-area/company-manager/payment/add-transaction/add-transaction.component';
 
@@ -147,6 +149,8 @@ import { AddTransactionComponent } from './components/personal-area/company-mana
     RoomListCalendarComponent,
     CategorySelectorComponent,
     ProspectDetailsComponent,
+    GroupTherapistsComponent,
+    TherapistTableComponent,
     PaymentListComponent,
     AddTransactionComponent,
   ],

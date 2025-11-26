@@ -168,6 +168,18 @@
   padding: 2rem;
 }
 
+.group-card.selected {
+  background-color: #dbeff2;
+  border-right: 4px solid #BB7E2B;
+  font-weight: bold;
+  transform: translateX(-3px);
+  color: #022F39;
+}
+
+.group-card.selected .group-icon {
+  color: #022F39;
+}
+
 @media (max-width: 768px) {
   .departments-list-card {
     max-width: 100%;
