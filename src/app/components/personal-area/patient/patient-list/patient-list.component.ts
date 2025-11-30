@@ -1,11 +1,10 @@
-// patient-list.component.ts
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
-import { Patient, PatientCreationData } from 'src/app/models/patient.model';
+import { PatientCreationData } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-patient-list',
@@ -13,8 +12,15 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
-  @Output() patientSelected = new EventEmitter<PatientCreationData>();
+
+  /** אם true — נטען את כל המטופלים */
+
+  /** אם component-parent רוצה לשלוח group */
   @Input() group: any;
+
+  /** שליחה למעלה כאשר בוחרים מטופל */
+  @Output() patientSelected = new EventEmitter<PatientCreationData>();
+
   patients: PatientCreationData[] = [];
   selectedPatientId: number | null = null;
   therapist_id: number = 0;
@@ -29,43 +35,42 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // קבלת המטפל המחובר מה-localStorage (TherapistData)
-    const therapistStr = localStorage.getItem('therapist');
-    let therapistObj: any = {};
-    if (therapistStr) {
-      try {
-        therapistObj = JSON.parse(therapistStr);
-      } catch (e) {
-        therapistObj = {};
-      }
-    }
-    this.therapist_id = therapistObj.therapist_id || 0;
-    this.loadPatients();
 
-    // האזנה לשינויים ברשימת המטופלים
+    // קבלת המטפל מה-localStorage
+    const therapistStr = localStorage.getItem('therapist');
+    const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
+    this.therapist_id = therapistObj.therapist_id || 0;
+    console.log(this.therapist_id, " therapist_id");
+
+
+    // אם יש therapist_id תקין — נטען מטופלים של מטפל
+    if (this.therapist_id && this.therapist_id > 0) {
+      this.loadPatientsByTherapist();
+    }
+    // אחרת — נטען את כולם
+    else {
+      this.loadAllPatients();
+    }
+    // האזנה לרשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
       .subscribe(patients => {
         this.patients = patients;
       });
 
-    // האזנה למצב טעינה
+    // האזנה לטעינה
     this.patientService.loading$
       .pipe(takeUntil(this.destroy$))
       .subscribe(loading => {
         this.isLoading = loading;
       });
 
-    // האזנה למטופל שנבחר
+    // האזנה למטופל נבחר
     this.patientService.selectedPatient$
       .pipe(takeUntil(this.destroy$))
       .subscribe(patient_id => {
         this.selectedPatientId = patient_id;
       });
-    if (this.group) {
-      console.log("Group received:", this.group);
-      // כאן תטעני את המטופלים של הקבוצה
-    }
   }
 
   ngOnDestroy() {
@@ -73,28 +78,52 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  loadPatients() {
+  /** טעינת כל המטופלים */
+  loadAllPatients() {
+    this.isLoading = true;
+    this.patientService.getAllPatients()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.patients = data || [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading ALL patients:', err);
+          this.isLoading = false;
+        }
+      });
+  }
+
+
+
+  /** טעינת מטופלים לפי מטפל */
+  loadPatientsByTherapist() {
+    this.isLoading = true;
     this.patientService.getPatientsByTherapist(this.therapist_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.patients = data;
-          // ...existing code...
+          this.isLoading = false;
         },
-        error: (error) => {
-          // ...existing code...
+        error: (err) => {
+          console.error('Error loading patients by therapist:', err);
+          this.isLoading = false;
         }
       });
   }
 
+  /** הצגת פרטי מטופל */
   viewPatientDetails(patient: PatientCreationData) {
     const patient_id = patient.patient?.patient_id;
     if (patient_id) {
       this.selectedPatientId = patient_id;
-      this.patientSelected.emit(patient); // שליחת האירוע להורה
+      this.patientSelected.emit(patient);
     }
   }
 
+  /** פתיחת דיאלוג הוספת מטופל */
   openAddPatientDialog(): void {
     const dialogRef = this.dialog.open(AddPatientDialogComponent, {
       width: '600px',
@@ -102,10 +131,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
       height: 'auto',
       maxHeight: '90vh',
       disableClose: false,
-      hasBackdrop: true,
-      backdropClass: 'custom-backdrop',
-      panelClass: 'custom-dialog-panel',
-      direction: 'rtl',
       data: {
         initialData: {
           therapist_id: this.therapist_id,
@@ -120,40 +145,32 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result && result.success && result.data) {
-          console.log('מטופל חדש נוסף:', result.data);
           this.patients = [...this.patients, result.data];
-          if (result.data.patient?.patient_id) {
-            const newPatientId = result.data.patient.patient_id;
-            setTimeout(() => {
-              this.patientService.selectPatient(newPatientId);
-            }, 500);
+
+          const newId = result.data.patient?.patient_id;
+          if (newId) {
+            setTimeout(() => this.patientService.selectPatient(newId), 500);
           }
         }
       });
   }
 
-  refreshPatientsList(): void {
-    this.loadPatients();
-  }
-
+  /** חיפוש מטופל */
   openSearchDialog(): void {
     const searchTerm = prompt('הכנס שם לחיפוש:');
-    if (searchTerm) {
-      this.patientService.searchPatients(searchTerm)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (results) => {
-            console.log('תוצאות חיפוש:', results);
-            if (results.length > 0) {
-              this.patients = results;
-            } else {
-              alert('לא נמצאו תוצאות');
-            }
-          },
-          error: (error) => {
-            console.error('Error searching patients:', error);
+    if (!searchTerm) return;
+
+    this.patientService.searchPatients(searchTerm)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (results) => {
+          if (results.length > 0) {
+            this.patients = results;
+          } else {
+            alert('לא נמצאו תוצאות');
           }
-        });
-    }
+        },
+        error: (error) => console.error('Error searching patients:', error)
+      });
   }
 }
