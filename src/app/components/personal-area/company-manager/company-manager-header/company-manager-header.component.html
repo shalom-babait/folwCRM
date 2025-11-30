@@ -1,44 +1,44 @@
 <header>
   <div routerLink="" class="divLogo">
-      <img class="logo" src="../../../assets/photoes/shalom babait logo.png" alt="לוגו">
+    <img class="logo" src="../../../assets/photoes/shalom babait logo.png" alt="לוגו">
   </div>
-    <div class="buttonLink">
-      <ul>
-  <li><button (click)="showSection('home')">בית</button></li>
-  <li><button (click)="showSection('employees')">רשימת עובדים</button></li>
-  <li><button (click)="showSection('requests')">רשימת פניות</button></li>
-  <li><button (click)="showSection('patients')">רשימת מטופלים</button></li>
-  <li><button (click)="showSection('prospects')">לקוחות</button></li>
-  <li><button (click)="showSection('departments'); navigateToDepartments()">מחלקות</button></li>
-  <li><button (click)="showSection('rooms')">חדרים</button></li>
-  <li><button routerLink="contact">דואר</button></li>
-  <li><button (click)="showSection('reports')">דוחות</button></li>
+  <div class="buttonLink">
+    <ul>
+      <li><button (click)="showSection('home')">בית</button></li>
+      <li><button (click)="showSection('employees')">רשימת עובדים</button></li>
+      <li><button (click)="showSection('requests')">רשימת פניות</button></li>
+      <li><button (click)="showSection('patients')">רשימת מטופלים</button></li>
+      <li><button (click)="showSection('prospects')">לקוחות</button></li>
+      <li><button (click)="showSection('departments'); navigateToDepartments()">מחלקות</button></li>
+      <li><button (click)="showSection('rooms')">חדרים</button></li>
+      <li><button routerLink="contact">דואר</button></li>
+      <li><button (click)="showSection('reports')">דוחות</button></li>
+    </ul>
+  </div>
+
+  <!-- User Profile Menu -->
+  <div class="user-profile-container">
+    <div class="user-avatar" (click)="toggleProfileMenu()">
+      <img [src]="userImage" alt="תמונת משתמש">
+    </div>
+
+    <div class="profile-menu" *ngIf="showProfileMenu">
+      <div class="profile-menu-header">
+        <div class="user-name">{{ userName }}</div>
+      </div>
+      <div class="menu-divider"></div>
+      <ul class="profile-menu-items">
+        <li (click)="goToSettings()">
+          <mat-icon class="menu-icon">settings</mat-icon>
+          <span>הגדרות</span>
+        </li>
+        <li class="logout" (click)="logout()">
+          <mat-icon class="menu-icon">logout</mat-icon>
+          <span>יציאה</span>
+        </li>
       </ul>
     </div>
-    
-    <!-- User Profile Menu -->
-    <div class="user-profile-container">
-      <div class="user-avatar" (click)="toggleProfileMenu()">
-        <img [src]="userImage" alt="תמונת משתמש">
-      </div>
-      
-      <div class="profile-menu" *ngIf="showProfileMenu">
-        <div class="profile-menu-header">
-          <div class="user-name">{{ userName }}</div>
-        </div>
-        <div class="menu-divider"></div>
-        <ul class="profile-menu-items">
-  <li (click)="goToSettings()">
-    <mat-icon class="menu-icon">settings</mat-icon>
-    <span>הגדרות</span>
-  </li>
-  <li class="logout" (click)="logout()">
-    <mat-icon class="menu-icon">logout</mat-icon>
-    <span>יציאה</span>
-  </li>
-</ul>
-      </div>
-    </div>
+  </div>
 </header>
 <div class="dynamic-section-container" *ngIf="selectedSection">
   <ng-container [ngSwitch]="selectedSection">
@@ -46,8 +46,9 @@
       <app-prospect-view></app-prospect-view>
     </ng-container>
     <ng-container *ngSwitchCase="'patients'">
-      <app-patient-table></app-patient-table>
+      <app-patient-view></app-patient-view>
     </ng-container>
+
     <!-- דוגמאות נוספות, ניתן להוסיף קומפוננטות נוספות -->
     <ng-container *ngSwitchCase="'employees'">
       <!-- <app-employee-table></app-employee-table> -->

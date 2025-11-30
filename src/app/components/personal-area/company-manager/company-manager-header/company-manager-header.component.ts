@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
     selectedSection: string | null = null;
 
     showSection(section: string) {
+      console.log(section,"section");
       this.selectedSection = this.selectedSection === section ? null : section;
     }
 
