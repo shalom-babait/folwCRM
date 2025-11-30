@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Patient, CreatePatientRequest, UpdatePatientRequest, PatientCreationData } from 'src/app/models/patient.model';
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
@@ -12,14 +11,14 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
-    /** עדכון פציינט ברשימה המקומית */
-    updatePatientInList(updatedPatient: PatientCreationData): void {
-      const current = this.patientsListSubject.value || [];
-      const newList = current.map(p =>
-        p.patient.patient_id === updatedPatient.patient.patient_id ? updatedPatient : p
-      );
-      this.patientsListSubject.next(newList);
-    }
+  /** עדכון פציינט ברשימה המקומית */
+  updatePatientInList(updatedPatient: PatientCreationData): void {
+    const current = this.patientsListSubject.value || [];
+    const newList = current.map(p =>
+      p.patient.patient_id === updatedPatient.patient.patient_id ? updatedPatient : p
+    );
+    this.patientsListSubject.next(newList);
+  }
   private apiUrl = environment.apiUrl;
 
   // --- מצב פנימי ---
@@ -41,7 +40,7 @@ export class PatientService {
   constructor(private http: HttpClient) { }
 
   // --- יצירת מטופל חדש ---
-  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {    
+  createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
     this.setLoading(true);
     return this.http.post<ApiResponse<PatientCreationData>>(
       `${this.apiUrl}/patients`,
@@ -89,15 +88,38 @@ export class PatientService {
   }
 
   // --- שליפת מטופלים ---
+
   getAllPatients(): Observable<PatientCreationData[]> {
     this.setLoading(true);
-    return this.http.get<ApiResponse<PatientCreationData[]>>(`${this.apiUrl}/patients`).pipe(
-      map(response => response.data || []),
-      tap(patients => this.patientsListSubject.next(patients)),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
+    return this.http.get<any>(`${this.apiUrl}/patients/getAllPatients/`).pipe(
+      map(response => {
+        const raw = response.data || [];
+        return raw.map((item: any) => ({
+          user: {
+            user_id: item.user_id,
+            first_name: item.first_name,
+            last_name: item.last_name,
+            teudat_zehut: item.teudat_zehut,
+            phone: item.phone,
+            city: item.city,
+            address: item.address,
+            email: item.email,
+            gender: item.gender,
+            birth_date: item.birth_date
+          },
+          patient: {
+            patient_id: item.patient_id,
+            therapist_id: item.therapist_id,
+            status: item.status,
+            history_notes: item.history_notes
+          }
+        }));
+      })
     );
+
+
   }
+
 
   getPatientsByTherapist(therapistId: number): Observable<PatientCreationData[]> {
     this.setLoading(true);
@@ -116,7 +138,7 @@ export class PatientService {
     );
   }
 
-  getPatientOnly(patientId: number): Observable<PatientCreationData> {    
+  getPatientOnly(patientId: number): Observable<PatientCreationData> {
     return this.http.get<PatientCreationData>(`${this.apiUrl}/patients/only/${patientId}`);
   }
 
