@@ -1,10 +1,18 @@
 <div class="view-container">
+
     <div class="right-panel">
         <app-departments-groups-list (groupSelected)="onGroupSelected($event)">
         </app-departments-groups-list>
     </div>
 
+    <!-- הודעה לפני בחירת קבוצה -->
+    <div class="left-panel empty-panel" *ngIf="!selectedGroup">
+        <p class="empty-message">על מנת לצפות בנתונים - יש לבחור קבוצה</p>
+    </div>
+
+    <!-- התוכן הרגיל כאשר נבחרה קבוצה -->
     <div class="left-panel" *ngIf="selectedGroup">
+
         <div class="header-tabs">
             <button class="tab-link" [class.active]="isActiveTab('patients')" (click)="setActiveTab('patients')">
                 <mat-icon>people</mat-icon>
@@ -45,5 +53,7 @@
                 <h3>תשלומים</h3>
             </div>
         </div>
+
     </div>
+
 </div>

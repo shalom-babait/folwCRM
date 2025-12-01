@@ -38,7 +38,9 @@
 
     <!-- עמודת הסטטוס -->
     <mat-form-field class="status-select mat-center-select" appearance="outline" matTooltip="שינוי סטטוס">
-      <mat-select [(ngModel)]="appointment.status" (selectionChange)="saveStatus(appointment)">
+<mat-select class="no-backdrop-select"
+            [(ngModel)]="appointment.status"
+            (selectionChange)="saveStatus(appointment)">
         <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
       </mat-select>
     </mat-form-field>
