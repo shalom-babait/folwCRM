@@ -1,0 +1,13 @@
+.empty-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f8f9fa;
+    font-size: 3rem;
+    font-weight: 500;
+    padding: 30px;
+}
+
+.empty-message {
+    text-align: center;
+}
