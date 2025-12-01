@@ -18,7 +18,7 @@
   <!-- כותרות השדות -->
   <div class="treatment-row header-row">
     <div class="treatment-cell">תאריך</div>
-    <div class="treatment-cell">שם פגישה</div>
+    <div class="treatment-cell">שם קבוצה</div>
     <div class="treatment-cell">מקום</div>
     <div class="treatment-cell">שעת התחלה</div>
     <div class="treatment-cell">שעת סיום</div>
@@ -30,7 +30,7 @@
   <!-- רשימת פגישות -->
   <div class="treatment-row data-row" *ngFor="let appointment of filteredAppointments">
     <div class="treatment-cell">{{appointment.appointment_date | date:'dd/MM/yyyy'}}</div>
-    <div class="treatment-cell">{{appointment.treatment_type}}</div>
+    <div class="treatment-cell">{{appointment.group_name}}</div>
     <div class="treatment-cell">{{appointment.room}}</div>
     <div class="treatment-cell">{{appointment.start_time | slice:0:5}}</div>
     <div class="treatment-cell">{{appointment.end_time | slice:0:5}}</div>

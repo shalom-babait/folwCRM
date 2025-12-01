@@ -218,7 +218,7 @@
     }
 
     .treatment-cell:nth-child(2)::before {
-        content: "שם פגישה: ";
+        content: "שם קבוצה: ";
         font-weight: bold;
     }
 
