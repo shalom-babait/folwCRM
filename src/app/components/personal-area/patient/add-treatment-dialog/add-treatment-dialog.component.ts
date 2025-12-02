@@ -96,9 +96,11 @@ export class CreateTreatmentDialogComponent implements OnInit {
             // בנה תאריך מלא בפורמט ISO תקני ל-FullCalendar
             const start = `${localDate}T${app.start_time}`;
             const end = `${localDate}T${app.end_time}`;
+            // Prefer therapist_name from backend, fallback to therapist_id or 'פגישה'
+            const therapistName = (app as any).therapist_name;
             return {
               id: app.appointment_id,
-              title: app.therapist_id ? `פגישה של מטפל ${app.therapist_id}` : 'פגישה',
+              title: therapistName ? therapistName : (app.therapist_id ? `פגישה של מטפל ${app.therapist_id}` : 'פגישה'),
               start,
               end,
               color: '#1a237e',
@@ -186,7 +188,6 @@ getErrorMessage(field: string): string {
       Object.keys(this.treatmentForm.controls).forEach(field => {
         this.treatmentForm.get(field)?.markAsTouched();
       });
-      console.log('Form invalid:', this.treatmentForm.value);
       return;
     }
 
@@ -238,11 +239,10 @@ getErrorMessage(field: string): string {
       end_time: endTime,
       notes: formValue.notes || ''
     };
-    console.log('appointment to send:', appointment);
+    // שלח פגישה לשרת
 
     this.patientService.createAppointment(appointment).subscribe({
       next: (response) => {
-        console.log('response from server:', response);
         if (response.success) {
           alert('הפגישה נוספה בהצלחה!');
           this.appointmentAdded.emit(response.data || appointment);
