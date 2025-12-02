@@ -54,14 +54,16 @@ export class CreateTreatmentDialogComponent implements OnInit {
         console.error('Error fetching rooms:', error);
       }
     });
-    this.typesService.getTypes().subscribe({
-      next: (type) => {
-        this.types = type;
-      },
-      error: (error) => {
-        console.error('Error fetching rooms:', error);
-      }
-    });
+    if (this.data && this.data.patient_id) {
+      this.typesService.getTypes(this.data.patient_id).subscribe({
+        next: (type) => {
+          this.types = type;
+        },
+        error: (error) => {
+          console.error('Error fetching rooms:', error);
+        }
+      });
+    }
     if (this.data && this.data.initialData) {
       this.treatmentForm.patchValue(this.data.initialData);
     }
@@ -96,7 +98,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
             const end = `${localDate}T${app.end_time}`;
             return {
               id: app.appointment_id,
-              title: app.patient_id ? `פגישה עם מטופל ${app.patient_id}` : 'פגישה',
+              title: app.therapist_id ? `פגישה של מטפל ${app.therapist_id}` : 'פגישה',
               start,
               end,
               color: '#1a237e',
