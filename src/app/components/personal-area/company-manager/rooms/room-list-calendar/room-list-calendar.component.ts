@@ -60,7 +60,8 @@ export class RoomListCalendarComponent implements OnInit {
             String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
             String(dateObj.getDate()).padStart(2, '0');
         }
-        const therapistName = this.getTherapistName(app.therapist_id);
+        // Prefer therapist_name from backend, fallback to getTherapistName or 'פגישה'
+        const therapistName = (app as any).therapist_name || this.getTherapistName(app.therapist_id);
         return {
           ...app,
           title: therapistName ? therapistName : 'פגישה',
