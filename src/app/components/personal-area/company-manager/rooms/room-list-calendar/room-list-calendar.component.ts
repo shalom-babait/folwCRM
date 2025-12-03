@@ -40,7 +40,7 @@ export class RoomListCalendarComponent implements OnInit {
   getTherapistName(therapistId: number): string {
     const therapist = this.therapists.find(t => t.therapist.therapist_id === therapistId);
     if (therapist) {
-      return therapist.user.first_name + ' ' + therapist.user.last_name;
+      return therapist.person.first_name + ' ' + therapist.person.last_name;
     }
     return '';
   }

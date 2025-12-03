@@ -36,7 +36,7 @@
         *ngFor="let therapist of therapists"
         [class.selected]="selectedTherapistId === (therapist.therapist.therapist_id)">
         <div class="therapist-info" (click)="viewTherapistDetails(therapist)">
-          <span class="therapist-name">{{ therapist.user.first_name }} {{ therapist.user.last_name }}</span>
+          <span class="therapist-name">{{ therapist.person.first_name }} {{ therapist.person.last_name }}</span>
         </div>
         <button 
           class="menu-button"

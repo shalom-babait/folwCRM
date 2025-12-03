@@ -19,7 +19,7 @@
       <!-- כותרת עם לינקים -->
       <div class="header-tabs">
         <span>
-          <p>{{ selectedPatient.user.first_name }} {{ selectedPatient.user.last_name }}</p>
+          <p>{{ selectedPatient.person.first_name }} {{ selectedPatient.person.last_name }}</p>
         </span>
         <br />
         <button class="tab-link" [class.active]="activeTab === 'details'" (click)="setActiveTab('details')">

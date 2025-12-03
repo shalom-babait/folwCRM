@@ -1,8 +1,10 @@
 import { SelectedDepartmentForSave } from './department-group.model';
-import { UserData } from './user.model';
+import { Person } from './person.model';
+import { UserData, UserDataWithPerson } from './user.model';
 
 export interface TherapistCreationData {
   user: UserData;
+  person: Person;
   therapist: TherapistData;
   selectedDepartments: SelectedDepartmentForSave[];
 }

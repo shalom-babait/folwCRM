@@ -51,8 +51,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
               patients.forEach((p, idx) => {
                 console.log('getPatientById for pid', patientIds[idx], 'returned:', p);
                 if (p && p.patient && p.patient.patient_id) {
-                  patientMap[p.patient.patient_id] = (p.user.first_name || '') + ' ' + (p.user.last_name || '');
-                }
+              patientMap[p.patient.patient_id] = (p.person.first_name || '') + ' ' + (p.person.last_name || '');                }
               });
               console.log('patientMap:', patientMap);
 
