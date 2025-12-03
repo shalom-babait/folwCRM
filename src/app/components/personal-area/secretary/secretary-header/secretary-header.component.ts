@@ -10,6 +10,11 @@ import { Router } from '@angular/router';
 })
 export class SecretaryHeaderComponent implements OnInit {
   selectedSection: string = 'home';
+  // איפוס state גלובלי כאשר מחליפים section
+  resetSectionState(section: string) {
+    this.selectedSection = section;
+    // אפשר להוסיף כאן איפוס משתנים גלובליים אם צריך
+  }
   showProfileMenu = false;
   userName = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל

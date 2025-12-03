@@ -33,8 +33,7 @@ export class PatientViewComponent {
             // אין patient_id בתשובה, לכן נשתמש ב-id מהאובייקט שנשלח
             const id = updated.patient.patient_id;
             this.patientService.getPatientOnly(id).subscribe(fullPatient => {
-              if (fullPatient && fullPatient.user && fullPatient.patient) {
-                this.selectedPatient = fullPatient;
+          if (fullPatient && fullPatient.person && fullPatient.patient) {                this.selectedPatient = fullPatient;
                 this.patientService.updatePatientInList(fullPatient);
               } else {
                 // נעדכן מהערך שנשלח (updated)

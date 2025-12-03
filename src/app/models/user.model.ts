@@ -1,16 +1,19 @@
+import { Person } from "./person.model";
+
 export interface UserData {
   user_id?: number;
-  first_name: string;
-  last_name: string;
-  teudat_zehut?: string;
-  phone?: string;
-  city?: string;
-  address?: string;
+  person_id?: number; 
   email: string;
-  password?: string; 
+  password?: string;
   role?: 'secretary' | 'manager' | 'therapist' | 'patient' | 'other';
   agree?: 0 | 1;
-  created_at?: string; // YYYY-MM-DD HH:mm:ss
-  gender?: 'male' | 'female' | 'other';
-  birth_date?: string; // YYYY-MM-DD
+  created_at?: string;
+}
+export interface UserLogin {  
+  email: string;
+  password: string;
+}
+export interface UserDataWithPerson {
+  user: UserData;
+  person: Person;
 }

@@ -33,7 +33,7 @@
       (click)="selectPatient(patient)">
       <div class="patient-cell patient-name-cell">
         <mat-icon class="patient-icon">person</mat-icon>
-        {{ patient.user.first_name }} {{ patient.user.last_name }}
+        {{ patient.person.first_name }} {{ patient.person.last_name }}
       </div>
       <div class="patient-cell">
         <span class="status-badge" [class.active]="patient.patient.status === 'פעיל'"
@@ -52,12 +52,12 @@
           class="empty-value">-</span>
       </div> -->
       <!-- <div class="patient-cell">{{ getMaritalStatusLabel(patient.marital_status) }}</div> -->
-      <div class="patient-cell">{{ getAge(patient?.user?.birth_date) }}
+      <div class="patient-cell">{{ getAge(patient?.person?.birth_date) }}
       </div>
       <div class="patient-cell">
         <!-- <span class="count-badge">{{ patient.user.email }}</span> -->
       </div>
-      <div class="patient-cell">{{ patient.user.city || '-' }}</div>
+      <div class="patient-cell">{{ patient.person.city || '-' }}</div>
       <div class="patient-cell actions-cell">
         <button class="action-btn view-btn" (click)="openPatientDetails(patient, false)" matTooltip="הצג פרטים">
           <mat-icon>visibility</mat-icon>
