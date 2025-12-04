@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FollowupService } from 'src/app/services/followup.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowUpWithPerson } from 'src/app/models/followup.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AddFollowupDialogComponent } from '../add-followup-dialog/add-followup-dialog.component';
 
 @Component({
   selector: 'app-user-follow-up-table',
@@ -11,11 +13,23 @@ import { FollowUpWithPerson } from 'src/app/models/followup.model';
   ]
 })
 export class UserFollowUpTableComponent implements OnInit {
+  isToday(dateStr: string): boolean {
+    if (!dateStr) return false;
+    const date = new Date(dateStr);
+    const today = new Date();
+    return date.getFullYear() === today.getFullYear() &&
+      date.getMonth() === today.getMonth() &&
+      date.getDate() === today.getDate();
+  }
   followups: FollowUpWithPerson[] = [];
   searchTerm: string = '';
   dateFilter: string = 'all';
 
-  constructor(private followupService: FollowupService, private authService: AuthService) {}
+  constructor(
+    private followupService: FollowupService,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     const userId = this.authService.getCurrentUserId();
@@ -25,6 +39,42 @@ export class UserFollowUpTableComponent implements OnInit {
       });
     }
   }
+    editFollowup(followup: FollowUpWithPerson): void {
+      const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
+        width: '400px',
+        data: {
+          followUp: followup.followUp,
+          person: followup.person
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // רענון הרשימה אחרי עריכה
+          const userId = this.authService.getCurrentUserId();
+          if (userId) {
+            this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+              this.followups = data;
+            });
+          }
+        }
+      });
+    }
+
+    deleteFollowup(followup: FollowUpWithPerson): void {
+      if (!followup.followUp?.followup_id) return;
+      if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
+        this.followupService.deleteFollowup(followup.followUp.followup_id).subscribe({
+          next: () => {
+            this.followups = this.followups.filter(f => f.followUp.followup_id !== followup.followUp.followup_id);
+          },
+          error: err => {
+            alert('מחיקה נכשלה');
+            console.error('Delete followup error:', err);
+          }
+        });
+      }
+    }
 
   get filteredFollowups() {
     let filtered = this.followups;
