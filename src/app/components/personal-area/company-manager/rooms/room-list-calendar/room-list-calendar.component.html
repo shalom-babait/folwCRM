@@ -1,6 +1,16 @@
 <div class="room-list-card">
   <div class="card-header">
     <h3>רשימת חדרים</h3>
+    <div class="header-actions">
+      <button class="add-room-btn" (click)="openAddRoomDialog()" matTooltip="הוסף חדר חדש" matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף חדר</span>
+      </button>
+      <button class="search-btn" (click)="openSearchDialog()" matTooltip="חיפוש חדר">
+        <mat-icon>search</mat-icon>
+        <span>חיפוש</span>
+      </button>
+    </div>
   </div>
   <div class="card-content">
     <!-- אינדיקטור טעינה (אם תרצה להוסיף בעתיד) -->
