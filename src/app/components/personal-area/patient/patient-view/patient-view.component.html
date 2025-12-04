@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <!-- תצוגה כאשר נבחר מטופל -->
+    <!-- תצוגת מטופל -->
     <div *ngIf="selectedPatient" class="patient-view">
 
       <!-- כותרת -->
@@ -55,12 +55,20 @@
           <span>תשלומים</span>
         </button>
 
+        <!-- ⭐ טאב חדש — מעקבים -->
+        <button class="tab-link"
+                [class.active]="activeTab === 'followups'"
+                (click)="setActiveTab('followups')">
+          <mat-icon>event</mat-icon>
+          <span>מעקבים</span>
+        </button>
+
         <button class="close-btn" (click)="onCloseDetails()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
 
-      <!-- תוכן לפי טאב -->
+      <!-- תוכן הטאבים -->
       <div class="tab-content">
 
         <!-- טיפולים -->
@@ -81,19 +89,10 @@
           </app-patient-details>
         </div>
 
-        <!-- יומן -->
-        <div *ngIf="activeTab === 'calendar'" class="calendar-view">
-          <div class="calendar-card">
-            <h3>יומן פגישות</h3>
-            <p>כאן יוצג יומן הפגישות של המטפל</p>
-          </div>
-        </div>
-
         <!-- דואר -->
         <div *ngIf="activeTab === 'mail'" class="mail-view">
           <div class="mail-card">
             <h3>התכתבויות</h3>
-            <p>כאן יוצגו ההתכתבויות עם המטפל</p>
           </div>
         </div>
 
@@ -101,6 +100,13 @@
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">
             <app-payment-list></app-payment-list>
+          </div>
+        </div>
+
+        <!-- ⭐ טאב חדש — מעקבים -->
+        <div *ngIf="activeTab === 'followups'" class="followups-view">
+          <div class="followups-card">
+            <app-followup-table [personId]="selectedPatient.person.person_id || 0" [creatorId]="userId || 0"></app-followup-table>
           </div>
         </div>
 

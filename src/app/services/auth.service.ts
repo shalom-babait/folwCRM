@@ -44,6 +44,20 @@ login(email: string, password: string): Observable<{ success: boolean; token: st
     return !!this.getToken();
   }
 
+    // מחלץ מזהה משתמש מה-token
+    getCurrentUserId(): number | null {
+      const token = this.getToken();
+      // console.log('JWT token:', token);
+      if (!token) return null;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.id || null;
+      } catch (err) {
+        console.error('JWT decode error:', err);
+        return null;
+      }
+    }
+
   // בודק אם למשתמש יש role מסוים
   hasRole(expectedRole: string): boolean {
     const role = this.getRoleFromToken();

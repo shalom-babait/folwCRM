@@ -1,0 +1,47 @@
+<div class="user-followup-list-container">
+		<div class="search-container">
+			<input type="text" placeholder="חיפוש לפי שם/טלפון/תאריך" class="search-input" [(ngModel)]="searchTerm">
+				<select [(ngModel)]="dateFilter" class="date-filter-dropdown">
+					<option value="all">הכל</option>
+					<option value="today">היום</option>
+					<option value="tomorrow">מחר</option>
+					<option value="thisWeek">השבוע</option>
+					<option value="thisMonth">החודש</option>
+					<option value="nextWeek">שבוע הבא</option>
+					<option value="nextMonth">חודש הבא</option>
+				</select>
+		</div>
+
+	<div class="treatment-row header-row">
+		<div class="treatment-cell">שם</div>
+		<div class="treatment-cell">טלפון</div>
+		<!-- <div class="treatment-cell">מייל</div> -->
+		<div class="treatment-cell">תזכורת?</div>
+		<div class="treatment-cell">תאריך מעקב</div>
+		<div class="treatment-cell">שעה</div>
+		<div class="treatment-cell">הערות</div>
+	</div>
+
+	<ng-container *ngIf="filteredFollowups.length > 0; else noFollowups">
+		<div class="treatment-row data-row" *ngFor="let f of filteredFollowups">
+			<div class="treatment-cell">{{ f.person.first_name }} {{ f.person.last_name }}</div>
+			<div class="treatment-cell">{{ f.person.phone }}</div>
+			<!-- <div class="treatment-cell">{{ f.person?.email }}</div> -->
+			<div class="treatment-cell">
+				<ng-container *ngIf="f.followUp.remind; else toggle">
+					<mat-icon color="primary">check</mat-icon>
+				</ng-container>
+				<ng-template #toggle>
+            <mat-slide-toggle name="remind" [(ngModel)]="f.followUp.remind"></mat-slide-toggle>				</ng-template>
+			</div>
+			<div class="treatment-cell">{{ f.followUp.follow_date | date:'dd/MM/yyyy' }}</div>
+			<div class="treatment-cell">{{ f.followUp.follow_time }}</div>
+			<div class="treatment-cell">{{ f.followUp.notes }}</div>
+		</div>
+	</ng-container>
+	<ng-template #noFollowups>
+		<div class="no-followups-message">
+            אין מעקבים להצגה.
+		</div>
+	</ng-template>
+</div>
