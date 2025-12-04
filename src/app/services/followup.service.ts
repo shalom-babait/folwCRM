@@ -26,6 +26,11 @@ export class FollowupService {
     return this.http.get<FollowUp[]>(`${this.apiUrl}/person/${personId}`);
   }
 
+  updateFollowup(followup: FollowUp): Observable<any> {
+    if (!followup.followup_id) throw new Error('Missing followup_id for update');
+    return this.http.put(`${this.apiUrl}/${followup.followup_id}`, followup);
+  }
+
   updateFollowupReminder(followupId: number, remind: boolean): Observable<any> {
     return this.http.put(`${this.apiUrl}/${followupId}`, { remind });
   }

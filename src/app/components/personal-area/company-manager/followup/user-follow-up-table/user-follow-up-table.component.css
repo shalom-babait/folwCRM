@@ -1,0 +1,19 @@
+/* Bell animation for today followup */
+.bell-animate {
+	animation: ring-bell 1s infinite;
+	color: #ff9800;
+}
+
+@keyframes ring-bell {
+	0% { transform: rotate(0deg); }
+	10% { transform: rotate(-15deg); }
+	20% { transform: rotate(10deg); }
+	30% { transform: rotate(-10deg); }
+	40% { transform: rotate(6deg); }
+	50% { transform: rotate(-4deg); }
+	60% { transform: rotate(2deg); }
+	70% { transform: rotate(-1deg); }
+	80% { transform: rotate(1deg); }
+	90% { transform: rotate(0deg); }
+	100% { transform: rotate(0deg); }
+}
