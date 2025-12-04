@@ -42,4 +42,7 @@ export class GroupsService {
     return this.http.get<ApiResponseGroup<UserGroup[]>>(`${this.apiUrl}/group_therapists/${group_id}`);
   }
 
+  getAppointmentsByGroup(group_id: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/appointments/group/${group_id}`);
+  }
 }

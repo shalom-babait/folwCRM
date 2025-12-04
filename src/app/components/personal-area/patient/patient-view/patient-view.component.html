@@ -1,12 +1,15 @@
 <div class="view-container">
+
   <div class="right-panel">
+    <!-- טוען את כל המטופלים -->
     <app-patient-list
       (patientSelected)="onPatientSelected($event)">
     </app-patient-list>
   </div>
 
   <div class="left-panel">
-    <!-- תצוגת ברירת מחדל - סיכומים -->
+
+    <!-- תצוגת ברירת מחדל -->
     <div *ngIf="!selectedPatient" class="summary-view">
       <div class="summary-card">
         <h2>סיכום מטופלים</h2>
@@ -14,50 +17,65 @@
       </div>
     </div>
 
-    <!-- תצוגה כאשר נבחר מטופל -->
+    <!-- תצוגת מטופל -->
     <div *ngIf="selectedPatient" class="patient-view">
-      <!-- כותרת עם לינקים -->
+
+      <!-- כותרת -->
       <div class="header-tabs">
         <span>
-          <p>{{ selectedPatient.user.first_name }} {{ selectedPatient.user.last_name }}</p>
+          <p>{{ selectedPatient.person.first_name }} {{ selectedPatient.person.last_name }}</p>
         </span>
         <br />
-        <button class="tab-link" [class.active]="activeTab === 'details'" (click)="setActiveTab('details')">
+
+        <button class="tab-link"
+                [class.active]="activeTab === 'details'"
+                (click)="setActiveTab('details')">
           <mat-icon>person</mat-icon>
           <span>פרטי מטופל</span>
         </button>
 
-        <button class="tab-link" [class.active]="activeTab === 'mail'" (click)="setActiveTab('mail')">
+        <button class="tab-link"
+                [class.active]="activeTab === 'mail'"
+                (click)="setActiveTab('mail')">
           <mat-icon>mail</mat-icon>
           <span>דואר</span>
         </button>
 
-        <button class="tab-link" [class.active]="activeTab === 'treatments'" (click)="setActiveTab('treatments')">
+        <button class="tab-link"
+                [class.active]="activeTab === 'treatments'"
+                (click)="setActiveTab('treatments')">
           <mat-icon>medical_services</mat-icon>
           <span>רשימת טיפולים</span>
         </button>
 
-        <button 
-          class="tab-link" 
-          [class.active]="activeTab === 'payments'"
-          (click)="setActiveTab('payments')">
+        <button class="tab-link"
+                [class.active]="activeTab === 'payments'"
+                (click)="setActiveTab('payments')">
           <mat-icon>payment</mat-icon>
           <span>תשלומים</span>
         </button>
-        
+
+        <!-- ⭐ טאב חדש — מעקבים -->
+        <button class="tab-link"
+                [class.active]="activeTab === 'followups'"
+                (click)="setActiveTab('followups')">
+          <mat-icon>event</mat-icon>
+          <span>מעקבים</span>
+        </button>
+
         <button class="close-btn" (click)="onCloseDetails()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
 
-      <!-- תוכן לפי הטאב הפעיל -->
+      <!-- תוכן הטאבים -->
       <div class="tab-content">
 
-        <!-- רשימת טיפולים -->
+        <!-- טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list 
-              [patient]="selectedPatient.patient" 
+            <app-treatment-list
+              [patient]="selectedPatient.patient"
               [patientId]="selectedPatient.patient.patient_id">
             </app-treatment-list>
           </div>
@@ -65,39 +83,35 @@
 
         <!-- פרטי מטופל -->
         <div *ngIf="activeTab === 'details'" class="details-view">
-          <app-patient-details [patient]="selectedPatient" (patientUpdated)="onPatientUpdated($event)"></app-patient-details>
-        </div>
-
-        <!-- יומן -->
-        <div *ngIf="activeTab === 'calendar'" class="calendar-view">
-          <div class="calendar-card">
-            <h3>יומן פגישות</h3>
-            <p>כאן יוצג יומן הפגישות של המטפל</p>
-            <!-- הוסף כאן את הקומפוננטה של היומן -->
-          </div>
+          <app-patient-details
+            [patient]="selectedPatient"
+            (patientUpdated)="onPatientUpdated($event)">
+          </app-patient-details>
         </div>
 
         <!-- דואר -->
         <div *ngIf="activeTab === 'mail'" class="mail-view">
           <div class="mail-card">
             <h3>התכתבויות</h3>
-            <p>כאן יוצגו ההתכתבויות עם המטפל</p>
-            <!-- הוסף כאן את הקומפוננטה של הדואר -->
           </div>
         </div>
 
         <!-- תשלומים -->
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">
-            <!-- אם יש קומפוננטה קיימת עבור תשלומים -->
-            <!-- <app-payment-list 
-              [patientId]="selectedPatient.patient.patient_id">
-            </app-payment-list> -->
             <app-payment-list></app-payment-list>
+          </div>
+        </div>
+
+        <!-- ⭐ טאב חדש — מעקבים -->
+        <div *ngIf="activeTab === 'followups'" class="followups-view">
+          <div class="followups-card">
+            <app-followup-table [personId]="selectedPatient.person.person_id || 0" [creatorId]="userId || 0"></app-followup-table>
           </div>
         </div>
 
       </div>
     </div>
+
   </div>
 </div>

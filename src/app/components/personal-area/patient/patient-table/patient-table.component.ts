@@ -73,22 +73,21 @@ export class PatientTableComponent implements OnInit, OnChanges {
             next: (patients: any) => {
 
               this.patients = patients.map((p: any) => ({
-                user: {
-                  user_id: p.user_id,
+                person: {
+                  person_id: p.person_id,
                   first_name: p.first_name ?? "-",
                   last_name: p.last_name ?? "-",
-                  email: p.email ?? "-",
                   phone: p.phone ?? "-",
                   city: p.city ?? "-",
                   birth_date: p.birth_date ?? "-",
                   address: p.address ?? "-",
-                  teudat_zehut: p.teudat_zehut ?? "-"
+                  teudat_zehut: p.teudat_zehut ?? "-",
+                  gender: p.gender ?? "אחר"
                 },
                 patient: {
                   patient_id: p.patient_id,
                   user_id: p.user_id,
                   therapist_id: p.therapist_id,
-                  gender: p.gender ?? "אחר",
                   status: p.status ?? "-",
                   history_notes: p.history_notes ?? ""
                 },
@@ -128,10 +127,10 @@ export class PatientTableComponent implements OnInit, OnChanges {
     }
 
     this.filteredPatients = this.patients.filter(p => {
-      const firstName = (p.user.first_name || '').toLowerCase();
-      const lastName = (p.user.last_name || '').toLowerCase();
+      const firstName = (p.person.first_name || '').toLowerCase();
+      const lastName = (p.person.last_name || '').toLowerCase();
       const fullName = `${firstName} ${lastName}`;
-      const city = (p.user.city || '').toLowerCase();
+      const city = (p.person.city || '').toLowerCase();
       return fullName.includes(searchLower) || city.includes(searchLower);
     });
   }
@@ -153,20 +152,20 @@ export class PatientTableComponent implements OnInit, OnChanges {
 
       switch (column) {
         case 'full_name':
-          valueA = `${a.user.first_name} ${a.user.last_name}`.toLowerCase();
-          valueB = `${b.user.first_name} ${b.user.last_name}`.toLowerCase();
+          valueA = `${a.person.first_name} ${a.person.last_name}`.toLowerCase();
+          valueB = `${b.person.first_name} ${b.person.last_name}`.toLowerCase();
           break;
         case 'birth_date':
-          valueA = a.patient.birth_date ? new Date(a.patient.birth_date).getTime() : 0;
-          valueB = b.patient.birth_date ? new Date(b.patient.birth_date).getTime() : 0;
+          valueA = a.person.birth_date ? new Date(a.person.birth_date).getTime() : 0;
+          valueB = b.person.birth_date ? new Date(b.person.birth_date).getTime() : 0;
           break;
         case 'city':
-          valueA = (a.user.city || '').toLowerCase();
-          valueB = (b.user.city || '').toLowerCase();
+          valueA = (a.person.city || '').toLowerCase();
+          valueB = (b.person.city || '').toLowerCase();
           break;
         case 'gender':
-          valueA = a.patient.gender || '';
-          valueB = b.patient.gender || '';
+          valueA = a.person.gender || '';
+          valueB = b.person.gender || '';
           break;
         case 'status':
           valueA = a.patient.status || '';

@@ -12,7 +12,7 @@ export class TypesService {
 
   constructor(private http: HttpClient) { }
 
-  getTypes(): Observable<Type[]> {
-    return this.http.get<Type[]>(this.apiUrl + '/getTypes');
+  getTypes(patientId: number): Observable<Type[]> {
+    return this.http.get<Type[]>(this.apiUrl + '/getTypes/' + patientId);
   }
 }

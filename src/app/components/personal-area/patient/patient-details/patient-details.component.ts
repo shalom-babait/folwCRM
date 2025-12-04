@@ -11,7 +11,7 @@ export class PatientDetailsComponent implements OnChanges {
 
   private getBirthDate(): string | undefined {
     // עדיפות ל-user, אם לא קיים ניקח מה-patient
-    return this.patient?.user?.birth_date || this.patient?.patient?.birth_date;
+    return this.patient?.person?.birth_date || this.patient?.patient?.person?.birth_date;
   }
   private formatDateForInput(dateString?: string): string {
     if (!dateString) return '';
@@ -49,65 +49,67 @@ export class PatientDetailsComponent implements OnChanges {
     }
 
     // טוען נתונים לטופס
-    if (this.patient && this.patientForm && this.patient.user) {
+    if (this.patient && this.patientForm && this.patient.person) {
       this.patientForm.patchValue({
-        first_name: this.patient.user.first_name,
-        last_name: this.patient.user.last_name,
-        phone: this.patient.user.phone,
-        email: this.patient.user.email,
+        first_name: this.patient.person.first_name,
+        last_name: this.patient.person.last_name,
+        phone: this.patient.person.phone,
+        // email: this.patient.user.user.email,
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.user.address
+        address: this.patient.person.address
       }, { emitEvent: false });
     }
   }
 
   startEdit(): void {
     this.isEditing = true;
-    if (this.patient && this.patient.user) {
+    if (this.patient && this.patient.person) {
       this.patientForm.patchValue({
-        first_name: this.patient.user.first_name,
-        last_name: this.patient.user.last_name,
-        phone: this.patient.user.phone,
-        email: this.patient.user.email,
+        first_name: this.patient.person.first_name,
+        last_name: this.patient.person.last_name,
+        phone: this.patient.person.phone,
+        // email: this.patient.user.email,
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.user.address
+        address: this.patient.person.address
       }, { emitEvent: false });
     }
   }
 
   cancelEdit(): void {
     this.isEditing = false;
-    if (this.patient && this.patient.user) {
+    if (this.patient && this.patient.person) {
       this.patientForm.patchValue({
-        first_name: this.patient.user.first_name,
-        last_name: this.patient.user.last_name,
-        phone: this.patient.user.phone,
-        email: this.patient.user.email,
+        first_name: this.patient.person.first_name,
+        last_name: this.patient.person.last_name,
+        phone: this.patient.person.phone,
+        // email: this.patient.user.email,
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.user.address
+        address: this.patient.person.address
       }, { emitEvent: false });
     }
   }
 
-  saveChanges(): void {
-    if (this.patientForm.valid) {
-      // בניית אובייקט עדכון מלא (gender נשאר בעברית)
-      const updatedPatient: PatientCreationData = {
-        ...this.patient,
-        user: {
-          ...this.patient.user,
-          ...this.patientForm.value
-        },
-        patient: {
-          ...this.patient.patient,
-          ...this.patientForm.value
-        }
-      };
-      this.patientUpdated.emit(updatedPatient);
-      this.isEditing = false;
+ saveChanges(): void {
+  if (this.patientForm.valid) {
+    const updatedPatient: PatientCreationData = {
+      ...this.patient,
+      person: {
+        ...this.patient.person,
+        ...this.patientForm.value
+      },
+      patient: {
+        ...this.patient.patient,
+        ...this.patientForm.value
+      }
+    };
+    // הסר email מהאובייקט אם קיים
+    if ('email' in updatedPatient.person) {
+      delete updatedPatient.person.email;
     }
+    this.patientUpdated.emit(updatedPatient);
+    this.isEditing = false;
   }
-
+}
   calculateAge(): number {
     const birthDateStr = this.getBirthDate();
     if (!birthDateStr) return 0;

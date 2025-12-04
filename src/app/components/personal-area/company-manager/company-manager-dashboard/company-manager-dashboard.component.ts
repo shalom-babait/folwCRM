@@ -9,7 +9,6 @@ export class CompanyManagerDashboardComponent {
   showDepartments = false;
 
   onShowDepartments() {
-    alert('Showing Departments');
     this.showDepartments = true;
   }
 }

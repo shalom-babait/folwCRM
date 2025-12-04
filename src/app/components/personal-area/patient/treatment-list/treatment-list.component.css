@@ -218,7 +218,7 @@
     }
 
     .treatment-cell:nth-child(2)::before {
-        content: "שם פגישה: ";
+        content: "שם קבוצה: ";
         font-weight: bold;
     }
 
@@ -332,3 +332,4 @@
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
 }
+

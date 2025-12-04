@@ -3,20 +3,12 @@
   <div class="card-header">
     <h3>רשימת מטופלים</h3>
     <div class="header-actions">
-      <button 
-        class="add-patient-btn"
-        (click)="openAddPatientDialog()"
-        [disabled]="isLoading"
-        matTooltip="הוסף מטופל חדש"
-        matTooltipPosition="below">
+      <button class="add-patient-btn" (click)="openAddPatientDialog()" [disabled]="isLoading"
+        matTooltip="הוסף מטופל חדש" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
         <span>הוסף מטופל</span>
       </button>
-      <button 
-        class="search-btn"
-        (click)="openSearchDialog()"
-        [disabled]="isLoading"
-        matTooltip="חיפוש מטופל">
+      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטופל">
         <mat-icon>search</mat-icon>
         <span>חיפוש</span>
       </button>
@@ -29,17 +21,12 @@
     </div>
 
     <div *ngIf="!isLoading && patients.length > 0">
-      <div 
-        class="patient-card" 
-        *ngFor="let patient of patients"
-        [class.selected]="selectedPatientId === (patient.patient.patient_id)">
+      <div class="patient-card" *ngFor="let patient of patients"
+        [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
         <div class="patient-info" (click)="viewPatientDetails(patient)">
-          <span class="patient-name">{{ patient.user.first_name }} {{ patient.user.last_name }}</span>
+          <span class="patient-name">{{ patient.person.first_name }} {{ patient.person.last_name }}</span>
         </div>
-        <button 
-          class="menu-button"
-          [matMenuTriggerFor]="patientMenu"
-          (click)="$event.stopPropagation()"
+        <button class="menu-button" [matMenuTriggerFor]="patientMenu" (click)="$event.stopPropagation()"
           matTooltip="פעולות">
           <mat-icon>more_vert</mat-icon>
         </button>
@@ -48,10 +35,6 @@
             <mat-icon>person</mat-icon>
             <span>הצג פרטי מטופל</span>
           </button>
-          <!-- <button mat-menu-item (click)="openPatientCalendar(patient.patient)">
-            <mat-icon>calendar_today</mat-icon>
-            <span>יומן של מטופל</span>
-          </button> -->
         </mat-menu>
       </div>
     </div>

@@ -40,7 +40,7 @@ export class RoomListCalendarComponent implements OnInit {
   getTherapistName(therapistId: number): string {
     const therapist = this.therapists.find(t => t.therapist.therapist_id === therapistId);
     if (therapist) {
-      return therapist.user.first_name + ' ' + therapist.user.last_name;
+      return therapist.person.first_name + ' ' + therapist.person.last_name;
     }
     return '';
   }
@@ -60,7 +60,8 @@ export class RoomListCalendarComponent implements OnInit {
             String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
             String(dateObj.getDate()).padStart(2, '0');
         }
-        const therapistName = this.getTherapistName(app.therapist_id);
+        // Prefer therapist_name from backend, fallback to getTherapistName or 'פגישה'
+        const therapistName = (app as any).therapist_name || this.getTherapistName(app.therapist_id);
         return {
           ...app,
           title: therapistName ? therapistName : 'פגישה',
