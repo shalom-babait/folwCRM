@@ -24,7 +24,7 @@ export class LogInComponent {
 onLogin() {
   this.authService.login(this.email, this.password).subscribe({
     next: (res: any) => {
-      console.log('Login successful:', res);
+      // console.log('Login successful:', res);
       localStorage.setItem('token', res.token);
       if (res.user) {
         localStorage.setItem('user', JSON.stringify(res.user));

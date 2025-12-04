@@ -10,6 +10,7 @@
       <li><button (click)="selectedSection = 'mail'">דואר</button></li>
       <li><button (click)="selectedSection = 'declarations'">הצהרות</button></li>
       <li><button (click)="selectedSection = 'calendar'">יומן טיפולים</button></li>
+      <li><button (click)="selectedSection = 'followups'">מעקבים</button></li>
     </ul>
   </div>
 
@@ -46,5 +47,6 @@
   <!-- <app-mail *ngSwitchCase="'mail'"></app-mail> -->
   <!-- <app-declarations *ngSwitchCase="'declarations'"></app-declarations> -->
   <app-therapist-calendar *ngSwitchCase="'calendar'"></app-therapist-calendar>
+  <app-user-follow-up-table *ngSwitchCase="'followups'"></app-user-follow-up-table>
   <div *ngSwitchDefault>בחר פעולה</div>
 </div>

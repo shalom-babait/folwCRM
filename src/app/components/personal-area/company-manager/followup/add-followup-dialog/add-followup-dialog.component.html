@@ -1,0 +1,50 @@
+<div class="create-treatment-dialog">
+  <h2 class="dialog-title">הוספת מעקב חדש</h2>
+
+  <form class="input-dialog" [formGroup]="followupForm" (ngSubmit)="onSubmit()">
+
+    <!-- תאריך מעקב -->
+    <div class="form-field">
+      <label for="follow_date">תאריך מעקב *</label>
+      <input
+        id="follow_date"
+        type="date"
+        formControlName="follow_date"
+      />
+      <div class="error-message" *ngIf="isFieldInvalid('follow_date')">
+        {{ getFieldError('follow_date', 'תאריך מעקב') }}
+      </div>
+    </div>
+
+    <!-- שעה (לא חובה) -->
+    <div class="form-field">
+      <label for="follow_time">שעה</label>
+      <input
+        id="follow_time"
+        type="time"
+        formControlName="follow_time"
+      />
+    </div>
+
+    <!-- האם לתזכר -->
+    <div class="form-field">
+      <label for="remind">תזכורת</label>
+      <input type="checkbox" id="remind" formControlName="remind" />
+    </div>
+
+    <!-- הערות -->
+    <div class="form-field">
+      <label for="notes">הערות</label>
+      <textarea id="notes" formControlName="notes"></textarea>
+    </div>
+
+    <!-- פעולות -->
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+      <button type="submit" class="save-button" [disabled]="!followupForm.valid || isSubmitting">
+        שמירה
+      </button>
+    </div>
+
+  </form>
+</div>
