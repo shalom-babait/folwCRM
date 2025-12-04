@@ -1,0 +1,24 @@
+<div class="create-treatment-dialog">
+	<h2 class="dialog-title">הוספת חדר חדש</h2>
+	<form class="input-dialog" [formGroup]="roomForm">
+		<div class="form-field">
+			<label for="room_name">שם חדר</label>
+			<input id="room_name" type="text" formControlName="room_name" placeholder="הזן שם חדר">
+			<div class="error-message" *ngIf="roomForm.get('room_name')?.hasError('required')">
+				שם החדר הוא שדה חובה
+			</div>
+			<div class="error-message" *ngIf="roomForm.get('room_name')?.hasError('minlength')">
+				שם החדר חייב להכיל לפחות 2 תווים
+			</div>
+		</div>
+		<div class="dialog-actions">
+			<button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+				ביטול
+			</button>
+			<button type="submit" class="save-button" (click)="onSubmit()" [disabled]="!roomForm.valid || isSubmitting">
+				<span *ngIf="!isSubmitting">הוסף</span>
+				<span *ngIf="isSubmitting">מוסיף...</span>
+			</button>
+		</div>
+	</form>
+</div>

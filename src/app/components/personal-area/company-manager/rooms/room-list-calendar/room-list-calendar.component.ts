@@ -1,3 +1,5 @@
+import { MatDialog } from '@angular/material/dialog';
+import { AddRoomDialogComponent } from '../add-room-dialog/add-room-dialog.component';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { RoomsService } from 'src/app/services/rooms.service';
@@ -22,11 +24,34 @@ export class RoomListCalendarComponent implements OnInit {
 
   @Output() roomSelected = new EventEmitter<Room>();
 
+
   constructor(
     private roomsService: RoomsService,
     private patientService: PatientService,
-    private userService: UserService
+    private userService: UserService,
+    private dialog: MatDialog
   ) {}
+
+  openAddRoomDialog(): void {
+    const dialogRef = this.dialog.open(AddRoomDialogComponent, {
+      width: '400px',
+      direction: 'rtl'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // רענון רשימת החדרים אחרי הוספה
+        this.roomsService.getRooms().subscribe((rooms: Room[]) => {
+          this.rooms = rooms;
+        });
+      }
+    });
+  }
+
+  openSearchDialog(): void {
+    // כאן תוכל לפתוח דיאלוג חיפוש או להפעיל לוגיקת חיפוש
+    alert('פונקציית חיפוש חדרים טרם מומשה');
+  }
 
   ngOnInit(): void {
     this.roomsService.getRooms().subscribe((rooms: Room[]) => {

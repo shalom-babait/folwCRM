@@ -49,6 +49,13 @@
           <mat-icon>people</mat-icon>
           <span>רשימת מטופלים</span>
         </button>
+        <button 
+          class="tab-link" 
+          [class.active]="activeTab === 'followups'"
+          (click)="setActiveTab('followups')">
+          <mat-icon>assignment</mat-icon>
+          <span>מעקבים</span>
+        </button>
         
         <button class="close-btn" (click)="onCloseDetails()">
           <mat-icon>close</mat-icon>
