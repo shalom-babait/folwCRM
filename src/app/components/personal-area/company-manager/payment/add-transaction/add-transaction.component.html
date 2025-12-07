@@ -35,22 +35,22 @@
   <div class="form-content" *ngIf="transactionType === 'debit'">
     <div class="form-group">
       <label>בחר תור:</label>
-      <select [(ngModel)]="debitForm.appointment_id" 
+      <!-- <select [(ngModel)]="debitForm.appointment_id" 
               (change)="onAppointmentChange()"
               class="form-control">
         <option value="">-- בחר תור --</option>
         <option *ngFor="let apt of appointments" [value]="apt.id">
           {{ apt.description }} - {{ apt.patient }}
         </option>
-      </select>
+      </select> -->
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label>תיאור החוב:</label>
       <input type="text" 
              [(ngModel)]="debitForm.description"
              class="form-control">
-    </div>
+    </div> -->
 
     <div class="form-row">
       <div class="form-group">
@@ -114,20 +114,20 @@
     <!-- מזומן - רק הבסיס (סכום + תאריך שכבר מוצגים) -->
     
     <!-- העברה בנקאית - אסמכתא -->
-    <div class="form-group" *ngIf="creditForm.method === 'transfer'">
+    <!-- <div class="form-group" *ngIf="creditForm.method === 'transfer'">
       <label>מספר אסמכתא:</label>
       <input type="text" 
              [(ngModel)]="creditForm.reference"
              placeholder="אסמכתא"
              class="form-control">
-    </div>
+    </div> -->
 
     <!-- כרטיס אשראי - מספר תשלומים וסטטוס -->
     <div *ngIf="creditForm.method === 'card'">
       <div class="form-row">
         <div class="form-group">
           <label>מספר תשלומים:</label>
-          <select [(ngModel)]="creditForm.installments" class="form-control">
+          <!-- <select [(ngModel)]="creditForm.installments" class="form-control">
             <option [value]="1">תשלום אחד</option>
             <option [value]="2">2 תשלומים</option>
             <option [value]="3">3 תשלומים</option>
@@ -137,7 +137,7 @@
             <option [value]="8">8 תשלומים</option>
             <option [value]="10">10 תשלומים</option>
             <option [value]="12">12 תשלומים</option>
-          </select>
+          </select> -->
         </div>
 
         <div class="form-group">

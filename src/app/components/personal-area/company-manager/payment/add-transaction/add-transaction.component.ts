@@ -1,20 +1,26 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 interface DebitTransaction {
-  type: 'debit';
+  transaction_type: 'debit';
   appointment_id: string;
   amount: number;
-  description: string;
-  date: Date;
+  // description: string;
+  payment_date: Date;
+  status: 'pending' | 'completed' | 'failed';
+  method: 'cash' | 'transfer' | 'card';
+
 }
 
 interface CreditTransaction {
-  type: 'credit';
+  appointment_id?: string;
+  transaction_type: 'credit';
   amount: number;
   payment_date: Date;
   method: 'cash' | 'transfer' | 'card';
   status: 'pending' | 'completed' | 'failed';
-  reference?: string;
+  // transaction_type?: string;
+  // reference?: string;
+  // installments?: number;
 }
 
 type Transaction = DebitTransaction | CreditTransaction;
@@ -30,25 +36,25 @@ export class AddTransactionComponent {
 
   transactionType: 'debit' | 'credit' = 'debit';
 
-  // שדות לחוב
+  // טופס חוב
   debitForm = {
     appointment_id: '',
     amount: 0,
-    description: '',
+    // description: '',
     date: new Date()
   };
 
-  // שדות לתשלום
+  // טופס תשלום
   creditForm = {
     amount: 0,
     payment_date: new Date(),
     method: 'cash' as 'cash' | 'transfer' | 'card',
     status: 'completed' as 'pending' | 'completed' | 'failed',
-    reference: '',
-    installments: 1
+    // reference: '',
+    // installments: 1
   };
 
-  // רשימת תורים לבחירה (דוגמה - להחליף בקריאה לשרת)
+  // רשימת תורים לדוגמה
   appointments = [
     { id: 'apt_001', description: 'טיפול שורש - 15/01/2025', patient: 'משה כהן' },
     { id: 'apt_002', description: 'ניקוי אבנית - 18/01/2025', patient: 'שרה לוי' },
@@ -68,7 +74,6 @@ export class AddTransactionComponent {
   ];
 
   onTransactionTypeChange() {
-    // איפוס הטפסים בשינוי סוג העסקה
     this.resetForms();
   }
 
@@ -76,7 +81,7 @@ export class AddTransactionComponent {
     this.debitForm = {
       appointment_id: '',
       amount: 0,
-      description: '',
+      // description: '',
       date: new Date()
     };
 
@@ -85,62 +90,56 @@ export class AddTransactionComponent {
       payment_date: new Date(),
       method: 'cash',
       status: 'completed',
-      reference: '',
-      installments: 1
+      // reference: '',
+      // installments: 1
     };
   }
 
+  // onAppointmentChange() {
+  //   const selectedAppointment = this.appointments.find(a => a.id === this.debitForm.appointment_id);
+  //   if (selectedAppointment) {
+  //     this.debitForm.description = selectedAppointment.description;
+  //   }
+  // }
+
   validateDebitForm(): boolean {
-    if (!this.debitForm.appointment_id) {
-      alert('יש לבחור תור');
-      return false;
-    }
-    if (this.debitForm.amount <= 0) {
-      alert('יש להזין סכום תקין');
-      return false;
-    }
-    if (!this.debitForm.description.trim()) {
-      alert('יש להזין תיאור');
-      return false;
-    }
+    if (!this.debitForm.appointment_id) return false;
+    if (this.debitForm.amount <= 0) return false;
+    // if (!this.debitForm.description.trim()) return false;
     return true;
   }
 
   validateCreditForm(): boolean {
-    if (this.creditForm.amount <= 0) {
-      alert('יש להזין סכום תקין');
-      return false;
-    }
-    if (!this.creditForm.payment_date) {
-      alert('יש לבחור תאריך תשלום');
-      return false;
-    }
+    if (this.creditForm.amount <= 0) return false;
+    if (!this.creditForm.payment_date) return false;
     return true;
   }
 
   onSubmit() {
-    let transaction: Transaction;
 
+    let transaction: Transaction;
     if (this.transactionType === 'debit') {
       if (!this.validateDebitForm()) return;
-
       transaction = {
-        type: 'debit',
+        transaction_type: 'debit',
         appointment_id: this.debitForm.appointment_id,
         amount: this.debitForm.amount,
-        description: this.debitForm.description,
-        date: this.debitForm.date
+        // description: this.debitForm.description,
+        payment_date: this.debitForm.date,
+        status: 'pending',
+        method: 'cash'
       };
     } else {
       if (!this.validateCreditForm()) return;
 
       transaction = {
-        type: 'credit',
+        transaction_type: 'credit',
         amount: this.creditForm.amount,
         payment_date: this.creditForm.payment_date,
         method: this.creditForm.method,
         status: this.creditForm.status,
-        reference: this.creditForm.reference || undefined
+        // reference: this.creditForm.reference || undefined,
+        // installments: this.creditForm.installments
       };
     }
 
@@ -151,15 +150,5 @@ export class AddTransactionComponent {
   onCancel() {
     this.cancelled.emit();
     this.resetForms();
-  }
-
-  onAppointmentChange() {
-    // מילוי אוטומטי של תיאור וסכום לפי התור שנבחר
-    const selectedAppointment = this.appointments.find(
-      apt => apt.id === this.debitForm.appointment_id
-    );
-    if (selectedAppointment) {
-      this.debitForm.description = selectedAppointment.description;
-    }
   }
 }

@@ -120,7 +120,6 @@ export class PatientService {
 
   }
 
-
   getPatientsByTherapist(therapistId: number): Observable<PatientCreationData[]> {
     this.setLoading(true);
     return this.http.get<PatientCreationData[]>(`${this.apiUrl}/patients/byTherapist/${therapistId}`).pipe(
