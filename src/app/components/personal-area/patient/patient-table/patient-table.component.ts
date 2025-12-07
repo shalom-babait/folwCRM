@@ -91,6 +91,10 @@ export class PatientTableComponent implements OnInit, OnChanges {
                   status: p.status ?? "-",
                   history_notes: p.history_notes ?? ""
                 },
+                user:{
+                  user_id: p.user_id,
+                  email: p.email ?? "-"
+                },
                 selectedDepartments: []
               }));
               this.filteredPatients = [...this.patients];

@@ -94,30 +94,15 @@ export class PatientService {
     return this.http.get<any>(`${this.apiUrl}/patients/getAllPatients/`).pipe(
       map(response => {
         const raw = response.data || [];
+        console.log(raw);
         return raw.map((item: any) => ({
-          user: {
-            user_id: item.user_id,
-            first_name: item.first_name,
-            last_name: item.last_name,
-            teudat_zehut: item.teudat_zehut,
-            phone: item.phone,
-            city: item.city,
-            address: item.address,
-            email: item.email,
-            gender: item.gender,
-            birth_date: item.birth_date
-          },
-          patient: {
-            patient_id: item.patient_id,
-            therapist_id: item.therapist_id,
-            status: item.status,
-            history_notes: item.history_notes
-          }
+          person: item.person,
+          patient: item.patient,
+          user: item.user || {},
+          selectedDepartments: item.selectedDepartments || []
         }));
       })
     );
-
-
   }
 
 
