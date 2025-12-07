@@ -90,6 +90,10 @@ import { GroupTherapistsComponent } from './components/personal-area/company-man
 import { TherapistTableComponent } from './components/personal-area/therapist/therapist-table/therapist-table.component';
 import { PaymentListComponent } from './components/personal-area/company-manager/payment-list/payment-list.component';
 import { AddTransactionComponent } from './components/personal-area/company-manager/payment/add-transaction/add-transaction.component';
+import { FollowupTableComponent } from './components/personal-area/company-manager/followup/followup-table/followup-table.component';
+import { AddFollowupDialogComponent } from './components/personal-area/company-manager/followup/add-followup-dialog/add-followup-dialog.component';
+import { UserFollowUpTableComponent } from './components/personal-area/company-manager/followup/user-follow-up-table/user-follow-up-table.component';
+import { AddRoomDialogComponent } from './components/personal-area/company-manager/rooms/add-room-dialog/add-room-dialog.component';
 
 
 @NgModule({
@@ -153,6 +157,10 @@ import { AddTransactionComponent } from './components/personal-area/company-mana
     TherapistTableComponent,
     PaymentListComponent,
     AddTransactionComponent,
+    FollowupTableComponent,
+    AddFollowupDialogComponent,
+    UserFollowUpTableComponent,
+    AddRoomDialogComponent,
   ],
   imports: [
     MatMenuModule,

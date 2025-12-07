@@ -35,28 +35,9 @@ export class PatientDashboardComponent implements OnInit {
           // ניתן להחזיר לוגים אם צריך דיבאג
           // console.log('Patient data from server:', data);
           this.patient = {
-            user: {
-              first_name: data.user?.first_name ?? '',
-              last_name: data.user?.last_name ?? '',
-              birth_date: data.user?.birth_date ?? '',
-              phone: data.user?.phone ?? '',
-              email: data.user?.email ?? '',
-              address: data.user?.address ?? '',
-              teudat_zehut: data.user?.teudat_zehut ?? '',
-              city: data.user?.city ?? '',
-              user_id: data.user?.user_id ?? undefined,
-              gender: data.user?.gender ?? undefined,
-            },
-            patient: {
-              patient_id: data.patient?.patient_id ?? id ?? 0,
-              user_id: data.user?.user_id ?? 0,
-              therapist_id: data.patient?.therapist_id ?? 0,
-              birth_date: data.patient?.birth_date ?? '',
-              gender: data.patient?.gender ?? 'אחר',
-              // status: data.patient?.status ?? '',
-              history_notes: data.patient?.history_notes ?? '',
-            },
-            selectedDepartments: []
+            person: data.person ?? {},
+            patient: data.patient ?? {},
+            selectedDepartments: data.selectedDepartments ?? []
           };
           // קריאת הפגישות רק אחרי שהמטופל נטען
           this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
@@ -67,7 +48,7 @@ export class PatientDashboardComponent implements OnInit {
               appointment_id: a.appointment_id ?? 0,
               patient_id: a.patient_id ?? id,
               room: a.room ?? '',
-              treatment_type: a.treatment_type ?? '',
+              group_name: a.group_name ?? '',
               total_minutes: a.total_minutes ?? 0,
               status: a.status ?? 'מתוזמנת',
               cost: a.cost ?? 0,
@@ -87,7 +68,7 @@ export class PatientDashboardComponent implements OnInit {
             appointment_id: a.appointment_id ?? 0,
             patient_id: a.patient_id ?? this.patientId,
             room: a.room ?? '',
-            treatment_type: a.treatment_type ?? '',
+            // treatment_type: a.treatment_type ?? '',
             total_minutes: a.total_minutes ?? 0,
             status: a.status ?? 'מתוזמנת',
             cost: a.cost ?? 0,
@@ -104,37 +85,21 @@ export class PatientDashboardComponent implements OnInit {
 
   onPatientUpdated(updatedPatient: PatientCreationData) {
     if (!this.patient) return;
-    // Convert gender from 'male'|'female'|'other' to 'זכר'|'נקבה'|'אחר'
-    let gender: 'זכר' | 'נקבה' | 'אחר' = 'אחר';
-    switch (updatedPatient.user.gender) {
-      case 'male':
-        gender = 'זכר';
-        break;
-      case 'female':
-        gender = 'נקבה';
-        break;
-      case 'other':
-        gender = 'אחר';
-        break;
-      default:
-        gender = 'אחר';
-    }
+    // Send gender in English as required by UpdatePatientRequest
+    let gender: 'male' | 'female' | 'other' = updatedPatient.person.gender ?? 'other';
     const backendPatient = {
       patient_id: this.patient?.patient.patient_id ?? 0,
-      user_id: updatedPatient.user.user_id ?? undefined,
-      first_name: updatedPatient.user.first_name ?? '',
-      last_name: updatedPatient.user.last_name ?? '',
-      teudat_zehut: updatedPatient.user.teudat_zehut ?? '',
-      phone: updatedPatient.user.phone ?? '',
-      city: updatedPatient.user.city ?? '',
-      address: updatedPatient.user.address ?? '',
-      email: updatedPatient.user.email ?? '',
-      password: updatedPatient.user.password ?? undefined,
-      role: updatedPatient.user.role ?? undefined,
-      agree: updatedPatient.user.agree ?? undefined,
-      created_at: updatedPatient.user.created_at ?? undefined,
+      user_id: updatedPatient.patient.user_id ?? undefined,
+      first_name: updatedPatient.person.first_name ?? '',
+      last_name: updatedPatient.person.last_name ?? '',
+      teudat_zehut: updatedPatient.person.teudat_zehut ?? '',
+      phone: updatedPatient.person.phone ?? '',
+      city: updatedPatient.person.city ?? '',
+      address: updatedPatient.person.address ?? '',
       gender: gender,
-      birth_date: updatedPatient.user.birth_date ?? '',
+      birth_date: updatedPatient.person.birth_date ?? '',
+      status: updatedPatient.patient.status ?? 'פעיל',
+      history_notes: updatedPatient.patient.history_notes ?? ''
     };
     this.patientService.updatePatient(this.patient?.patient.patient_id ?? 0, backendPatient).subscribe(
       (res) => {

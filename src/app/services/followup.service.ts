@@ -1,0 +1,42 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { FollowUp, FollowUpWithPerson } from '../models/followup.model';
+import { environment } from 'src/environments/environment';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FollowupService {
+  private apiUrl = `${environment.apiUrl}/followups`;
+
+  constructor(private http: HttpClient) { }
+
+  addFollowup(followup: FollowUp): Observable<any> {
+    console.log('Adding followup with data:', followup);
+    return this.http.post(`${this.apiUrl}`, followup);
+  }
+
+  getFollowupsByCreator(created_by_person_id: number): Observable<FollowUpWithPerson[]> {
+    return this.http.get<FollowUpWithPerson[]>(`${environment.apiUrl}/followups/creator/${created_by_person_id}`);
+  }
+
+  getFollowupsByPerson(personId: number): Observable<FollowUp[]> {
+    return this.http.get<FollowUp[]>(`${this.apiUrl}/person/${personId}`);
+  }
+
+  updateFollowup(followup: FollowUp): Observable<any> {
+    if (!followup.followup_id) throw new Error('Missing followup_id for update');
+    return this.http.put(`${this.apiUrl}/${followup.followup_id}`, followup);
+  }
+
+  updateFollowupReminder(followupId: number, remind: boolean): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${followupId}`, { remind });
+  }
+
+  deleteFollowup(followupId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${followupId}`);
+  }
+
+}

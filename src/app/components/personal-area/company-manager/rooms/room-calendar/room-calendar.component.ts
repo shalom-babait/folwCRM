@@ -13,7 +13,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 })
 export class RoomCalendarComponent implements OnInit {
   @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
-  @Input() roomId!: number;
+  @Input() roomId?: number; // אופציונלי, לשימושים אחרים
   @Input() events: any[] = [];
   @Output() dateSelected = new EventEmitter<any>();
 
@@ -47,8 +47,11 @@ export class RoomCalendarComponent implements OnInit {
     dayHeaders: true,
     firstDay: 0,
     eventContent: function(arg) {
+      // Prefer therapist_name if available, fallback to title
+      const therapistName = arg.event.extendedProps && arg.event.extendedProps['therapist_name'];
+      const displayTitle = therapistName || arg.event.title;
       return {
-        html: `<div class='custom-event'><span class='custom-event-text'>${arg.event.title}</span></div>`
+        html: `<div class='custom-event'><span class='custom-event-text'>${displayTitle}</span></div>`
       };
     }
   };
@@ -72,15 +75,20 @@ export class RoomCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // לוגים לאבחון
-    console.log('RoomCalendarComponent ngOnInit events:', this.events);
-    this.calendarOptions.events = this.events;
+    // לא לדרוס את calendarOptions.events כאן, רק ב-ngOnChanges
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['events']) {
-      console.log('RoomCalendarComponent ngOnChanges events:', this.events);
-      this.calendarOptions.events = this.events;
+      this.calendarOptions = {
+        ...this.calendarOptions,
+        events: this.events
+      };
+      if (this.calendarComponent && this.calendarComponent.getApi) {
+        const api = this.calendarComponent.getApi();
+        api.removeAllEvents();
+        api.addEventSource(this.events);
+      }
     }
   }
 

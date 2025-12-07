@@ -6,7 +6,7 @@
     <ul>
       <li><button (click)="showSection('home')">בית</button></li>
       <li><button (click)="showSection('employees')">רשימת עובדים</button></li>
-      <li><button (click)="showSection('requests')">רשימת פניות</button></li>
+      <!-- <li><button (click)="showSection('requests')">רשימת פניות</button></li> -->
       <li><button (click)="showSection('patients')">רשימת מטופלים</button></li>
       <li><button (click)="showSection('prospects')">לקוחות</button></li>
       <li><button (click)="showSection('departments'); navigateToDepartments()">מחלקות</button></li>
@@ -55,6 +55,9 @@
     </ng-container>
     <ng-container *ngSwitchCase="'departments'">
       <app-departments-groups-view></app-departments-groups-view>
+    </ng-container>
+    <ng-container *ngSwitchCase="'rooms'">
+      <app-rooms-view></app-rooms-view>
     </ng-container>
     <!-- אפשר להמשיך להוסיף cases נוספים -->
   </ng-container>

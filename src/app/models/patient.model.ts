@@ -1,51 +1,42 @@
 import { SelectedDepartmentForSave } from "./department-group.model";
 import { UserData } from "./user.model";
+import { Person } from "./person.model"; // להוסיף קובץ עם המודל ששלחתי קודם
 
-// --- מודל מטופל (Patient) ---
-// מייצג רשומה מטבלת Patients במסד הנתונים
 export interface Patient {
   patient_id?: number;
   user_id: number;
   therapist_id?: number | null | undefined;
-  birth_date?: string; // YYYY-MM-DD
-  gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
 }
 
-// --- נתונים בסיסיים של מטופל לצורך יצירה/עדכון ---
 export interface PatientBase {
   therapist_id?: number | null | undefined;
-  birth_date?: string; // YYYY-MM-DD
-  gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
 }
 
-// --- בקשת יצירה של מטופל חדש ---
 export interface CreatePatientRequest extends PatientBase {
-  user_id: number; // חובה בעת יצירה
+  user_id: number;
 }
 
-// --- בקשת עדכון של מטופל קיים ---
 export interface UpdatePatientRequest extends Partial<PatientBase> {
   therapist_id?: number | null | undefined;
 }
 
-// --- נתוני מטופל מלאים (כפי שנשלחים/מתקבלים מהשרת) ---
+// נתוני מטופל מלאים (כולל פרטי Person)
 export interface PatientData {
   patient_id?: number;
   user_id: number;
   therapist_id?: number | null | undefined;
-  birth_date?: string;
-  gender?: 'זכר' | 'נקבה' | 'אחר';
   status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   history_notes?: string;
+  person?: Person; // פרטי המטופל האישיים
 }
 
-// --- אובייקט ליצירת מטופל כולל נתוני משתמש ושיוך מחלקות ---
+// אובייקט ליצירת מטופל כולל משתמש, פרסון ושיוך מחלקות
 export interface PatientCreationData {
-  user: UserData; // פרטי המשתמש מטבלת Users
+  person: Person; // פרטי המטופל האישיים
   patient: PatientData; // פרטי המטופל מטבלת Patients
-  selectedDepartments: SelectedDepartmentForSave[]; // שיוך למחלקות
+  selectedDepartments: SelectedDepartmentForSave[];
 }

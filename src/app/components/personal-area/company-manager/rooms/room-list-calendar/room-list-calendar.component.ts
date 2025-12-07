@@ -1,3 +1,5 @@
+import { MatDialog } from '@angular/material/dialog';
+import { AddRoomDialogComponent } from '../add-room-dialog/add-room-dialog.component';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { RoomsService } from 'src/app/services/rooms.service';
@@ -22,11 +24,34 @@ export class RoomListCalendarComponent implements OnInit {
 
   @Output() roomSelected = new EventEmitter<Room>();
 
+
   constructor(
     private roomsService: RoomsService,
     private patientService: PatientService,
-    private userService: UserService
+    private userService: UserService,
+    private dialog: MatDialog
   ) {}
+
+  openAddRoomDialog(): void {
+    const dialogRef = this.dialog.open(AddRoomDialogComponent, {
+      width: '400px',
+      direction: 'rtl'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // רענון רשימת החדרים אחרי הוספה
+        this.roomsService.getRooms().subscribe((rooms: Room[]) => {
+          this.rooms = rooms;
+        });
+      }
+    });
+  }
+
+  openSearchDialog(): void {
+    // כאן תוכל לפתוח דיאלוג חיפוש או להפעיל לוגיקת חיפוש
+    alert('פונקציית חיפוש חדרים טרם מומשה');
+  }
 
   ngOnInit(): void {
     this.roomsService.getRooms().subscribe((rooms: Room[]) => {
@@ -40,7 +65,7 @@ export class RoomListCalendarComponent implements OnInit {
   getTherapistName(therapistId: number): string {
     const therapist = this.therapists.find(t => t.therapist.therapist_id === therapistId);
     if (therapist) {
-      return therapist.user.first_name + ' ' + therapist.user.last_name;
+      return therapist.person.first_name + ' ' + therapist.person.last_name;
     }
     return '';
   }
@@ -60,7 +85,8 @@ export class RoomListCalendarComponent implements OnInit {
             String(dateObj.getMonth() + 1).padStart(2, '0') + '-' +
             String(dateObj.getDate()).padStart(2, '0');
         }
-        const therapistName = this.getTherapistName(app.therapist_id);
+        // Prefer therapist_name from backend, fallback to getTherapistName or 'פגישה'
+        const therapistName = (app as any).therapist_name || this.getTherapistName(app.therapist_id);
         return {
           ...app,
           title: therapistName ? therapistName : 'פגישה',

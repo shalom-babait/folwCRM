@@ -58,7 +58,7 @@ export class TreatmentListComponent implements OnInit {
       endDate.setHours(Number(endHour), Number(endMinute), 0, 0);
       return {
         id: app.appointment_id,
-        title: app.treatment_type + (app.room ? ' - ' + app.room : ''),
+        title: (app.group_name ) + (app.room ? ' - ' + app.room : ''),
         start: startDate.toISOString().slice(0, 16),
         end: endDate.toISOString().slice(0, 16),
         extendedProps: {

@@ -32,8 +32,12 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // ניקוי כל ה-subscriptions כדי למנוע טעינה חוזרת וזליגת זיכרון
     this.destroy$.next();
     this.destroy$.complete();
+    this.therapists = [];
+    this.selectedTherapistId = null;
+    this.isLoading = false;
   }
 
   loadTherapists() {
@@ -88,25 +92,19 @@ export class TherapistListComponent implements OnInit, OnDestroy {
 
   onTherapistSave(data: TherapistCreationData) {
     this.isLoading = true;
-    // ודא ש-agree הוא 0, 1 או undefined בלבד
-    const user = {
-      ...data.user,
-    };
-    this.userService.createTherapist(data.user, data.therapist,data.selectedDepartments)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          console.log('מטפל חדש נוסף:', res);
-          this.refreshTherapistsList();
-          this.isLoading = false;
-          alert('המטפל נוסף בהצלחה!');
-        },
-        error: (err) => {
-          console.error('שגיאה ביצירת מטפל:', err);
-          this.isLoading = false;
-          alert('שגיאה בהוספת מטפל. אנא נסה שוב.');
-        }
-      });
+  // this.userService.createTherapist(data.user, data.therapist, data.selectedDepartments).subscribe({
+  //       next: (res) => {
+  //         console.log('מטפל חדש נוסף:', res);
+  //         this.refreshTherapistsList();
+  //         this.isLoading = false;
+  //         alert('המטפל נוסף בהצלחה!');
+  //       },
+  //       error: (err) => {
+  //         console.error('שגיאה ביצירת מטפל:', err);
+  //         this.isLoading = false;
+  //         alert('שגיאה בהוספת מטפל. אנא נסה שוב.');
+  //       }
+  //     });
   }
 
   refreshTherapistsList(): void {
