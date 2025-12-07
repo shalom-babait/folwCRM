@@ -23,8 +23,10 @@
     <div *ngIf="!isLoading && patients.length > 0">
       <div class="patient-card" *ngFor="let patient of patients"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
-        <div class="patient-info" (click)="viewPatientDetails(patient)">
-          <span class="patient-name">{{ patient.person.first_name }} {{ patient.person.last_name }}</span>
+        <div class="patient-info" (click)="viewPatientDetails(patient); logPatient(patient)">
+          <span class="patient-name">
+            {{ patient.person?.first_name || '---' }} {{ patient.person?.last_name || '' }}
+          </span>
         </div>
         <button class="menu-button" [matMenuTriggerFor]="patientMenu" (click)="$event.stopPropagation()"
           matTooltip="פעולות">

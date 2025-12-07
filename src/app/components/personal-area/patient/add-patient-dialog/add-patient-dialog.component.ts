@@ -61,6 +61,13 @@ export class AddPatientDialogComponent implements OnInit {
         status: formValue.status || 'פעיל',
         history_notes: formValue.history_notes?.trim() || undefined,
       },
+      user:{
+        user_id: user_id,
+        email: formValue.email.trim(),
+        role: 'patient',
+        agree: 0,
+        created_at: new Date().toISOString()
+      },
       selectedDepartments: selectedDepartments
     };
   }
@@ -169,6 +176,10 @@ export class AddPatientDialogComponent implements OnInit {
                 therapist_id: patient.therapist_id,
                 status: patient.status,
                 history_notes: patient.history_notes,
+              },
+              user:{
+                user_id: user_id,
+                email: formValue.email.trim(),
               },
               selectedDepartments: this.selectedDepartments
             };

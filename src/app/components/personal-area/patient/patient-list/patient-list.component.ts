@@ -86,6 +86,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.patients = data || [];
+        
           this.isLoading = false;
         },
         error: (err) => {
@@ -172,5 +173,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('Error searching patients:', error)
       });
+  }
+
+  logPatient(patient: any) {
+    console.log(patient);
   }
 }
