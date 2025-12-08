@@ -26,6 +26,7 @@
         <div class="item-info" (click)="viewPatientDetails(patient); logPatient(patient)">
           <span class="item-name">
             {{ patient.person.first_name || '---' }} {{ patient.person.last_name || '' }}
+
           </span>
         </div>
         <div class="list-actions">
@@ -39,7 +40,13 @@
               <span>הצג פרטי מטופל</span>
             </button>
           </mat-menu>
-        </div>
+
+          <button mat-menu-item (click)="viewPatientMeetings(patient)">
+            <mat-icon>calendar_today</mat-icon>
+            <span>רשימת פגישות</span>
+          </button>
+        </mat-menu>
+
       </div>
     </div>
 

@@ -12,6 +12,8 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
+  @Output() patientMeetingsRequested = new EventEmitter<PatientCreationData>();
 
   /** אם true — נטען את כל המטופלים */
 
@@ -124,6 +126,15 @@ export class PatientListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** הצגת רשימת פגישות עבור מטופל */
+  viewPatientMeetings(patient: PatientCreationData) {
+    const patient_id = patient.patient?.patient_id;
+    if (patient_id) {
+      this.selectedPatientId = patient_id;
+      this.patientMeetingsRequested.emit(patient);
+    }
+  }
+
   /** פתיחת דיאלוג הוספת מטופל */
   openAddPatientDialog(): void {
     const dialogRef = this.dialog.open(AddPatientDialogComponent, {
@@ -173,9 +184,5 @@ export class PatientListComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('Error searching patients:', error)
       });
-  }
-
-  logPatient(patient: any) {
-    console.log(patient);
   }
 }
