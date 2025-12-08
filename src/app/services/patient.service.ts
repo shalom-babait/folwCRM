@@ -11,6 +11,10 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
+    /** עדכון הערות לפגישה */
+    updateAppointmentNotes(appointmentId: number, notes: string) {
+      return this.http.put(`${this.apiUrl}/appointments/updateAppointment/${appointmentId}`, { notes });
+    }
   /** עדכון פציינט ברשימה המקומית */
   updatePatientInList(updatedPatient: PatientCreationData): void {
     const current = this.patientsListSubject.value || [];
