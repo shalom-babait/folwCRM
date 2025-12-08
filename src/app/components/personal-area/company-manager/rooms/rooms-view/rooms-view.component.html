@@ -23,10 +23,10 @@
 				</button>
 				<button 
 					class="tab-link" 
-					[class.active]="activeTab === 'details'"
-					(click)="setActiveTab('details')">
-					<mat-icon>info</mat-icon>
-					<span>פרטי חדר</span>
+					[class.active]="activeTab === 'settings'"
+					(click)="setActiveTab('settings')">
+					<mat-icon>settings</mat-icon>
+					<span>הגדרות</span>
 				</button>
 				<button class="close-btn" (click)="onCloseDetails()">
 					<mat-icon>close</mat-icon>
@@ -38,32 +38,15 @@
 					<div class="calendar-card">
 						<h3>יומן חדר</h3>
 						<app-room-calendar 
-							*ngIf="selectedRoom?.room_id"
+							*ngIf="selectedRoom.room_id"
 							[roomId]="selectedRoom.room_id"
 							[events]="selectedRoomEvents">
 						</app-room-calendar>
 					</div>
 				</div>
-				<!-- פרטי חדר -->
-				<div *ngIf="activeTab === 'details'" class="details-view">
-					<div class="details-card">
-						<div class="details-content">
-							<div class="detail-section">
-								<mat-icon>meeting_room</mat-icon>
-								<div>
-									<label>שם חדר:</label>
-									<p>{{ selectedRoom.room_name }}</p>
-								</div>
-							</div>
-							<div class="detail-section">
-								<mat-icon>badge</mat-icon>
-								<div>
-									<label>מזהה חדר:</label>
-									<p>{{ selectedRoom.room_id }}</p>
-								</div>
-							</div>
-						</div>
-					</div>
+				<!-- הגדרות חדר -->
+				<div *ngIf="activeTab === 'settings'" class="settings-view">
+					<app-room-settings [room]="selectedRoom"></app-room-settings>
 				</div>
 			</div>
 		</div>

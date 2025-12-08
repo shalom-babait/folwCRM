@@ -10,6 +10,9 @@ import { Room } from 'src/app/models/room.model';
   providedIn: 'root'
 })
 export class RoomsService {
+  deleteRoom(roomId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deleteRoom/${roomId}`);
+  }
   private apiUrl = `${environment.apiUrl}/rooms`;
 
   constructor(private http: HttpClient) { }

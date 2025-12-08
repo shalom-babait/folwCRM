@@ -1,22 +1,14 @@
 <!-- therapist-list.component.html -->
-<div class="therapist-list-card">
+<div class="list-card">
   <div class="card-header">
     <h3>רשימת מטפלים</h3>
     <div class="header-actions">
-      <button 
-        class="add-therapist-btn"
-        (click)="openAddTherapistDialog()"
-        [disabled]="isLoading"
-        matTooltip="הוסף מטפל חדש"
-        matTooltipPosition="below">
+      <button class="add-item-btn" (click)="openAddTherapistDialog()" [disabled]="isLoading"
+        matTooltip="הוסף מטפל חדש" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
         <span>הוסף מטפל</span>
       </button>
-      <button 
-        class="search-btn"
-        (click)="openSearchDialog()"
-        [disabled]="isLoading"
-        matTooltip="חיפוש מטפל">
+      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטפל">
         <mat-icon>search</mat-icon>
         <span>חיפוש</span>
       </button>
@@ -25,41 +17,43 @@
 
   <div class="card-content">
     <!-- אינדיקטור טעינה -->
-    <div *ngIf="isLoading" class="loading-container">
+  <div *ngIf="isLoading" class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
 
     <!-- רשימת מטפלים -->
     <div *ngIf="!isLoading && therapists.length > 0">
       <div 
-        class="therapist-card" 
+        class="list-item-card" 
         *ngFor="let therapist of therapists"
         [class.selected]="selectedTherapistId === (therapist.therapist.therapist_id)">
-        <div class="therapist-info" (click)="viewTherapistDetails(therapist)">
-          <span class="therapist-name">{{ therapist.person.first_name }} {{ therapist.person.last_name }}</span>
+        <div class="item-info" (click)="viewTherapistDetails(therapist)">
+          <span class="item-name">{{ therapist.person.first_name }} {{ therapist.person.last_name }}</span>
         </div>
-        <button 
-          class="menu-button"
-          [matMenuTriggerFor]="therapistMenu"
-          (click)="$event.stopPropagation()"
-          matTooltip="פעולות">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #therapistMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
-          <button mat-menu-item (click)="viewTherapistDetails(therapist)">
-            <mat-icon>person</mat-icon>
-            <span>הצג פרטי מטפל</span>
+        <div class="list-actions">
+          <button 
+            class="menu-button"
+            [matMenuTriggerFor]="therapistMenu"
+            (click)="$event.stopPropagation()"
+            matTooltip="פעולות">
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-menu-item (click)="openTherapistCalendar(therapist.therapist)">
-            <mat-icon>calendar_today</mat-icon>
-            <span>יומן של מטפל</span>
-          </button>
-        </mat-menu>
+          <mat-menu #therapistMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+            <button mat-menu-item (click)="viewTherapistDetails(therapist)">
+              <mat-icon>person</mat-icon>
+              <span>הצג פרטי מטפל</span>
+            </button>
+            <button mat-menu-item (click)="openTherapistCalendar(therapist.therapist)">
+              <mat-icon>calendar_today</mat-icon>
+              <span>יומן של מטפל</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
     </div>
 
     <!-- הודעה אם אין מטפלים -->
-    <div *ngIf="!isLoading && therapists.length === 0" class="no-therapists">
+  <div *ngIf="!isLoading && therapists.length === 0" class="no-items">
       <p>אין מטפלים כרגע</p>
       <p>לחץ על "הוסף מטפל" כדי להתחיל</p>
     </div>
