@@ -23,7 +23,7 @@
     <div *ngIf="!isLoading && patients.length > 0">
       <div class="patient-card" *ngFor="let patient of patients"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
-        <div class="patient-info" (click)="viewPatientDetails(patient); logPatient(patient)">
+        <div class="patient-info" (click)="viewPatientDetails(patient)">
           <span class="patient-name">
             {{ patient.person?.first_name || '---' }} {{ patient.person?.last_name || '' }}
           </span>
@@ -36,6 +36,10 @@
           <button mat-menu-item (click)="viewPatientDetails(patient)">
             <mat-icon>person</mat-icon>
             <span>הצג פרטי מטופל</span>
+          </button>
+          <button mat-menu-item (click)="viewPatientMeetings(patient)">
+            <mat-icon>calendar_today</mat-icon>
+            <span>רשימת פגישות</span>
           </button>
         </mat-menu>
       </div>
