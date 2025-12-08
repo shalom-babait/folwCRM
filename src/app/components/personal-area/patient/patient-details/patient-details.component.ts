@@ -50,11 +50,12 @@ export class PatientDetailsComponent implements OnChanges {
 
     // טוען נתונים לטופס
     if (this.patient && this.patientForm && this.patient.person) {
+      
       this.patientForm.patchValue({
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.user.email,
+        email: this.patient.user.email,
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address
       }, { emitEvent: false });

@@ -45,7 +45,7 @@ export class DepartmentsGroupViewComponent {
   loadGroupAppointments(groupId: number): void {
     this.loading = true;
     this.groupsService.getAppointmentsByGroup(groupId).subscribe(res => {
-      console.log('קיבלתי פגישות מהשרת:', res);
+      // console.log('קיבלתי פגישות מהשרת:', res);
       const appointments = res.data || [];
       this.groupAppointments = appointments.map((a: any) => {
         // המרה לתאריך מקומי כדי למנוע תזוזה של יום
@@ -63,11 +63,11 @@ export class DepartmentsGroupViewComponent {
           end,
           ...a
         };
-        console.log('אירוע ליומן:', event);
+        // console.log('אירוע ליומן:', event);
         return event;
       });
       this.loading = false;
-      console.log('groupAppointments ליומן:', this.groupAppointments);
+      // console.log('groupAppointments ליומן:', this.groupAppointments);
     }, err => {
       this.loading = false;
       console.error('שגיאה בטעינת פגישות:', err);

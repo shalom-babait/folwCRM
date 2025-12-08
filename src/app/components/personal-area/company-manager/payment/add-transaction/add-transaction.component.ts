@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 interface DebitTransaction {
   transaction_type: 'debit';
-  appointment_id: string;
+  appointment_id: null | string;
   amount: number;
   // description: string;
   payment_date: Date;
@@ -103,11 +103,10 @@ export class AddTransactionComponent {
   // }
 
   validateDebitForm(): boolean {
-    if (!this.debitForm.appointment_id) return false;
     if (this.debitForm.amount <= 0) return false;
-    // if (!this.debitForm.description.trim()) return false;
     return true;
   }
+
 
   validateCreditForm(): boolean {
     if (this.creditForm.amount <= 0) return false;
@@ -122,7 +121,8 @@ export class AddTransactionComponent {
       if (!this.validateDebitForm()) return;
       transaction = {
         transaction_type: 'debit',
-        appointment_id: this.debitForm.appointment_id,
+        appointment_id:this.debitForm.appointment_id || null,
+
         amount: this.debitForm.amount,
         // description: this.debitForm.description,
         payment_date: this.debitForm.date,

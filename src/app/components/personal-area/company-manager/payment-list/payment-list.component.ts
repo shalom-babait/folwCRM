@@ -41,7 +41,7 @@ export class PaymentListComponent implements OnInit {
 
         this.transactions = data.map((item: any) => {
           const amount = Number(item.amount ?? 0);
-          const isCharge = item.transaction_type === 'חיוב';
+          const isCharge = item.transaction_type === 'debit';
 
           const debit = isCharge ? amount : 0;
           const credit = !isCharge ? amount : 0;
@@ -93,17 +93,28 @@ export class PaymentListComponent implements OnInit {
     dialogRef.componentInstance.transactionAdded.subscribe((transaction) => {
       console.log("Transaction received:", transaction);
 
+      const methodMap: any = {
+        cash: 'מזומן',
+        transfer: 'העברה בנקאית',
+        card: 'כרטיס אשראי'
+      };
+
+      const statusMap: any = {
+        pending: 'pending',
+        completed: 'paid',
+        failed: 'failed'
+      };
+
       const payload = {
-        // patient_id: this.patientId,
         appointment_id: transaction.transaction_type === 'debit' ? transaction.appointment_id : null,
         amount: transaction.amount,
-        // description: transaction.type === 'debit' ? transaction.description : 'תשלום',
-        payment_date: transaction.transaction_type === 'credit' ? transaction.payment_date : transaction.payment_date,
-        method: transaction.transaction_type === 'credit' ? transaction.method : null,
-        status: transaction.transaction_type === 'credit' ? transaction.status : null,
-        // reference: transaction.type === 'credit' ? transaction.reference : null,
+        payment_date: transaction.payment_date,
+        method: methodMap[transaction.method] ?? 'מזומן',
+        status: statusMap[transaction.status] ?? 'pending',
         transaction_type: transaction.transaction_type
       };
+
+
 
       this.paymentService.createPayment(payload).subscribe({
         next: () => {
@@ -114,6 +125,7 @@ export class PaymentListComponent implements OnInit {
         error: (err) => console.error("שגיאה בשמירה:", err)
       });
     });
+
 
     dialogRef.componentInstance.cancelled.subscribe(() => {
       dialogRef.close();
