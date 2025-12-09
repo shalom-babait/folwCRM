@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { RoomsService } from 'src/app/services/rooms.service';
 import { Room } from 'src/app/models/room.model';
 
 @Component({
@@ -11,6 +12,9 @@ export class RoomSettingsComponent {
   roomColor: string = '#ffffff';
   editMode: boolean = false;
   editedName: string = '';
+  isSaving: boolean = false;
+
+  constructor(private roomsService: RoomsService) {}
 
   ngOnChanges() {
     if (this.room) {
@@ -21,10 +25,24 @@ export class RoomSettingsComponent {
 
   onSave() {
     if (this.room) {
-      this.room.room_name = this.editedName;
-      this.room.color = this.roomColor;
-      this.editMode = false;
-      // כאן אפשר להוסיף קריאה לשרת לעדכון
+      this.isSaving = true;
+      const updatedRoom: Room = {
+        ...this.room,
+        room_name: this.editedName,
+        color: this.roomColor
+      };
+      this.roomsService.updateRoom(updatedRoom).subscribe({
+        next: () => {
+          this.room.room_name = this.editedName;
+          this.room.color = this.roomColor;
+          this.editMode = false;
+          this.isSaving = false;
+        },
+        error: (err) => {
+          this.isSaving = false;
+          console.error('Failed to update room:', err);
+        }
+      });
     }
   }
 }

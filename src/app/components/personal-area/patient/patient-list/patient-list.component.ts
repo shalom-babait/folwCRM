@@ -12,6 +12,7 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  @Input() therapistId?: number;
   /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
   @Output() patientMeetingsRequested = new EventEmitter<PatientCreationData>();
 
@@ -38,10 +39,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // קבלת המטפל מה-localStorage
-    const therapistStr = localStorage.getItem('therapist');
-    const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
-    this.therapist_id = therapistObj.therapist_id || 0;
+    // קבלת מזהה מטפל מה-@Input אם קיים, אחרת מה-localStorage
+    if (this.therapistId && this.therapistId > 0) {
+      this.therapist_id = this.therapistId;
+    } else {
+      const therapistStr = localStorage.getItem('therapist');
+      const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
+      this.therapist_id = therapistObj.therapist_id || 0;
+    }
     console.log(this.therapist_id, " therapist_id");
 
 
@@ -122,6 +127,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
     const patient_id = patient.patient?.patient_id;
     if (patient_id) {
       this.selectedPatientId = patient_id;
+      console.log('Selected patient id from list:', patient_id);
       this.patientSelected.emit(patient);
     }
   }
@@ -144,12 +150,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
       maxHeight: '90vh',
       disableClose: false,
       data: {
+        therapist_id: this.therapist_id,
         initialData: {
-          therapist_id: this.therapist_id,
           status: 'פעיל'
         },
-        context: 'patient-list',
-        therapistId: this.therapist_id
+        context: 'patient-list'
       }
     });
 
@@ -184,5 +189,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('Error searching patients:', error)
       });
+  }
+
+  logPatient(patient: any) {
+    console.log('Patient:', patient);
   }
 }
