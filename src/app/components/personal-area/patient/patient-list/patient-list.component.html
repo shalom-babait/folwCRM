@@ -1,9 +1,9 @@
 <!-- patient-list.component.html -->
-<div class="patient-list-card">
+<div class="list-card">
   <div class="card-header">
     <h3>רשימת מטופלים</h3>
     <div class="header-actions">
-      <button class="add-patient-btn" (click)="openAddPatientDialog()" [disabled]="isLoading"
+      <button class="add-item-btn" (click)="openAddPatientDialog()" [disabled]="isLoading"
         matTooltip="הוסף מטופל חדש" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
         <span>הוסף מטופל</span>
@@ -21,31 +21,35 @@
     </div>
 
     <div *ngIf="!isLoading && patients.length > 0">
-      <div class="patient-card" *ngFor="let patient of patients"
+      <div class="list-item-card" *ngFor="let patient of patients"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
-        <div class="patient-info" (click)="viewPatientDetails(patient)">
-          <span class="patient-name">
-            {{ patient.person?.first_name || '---' }} {{ patient.person?.last_name || '' }}
+        <div class="item-info" (click)="viewPatientDetails(patient); logPatient(patient)">
+          <span class="item-name">
+            {{ patient.person.first_name || '---' }} {{ patient.person.last_name || '' }}
+
           </span>
         </div>
-        <button class="menu-button" [matMenuTriggerFor]="patientMenu" (click)="$event.stopPropagation()"
-          matTooltip="פעולות">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #patientMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
-          <button mat-menu-item (click)="viewPatientDetails(patient)">
-            <mat-icon>person</mat-icon>
-            <span>הצג פרטי מטופל</span>
+        <div class="list-actions">
+          <button class="menu-button" [matMenuTriggerFor]="patientMenu" (click)="$event.stopPropagation()"
+            matTooltip="פעולות">
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-menu-item (click)="viewPatientMeetings(patient)">
-            <mat-icon>calendar_today</mat-icon>
-            <span>רשימת פגישות</span>
-          </button>
-        </mat-menu>
+          <mat-menu #patientMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+            <button mat-menu-item (click)="viewPatientDetails(patient)">
+              <mat-icon>person</mat-icon>
+              <span>הצג פרטי מטופל</span>
+            </button>
+            <button mat-menu-item (click)="viewPatientMeetings(patient)">
+              <mat-icon>calendar_today</mat-icon>
+              <span>רשימת פגישות</span>
+            </button>
+          </mat-menu>
+        </div>
+
       </div>
     </div>
 
-    <div *ngIf="!isLoading && patients.length === 0" class="no-patients">
+  <div *ngIf="!isLoading && patients.length === 0" class="no-items">
       <p>אין מטופלים כרגע</p>
       <p>לחץ על "הוסף מטופל" כדי להתחיל</p>
     </div>

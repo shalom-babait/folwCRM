@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { PatientCreationData } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/patient.service';
@@ -9,22 +9,23 @@ import { PatientService } from 'src/app/services/patient.service';
   styleUrls: ['./patient-view.component.css', '../../../../styles/views.css']
 })
 export class PatientViewComponent {
-    /** פתיחת רשימת פגישות ישירות מהתפריט */
-    onPatientMeetingsRequested(patient: PatientCreationData): void {
-      this.selectedPatient = patient;
-      this.activeTab = 'meetings';
-      this.appointments = [];
-      if (patient && patient.patient && patient.patient.patient_id) {
-        this.patientService.getAppointmentsByPatientId(patient.patient.patient_id).subscribe(
-          (appointments) => {
-            this.appointments = appointments || [];
-          },
-          (err) => {
-            this.appointments = [];
-          }
-        );
-      }
+  @Input() therapistId?: number;
+  /** פתיחת רשימת פגישות ישירות מהתפריט */
+  onPatientMeetingsRequested(patient: PatientCreationData): void {
+    this.selectedPatient = patient;
+    this.activeTab = 'meetings';
+    this.appointments = [];
+    if (patient && patient.patient && patient.patient.patient_id) {
+      this.patientService.getAppointmentsByPatientId(patient.patient.patient_id).subscribe(
+        (appointments) => {
+          this.appointments = appointments || [];
+        },
+        (err) => {
+          this.appointments = [];
+        }
+      );
     }
+  }
   editNotesMode: boolean = false;
   editedNotes: string = '';
   selectedAppointment: any = null;

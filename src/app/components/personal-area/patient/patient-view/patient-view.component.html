@@ -3,6 +3,7 @@
   <div class="right-panel">
     <!-- טוען את כל המטופלים -->
     <app-patient-list
+      [therapistId]="therapistId"
       (patientSelected)="onPatientSelected($event)"
       (patientMeetingsRequested)="onPatientMeetingsRequested($event)">
     </app-patient-list>
