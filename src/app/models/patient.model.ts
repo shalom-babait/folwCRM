@@ -38,6 +38,6 @@ export interface PatientData {
 export interface PatientCreationData {
   person: Person; // פרטי המטופל האישיים
   patient: PatientData; // פרטי המטופל מטבלת Patients
-  user: UserData; // פרטי המשתמש מטבלת Users
+  // user: UserData; // פרטי המשתמש מטבלת Users
   selectedDepartments: SelectedDepartmentForSave[];
 }

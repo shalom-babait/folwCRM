@@ -18,7 +18,8 @@ export class AddRoomDialogComponent {
     private roomsService: RoomsService
   ) {
     this.roomForm = this.fb.group({
-      room_name: ['', [Validators.required, Validators.minLength(2)]]
+      room_name: ['', [Validators.required, Validators.minLength(2)]],
+      color: ['#ffffff']
     });
   }
 
@@ -32,8 +33,11 @@ export class AddRoomDialogComponent {
 
       const room = {
         room_id: 0, // Backend should assign the ID
-        room_name: this.roomForm.value.room_name
+        room_name: this.roomForm.value.room_name,
+        color: this.roomForm.value.color // in case color is present
       };
+
+      console.log('Room sent to server:', room);
 
       this.roomsService.addRoom({ room }).subscribe({
         next: () => {

@@ -58,12 +58,27 @@
       </div>
     </div>
 
+
     <!-- אימייל -->
     <div class="form-field">
-      <label for="email">אימייל *</label>
+      <label for="email">אימייל</label>
       <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל">
       <div class="error-message" *ngIf="isFieldInvalid('email')">
         {{ getFieldError('email', 'אימייל') }}
+      </div>
+    </div>
+
+    <!-- בחירת מטפל אם לא הגיע מבחוץ -->
+    <div class="form-field" *ngIf="!data?.therapist_id">
+      <label for="therapist_id">בחר מטפל *</label>
+      <select id="therapist_id" formControlName="therapist_id" required>
+        <option [value]="null" disabled selected>בחר מטפל</option>
+        <option *ngFor="let therapist of therapists" [value]="therapist.therapist.therapist_id">
+          {{ therapist.person.first_name }} {{ therapist.person.last_name }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="isTriedToSubmit && !patientForm.get('therapist_id')?.value">
+        יש לבחור מטפל
       </div>
     </div>
 
@@ -125,7 +140,7 @@
       <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
         ביטול
       </button>
-      <button type="submit" class="save-button" [disabled]="!patientForm.valid || isSubmitting">
+      <button type="submit" class="save-button" [disabled]="(!patientForm.valid || isSubmitting) || (!data?.therapist_id && !patientForm.get('therapist_id')?.value)">
         {{ isSubmitting ? 'שומר...' : 'שמור מטופל' }}
       </button>
     </div>

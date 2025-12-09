@@ -16,8 +16,9 @@ export class TherapistsViewComponent {
    * מופעל כאשר נבחר מטפל מהרשימה
    */
   onTherapistSelected(therapist: TherapistCreationData): void {
-    this.selectedTherapist = therapist;
-    this.activeTab = 'details'; // חזרה לטאב הראשון בכל פעם שבוחרים מטפל חדש
+  this.selectedTherapist = therapist;
+  this.activeTab = 'details'; // חזרה לטאב הראשון בכל פעם שבוחרים מטפל חדש
+  console.log('Selected therapist:', therapist);
   }
 
   /**

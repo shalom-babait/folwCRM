@@ -39,13 +39,12 @@
               <mat-icon>person</mat-icon>
               <span>הצג פרטי מטופל</span>
             </button>
+            <button mat-menu-item (click)="viewPatientMeetings(patient)">
+              <mat-icon>calendar_today</mat-icon>
+              <span>רשימת פגישות</span>
+            </button>
           </mat-menu>
-
-          <button mat-menu-item (click)="viewPatientMeetings(patient)">
-            <mat-icon>calendar_today</mat-icon>
-            <span>רשימת פגישות</span>
-          </button>
-        </mat-menu>
+        </div>
 
       </div>
     </div>
