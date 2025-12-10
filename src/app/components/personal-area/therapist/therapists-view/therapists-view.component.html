@@ -129,6 +129,13 @@
             <!-- הוסף כאן את הקומפוננטה של הדואר -->
           </div>
         </div>
+
+        <!-- רשימת מטופלים -->
+        <div *ngIf="activeTab === 'patients'" class="patients-view">
+            <app-patient-table 
+              [therapistId]="selectedTherapist?.therapist?.therapist_id ?? undefined">
+            </app-patient-table>
+        </div>
       </div>
     </div>
   </div>

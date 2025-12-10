@@ -17,6 +17,30 @@ import { TherapistCreationData } from 'src/app/models/therapist.model';
   ]
 })
 export class RoomListCalendarComponent implements OnInit {
+  showRoomDetails(room: Room): void {
+    // TODO: Implement room details dialog
+    alert(`פרטי חדר: ${room.room_name}`);
+  }
+
+  deleteRoom(room: Room): void {
+    // TODO: Implement room deletion logic
+    if (confirm(`האם למחוק את החדר "${room.room_name}"?`)) {
+      this.roomsService.deleteRoom(room.room_id).subscribe({
+        next: () => {
+          this.rooms = this.rooms.filter(r => r.room_id !== room.room_id);
+        },
+        error: err => {
+          alert('מחיקת חדר נכשלה');
+          console.error('Delete room error:', err);
+        }
+      });
+    }
+  }
+
+  openRoomSettings(room: Room): void {
+    // TODO: Implement room settings dialog
+    alert(`הגדרות לחדר: ${room.room_name}`);
+  }
   rooms: Room[] = [];
   selectedRoomId: number | null = null;
   roomEvents: Appointment[] = [];

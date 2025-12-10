@@ -1,3 +1,5 @@
+import { TherapistCreationData } from 'src/app/models/therapist.model';
+import { UserService } from 'src/app/services/user.service';
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
@@ -16,6 +18,8 @@ import { SelectedDepartmentForSave } from 'src/app/models/department-group.model
   ]
 })
 export class AddPatientDialogComponent implements OnInit {
+  isTriedToSubmit = false;
+  therapists: TherapistCreationData[] = [];
   selectedDepartments: SelectedDepartmentForSave[] = [];
 
   // קריאה מהקומפוננטה של דפרטמנט סלקטור
@@ -27,17 +31,24 @@ export class AddPatientDialogComponent implements OnInit {
   private buildPatientCreationData(formValue: any, user_id: number, selectedDepartments: SelectedDepartmentForSave[]): PatientCreationData {
   // Ensure birth_date is always yyyy-mm-dd or undefined
   const birthDate = formValue.birth_date ? new Date(formValue.birth_date).toISOString().split('T')[0] : undefined;
+    // קח את ה-therapist_id מהדיאלוג אם קיים, אחרת מהטופס, אחרת מה-localStorage
     let therapist_id: number | null = null;
-    try {
-      const therapistStr = localStorage.getItem('therapist');
-      if (therapistStr) {
-        const therapistObj = JSON.parse(therapistStr);
-        if (therapistObj && therapistObj.therapist_id) {
-          therapist_id = therapistObj.therapist_id;
+    if (this.data?.therapist_id) {
+      therapist_id = this.data.therapist_id;
+    } else if (formValue.therapist_id) {
+      therapist_id = formValue.therapist_id;
+    } else {
+      try {
+        const therapistStr = localStorage.getItem('therapist');
+        if (therapistStr) {
+          const therapistObj = JSON.parse(therapistStr);
+          if (therapistObj && therapistObj.therapist_id) {
+            therapist_id = therapistObj.therapist_id;
+          }
         }
+      } catch (e) {
+        therapist_id = null;
       }
-    } catch (e) {
-      therapist_id = null;
     }
 
     // Ensure gender is always in English
@@ -61,13 +72,13 @@ export class AddPatientDialogComponent implements OnInit {
         status: formValue.status || 'פעיל',
         history_notes: formValue.history_notes?.trim() || undefined,
       },
-      user:{
-        user_id: user_id,
-        email: formValue.email.trim(),
-        role: 'patient',
-        agree: 0,
-        created_at: new Date().toISOString()
-      },
+      // user:{
+      //   user_id: user_id,
+      //   email: formValue.email.trim(),
+      //   role: 'patient',
+      //   agree: 0,
+      //   created_at: new Date().toISOString()
+      // },
       selectedDepartments: selectedDepartments
     };
   }
@@ -93,13 +104,24 @@ export class AddPatientDialogComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<AddPatientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public errorHandler: ErrorHandlerService
+    public errorHandler: ErrorHandlerService,
+    private userService: UserService
   ) {
     this.patientForm = this.createForm();
   }
 
   ngOnInit(): void {
-    // אתחול נוסף במידת הצורך
+    // טען מטפלים רק אם לא הגיע מבחוץ
+    if (!this.data?.therapist_id) {
+      this.userService.getAllTherapists().subscribe({
+        next: (therapists) => {
+          this.therapists = therapists;
+        },
+        error: (err) => {
+          console.error('שגיאה בטעינת מטפלים:', err);
+        }
+      });
+    }
   }
 
   private createForm(): FormGroup {
@@ -110,11 +132,12 @@ export class AddPatientDialogComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^05\d{8}$/)]],
       city: ['', Validators.required],
       address: [''],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.email]],
       birth_date: [''],
       gender: ['male', Validators.required],
       status: ['פעיל', Validators.required],
-      history_notes: ['', [Validators.maxLength(500)]]
+      history_notes: ['', [Validators.maxLength(500)]],
+      therapist_id: [null, this.data?.therapist_id ? [] : [Validators.required]]
     });
   }
 
@@ -139,6 +162,11 @@ export class AddPatientDialogComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.isTriedToSubmit = true;
+    // אם אין מטפל נבחר ואין מטפל מבחוץ, לא לאפשר שליחה
+    if (!this.data?.therapist_id && !this.patientForm.get('therapist_id')?.value) {
+      return;
+    }
     if (this.patientForm.valid) {
       this.isSubmitting = true;
       const formValue = this.patientForm.value;
@@ -177,10 +205,10 @@ export class AddPatientDialogComponent implements OnInit {
                 status: patient.status,
                 history_notes: patient.history_notes,
               },
-              user:{
-                user_id: user_id,
-                email: formValue.email.trim(),
-              },
+              // user:{
+              //   user_id: user_id,
+              //   email: formValue.email.trim(),
+              // },
               selectedDepartments: this.selectedDepartments
             };
             this.dialogRef.close(patientCreationData);

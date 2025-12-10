@@ -1,12 +1,12 @@
-<div class="room-list-card">
+<div class="list-card">
   <div class="card-header">
     <h3>רשימת חדרים</h3>
-    <div class="header-actions">
-      <button class="add-room-btn" (click)="openAddRoomDialog()" matTooltip="הוסף חדר חדש" matTooltipPosition="below">
+  <div class="header-actions">
+  <button class="add-item-btn" (click)="openAddRoomDialog()" matTooltip="הוסף חדר חדש" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
         <span>הוסף חדר</span>
       </button>
-      <button class="search-btn" (click)="openSearchDialog()" matTooltip="חיפוש חדר">
+  <button class="search-btn" (click)="openSearchDialog()" matTooltip="חיפוש חדר">
         <mat-icon>search</mat-icon>
         <span>חיפוש</span>
       </button>
@@ -21,18 +21,37 @@
     <!-- רשימת חדרים -->
     <div *ngIf="rooms.length > 0">
       <div 
-        class="room-card" 
+        class="list-item-card" 
         *ngFor="let room of rooms"
         [class.selected]="room.room_id === selectedRoomId"
         (click)="selectRoom(room.room_id)">
-        <div class="room-info">
-          <span class="room-name">{{ room.room_name }}</span>
+        <div class="item-info">
+          <span class="item-name">{{ room.room_name }}</span>
+        </div>
+        <div class="list-actions">
+          <button mat-icon-button [matMenuTriggerFor]="roomMenu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #roomMenu="matMenu">
+            <button mat-menu-item (click)="showRoomDetails(room)">
+              <mat-icon>info</mat-icon>
+              <span>הצגת פרטים</span>
+            </button>
+            <button mat-menu-item (click)="deleteRoom(room)">
+              <mat-icon>delete</mat-icon>
+              <span>מחיקת חדר</span>
+            </button>
+            <button mat-menu-item (click)="openRoomSettings(room)">
+              <mat-icon>settings</mat-icon>
+              <span>הגדרות</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
     </div>
 
     <!-- הודעה אם אין חדרים -->
-    <div *ngIf="rooms.length === 0" class="no-rooms">
+  <div *ngIf="rooms.length === 0" class="no-items">
       <p>אין חדרים כרגע</p>
       <p>לחץ על "הוסף חדר" כדי להתחיל</p>
     </div>

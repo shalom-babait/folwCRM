@@ -36,7 +36,7 @@ export class PatientDashboardComponent implements OnInit {
           // console.log('Patient data from server:', data);
           this.patient = {
             person: data.person ?? {},
-            user: data.user ?? {},
+            // user: data.user ?? {},
             patient: data.patient ?? {},
             selectedDepartments: data.selectedDepartments ?? []
           };

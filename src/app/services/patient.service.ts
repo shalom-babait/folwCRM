@@ -11,6 +11,10 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
+    /** עדכון הערות לפגישה */
+    updateAppointmentNotes(appointmentId: number, notes: string) {
+      return this.http.put(`${this.apiUrl}/appointments/updateAppointment/${appointmentId}`, { notes });
+    }
   /** עדכון פציינט ברשימה המקומית */
   updatePatientInList(updatedPatient: PatientCreationData): void {
     const current = this.patientsListSubject.value || [];
@@ -42,18 +46,32 @@ export class PatientService {
   // --- יצירת מטופל חדש ---
   createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
     this.setLoading(true);
+    console.log('Sending patient creation request:', {
+      url: `${this.apiUrl}/patients/create`,
+      data: patientData,
+      options: this.httpOptions
+    });
     return this.http.post<ApiResponse<PatientCreationData>>(
-      `${this.apiUrl}/patients`,
+      `${this.apiUrl}/patients/create`,
       patientData,
       this.httpOptions
     ).pipe(
       tap(response => {
+        console.log('Received response from patient creation:', response);
         if (response.success && response.data) {
           this.addPatientToLocalList(response.data);
+        } else {
+          console.error('Patient creation failed, response:', response);
         }
       }),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
+      catchError(error => {
+        console.error('Error during patient creation HTTP request:', error);
+        return this.handleError(error);
+      }),
+      tap(() => {
+        console.log('Patient creation request finished');
+        this.setLoading(false);
+      })
     );
   }
 

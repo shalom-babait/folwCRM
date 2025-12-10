@@ -10,6 +10,9 @@ import { Room } from 'src/app/models/room.model';
   providedIn: 'root'
 })
 export class RoomsService {
+  deleteRoom(roomId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deleteRoom/${roomId}`);
+  }
   private apiUrl = `${environment.apiUrl}/rooms`;
 
   constructor(private http: HttpClient) { }
@@ -18,6 +21,10 @@ export class RoomsService {
     return this.http.get<Room[]>(this.apiUrl + '/getRooms');
   }
   addRoom(room: { room: Room }): Observable<Room> {
-  return this.http.post<Room>(this.apiUrl + '/addRoom', room);
-}
+    return this.http.post<Room>(this.apiUrl + '/addRoom', room);
+  }
+
+  updateRoom(room: Room): Observable<Room> {
+    return this.http.put<Room>(this.apiUrl + `/updateRoom/${room.room_id}`, room);
+  }
 }

@@ -1,0 +1,29 @@
+<div class="room-settings-card">
+	<div class="settings-header">
+		<h2>הגדרות חדר</h2>
+		<button class="edit-icon" *ngIf="!editMode" (click)="editMode = true" matTooltip="ערוך הגדרות חדר">
+			<mat-icon>edit</mat-icon>
+		</button>
+		<button class="edit-icon" *ngIf="editMode" (click)="editMode = false" matTooltip="ביטול עריכה">
+			<mat-icon>close</mat-icon>
+		</button>
+	</div>
+	<div class="settings-section">
+		<label>שם חדר:</label>
+		<ng-container *ngIf="!editMode; else editName">
+			<span>{{ room.room_name }}</span>
+		</ng-container>
+		<ng-template #editName>
+			<input type="text" [(ngModel)]="editedName" />
+		</ng-template>
+	</div>
+	<div class="settings-section">
+		<label>צבע חדר:</label>
+		<input type="color" [(ngModel)]="roomColor" [disabled]="!editMode" />
+	</div>
+	<div class="settings-actions" *ngIf="editMode">
+		<button class="save-button" (click)="onSave()">
+			שמור
+		</button>
+	</div>
+</div>

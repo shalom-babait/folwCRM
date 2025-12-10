@@ -5,10 +5,10 @@
   <div class="buttonLink">
     <ul>
       <li><button (click)="selectedSection = 'home'">בית</button></li>
-      <li><button (click)="selectedSection = 'patients'">רשימת מטופלים</button></li>
+  <li><button (click)="onPatientsClick()">רשימת מטופלים</button></li>
       <li><button (click)="selectedSection = 'rooms'">חדרים</button></li>
       <li><button (click)="selectedSection = 'mail'">דואר</button></li>
-      <li><button (click)="selectedSection = 'declarations'">הצהרות</button></li>
+      <!-- <li><button (click)="selectedSection = 'declarations'">הצהרות</button></li> -->
       <li><button (click)="selectedSection = 'calendar'">יומן טיפולים</button></li>
       <li><button (click)="selectedSection = 'followups'">מעקבים</button></li>
     </ul>
@@ -42,7 +42,7 @@
 <!-- מיכל התוכן הראשי -->
 <div [ngSwitch]="selectedSection">
   <!-- <app-therapist-home *ngSwitchCase="'home'"></app-therapist-home> -->
-  <app-patient-view *ngSwitchCase="'patients'"></app-patient-view>
+  <app-patient-view *ngSwitchCase="'patients'" [therapistId]="therapistId"></app-patient-view>
   <app-rooms-view *ngSwitchCase="'rooms'"></app-rooms-view>
   <!-- <app-mail *ngSwitchCase="'mail'"></app-mail> -->
   <!-- <app-declarations *ngSwitchCase="'declarations'"></app-declarations> -->
