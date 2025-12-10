@@ -197,11 +197,17 @@ export class PatientService {
   }
 
   getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-    const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
-    obs.subscribe(appointments => {
-      console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
-    });
-    return obs;
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byPatient/${patientId}`)
+      .pipe(
+        map(response => response.data || []),
+        tap(appointments => {
+          console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+        }),
+        catchError(error => {
+          console.error('Error fetching appointments for patient:', error);
+          return of([]);
+        })
+      );
   }
 
   updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
@@ -224,27 +230,15 @@ export class PatientService {
         `${this.apiUrl}/treatments/patient/${patient_id}`
       ).pipe(
         map(response => response.data || []),
-        catchError(() => this.getMockTreatments(patient_id))
+        catchError(error => {
+          console.error('Error fetching treatments:', error);
+          return of([]);
+        })
       );
     }
-    return this.getMockTreatments(patient_id);
+    return of([]);
   }
 
-  private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-    // קבלת ה-therapist_id מה-localStorage
-    const therapistIdStr = localStorage.getItem('therapist_id');
-    const therapistId = therapistIdStr ? Number(therapistIdStr) : 1;
-    const id = patient_id || 1;
-    console.log('Fetching appointments for patient_id:', id, 'and therapist_id:', therapistId);
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/${therapistId}`).pipe(
-      tap(appointments => console.log('Raw appointments:', appointments)),
-      map(appointments => appointments || []),
-      catchError(error => {
-        console.error('Error fetching appointments:', error);
-        return of([]);
-      })
-    );
-  }
 
   // --- עזר לניהול טעינה ושגיאות ---
   private setLoading(loading: boolean): void {
