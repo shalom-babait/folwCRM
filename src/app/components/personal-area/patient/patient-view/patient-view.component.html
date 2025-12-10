@@ -29,30 +29,22 @@
         </span>
         <br />
 
-        <button class="tab-link"
-                [class.active]="activeTab === 'details'"
-                (click)="setActiveTab('details')">
+        <button class="tab-link" [class.active]="activeTab === 'details'" (click)="setActiveTab('details')">
           <mat-icon>person</mat-icon>
           <span>פרטי מטופל</span>
         </button>
 
-        <button class="tab-link"
-                [class.active]="activeTab === 'mail'"
-                (click)="setActiveTab('mail')">
+        <button class="tab-link" [class.active]="activeTab === 'mail'" (click)="setActiveTab('mail')">
           <mat-icon>mail</mat-icon>
           <span>דואר</span>
         </button>
 
-        <button class="tab-link"
-                [class.active]="activeTab === 'treatments'"
-                (click)="setActiveTab('treatments')">
+        <button class="tab-link" [class.active]="activeTab === 'treatments'" (click)="setActiveTab('treatments')">
           <mat-icon>medical_services</mat-icon>
           <span>טיפולים</span>
         </button>
 
-        <button class="tab-link"
-                [class.active]="activeTab === 'payments'"
-                (click)="setActiveTab('payments')">
+        <button class="tab-link" [class.active]="activeTab === 'payments'" (click)="setActiveTab('payments')">
           <mat-icon>payment</mat-icon>
           <span>תשלומים</span>
         </button>
@@ -84,18 +76,14 @@
         <!-- טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list
-              [patient]="selectedPatient.patient"
-              [patientId]="selectedPatient.patient.patient_id">
+            <app-treatment-list [patient]="selectedPatient.patient" [patientId]="selectedPatient.patient.patient_id">
             </app-treatment-list>
           </div>
         </div>
 
         <!-- פרטי מטופל -->
         <div *ngIf="activeTab === 'details'" class="details-view">
-          <app-patient-details
-            [patient]="selectedPatient"
-            (patientUpdated)="onPatientUpdated($event)">
+          <app-patient-details [patient]="selectedPatient" (patientUpdated)="onPatientUpdated($event)">
           </app-patient-details>
         </div>
 
@@ -109,7 +97,9 @@
         <!-- תשלומים -->
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">
-            <app-payment-list></app-payment-list>
+            <app-payment-list [patientId]="selectedPatient.patient.patient_id!">
+            </app-payment-list>
+
           </div>
         </div>
 
