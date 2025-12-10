@@ -34,6 +34,11 @@ export class PatientViewComponent {
   activeTab: string = 'details';
   searchTerm: string = '';
   loading: boolean = false;
+  payments: any[] = [];
+
+
+  /** עדכון פרטי מטופל */
+
   userId: number | null = null;
 
   constructor(private patientService: PatientService, private authService: AuthService) {

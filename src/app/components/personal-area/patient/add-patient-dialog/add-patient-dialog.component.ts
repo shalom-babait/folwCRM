@@ -172,7 +172,7 @@ export class AddPatientDialogComponent implements OnInit {
       const formValue = this.patientForm.value;
       const user_id = this.data?.user_id ?? 0;
       const patientCreationData: PatientCreationData = this.buildPatientCreationData(formValue, user_id, this.selectedDepartments);
-      console.log('PatientCreationData to send:', patientCreationData);
+      // console.log('PatientCreationData to send:', patientCreationData);
       this.patientService.createPatient(patientCreationData).subscribe({
         next: (response) => {
           this.isSubmitting = false;
