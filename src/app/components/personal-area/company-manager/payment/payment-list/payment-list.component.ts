@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddTransactionComponent } from '../payment/add-transaction/add-transaction.component';
+import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { PaymentService } from 'src/app/services/payments.service';
 
 interface Transaction {
@@ -91,7 +91,7 @@ export class PaymentListComponent implements OnInit {
     });
 
     dialogRef.componentInstance.transactionAdded.subscribe((transaction) => {
-      console.log("Transaction received:", transaction);
+      console.log("Patient ID in transactionAdded:", this.patientId);
 
       const methodMap: any = {
         cash: 'מזומן',
@@ -101,8 +101,9 @@ export class PaymentListComponent implements OnInit {
 
       const statusMap: any = {
         pending: 'pending',
-        completed: 'paid',
-        failed: 'failed'
+        paid: 'paid',
+        failed: 'failed',
+        refunded: 'refunded'
       };
 
       const payload = {
@@ -111,7 +112,8 @@ export class PaymentListComponent implements OnInit {
         payment_date: transaction.payment_date,
         method: methodMap[transaction.method] ?? 'מזומן',
         status: statusMap[transaction.status] ?? 'pending',
-        transaction_type: transaction.transaction_type
+        transaction_type: transaction.transaction_type,
+        patient_id: this.patientId
       };
 
 

@@ -6,25 +6,19 @@
     <label class="section-label">סוג העסקה:</label>
     <div class="transaction-type-selector">
       <label class="type-option" [class.active]="transactionType === 'debit'">
-        <input type="radio" 
-               name="transactionType" 
-               value="debit" 
-               [(ngModel)]="transactionType"
-               (change)="onTransactionTypeChange()">
+        <input type="radio" name="transactionType" value="debit" [(ngModel)]="transactionType"
+          (change)="onTransactionTypeChange()">
         <div class="option-content">
-            <mat-icon>assignment</mat-icon>
+          <mat-icon>assignment</mat-icon>
           <span class="label">חוב (טיפול)</span>
         </div>
       </label>
-      
+
       <label class="type-option" [class.active]="transactionType === 'credit'">
-        <input type="radio" 
-               name="transactionType" 
-               value="credit" 
-               [(ngModel)]="transactionType"
-               (change)="onTransactionTypeChange()">
+        <input type="radio" name="transactionType" value="credit" [(ngModel)]="transactionType"
+          (change)="onTransactionTypeChange()">
         <div class="option-content">
-            <mat-icon>payment</mat-icon>
+          <mat-icon>payment</mat-icon>
           <span class="label">תשלום</span>
         </div>
       </label>
@@ -35,14 +29,13 @@
   <div class="form-content" *ngIf="transactionType === 'debit'">
     <div class="form-group">
       <label>בחר תור:</label>
-      <!-- <select [(ngModel)]="debitForm.appointment_id" 
-              (change)="onAppointmentChange()"
-              class="form-control">
+      <select [(ngModel)]="debitForm.appointment_id" class="form-control">
         <option value="">-- בחר תור --</option>
-        <option *ngFor="let apt of appointments" [value]="apt.id">
-          {{ apt.description }} - {{ apt.patient }}
+        <option *ngFor="let apt of appointments" [value]="apt.appointment_id">
+          {{ apt.appointment_date }} - {{ apt.start_time }} |
+          {{ apt.therapist_name }} | {{ apt.type_name }}
         </option>
-      </select> -->
+      </select>
     </div>
 
     <!-- <div class="form-group">
@@ -55,19 +48,12 @@
     <div class="form-row">
       <div class="form-group">
         <label>סכום החוב (₪):</label>
-        <input type="number" 
-               [(ngModel)]="debitForm.amount"
-               min="0"
-               step="10"
-               placeholder="0"
-               class="form-control">
+        <input type="number" [(ngModel)]="debitForm.amount" min="0" step="10" placeholder="0" class="form-control">
       </div>
 
       <div class="form-group">
         <label>תאריך:</label>
-        <input type="date" 
-               [(ngModel)]="debitForm.date"
-               class="form-control">
+        <input type="date" [(ngModel)]="debitForm.date" class="form-control">
       </div>
     </div>
   </div>
@@ -78,41 +64,30 @@
     <div class="form-row">
       <div class="form-group">
         <label>סכום התשלום (₪):</label>
-        <input type="number" 
-               [(ngModel)]="creditForm.amount"
-               min="0"
-               step="10"
-               placeholder="0"
-               class="form-control">
+        <input type="number" [(ngModel)]="creditForm.amount" min="0" step="10" placeholder="0" class="form-control">
       </div>
 
       <div class="form-group">
         <label>תאריך תשלום:</label>
-        <input type="date" 
-               [(ngModel)]="creditForm.payment_date"
-               class="form-control">
+        <input type="date" [(ngModel)]="creditForm.payment_date" class="form-control">
       </div>
     </div>
 
     <div class="form-group">
       <label>אמצעי תשלום:</label>
       <div class="payment-methods">
-        <label *ngFor="let method of paymentMethods" 
-               class="method-option"
-               [class.selected]="creditForm.method === method.value">
-          <input type="radio" 
-                 name="paymentMethod" 
-                 [value]="method.value" 
-                 [(ngModel)]="creditForm.method">
+        <label *ngFor="let method of paymentMethods" class="method-option"
+          [class.selected]="creditForm.method === method.value">
+          <input type="radio" name="paymentMethod" [value]="method.value" [(ngModel)]="creditForm.method">
           <span>{{ method.label }}</span>
         </label>
       </div>
     </div>
 
     <!-- שדות ספציפיים לפי אמצעי תשלום -->
-    
+
     <!-- מזומן - רק הבסיס (סכום + תאריך שכבר מוצגים) -->
-    
+
     <!-- העברה בנקאית - אסמכתא -->
     <!-- <div class="form-group" *ngIf="creditForm.method === 'transfer'">
       <label>מספר אסמכתא:</label>

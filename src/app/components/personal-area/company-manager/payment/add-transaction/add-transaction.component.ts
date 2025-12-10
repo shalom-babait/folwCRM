@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-
+import { PaymentService } from 'src/app/services/payments.service';
+import { Component, EventEmitter, Output, OnInit, Input, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 interface DebitTransaction {
   transaction_type: 'debit';
-  appointment_id: null | string;
+  appointment_id: null | string | number;
   amount: number;
   // description: string;
   payment_date: Date;
-  status: 'pending' | 'completed' | 'failed';
+  status: 'pending' | 'paid' | 'failed' | 'refunded';
   method: 'cash' | 'transfer' | 'card';
 
 }
@@ -17,7 +18,7 @@ interface CreditTransaction {
   amount: number;
   payment_date: Date;
   method: 'cash' | 'transfer' | 'card';
-  status: 'pending' | 'completed' | 'failed';
+  status: 'paid' | 'pending' | 'failed' | 'refunded';
   // transaction_type?: string;
   // reference?: string;
   // installments?: number;
@@ -30,12 +31,28 @@ type Transaction = DebitTransaction | CreditTransaction;
   templateUrl: './add-transaction.component.html',
   styleUrls: ['./add-transaction.component.css']
 })
-export class AddTransactionComponent {
+export class AddTransactionComponent implements OnInit {
   @Output() transactionAdded = new EventEmitter<Transaction>();
   @Output() cancelled = new EventEmitter<void>();
+  patientId!: number;
+
+  appointments: any[] = [];
 
   transactionType: 'debit' | 'credit' = 'debit';
 
+  constructor(private paymentService: PaymentService, @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  ngOnInit() {
+    this.patientId = this.data.patient_id; // קבל את ה-patientId מה-data
+    this.loadAppointments();
+  }
+
+
+  loadAppointments() {
+    this.paymentService.getAppointmentsByPatient(this.patientId)
+      .subscribe(data => this.appointments = data);
+
+  }
   // טופס חוב
   debitForm = {
     appointment_id: '',
@@ -49,17 +66,17 @@ export class AddTransactionComponent {
     amount: 0,
     payment_date: new Date(),
     method: 'cash' as 'cash' | 'transfer' | 'card',
-    status: 'completed' as 'pending' | 'completed' | 'failed',
+    status: 'paid' as 'pending' | 'paid' | 'failed',
     // reference: '',
     // installments: 1
   };
 
   // רשימת תורים לדוגמה
-  appointments = [
-    { id: 'apt_001', description: 'טיפול שורש - 15/01/2025', patient: 'משה כהן' },
-    { id: 'apt_002', description: 'ניקוי אבנית - 18/01/2025', patient: 'שרה לוי' },
-    { id: 'apt_003', description: 'כתר קרמי - 20/01/2025', patient: 'דוד ישראלי' }
-  ];
+  // appointments = [
+  //   { id: 'apt_001', description: 'טיפול שורש - 15/01/2025', patient: 'משה כהן' },
+  //   { id: 'apt_002', description: 'ניקוי אבנית - 18/01/2025', patient: 'שרה לוי' },
+  //   { id: 'apt_003', description: 'כתר קרמי - 20/01/2025', patient: 'דוד ישראלי' }
+  // ];
 
   paymentMethods = [
     { value: 'cash', label: 'מזומן' },
@@ -69,8 +86,9 @@ export class AddTransactionComponent {
 
   paymentStatuses = [
     { value: 'pending', label: 'ממתין' },
-    { value: 'completed', label: 'אושר' },
-    { value: 'failed', label: 'נכשל' }
+    { value: 'paid', label: 'אושר' },
+    { value: 'failed', label: 'נכשל' },
+    { value: 'refunded', label: 'הוחזר' }
   ];
 
   onTransactionTypeChange() {
@@ -89,7 +107,7 @@ export class AddTransactionComponent {
       amount: 0,
       payment_date: new Date(),
       method: 'cash',
-      status: 'completed',
+      status: 'paid',
       // reference: '',
       // installments: 1
     };
@@ -121,15 +139,17 @@ export class AddTransactionComponent {
       if (!this.validateDebitForm()) return;
       transaction = {
         transaction_type: 'debit',
-        appointment_id:this.debitForm.appointment_id || null,
+        appointment_id: this.debitForm.appointment_id
+          ? Number(this.debitForm.appointment_id)
+          : null,
 
         amount: this.debitForm.amount,
-        // description: this.debitForm.description,
         payment_date: this.debitForm.date,
         status: 'pending',
         method: 'cash'
       };
-    } else {
+    }
+    else {
       if (!this.validateCreditForm()) return;
 
       transaction = {

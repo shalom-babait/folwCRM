@@ -6,11 +6,12 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class PaymentService {
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** מחזיר את כל התשלומים של מטופל לפי patient_id */
   getPaymentsByPatientId(patientId: number): Observable<any[]> {
@@ -18,9 +19,10 @@ export class PaymentService {
   }
 
   createPayment(paymentData: any) {
-    console.log(paymentData," paymentData");
-    
-  return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
-}
+    return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
+  }
 
+  getAppointmentsByPatient(patientId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/appointments/patient/${patientId}`);
+  }
 }
