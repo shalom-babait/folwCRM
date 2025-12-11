@@ -1,10 +1,26 @@
 <div class="payment-container">
   <h2>כרטיס לקוח - היסטוריית תשלומים</h2>
-  
+
   <div class="table-wrapper">
     <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
-  <button class="btn-details" (click)="openAddTransaction()">הוסף פעולה חדשה</button>
+      <button class="btn-details" (click)="openAddTransaction()">הוסף פעולה חדשה</button>
     </div>
+    <div class="filter-container">
+  <div class="form-group">
+    <label for="dateFilter">סנן לפי תאריך:</label>
+    <input type="date" id="dateFilter" [(ngModel)]="dateFilter" (change)="applyFilters()" class="form-control" />
+  </div>
+
+  <div class="form-group">
+    <label for="amountFilter">סנן לפי סכום:</label>
+    <input type="number" id="amountFilter" [(ngModel)]="amountFilter" (change)="applyFilters()" class="form-control" />
+  </div>
+
+  <button class="btn-filter" (click)="clearFilters()">נקה סינון</button>
+  <button class="btn-sort" (click)="toggleSortOrder()" [matTooltip]="getSortTooltip()">החלף מיון לפי תאריך</button>
+</div>
+
+
     <table class="payment-table">
       <thead>
         <tr>
@@ -17,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let transaction of transactions">
+        <tr *ngFor="let transaction of filteredTransactions">
           <td>{{ formatDate(transaction.date) }}</td>
           <td>{{ transaction.description }}</td>
           <td class="debit">
@@ -30,13 +46,8 @@
             ₪{{ transaction.balance }}
           </td>
           <td class="actions">
-            <button class="btn-details" (click)="showDetails(transaction)">
-              פרטים
-            </button>
-            <button class="btn-assign" (click)="assignPayment(transaction)" 
-                    *ngIf="transaction.debit > 0">
-              שייך תשלום
-            </button>
+            <button class="btn-details" (click)="showDetails(transaction)">פרטים</button>
+            <button class="btn-assign" (click)="assignPayment(transaction)" *ngIf="transaction.debit > 0">שייך תשלום</button>
           </td>
         </tr>
       </tbody>
@@ -54,9 +65,7 @@
     </div>
     <div class="summary-row final">
       <span class="label">יתרה כוללת:</span>
-      <span class="value" [ngClass]="getBalanceClass(finalBalance)">
-        ₪{{ finalBalance }}
-      </span>
+      <span class="value" [ngClass]="getBalanceClass(finalBalance)">₪{{ finalBalance }}</span>
     </div>
   </div>
 

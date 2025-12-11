@@ -18,12 +18,14 @@ interface Transaction {
 })
 export class PaymentListComponent implements OnInit {
   @Input() patientId!: number;
-
+  sortOrder: 'asc' | 'desc' = 'asc'; // 'asc' למיון מהישן לחדש, 'desc' מהחדש לישן
   transactions: Transaction[] = [];
   totalDebits = 0;
   totalCredits = 0;
   finalBalance = 0;
-
+  filteredTransactions: Transaction[] = [];
+  dateFilter: string | null = null;
+  amountFilter: number | null = null;
   constructor(private dialog: MatDialog, private paymentService: PaymentService) { }
 
   ngOnInit() {
@@ -60,14 +62,52 @@ export class PaymentListComponent implements OnInit {
         });
 
         // מיון לפי תאריך מהישן לחדש
-        this.transactions.sort((a, b) => a.date.getTime() - b.date.getTime());
+        this.transactions.sort((a, b) => {
+          return this.sortOrder === 'asc'
+            ? a.date.getTime() - b.date.getTime()
+            : b.date.getTime() - a.date.getTime();
+        });
+        this.recalculateBalances();
 
         this.calculateTotals();
+        this.applyFilters();
       },
       error: (err) => {
         console.error('שגיאה בטעינת תשלומים:', err);
       }
     });
+  }
+  getSortTooltip(): string {
+    return this.sortOrder === 'asc' ? 'החלף למיון מהחדש לישן' : 'החלף למיון מהישן לחדש';
+  }
+
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    this.loadTransactions(); // טען מחדש את התשלומים כדי להחיל את המיון החדש
+  }
+
+  applyFilters() {
+    this.filteredTransactions = this.transactions.filter(transaction => {
+      const dateMatch = this.dateFilter ? transaction.date >= new Date(this.dateFilter) : true;
+      const amountMatch = this.amountFilter ? (transaction.debit >= this.amountFilter || transaction.credit >= this.amountFilter) : true;
+      return dateMatch && amountMatch;
+    });
+    this.calculateTotals(); // אם אתה רוצה לעדכן את הסכומים
+  }
+
+  recalculateBalances() {
+    let runningBalance = 0;
+
+    this.transactions = this.transactions.map(t => {
+      runningBalance += t.debit - t.credit;
+      return { ...t, balance: runningBalance };
+    });
+  }
+
+  clearFilters() {
+    this.dateFilter = null;
+    this.amountFilter = null;
+    this.applyFilters();
   }
 
   calculateTotals() {
