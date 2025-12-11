@@ -19,6 +19,8 @@ export class PaymentService {
   }
 
   createPayment(paymentData: any) {
+    console.log(paymentData);
+    
     return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
   }
 
