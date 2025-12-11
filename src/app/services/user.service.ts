@@ -19,27 +19,7 @@ export class UserService {
     return this.http.post(`${this.apiUrl}`, userData);
   }
 
-  createTherapist(
-    userData: UserDataWithPerson,
-    therapistData: TherapistData,
-    selectedDepartments: Array<{ department_id: number; group_ids: number[] }>
-  ): Observable<any> {
-    return this.http.post(`${this.apiUrl}/therapists/create`, {
-      user: userData,
-      therapist: therapistData,
-      selectedDepartments
-    });
-  }
-
   createPatient(userData: UserData, patientData: PatientBase): Observable<any> {
     return this.http.post(`${this.apiUrl}/patient`, { userData, patientData });
-  }
-
-  getAllTherapists(): Observable<TherapistCreationData[]> {
-    return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/all`);
-  }
-
-  searchTherapists(searchTerm: string): Observable<TherapistCreationData[]> {
-    return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/search?name=${encodeURIComponent(searchTerm)}`);
   }
 }

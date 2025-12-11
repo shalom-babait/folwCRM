@@ -95,6 +95,7 @@ import { AddFollowupDialogComponent } from './components/personal-area/company-m
 import { UserFollowUpTableComponent } from './components/personal-area/company-manager/followup/user-follow-up-table/user-follow-up-table.component';
 import { AddRoomDialogComponent } from './components/personal-area/company-manager/rooms/add-room-dialog/add-room-dialog.component';
 import { RoomSettingsComponent } from './components/personal-area/company-manager/rooms/room-settings/room-settings.component';
+import { RoomsHomeComponent } from './components/personal-area/company-manager/rooms/rooms-home/rooms-home.component';
 
 
 @NgModule({
@@ -163,6 +164,7 @@ import { RoomSettingsComponent } from './components/personal-area/company-manage
     UserFollowUpTableComponent,
     AddRoomDialogComponent,
     RoomSettingsComponent,
+    RoomsHomeComponent,
   ],
   imports: [
     MatMenuModule,

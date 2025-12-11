@@ -1,5 +1,5 @@
 import { TherapistCreationData } from 'src/app/models/therapist.model';
-import { UserService } from 'src/app/services/user.service';
+import { TherapistService } from 'src/app/services/therapist.service';
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
@@ -105,7 +105,7 @@ export class AddPatientDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<AddPatientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public errorHandler: ErrorHandlerService,
-    private userService: UserService
+  private therapistService: TherapistService
   ) {
     this.patientForm = this.createForm();
   }
@@ -113,7 +113,7 @@ export class AddPatientDialogComponent implements OnInit {
   ngOnInit(): void {
     // טען מטפלים רק אם לא הגיע מבחוץ
     if (!this.data?.therapist_id) {
-      this.userService.getAllTherapists().subscribe({
+  this.therapistService.getAllTherapists().subscribe({
         next: (therapists) => {
           this.therapists = therapists;
         },

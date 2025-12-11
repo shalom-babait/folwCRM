@@ -91,22 +91,6 @@
       </div>
     </div>
 
-    <!-- פרטי מטפל -->
-    <div class="form-field">
-      <label for="specialization">תחום התמחות *</label>
-      <input id="specialization" formControlName="specialization" />
-      <div class="error-message" *ngIf="isFieldInvalid('specialization')">
-        {{ getFieldError('specialization', 'תחום התמחות') }}
-      </div>
-    </div>
-    
-    <div class="form-field">
-      <label for="experience_years">שנות ניסיון *</label>
-      <input id="experience_years" formControlName="experience_years" type="number" min="0" max="50" />
-      <div class="error-message" *ngIf="isFieldInvalid('experience_years')">
-        {{ getFieldError('experience_years', 'שנות ניסיון') }}
-      </div>
-    </div>
 <app-department-group-selector
   [initialSelections]="initialSelections"
   [searchPlaceholder]="'חפש מחלקה או קבוצה להוספה...'"
