@@ -15,10 +15,11 @@ export class TherapistSessionService {
     return this.therapistSubject.value;
   }
 
+
   getTherapistId(): number | undefined {
     return this.therapistSubject.value?.therapist?.therapist_id;
   }
-
+ 
   clearTherapist() {
     this.therapistSubject.next(null);
   }

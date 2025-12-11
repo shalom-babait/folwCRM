@@ -162,8 +162,12 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result && result.success && result.data) {
-          this.patients = [...this.patients, result.data];
-
+          // אחרי הוספה: טען את אותו סוג רשימה כמו בהתחלה
+          if (this.therapistId && this.therapistId > 0) {
+            this.loadPatientsByTherapist();
+          } else {
+            this.loadAllPatients();
+          }
           const newId = result.data.patient?.patient_id;
           if (newId) {
             setTimeout(() => this.patientService.selectPatient(newId), 500);

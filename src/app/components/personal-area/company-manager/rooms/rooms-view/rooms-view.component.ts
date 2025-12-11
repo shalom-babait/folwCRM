@@ -13,7 +13,7 @@ import { PatientService } from 'src/app/services/patient.service';
 })
 export class RoomsViewComponent {
   selectedRoom: Room | null = null;
-  activeTab: string = 'calendar';
+  activeTab: string = 'home';
   selectedRoomEvents: Appointment[] = [];
 
   constructor(private patientService: PatientService) {}
