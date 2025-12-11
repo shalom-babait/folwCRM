@@ -4,7 +4,7 @@ import { UserData, UserDataWithPerson } from './user.model';
 
 export interface TherapistCreationData {
   user: UserData;
-  person: Person;
+  person: Person; 
   therapist: TherapistData;
   selectedDepartments: SelectedDepartmentForSave[];
 }
@@ -13,6 +13,6 @@ export interface TherapistCreationData {
 export interface TherapistData {
   // נתונים להצגת מטפל קיים
   therapist_id?: number;
-  specialization?: string;
-  experience_years?: number;
+  // specialization?: string;
+  // experience_years?: number;
 }

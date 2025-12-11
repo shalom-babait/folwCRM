@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
 import { UserData } from 'src/app/models/user.model';
-import { UserService } from 'src/app/services/user.service';
+import { TherapistService } from 'src/app/services/therapist.service';
 import { AddTherapistDialogComponent } from '../../therapist/add-therapist-dialog/add-therapist-dialog.component';
 
 @Component({
@@ -23,7 +23,7 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private userService: UserService,
+  private therapistService: TherapistService,
     private dialog: MatDialog
   ) {}
 
@@ -42,7 +42,7 @@ export class TherapistListComponent implements OnInit, OnDestroy {
 
   loadTherapists() {
     this.isLoading = true;
-    this.userService.getAllTherapists()
+  this.therapistService.getAllTherapists()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (therapists) => {
@@ -92,7 +92,7 @@ export class TherapistListComponent implements OnInit, OnDestroy {
 
   onTherapistSave(data: TherapistCreationData) {
     this.isLoading = true;
-  // this.userService.createTherapist(data.user, data.therapist, data.selectedDepartments).subscribe({
+  // this.therapistService.createTherapist(data.user, data.therapist, data.selectedDepartments).subscribe({
   //       next: (res) => {
   //         console.log('מטפל חדש נוסף:', res);
   //         this.refreshTherapistsList();
@@ -115,7 +115,7 @@ export class TherapistListComponent implements OnInit, OnDestroy {
     const searchTerm = prompt('הכנס שם לחיפוש:');
     if (searchTerm && searchTerm.trim()) {
       this.isLoading = true;
-      this.userService.searchTherapists(searchTerm.trim())
+  this.therapistService.searchTherapists(searchTerm.trim())
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (results) => {

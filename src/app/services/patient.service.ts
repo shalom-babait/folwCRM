@@ -11,6 +11,10 @@ import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/
   providedIn: 'root'
 })
 export class PatientService {
+    /** עדכון הערות לפגישה */
+    updateAppointmentNotes(appointmentId: number, notes: string) {
+      return this.http.put(`${this.apiUrl}/appointments/updateAppointment/${appointmentId}`, { notes });
+    }
   /** עדכון פציינט ברשימה המקומית */
   updatePatientInList(updatedPatient: PatientCreationData): void {
     const current = this.patientsListSubject.value || [];
@@ -42,18 +46,32 @@ export class PatientService {
   // --- יצירת מטופל חדש ---
   createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
     this.setLoading(true);
+    console.log('Sending patient creation request:', {
+      url: `${this.apiUrl}/patients/create`,
+      data: patientData,
+      options: this.httpOptions
+    });
     return this.http.post<ApiResponse<PatientCreationData>>(
-      `${this.apiUrl}/patients`,
+      `${this.apiUrl}/patients/create`,
       patientData,
       this.httpOptions
     ).pipe(
       tap(response => {
+        console.log('Received response from patient creation:', response);
         if (response.success && response.data) {
           this.addPatientToLocalList(response.data);
+        } else {
+          console.error('Patient creation failed, response:', response);
         }
       }),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
+      catchError(error => {
+        console.error('Error during patient creation HTTP request:', error);
+        return this.handleError(error);
+      }),
+      tap(() => {
+        console.log('Patient creation request finished');
+        this.setLoading(false);
+      })
     );
   }
 
@@ -94,32 +112,16 @@ export class PatientService {
     return this.http.get<any>(`${this.apiUrl}/patients/getAllPatients/`).pipe(
       map(response => {
         const raw = response.data || [];
+        console.log(raw);
         return raw.map((item: any) => ({
-          user: {
-            user_id: item.user_id,
-            first_name: item.first_name,
-            last_name: item.last_name,
-            teudat_zehut: item.teudat_zehut,
-            phone: item.phone,
-            city: item.city,
-            address: item.address,
-            email: item.email,
-            gender: item.gender,
-            birth_date: item.birth_date
-          },
-          patient: {
-            patient_id: item.patient_id,
-            therapist_id: item.therapist_id,
-            status: item.status,
-            history_notes: item.history_notes
-          }
+          person: item.person,
+          patient: item.patient,
+          user: item.user || {},
+          selectedDepartments: item.selectedDepartments || []
         }));
       })
     );
-
-
   }
-
 
   getPatientsByTherapist(therapistId: number): Observable<PatientCreationData[]> {
     this.setLoading(true);
@@ -194,11 +196,17 @@ export class PatientService {
   }
 
   getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
-    const obs = this.getMockTreatments(patientId) as Observable<Appointment[]>;
-    obs.subscribe(appointments => {
-      console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
-    });
-    return obs;
+    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byPatient/${patientId}`)
+      .pipe(
+        map(response => response.data || []),
+        tap(appointments => {
+          console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+        }),
+        catchError(error => {
+          console.error('Error fetching appointments for patient:', error);
+          return of([]);
+        })
+      );
   }
 
   updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
@@ -221,27 +229,15 @@ export class PatientService {
         `${this.apiUrl}/treatments/patient/${patient_id}`
       ).pipe(
         map(response => response.data || []),
-        catchError(() => this.getMockTreatments(patient_id))
+        catchError(error => {
+          console.error('Error fetching treatments:', error);
+          return of([]);
+        })
       );
     }
-    return this.getMockTreatments(patient_id);
+    return of([]);
   }
 
-  private getMockTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
-    // קבלת ה-therapist_id מה-localStorage
-    const therapistIdStr = localStorage.getItem('therapist_id');
-    const therapistId = therapistIdStr ? Number(therapistIdStr) : 1;
-    const id = patient_id || 1;
-    console.log('Fetching appointments for patient_id:', id, 'and therapist_id:', therapistId);
-    return this.http.get<AppointmentResponse[]>(`${this.apiUrl}/appointments/${id}/${therapistId}`).pipe(
-      tap(appointments => console.log('Raw appointments:', appointments)),
-      map(appointments => appointments || []),
-      catchError(error => {
-        console.error('Error fetching appointments:', error);
-        return of([]);
-      })
-    );
-  }
 
   // --- עזר לניהול טעינה ושגיאות ---
   private setLoading(loading: boolean): void {

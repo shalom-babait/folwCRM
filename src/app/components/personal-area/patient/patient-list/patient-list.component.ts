@@ -12,6 +12,9 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  @Input() therapistId?: number;
+  /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
+  @Output() patientMeetingsRequested = new EventEmitter<PatientCreationData>();
 
   /** אם true — נטען את כל המטופלים */
 
@@ -36,10 +39,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // קבלת המטפל מה-localStorage
-    const therapistStr = localStorage.getItem('therapist');
-    const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
-    this.therapist_id = therapistObj.therapist_id || 0;
+    // קבלת מזהה מטפל מה-@Input אם קיים, אחרת מה-localStorage
+    if (this.therapistId && this.therapistId > 0) {
+      this.therapist_id = this.therapistId;
+    } else {
+      const therapistStr = localStorage.getItem('therapist');
+      const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
+      this.therapist_id = therapistObj.therapist_id || 0;
+    }
     console.log(this.therapist_id, " therapist_id");
 
 
@@ -86,6 +93,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.patients = data || [];
+        
           this.isLoading = false;
         },
         error: (err) => {
@@ -119,7 +127,17 @@ export class PatientListComponent implements OnInit, OnDestroy {
     const patient_id = patient.patient?.patient_id;
     if (patient_id) {
       this.selectedPatientId = patient_id;
+      console.log('Selected patient id from list:', patient_id);
       this.patientSelected.emit(patient);
+    }
+  }
+
+  /** הצגת רשימת פגישות עבור מטופל */
+  viewPatientMeetings(patient: PatientCreationData) {
+    const patient_id = patient.patient?.patient_id;
+    if (patient_id) {
+      this.selectedPatientId = patient_id;
+      this.patientMeetingsRequested.emit(patient);
     }
   }
 
@@ -132,12 +150,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
       maxHeight: '90vh',
       disableClose: false,
       data: {
+        therapist_id: this.therapist_id,
         initialData: {
-          therapist_id: this.therapist_id,
           status: 'פעיל'
         },
-        context: 'patient-list',
-        therapistId: this.therapist_id
+        context: 'patient-list'
       }
     });
 
@@ -145,8 +162,12 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result && result.success && result.data) {
-          this.patients = [...this.patients, result.data];
-
+          // אחרי הוספה: טען את אותו סוג רשימה כמו בהתחלה
+          if (this.therapistId && this.therapistId > 0) {
+            this.loadPatientsByTherapist();
+          } else {
+            this.loadAllPatients();
+          }
           const newId = result.data.patient?.patient_id;
           if (newId) {
             setTimeout(() => this.patientService.selectPatient(newId), 500);
@@ -172,5 +193,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('Error searching patients:', error)
       });
+  }
+
+  logPatient(patient: any) {
+    console.log('Patient:', patient);
   }
 }

@@ -5,7 +5,7 @@ import { Room } from 'src/app/models/room.model';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
-import { UserService } from 'src/app/services/user.service';
+import { TherapistService } from 'src/app/services/therapist.service';
 import { TherapistCreationData } from 'src/app/models/therapist.model';
 
 @Component({
@@ -17,6 +17,30 @@ import { TherapistCreationData } from 'src/app/models/therapist.model';
   ]
 })
 export class RoomListCalendarComponent implements OnInit {
+  showRoomDetails(room: Room): void {
+    // TODO: Implement room details dialog
+    alert(`פרטי חדר: ${room.room_name}`);
+  }
+
+  deleteRoom(room: Room): void {
+    // TODO: Implement room deletion logic
+    if (confirm(`האם למחוק את החדר "${room.room_name}"?`)) {
+      this.roomsService.deleteRoom(room.room_id).subscribe({
+        next: () => {
+          this.rooms = this.rooms.filter(r => r.room_id !== room.room_id);
+        },
+        error: err => {
+          alert('מחיקת חדר נכשלה');
+          console.error('Delete room error:', err);
+        }
+      });
+    }
+  }
+
+  openRoomSettings(room: Room): void {
+    // TODO: Implement room settings dialog
+    alert(`הגדרות לחדר: ${room.room_name}`);
+  }
   rooms: Room[] = [];
   selectedRoomId: number | null = null;
   roomEvents: Appointment[] = [];
@@ -28,7 +52,7 @@ export class RoomListCalendarComponent implements OnInit {
   constructor(
     private roomsService: RoomsService,
     private patientService: PatientService,
-    private userService: UserService,
+  private therapistService: TherapistService,
     private dialog: MatDialog
   ) {}
 
@@ -57,7 +81,7 @@ export class RoomListCalendarComponent implements OnInit {
     this.roomsService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
     });
-    this.userService.getAllTherapists().subscribe((therapists: TherapistCreationData[]) => {
+    this.therapistService.getAllTherapists().subscribe((therapists: TherapistCreationData[]) => {
       this.therapists = therapists;
     });
   }

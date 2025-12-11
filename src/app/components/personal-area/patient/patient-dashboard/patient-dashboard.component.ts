@@ -36,6 +36,7 @@ export class PatientDashboardComponent implements OnInit {
           // console.log('Patient data from server:', data);
           this.patient = {
             person: data.person ?? {},
+            // user: data.user ?? {},
             patient: data.patient ?? {},
             selectedDepartments: data.selectedDepartments ?? []
           };
@@ -103,7 +104,7 @@ export class PatientDashboardComponent implements OnInit {
     };
     this.patientService.updatePatient(this.patient?.patient.patient_id ?? 0, backendPatient).subscribe(
       (res) => {
-        console.log('Update response:', res);
+        // console.log('Update response:', res);
         // לאחר עדכון, טען מחדש את הנתונים מהשרת כדי להציג את הערכים האמיתיים מה-SQL
         if (this.patient && this.patient.patient.patient_id) {
           // השתמש ב-endpoint שמחזיר את כל נתוני המטופל כולל Users

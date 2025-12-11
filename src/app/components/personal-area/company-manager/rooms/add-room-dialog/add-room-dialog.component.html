@@ -7,6 +7,10 @@
 			<div class="error-message" *ngIf="roomForm.get('room_name')?.hasError('required')">
 				שם החדר הוא שדה חובה
 			</div>
+			<div class="form-field">
+				<label for="room_color">צבע חדר</label>
+				<input id="room_color" type="color" formControlName="color">
+			</div>
 			<div class="error-message" *ngIf="roomForm.get('room_name')?.hasError('minlength')">
 				שם החדר חייב להכיל לפחות 2 תווים
 			</div>

@@ -12,6 +12,7 @@ import { AddPatientDialogComponent } from '../../patient/add-patient-dialog/add-
 })
 export class PatientTableComponent implements OnInit, OnChanges {
   @Input() group: any;
+  @Input() therapistId?: number;
   patients: PatientCreationData[] = [];
   filteredPatients: PatientCreationData[] = [];
   searchTerm: string = '';
@@ -30,9 +31,12 @@ export class PatientTableComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.loadPatients();
+    if (this.therapistId) {
+      this.loadPatientsByTherapist(this.therapistId);
+    } else {
+      this.loadPatients();
+    }
     this.setupGrid();
-
   }
 
   setupGrid(): void {//עיצוב תוכן השדות מתחת לעמודות
@@ -49,7 +53,29 @@ export class PatientTableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.group) this.loadPatients();
+    if (this.therapistId) {
+      this.loadPatientsByTherapist(this.therapistId);
+    } else if (this.group) {
+      this.loadPatients();
+    }
+  }
+  loadPatientsByTherapist(therapistId: number): void {
+    this.isLoading = true;
+    this.patients = [];
+    this.filteredPatients = [];
+    this.selectedPatientId = null;
+    this.selectedPatient = null;
+    this.patientService.getPatientsByTherapist(therapistId).subscribe({
+      next: (patients: PatientCreationData[]) => {
+        this.patients = patients;
+        this.filteredPatients = [...patients];
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('שגיאה בטעינת מטופלים לפי מטפל:', error);
+        this.isLoading = false;
+      }
+    });
   }
 
   loadPatients(): void {
@@ -90,6 +116,10 @@ export class PatientTableComponent implements OnInit, OnChanges {
                   therapist_id: p.therapist_id,
                   status: p.status ?? "-",
                   history_notes: p.history_notes ?? ""
+                },
+                user:{
+                  user_id: p.user_id,
+                  email: p.email ?? "-"
                 },
                 selectedDepartments: []
               }));
@@ -183,7 +213,8 @@ export class PatientTableComponent implements OnInit, OnChanges {
 
   /** בחירת מטופל */
   selectPatient(patient: PatientCreationData): void {
-    this.selectedPatientId = patient.patient.patient_id || null;
+  this.selectedPatientId = patient.patient.patient_id || null;
+  console.log('Selected patient id:', patient.patient.patient_id);
     // אם בחרו מטופל אחר — לסגור תצוגה קודמת
     if (!this.selectedPatient || this.selectedPatient.patient.patient_id !== patient.patient.patient_id) {
       this.selectedPatient = null;
@@ -251,12 +282,16 @@ export class PatientTableComponent implements OnInit, OnChanges {
   openAddPatientDialog(): void {
     const dialogRef = this.dialog.open(AddPatientDialogComponent, {
       width: '600px',
-      data: { user_id: 0 }
+      data: { user_id: 0, therapist_id: this.therapistId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadPatients(); // טעינה מחדש אחרי הוספה
+        if (this.therapistId) {
+          this.loadPatientsByTherapist(this.therapistId);
+        } else {
+          this.loadPatients();
+        }
       }
     });
   }

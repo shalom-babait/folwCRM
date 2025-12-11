@@ -88,12 +88,14 @@ import { CategorySelectorComponent } from './components/personal-area/company-ma
 import { ProspectDetailsComponent } from './components/personal-area/company-manager/prospects/prospect-details/prospect-details.component';
 import { GroupTherapistsComponent } from './components/personal-area/company-manager/departments/group-therapists/group-therapists.component';
 import { TherapistTableComponent } from './components/personal-area/therapist/therapist-table/therapist-table.component';
-import { PaymentListComponent } from './components/personal-area/company-manager/payment-list/payment-list.component';
+import { PaymentListComponent } from './components/personal-area/company-manager/payment/payment-list/payment-list.component';
 import { AddTransactionComponent } from './components/personal-area/company-manager/payment/add-transaction/add-transaction.component';
 import { FollowupTableComponent } from './components/personal-area/company-manager/followup/followup-table/followup-table.component';
 import { AddFollowupDialogComponent } from './components/personal-area/company-manager/followup/add-followup-dialog/add-followup-dialog.component';
 import { UserFollowUpTableComponent } from './components/personal-area/company-manager/followup/user-follow-up-table/user-follow-up-table.component';
 import { AddRoomDialogComponent } from './components/personal-area/company-manager/rooms/add-room-dialog/add-room-dialog.component';
+import { RoomSettingsComponent } from './components/personal-area/company-manager/rooms/room-settings/room-settings.component';
+import { RoomsHomeComponent } from './components/personal-area/company-manager/rooms/rooms-home/rooms-home.component';
 
 
 @NgModule({
@@ -161,6 +163,8 @@ import { AddRoomDialogComponent } from './components/personal-area/company-manag
     AddFollowupDialogComponent,
     UserFollowUpTableComponent,
     AddRoomDialogComponent,
+    RoomSettingsComponent,
+    RoomsHomeComponent,
   ],
   imports: [
     MatMenuModule,

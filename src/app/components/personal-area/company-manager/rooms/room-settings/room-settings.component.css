@@ -1,0 +1,134 @@
+.settings-header .edit-icon {
+	background: #f5f5f5;
+	border: none;
+	cursor: pointer;
+	color: #034752;
+	font-size: 1.3rem;
+	margin-right: 1rem;
+	margin-left: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	width: 36px;
+	height: 36px;
+	transition: background 0.2s, color 0.2s;
+	box-shadow: 0 2px 6px rgba(2,47,57,0.08);
+}
+.settings-header .edit-icon:hover {
+	background: #e0e0e0;
+	color: #022F39;
+}
+/* Header with edit icon */
+.settings-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+.settings-header h2 {
+	flex: 1;
+	margin: 0;
+	background-color: #022F39;
+	color: white;
+	font-size: 1.4rem;
+	font-weight: bold;
+	text-align: center;
+	padding: 1rem;
+	border-radius: 0.7rem;
+}
+.settings-header .edit-icon {
+	margin-right: 1rem;
+	margin-left: 0.5rem;
+}
+/* === ROOM SETTINGS CARD === */
+
+.room-settings-card {
+	max-width: 500px;
+	background-color: #fff;
+	border-radius: 1rem;
+	box-shadow: 0 4px 20px rgba(2,47,57,0.10);
+	font-family: Arial, sans-serif;
+	overflow: hidden;
+	direction: rtl;
+	margin: 2rem auto;
+	padding: 2rem 2.5rem;
+}
+
+
+.settings-section {
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+	margin-bottom: 1.2rem;
+}
+
+.settings-section label {
+	color: #022F39;
+	font-weight: bold;
+	min-width: 80px;
+	font-size: 0.95rem;
+}
+
+.settings-section span {
+	font-size: 1rem;
+	color: #333;
+}
+.settings-section input[type="text"] {
+	width: 100%;
+	padding: 0.5rem 0.8rem;
+	font-size: 1rem;
+	border: none;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+	color: black;
+	background-color: #f5f5f5;
+	transition: box-shadow 0.2s;
+}
+.settings-section input[type="text"]:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px #022F39;
+}
+
+.settings-section input[type="color"] {
+	border: none;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	box-shadow: 0 2px 6px rgba(2,47,57,0.10);
+	cursor: pointer;
+	background: #f5f5f5;
+	transition: box-shadow 0.2s;
+}
+.settings-section input[type="color"]:hover {
+	box-shadow: 0 4px 12px rgba(2,47,57,0.18);
+}
+.settings-actions {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.5rem;
+}
+.settings-actions .save-button {
+	background-color: #022F39;
+	color: white;
+	padding: 0.5rem 1.5rem;
+	border-radius: 0.5rem;
+	border: none;
+	cursor: pointer;
+	font-size: 0.95rem;
+	font-weight: bold;
+	transition: background 0.2s;
+	min-width: 100px;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+.settings-actions .save-button:hover:not(:disabled) {
+	background-color: #034752;
+}
+.settings-actions .save-button:disabled {
+	background-color: #ccc;
+	color: #666;
+	cursor: not-allowed;
+}

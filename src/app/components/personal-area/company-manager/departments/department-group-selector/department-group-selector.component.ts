@@ -65,7 +65,7 @@ export class DepartmentGroupSelectorComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.departments = data;
         this.isLoading = false;
-        console.log('Departments loaded:', data);
+        // console.log('Departments loaded:', data);
       },
       error: (error) => {
         console.error('Error loading departments:', error);
