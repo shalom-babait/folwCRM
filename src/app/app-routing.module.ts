@@ -18,9 +18,10 @@ import { DepartmentsGroupViewComponent } from './components/personal-area/compan
 import { SecretaryHomeComponent } from './components/personal-area/secretary/secretary-home/secretary-home.component';
 import { PatientViewComponent } from './components/personal-area/patient/patient-view/patient-view.component';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component';
+import { LogInComponent } from './components/marketing/log-in/log-in.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: LogInComponent },
   {
     path: 'company-manager', component: CompanyManagerDashboardComponent, children: [
       { path: 'departments', component: DepartmentsGroupViewComponent }

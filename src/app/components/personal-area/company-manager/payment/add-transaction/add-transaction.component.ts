@@ -45,8 +45,8 @@ export class AddTransactionComponent implements OnInit {
   }
 
   loadAppointments() {
-    this.paymentService.getAppointmentsByPatient(this.patientId)
-      .subscribe(data => this.appointments = data);
+    this.paymentService.getAppointments(this.patientId)
+      .subscribe((data: any[]) => this.appointments = data);
   }
 
   // תאריך של היום בפורמט YYYY-MM-DD

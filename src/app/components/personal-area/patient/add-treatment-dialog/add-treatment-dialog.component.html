@@ -56,11 +56,9 @@
       <div class="form-field">
         <label for="type">סוג טיפול</label>
         <select id="type" formControlName="type">
+          <option [value]="''"></option>
           <option *ngFor="let type of types" [value]="type.group_id">{{ type.group_name }}</option>
         </select>
-        <div class="error-message" *ngIf="treatmentForm.get('type')?.invalid && treatmentForm.get('type')?.touched">
-          חובה לבחור סוג טיפול
-        </div>
       </div>
 
       <!-- מטופל (מוסתר, אוטומטי) -->

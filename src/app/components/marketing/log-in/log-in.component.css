@@ -5,7 +5,9 @@
 
 .titleContainer {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     margin-bottom: 2rem;
 }
 
@@ -23,9 +25,37 @@
 }
 
 .WantToBeUpdatedTiteleInput {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+  transition: box-shadow 0.2s ease;
+  margin-bottom: 0.7rem;
+}
+
+.WantToBeUpdatedTiteleInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #022F39;
+}
+
+.WantToBeUpdatedTiteleInput.ng-invalid.ng-touched {
+  border: 2px solid #e57373;
+}
+
+/* הסרת חיצים ממספרים (אם יהיו) */
+.WantToBeUpdatedTiteleInput[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.WantToBeUpdatedTiteleInput[type="number"]::-webkit-outer-spin-button,
+.WantToBeUpdatedTiteleInput[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .password-container {
@@ -61,4 +91,68 @@
 
 .SubmitNewPasswordButton {
     width: 20rem;
+}
+
+/* --- Login Fullpage Styles --- */
+.login-fullpage-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('/assets/login-bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.login-center-box {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  border-radius: 1.5rem;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  min-width: 340px;
+  max-width: 380px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-title {
+  text-align: center;
+  color: #022F39;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+.connection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submitButton {
+  width: 100%;
+  margin-top: 1.2rem;
+}
+
+.login-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.2rem;
+  max-width: 120px;
+  max-height: 120px;
+}
+
+@media (max-width: 500px) {
+  .login-center-box {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem;
+  }
+  .WantToBeUpdatedTiteleInput {
+    width: 90vw;
+  }
 }

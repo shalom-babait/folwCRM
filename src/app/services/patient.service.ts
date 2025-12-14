@@ -182,12 +182,14 @@ export class PatientService {
     );
   }
 
-  getAppointmentsByRoomId(roomId: number): Observable<Appointment[]> {
+
+  getAppointmentsByRoom(roomId: number): Observable<Appointment[]> {
     return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`).pipe(
       map(response => response.data || []),
       catchError(() => of([]))
     );
   }
+
 
   getAppointmentById(appointmentId: number): Observable<Appointment> {
     return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`).pipe(
@@ -195,12 +197,13 @@ export class PatientService {
     );
   }
 
-  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
+
+  getAppointmentsByPatient(patientId: number): Observable<Appointment[]> {
     return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byPatient/${patientId}`)
       .pipe(
         map(response => response.data || []),
         tap(appointments => {
-          console.log('Appointments returned from getAppointmentsByPatientId:', appointments);
+          console.log('Appointments returned from getAppointmentsByPatient:', appointments);
         }),
         catchError(error => {
           console.error('Error fetching appointments for patient:', error);
@@ -223,14 +226,24 @@ export class PatientService {
     );
   }
 
-  getTreatments(patient_id?: number): Observable<AppointmentResponse[]> {
+
+  getAppointments(patient_id?: number): Observable<AppointmentResponse[]> {
     if (patient_id) {
-      return this.http.get<ApiResponse<AppointmentResponse[]>>(
-        `${this.apiUrl}/treatments/patient/${patient_id}`
+      return this.http.get<any>(
+        `${this.apiUrl}/appointments/patient/${patient_id}`
       ).pipe(
-        map(response => response.data || []),
+        map((response: any) => {
+          const arr = Array.isArray(response) ? response : (response.data || []);
+          return arr.map((item: any) => ({
+            ...item,
+            group_name: item.type_name ?? '',
+            room: item.room ?? '',
+            end_time: item.end_time ?? '',
+            total_minutes: item.total_minutes ?? 0,
+            status: item.status ?? '',
+          }));
+        }),
         catchError(error => {
-          console.error('Error fetching treatments:', error);
           return of([]);
         })
       );
@@ -298,13 +311,14 @@ export class PatientService {
       );
   }
 
-  getTreatmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
+
+  getAppointmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
     if (!therapistId) {
-      console.error('getTreatmentsForTherapist: therapistId is missing!', therapistId);
+      console.error('getAppointmentsForTherapist: therapistId is missing!', therapistId);
       return of([]);
     }
     const url = `${this.apiUrl}/appointments/therapist/${therapistId}`;
-    console.log('getTreatmentsForTherapist: GET', url, 'therapistId:', therapistId);
+    console.log('getAppointmentsForTherapist: GET', url, 'therapistId:', therapistId);
     return this.http.get<ApiResponse<AppointmentResponse[]>>(url).pipe(
       map((response: ApiResponse<AppointmentResponse[]>) => response.data || []),
       catchError((error) => {

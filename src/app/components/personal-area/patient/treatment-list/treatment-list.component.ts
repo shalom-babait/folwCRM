@@ -5,6 +5,7 @@ import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-trea
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
+import { co } from '@fullcalendar/core/internal-common';
 @Component({
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
@@ -12,11 +13,7 @@ import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar
     '../../../../styles/list-cards.css']
 })
 export class TreatmentListComponent implements OnInit {
-  ngOnChanges(changes: any): void {
-    if (changes.appointments && changes.appointments.currentValue) {
-      this.appointments = changes.appointments.currentValue;
-    }
-  }
+
   @Input() appointments: Appointment[] = [];
   @Input() patientId: number | undefined;
   @Input() patient?: Patient;
@@ -34,14 +31,17 @@ export class TreatmentListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // טען טיפולים מהשרת אם לא מועבר מערך טיפולים
-    if (this.appointments.length === 0 && this.patientId) {
-      this.patientService.getTreatments(this.patientId).subscribe(data => {
+    if (this.patientId) {
+      this.patientService.getAppointments(this.patientId).subscribe(data => {
         this.appointments = data;
       });
     }
   }
-
+  ngOnChanges(changes: any): void {
+    if (changes.appointments && changes.appointments.currentValue) {
+      this.appointments = changes.appointments.currentValue;
+    }
+  }
   // פתיחת דיאלוג יומן עם הפגישות
   openCalendarDialog(): void {
     // המרת הפגישות לפורמט FullCalendar
@@ -80,10 +80,10 @@ export class TreatmentListComponent implements OnInit {
   // פילטר טיפולים לפי תאריך
   get filteredAppointments(): Appointment[] {
     let filtered = this.appointments;
-    if (this.appointments.length > 0 && this.appointments[0].patient_id) {
-      const patientId = this.appointments[0].patient_id;
-      filtered = filtered.filter(a => a.patient_id === patientId);
-    }
+    // if (this.appointments.length > 0 && this.appointments[0].patient_id) {
+    //   const patientId = this.appointments[0].patient_id;
+    //   filtered = filtered.filter(a => a.patient_id === patientId);
+    // }
     if (!this.searchTerm.trim()) {
       return filtered;
     }
@@ -103,7 +103,7 @@ export class TreatmentListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // רענון מלא של הרשימה מהשרת
-        this.patientService.getTreatments(this.patientId).subscribe(data => {
+  this.patientService.getAppointments(this.patientId).subscribe(data => {
           this.appointments = data;
         });
       }
