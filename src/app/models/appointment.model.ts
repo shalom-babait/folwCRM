@@ -1,7 +1,7 @@
 export interface CreateAppointmentRequest {
   therapist_id: number;
   patient_id: number;
-  type_id: number;
+  type_id?: number;
   room_id: number;
   appointment_date: string;
   start_time: string;

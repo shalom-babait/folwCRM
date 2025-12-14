@@ -19,10 +19,12 @@ export class PaymentService {
   }
 
   createPayment(paymentData: any) {
+    console.log(paymentData);
+    
     return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
   }
 
-  getAppointmentsByPatient(patientId: number): Observable<any[]> {
+  getAppointments(patientId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/patient/${patientId}`);
   }
 }

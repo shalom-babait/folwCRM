@@ -16,7 +16,7 @@ export class PatientViewComponent {
     this.activeTab = 'meetings';
     this.appointments = [];
     if (patient && patient.patient && patient.patient.patient_id) {
-      this.patientService.getAppointmentsByPatientId(patient.patient.patient_id).subscribe(
+  this.patientService.getAppointmentsByPatient(patient.patient.patient_id).subscribe(
         (appointments) => {
           this.appointments = appointments || [];
         },
@@ -131,7 +131,7 @@ export class PatientViewComponent {
     this.activeTab = 'details';
     this.appointments = [];
     if (patient && patient.patient && patient.patient.patient_id) {
-      this.patientService.getAppointmentsByPatientId(patient.patient.patient_id).subscribe(
+  this.patientService.getAppointmentsByPatient(patient.patient.patient_id).subscribe(
         (appointments) => {
           this.appointments = appointments || [];
         },

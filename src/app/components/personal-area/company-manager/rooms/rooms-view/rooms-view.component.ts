@@ -22,7 +22,7 @@ export class RoomsViewComponent {
     this.selectedRoom = room;
     this.activeTab = 'calendar';
     if (room?.room_id) {
-      this.patientService.getAppointmentsByRoomId(room.room_id).subscribe((appointments: Appointment[]) => {
+      this.patientService.getAppointmentsByRoom(room.room_id).subscribe((appointments: Appointment[]) => {
         this.selectedRoomEvents = appointments.map(app => {
           let dateStr = '';
           if (app.appointment_date) {

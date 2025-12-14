@@ -45,29 +45,7 @@ a:hover {
   height: 4rem;
   padding: 1.5rem;
 }
-/* אינפוטים */
-.WantToBeUpdatedTiteleInput{
-  width: 40rem;
-  height: 4.5rem;
-  background:none;
-  border-radius:5rem;
-  color: #ffffff;
-  border: 0.2rem solid #022F39; 
-  margin: 0.5rem 0 0.5rem 0; 
-  direction: rtl;
-  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
-}
-  .WantToBeUpdatedTiteleInput::placeholder{
-     color: white;
-     padding: 1rem;
-  }
-  .WantToBeUpdatedTiteleInput:focus {
-    box-shadow: 0 0 5px white;
-    outline: none;
-}
-.selectInput{
-  background-color: #BB7E2B;
-}
+
   /* כפתור שליחת הודעה */
   .submitButton{
     border: 0.2rem solid #022F39;
@@ -81,20 +59,7 @@ a:hover {
     font-size: 1.5rem;
     margin-top: 1rem;
 }
-.bottomLine{
-  border-bottom: 2px solid #022F39;}
-/* כפתור גלילה לראש העמוד */
-.scrollToTopButton {
-  background-color: #BB7E2B;
-  border-radius: 3rem;
-  margin-right: 12rem;
-  transform: translateY(50%);
-  width: 5rem;
-  height: 5rem;
-  color: #022F39;
-  border: 0.2rem solid #022F39; 
-  box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
-}
+
 /* איקונים */
 .fa-whatsapp {
   font-size: 2.7rem;
@@ -125,7 +90,7 @@ a:hover {
   display: flex;
 }
 /* שינוי עיצוב לדיאלוג של אנגולר מטריאל */
-.mat-mdc-dialog-container .mdc-dialog__surface {
+/* .mat-mdc-dialog-container .mdc-dialog__surface {
   border-radius:5rem  !important;
 }
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
@@ -133,4 +98,4 @@ a:hover {
   background-color: #022F39;
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */

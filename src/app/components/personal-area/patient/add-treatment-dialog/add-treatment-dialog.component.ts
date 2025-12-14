@@ -82,7 +82,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       this.roomEvents = [];
       return;
     }
-    this.patientService.getAppointmentsByRoomId(roomId).subscribe({
+  this.patientService.getAppointmentsByRoom(roomId).subscribe({
       next: (appointments) => {
         this.roomEvents = appointments
           .filter(app => app.status !== 'בוטלה')
@@ -161,7 +161,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       startTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       endTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       place: [null, Validators.required],
-      type: [null, Validators.required],
+      type: [null],
       patient_id: [this.data?.patient_id || null, Validators.required],
       notes: ['', [Validators.maxLength(250)]]
     });

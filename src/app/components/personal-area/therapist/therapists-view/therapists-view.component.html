@@ -136,6 +136,13 @@
               [therapistId]="selectedTherapist?.therapist?.therapist_id ?? undefined">
             </app-patient-table>
         </div>
+
+        <!-- טבלת מעקבים -->
+        <div *ngIf="activeTab === 'followups'" class="followups-view">
+          <app-followup-table 
+            [personId]="selectedTherapist.person.person_id || 0">
+          </app-followup-table>
+        </div>
       </div>
     </div>
   </div>

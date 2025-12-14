@@ -21,7 +21,12 @@ export class LogInComponent {
   password: string = '';
   userName: string = '';
 
-  constructor(private authService: AuthService, private therapistSessionService: TherapistSessionService) {}
+  constructor(
+    private authService: AuthService,
+    private therapistSessionService: TherapistSessionService,
+    private router: Router
+  ) {}
+    // Removed duplicate constructor
 
   onLogin() {
     this.authService.login(this.email, this.password).subscribe({
@@ -54,7 +59,18 @@ export class LogInComponent {
         }
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const role = user.role;
-        (window as any).dialogRef?.close(role);
+        // ניתוב לפי תפקיד
+        if (role === 'therapist') {
+          this.router.navigate(['/personal-area/therapist']);
+        } else if (role === 'patient') {
+          this.router.navigate(['/personal-area/patient']);
+        } else if (role === 'secretary') {
+          this.router.navigate(['/personal-area/secretary']);
+        } else if (role === 'admin') {
+          this.router.navigate(['/personal-area/admin']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
