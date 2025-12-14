@@ -41,7 +41,7 @@ export class PatientDashboardComponent implements OnInit {
             selectedDepartments: data.selectedDepartments ?? []
           };
           // קריאת הפגישות רק אחרי שהמטופל נטען
-          this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+          this.patientService.getAppointmentsByPatient(id).subscribe(data => {
             // ניתן להחזיר לוגים אם צריך דיבאג
             // console.log('Appointments raw from API:', data);
             this.appointments = (data || []).map((a: any) => ({
@@ -63,7 +63,7 @@ export class PatientDashboardComponent implements OnInit {
             // console.log('Appointments array for child:', this.appointments);
           });
         });
-        this.patientService.getAppointmentsByPatientId(id).subscribe(data => {
+  this.patientService.getAppointmentsByPatient(id).subscribe(data => {
           this.appointments = (data || []).map((a: any) => ({
             ...a,
             appointment_id: a.appointment_id ?? 0,

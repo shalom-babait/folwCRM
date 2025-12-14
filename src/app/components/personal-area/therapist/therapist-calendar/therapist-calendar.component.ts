@@ -38,7 +38,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
     }
     if (therapistIdToUse) {
       this.therapistId = therapistIdToUse;
-      this.patientService.getTreatmentsForTherapist(therapistIdToUse)
+  this.patientService.getAppointmentsForTherapist(therapistIdToUse)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (appointments) => {

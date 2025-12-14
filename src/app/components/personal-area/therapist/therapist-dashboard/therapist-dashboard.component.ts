@@ -57,7 +57,7 @@ export class TherapistDashboardComponent implements OnInit, OnDestroy {
 
   // טעינת פגישות של המטופל מהשרת
   loadPatientAppointments(patientId: number) {
-    this.patientService.getTreatments(patientId)
+  this.patientService.getAppointments(patientId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (appointments) => {

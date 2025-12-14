@@ -100,7 +100,7 @@ export class RoomListCalendarComponent implements OnInit {
     if (selectedRoom) {
       this.roomSelected.emit(selectedRoom);
     }
-    this.patientService.getAppointmentsByRoomId(roomId).subscribe((appointments: Appointment[]) => {
+  this.patientService.getAppointmentsByRoom(roomId).subscribe((appointments: Appointment[]) => {
       this.roomEvents = appointments.map((app: Appointment) => {
         let dateStr = '';
         if (app.appointment_date) {
