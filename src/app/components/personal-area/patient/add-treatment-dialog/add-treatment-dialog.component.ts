@@ -42,10 +42,18 @@ export class CreateTreatmentDialogComponent implements OnInit {
     private dialog: MatDialog
     // private treatmentService: TreatmentService
   ) {
-    this.treatmentForm = this.createForm();
+  this.treatmentForm = this.createForm();
+  // ברירת מחדל: טיפול פרונטלי
+  this.treatmentForm.get('mode')?.setValue('frontal');
   }
 
   ngOnInit(): void {
+    // אם מצב הטיפול משתנה לטלפוני, ננקה את שדה החדר
+    this.treatmentForm.get('mode')?.valueChanges.subscribe(mode => {
+      if (mode === 'phone') {
+        this.treatmentForm.get('place')?.setValue(null);
+      }
+    });
     this.roomsService.getRooms().subscribe({
       next: (rooms) => {
         this.rooms = rooms;
@@ -157,10 +165,11 @@ export class CreateTreatmentDialogComponent implements OnInit {
 
   private createForm(): FormGroup {
     return this.fb.group({
+      mode: ['frontal', Validators.required],
       date: [null, Validators.required],
       startTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
       endTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
-      place: [null, Validators.required],
+      place: [null],
       type: [null],
       patient_id: [this.data?.patient_id || null, Validators.required],
       notes: ['', [Validators.maxLength(250)]]
@@ -197,19 +206,21 @@ getErrorMessage(field: string): string {
     const newEnd = formValue.endTime;
     const newDate = formValue.date;
     const roomId = formValue.place;
-    // בדוק חפיפה עם roomEvents
-    const overlap = this.roomEvents.some(ev => {
-      // השווה תאריך
-      const evDate = ev.start.split('T')[0];
-      if (evDate !== newDate) return false;
-      // השווה שעות
-      const evStart = ev.start.split('T')[1];
-      const evEnd = ev.end.split('T')[1];
-      return (newStart < evEnd && newEnd > evStart);
-    });
-    if (overlap) {
-      alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
-      return;
+    // בדוק חפיפה רק אם מדובר בטיפול פרונטלי
+    if (formValue.mode === 'frontal') {
+      const overlap = this.roomEvents.some(ev => {
+        // השווה תאריך
+        const evDate = ev.start.split('T')[0];
+        if (evDate !== newDate) return false;
+        // השווה שעות
+        const evStart = ev.start.split('T')[1];
+        const evEnd = ev.end.split('T')[1];
+        return (newStart < evEnd && newEnd > evStart);
+      });
+      if (overlap) {
+        alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
+        return;
+      }
     }
 
     // תיקון פורמט שדות לפני שליחה לשרת
@@ -233,11 +244,12 @@ getErrorMessage(field: string): string {
       therapist_id,
       patient_id: formValue.patient_id,
       type_id: formValue.type,
-      room_id: formValue.place,
+      room_id: formValue.mode === 'frontal' ? formValue.place : null,
       appointment_date: appointmentDate,
       start_time: startTime,
       end_time: endTime,
-      notes: formValue.notes || ''
+      notes: formValue.notes || '',
+      mode: formValue.mode
     };
     // שלח פגישה לשרת
 

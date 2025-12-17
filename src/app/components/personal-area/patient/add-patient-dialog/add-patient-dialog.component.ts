@@ -64,6 +64,7 @@ export class AddPatientDialogComponent implements OnInit {
         address: formValue.address?.trim() || undefined,
         birth_date: birthDate,
         gender: gender,
+        email: formValue.email?.trim() || undefined,
       },
       patient: {
         patient_id: undefined,
@@ -197,6 +198,7 @@ export class AddPatientDialogComponent implements OnInit {
                 address: person.address,
                 birth_date: person.birth_date,
                 gender: person.gender,
+                email: person.email,
               },
               patient: {
                 patient_id: patient.patient_id,

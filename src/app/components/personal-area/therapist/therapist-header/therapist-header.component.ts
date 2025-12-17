@@ -10,7 +10,7 @@ import { TherapistSessionService } from 'src/app/services/therapist-session.serv
 export class TherapistHeaderComponent implements OnInit {
   selectedSection: string = 'home';
   showProfileMenu = false;
-  userName = '';
+  user_name = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
   therapistId: number | undefined;
 
@@ -18,7 +18,7 @@ export class TherapistHeaderComponent implements OnInit {
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+    this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
     // קבלת מזהה המטפל מהסשן
     this.therapistId = this.therapistSessionService.getTherapistId();
     // עדכון מזהה המטפל אם יש שינוי בסשן
