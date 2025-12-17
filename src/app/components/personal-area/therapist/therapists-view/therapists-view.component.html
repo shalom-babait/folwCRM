@@ -80,7 +80,7 @@
                 <mat-icon>email</mat-icon>
                 <div>
                   <label>אימייל:</label>
-                  <p>{{ selectedTherapist.user.email }}</p>
+                  <p>{{ selectedTherapist.person.email }}</p>
                 </div>
               </div>
               
@@ -91,7 +91,14 @@
                   <p>{{ selectedTherapist.person.phone || 'לא צוין' }}</p>
                 </div>
               </div>
-              
+                <div class="detail-section">
+                  <mat-icon>account_circle</mat-icon>
+                  <div>
+                    <label>שם משתמש:</label>
+                    <p>{{ selectedTherapist.user.user_name }}</p>
+                  </div>
+                </div>
+                      <p>{{ selectedTherapist.user.user_name }}</p>
               <div class="detail-section">
                 <mat-icon>badge</mat-icon>
                 <div>

@@ -39,13 +39,13 @@ export class AddTherapistDialogComponent implements OnInit {
     this.therapistForm = this.fb.group({
       first_name: ['', [Validators.required, Validators.minLength(2)]],
       last_name: ['', [Validators.required, Validators.minLength(2)]],
-      teudat_zehut: ['', [Validators.pattern(/^\d{9}$/)]],
-      phone: ['', [Validators.required, Validators.pattern(/^05\d{8}$/)]],
+      teudat_zehut: ['', [Validators.pattern(/^[0-9]{9}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^05[0-9]{8}$/)]],
       city: ['', Validators.required],
       address: [''],
+      user_name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
-  // specialization and experience_years removed
       agree: [false, Validators.requiredTrue],
       gender: ['other', Validators.required],
       birth_date: ['']
@@ -67,7 +67,7 @@ export class AddTherapistDialogComponent implements OnInit {
     if (this.therapistForm.valid) {
       const formValue = this.therapistForm.value;
       const user = {
-        email: formValue.email.trim(),
+        user_name: formValue.user_name.trim(),
         password: formValue.password,
         role: 'therapist' as 'therapist',
         agree: (formValue.agree ? 1 : 0) as 0 | 1
@@ -80,7 +80,8 @@ export class AddTherapistDialogComponent implements OnInit {
         city: formValue.city.trim(),
         address: formValue.address?.trim() || undefined,
         gender: formValue.gender,
-        birth_date: formValue.birth_date
+        birth_date: formValue.birth_date,
+        email: formValue.email?.trim() || undefined
       };
       const therapist = {};
       const therapistCreationData = {

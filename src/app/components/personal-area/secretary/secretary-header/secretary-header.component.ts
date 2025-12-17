@@ -16,13 +16,13 @@ export class SecretaryHeaderComponent implements OnInit {
     // אפשר להוסיף כאן איפוס משתנים גלובליים אם צריך
   }
   showProfileMenu = false;
-  userName = '';
+  user_name = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
   constructor(private router: Router) {}
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+    this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
   }
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
