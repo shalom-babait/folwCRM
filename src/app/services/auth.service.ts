@@ -15,10 +15,10 @@ export class AuthService {
     });
   }
 
-login(email: string, password: string): Observable<{ success: boolean; token: string; user?: any }> {
+login(user_name: string, password: string): Observable<{ success: boolean; token: string; user?: any }> {
   return this.http.post<{ success: boolean; token: string; user?: any }>(
     `${this.apiUrl}/login`,
-    { email, password }
+    { user_name, password }
   );
 }
 

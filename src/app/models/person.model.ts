@@ -8,4 +8,5 @@ export interface Person {
   address?: string;
   birth_date?: string; // YYYY-MM-DD
   gender?: 'male' | 'female' | 'other';
+  email?: string;
 }

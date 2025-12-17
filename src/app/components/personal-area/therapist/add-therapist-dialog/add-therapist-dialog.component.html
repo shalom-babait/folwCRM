@@ -53,6 +53,7 @@
     </div>
     
     <!-- פרטי התחברות -->
+    
     <div class="form-field">
       <label for="email">אימייל *</label>
       <input id="email" formControlName="email" type="email" />
@@ -60,15 +61,6 @@
         {{ getFieldError('email', 'אימייל') }}
       </div>
     </div>
-    
-    <div class="form-field">
-      <label for="password">סיסמה *</label>
-      <input id="password" formControlName="password" type="password" maxlength="100" />
-      <div class="error-message" *ngIf="isFieldInvalid('password')">
-        {{ getFieldError('password', 'סיסמה') }}
-      </div>
-    </div>
-
     <!-- שדה מין -->
     <div class="form-field">
       <label for="gender">מין *</label>
@@ -81,6 +73,23 @@
         {{ getFieldError('gender', 'מין') }}
       </div>
     </div>
+    <div class="form-field">
+      <label for="user_name">שם משתמש *</label>
+      <input id="user_name" formControlName="user_name" type="text" />
+      <div class="error-message" *ngIf="isFieldInvalid('user_name')">
+        {{ getFieldError('user_name', 'שם משתמש') }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="password">סיסמה *</label>
+      <input id="password" formControlName="password" type="password" maxlength="100" />
+      <div class="error-message" *ngIf="isFieldInvalid('password')">
+        {{ getFieldError('password', 'סיסמה') }}
+      </div>
+    </div>
+
+    
 
     <!-- שדה תאריך לידה -->
     <div class="form-field">

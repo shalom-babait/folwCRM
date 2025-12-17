@@ -91,20 +91,8 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   }
 
   onTherapistSave(data: TherapistCreationData) {
-    this.isLoading = true;
-  // this.therapistService.createTherapist(data.user, data.therapist, data.selectedDepartments).subscribe({
-  //       next: (res) => {
-  //         console.log('מטפל חדש נוסף:', res);
-  //         this.refreshTherapistsList();
-  //         this.isLoading = false;
-  //         alert('המטפל נוסף בהצלחה!');
-  //       },
-  //       error: (err) => {
-  //         console.error('שגיאה ביצירת מטפל:', err);
-  //         this.isLoading = false;
-  //         alert('שגיאה בהוספת מטפל. אנא נסה שוב.');
-  //       }
-  //     });
+    // לאחר הוספת מטפל חדש, טען מחדש את רשימת המטפלים
+    this.refreshTherapistsList();
   }
 
   refreshTherapistsList(): void {

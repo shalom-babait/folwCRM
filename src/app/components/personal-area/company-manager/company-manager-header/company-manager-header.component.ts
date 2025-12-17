@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   })
   export class CompanyManagerHeaderComponent implements OnInit {
     showProfileMenu = false;
-    userName = '';
+    user_name = '';
     userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
     selectedSection: string | null = null;
@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
     constructor(private router: Router) {}
     ngOnInit() {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      this.userName = user.first_name + ' ' + user.last_name || 'משתמש';
+      this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
     }
     toggleProfileMenu() {
       this.showProfileMenu = !this.showProfileMenu;

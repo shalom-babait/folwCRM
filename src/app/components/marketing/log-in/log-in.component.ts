@@ -17,9 +17,8 @@ export class LogInComponent {
   passwordHasBeenSent: boolean = false;
   SendingPasswordToMail: boolean = false;
 
-  email: string = '';
   password: string = '';
-  userName: string = '';
+  user_name: string = '';
 
   constructor(
     private authService: AuthService,
@@ -29,12 +28,12 @@ export class LogInComponent {
     // Removed duplicate constructor
 
   onLogin() {
-    this.authService.login(this.email, this.password).subscribe({
+  this.authService.login(this.user_name, this.password).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         if (res.user) {
           localStorage.setItem('user', JSON.stringify(res.user));
-          this.userName = res.user.name || res.user.username || '';
+          this.user_name = res.user.user_name || '';
         }
         // שמירת מזהה לפי תפקיד
         if (res.therapist_id) {
@@ -60,7 +59,9 @@ export class LogInComponent {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const role = user.role;
         // ניתוב לפי תפקיד
-        if (role === 'therapist') {
+        if (role === 'company_manager') {
+          this.router.navigate(['/company-manager']);
+        } else if (role === 'therapist') {
           this.router.navigate(['/personal-area/therapist']);
         } else if (role === 'patient') {
           this.router.navigate(['/personal-area/patient']);

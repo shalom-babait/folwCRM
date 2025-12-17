@@ -22,11 +22,7 @@ import { LogInComponent } from './components/marketing/log-in/log-in.component';
 
 const routes: Routes = [
   { path: '', component: LogInComponent },
-  {
-    path: 'company-manager', component: CompanyManagerDashboardComponent, children: [
-      { path: 'departments', component: DepartmentsGroupViewComponent }
-    ]
-  },
+  {path: 'company-manager', component: CompanyManagerDashboardComponent,canActivate: [authGuard], data: { expectedRole: 'company_manager' },},
   { path: 'sign-up-for-course', component: SignUpForCourseComponent },
   { path: 'contact', component: DetilsContactComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
