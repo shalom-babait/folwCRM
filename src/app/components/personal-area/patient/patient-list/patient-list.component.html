@@ -6,12 +6,18 @@
       <button class="add-item-btn" (click)="openAddPatientDialog()" [disabled]="isLoading"
         matTooltip="הוסף מטופל חדש" matTooltipPosition="below">
         <mat-icon>add</mat-icon>
-        <span>הוסף מטופל</span>
+        <!-- <span>הוסף מטופל</span> -->
       </button>
-      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטופל">
-        <mat-icon>search</mat-icon>
-        <span>חיפוש</span>
-      </button>
+      <div class="search-input-wrapper">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          [disabled]="isLoading"
+          placeholder="חפש מטופל..."
+          class="search-input"
+        />
+      </div>
     </div>
   </div>
 
@@ -21,7 +27,7 @@
     </div>
 
     <div *ngIf="!isLoading && patients.length > 0">
-      <div class="list-item-card" *ngFor="let patient of patients"
+      <div class="list-item-card" *ngFor="let patient of patients | patientNameFilter:searchText"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
         <div class="item-info" (click)="viewPatientDetails(patient); logPatient(patient)">
           <span class="item-name">

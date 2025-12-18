@@ -20,39 +20,41 @@
   </div> -->
 <div class="create-treatment-dialog">
   <h2 class="dialog-title">טיפול חדש</h2>
+
   <div class="input-dialog">
-    <div class="form-section" style="margin-bottom: 0;">
-      <label class="section-label">סוג טיפול:</label>
-      <div class="treatment-mode-selector">
-        <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'frontal'}">
-          <input type="radio" id="mode-frontal" formControlName="mode" value="frontal" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'frontal'">
-          <label for="mode-frontal" class="option-content" tabindex="0">
-            <mat-icon>groups</mat-icon>
-            <span class="label">פרונטלי</span>
-          </label>
-        </div>
-        <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'phone'}">
-          <input type="radio" id="mode-phone" formControlName="mode" value="phone" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'phone'">
-          <label for="mode-phone" class="option-content" tabindex="0">
-            <mat-icon>call</mat-icon>
-            <span class="label">טלפוני</span>
-          </label>
+    <form [formGroup]="treatmentForm">
+      <div class="form-section" style="margin-bottom: 0;">
+        <label class="section-label">סוג טיפול:</label>
+        <div class="treatment-mode-selector">
+          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'frontal'}">
+            <input type="radio" id="mode-frontal" formControlName="mode" value="frontal" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'frontal'">
+            <label for="mode-frontal" class="option-content" tabindex="0">
+              <mat-icon>groups</mat-icon>
+              <span class="label">פרונטלי</span>
+            </label>
+          </div>
+          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'phone'}">
+            <input type="radio" id="mode-phone" formControlName="mode" value="phone" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'phone'">
+            <label for="mode-phone" class="option-content" tabindex="0">
+              <mat-icon>call</mat-icon>
+              <span class="label">טלפוני</span>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
-  <form [formGroup]="treatmentForm">
 
-  <!-- מקום (חדר) - מוצג רק אם פרונטלי -->
-  <div class="form-field" *ngIf="treatmentForm.get('mode')?.value === 'frontal'">
-    <label for="place">מקום</label>
-    <select id="place" formControlName="place">
-      <option [value]="null">בחר חדר</option>
-      <option *ngFor="let room of rooms" [value]="room.room_id">{{ room.room_name }}</option>
-    </select>
-    <div class="error-message" *ngIf="treatmentForm.get('place')?.invalid && treatmentForm.get('place')?.touched">
-      חובה לבחור חדר
-    </div>
-  </div>
+
+      <!-- מקום (חדר) - מוצג רק אם פרונטלי -->
+      <div class="form-field" *ngIf="treatmentForm.get('mode')?.value === 'frontal'">
+        <label for="place">מקום</label>
+        <select id="place" formControlName="place">
+          <option [value]="null">בחר חדר</option>
+          <option *ngFor="let room of rooms" [value]="room.room_id">{{ room.room_name }}</option>
+        </select>
+        <div class="error-message" *ngIf="treatmentForm.get('place')?.invalid && treatmentForm.get('place')?.touched">
+          חובה לבחור חדר
+        </div>
+      </div>
 
       <!-- יומן חדר ב-overlay -->
       <app-calendar-overlay
