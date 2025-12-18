@@ -240,11 +240,17 @@ getErrorMessage(field: string): string {
     // שליפת therapist_id מתוך localStorage
     const therapistIdStr = localStorage.getItem('therapist_id');
     const therapist_id = therapistIdStr ? Number(therapistIdStr) : (this.data?.therapist_id || 1);
+    // Build appointment payload, omitting null/undefined fields
+    let roomIdToSend = null;
+    if (formValue.mode === 'frontal') {
+      const selectedRoom = Number(formValue.place);
+      roomIdToSend = selectedRoom && selectedRoom !== 0 ? selectedRoom : null;
+    }
     const appointment: any = {
       therapist_id,
       patient_id: formValue.patient_id,
-      type_id: formValue.type,
-      room_id: formValue.mode === 'frontal' ? formValue.place : null,
+      treatment_type_id: Number(formValue.type) || 0, // תמיד מספר
+      room_id: roomIdToSend,
       appointment_date: appointmentDate,
       start_time: startTime,
       end_time: endTime,
@@ -253,7 +259,8 @@ getErrorMessage(field: string): string {
     };
     // שלח פגישה לשרת
 
-    this.patientService.createAppointment(appointment).subscribe({
+  console.log('Appointment payload:', appointment);
+  this.patientService.createAppointment(appointment).subscribe({
       next: (response) => {
         if (response.success) {
           alert('הפגישה נוספה בהצלחה!');

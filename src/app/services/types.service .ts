@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-interface Type {
-  type_id: number;
-  type_name: string;
-}
+import { Type } from 'src/app/models/type.model';
 
 @Injectable({
   providedIn: 'root'

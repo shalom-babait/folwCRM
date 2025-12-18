@@ -1,0 +1,26 @@
+/* עיצוב לאינפוט חיפוש כמו כפתור */
+.search-input-wrapper {
+	display: flex;
+	align-items: center;
+	background: #f5f5f5;
+	border-radius: 4px;
+	border: 1px solid #cfd8dc;
+	padding: 0 8px;
+	height: 40px;
+	margin-right: 8px;
+}
+.search-input {
+	border: none;
+	background: transparent;
+	outline: none;
+	font-size: 16px;
+	padding: 0 8px;
+	height: 38px;
+	width: 140px;
+	direction: rtl;
+	color: #111;
+}
+.search-icon {
+	color: #607d8b;
+	font-size: 22px;
+}

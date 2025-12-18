@@ -50,6 +50,7 @@ import { SecretaryDashboardComponent } from './components/personal-area/secretar
 import { PatientDashboardComponent } from './components/personal-area/patient/patient-dashboard/patient-dashboard.component';
 import { LinkContentComponent } from './components/marketing/link-content/link-content.component';
 import { PatientListComponent } from './components/personal-area/patient/patient-list/patient-list.component';
+import { PatientNameFilterPipe } from './components/personal-area/patient/patient-list/patient-name-filter.pipe';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component'
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
@@ -111,7 +112,8 @@ import { RoomsHomeComponent } from './components/personal-area/company-manager/r
     ContactComponent,
     TheySayAboutUsComponent,
     SignUpForCourseComponent,
-    PatientListComponent,
+  PatientListComponent,
+  PatientNameFilterPipe,
     HomeComponent,
     RegistrationFormComponent,
     LogInComponent,
