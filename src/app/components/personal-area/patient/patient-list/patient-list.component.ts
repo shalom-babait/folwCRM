@@ -1,3 +1,6 @@
+import { PatientNameFilterPipe } from './patient-name-filter.pipe';
+
+// שים לב: יש להוסיף את PatientNameFilterPipe ל-declarations במודול המתאים (module)
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +15,7 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+
   @Input() therapistId?: number;
   /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
   @Output() patientMeetingsRequested = new EventEmitter<PatientCreationData>();
@@ -23,7 +27,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   /** שליחה למעלה כאשר בוחרים מטופל */
   @Output() patientSelected = new EventEmitter<PatientCreationData>();
-
+  searchText: string = '';
   patients: PatientCreationData[] = [];
   selectedPatientId: number | null = null;
   therapist_id: number = 0;
