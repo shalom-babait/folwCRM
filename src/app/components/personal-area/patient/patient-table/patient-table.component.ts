@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { PatientCreationData } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/patient.service';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -27,7 +28,11 @@ export class PatientTableComponent implements OnInit, OnChanges {
   isEditModeOnOpen: boolean = false;
 
 
-  constructor(private patientService: PatientService, private groupservice: GroupsService, private dialog: MatDialog
+  constructor(
+    private patientService: PatientService,
+    private groupservice: GroupsService,
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -260,16 +265,8 @@ export class PatientTableComponent implements OnInit, OnChanges {
 
 
   openPatientDetails(patient: any, editMode: boolean) {
-    // אם אותו מטופל כבר פתוח — אל תסגור!
-    if (this.selectedPatient && this.selectedPatient.patient.patient_id === patient.patient.patient_id) {
-      // רק עדכן מצב עריכה
-      this.isEditModeOnOpen = editMode;
-      return; // אל תסגור אותו
-    }
-
-    // אם זה מטופל חדש — פתח אותו
-    this.selectedPatient = patient;
-    this.isEditModeOnOpen = editMode;
+    // ניווט ל-patient-view עם מזהה המטופל
+    this.router.navigate(['/patient-view', patient.patient.patient_id]);
   }
 
 

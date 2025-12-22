@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Activities } from 'src/app/classes/activities';
 
 @Component({
   selector: 'app-registration-form',

@@ -1,21 +1,12 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators ,AbstractControl} from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ErrorHandlerService } from 'src/app/services/error-handler.service';
-// import { TreatmentService } from 'src/app/services/treatment.service'; // לשימוש עתידי
-// import { TreatmentData } from 'src/app/classes/treatment'; // לשימוש עתידי
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { Room } from 'src/app/models/room.model';
-//import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-//import { MatSnackBar } from '@angular/material/snack-bar';
-//import { PatientService } from '../../../../services/patient.service';
-//import { RoomsService } from 'src/app/services/rooms.service';
-//import { TypesService } from 'src/app/services/types.service ';
+import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 
 @Component({
   selector: 'app-add-treatment-dialog',
@@ -23,144 +14,60 @@ import { Room } from 'src/app/models/room.model';
   styleUrls: ['./add-treatment-dialog.component.css']
 })
 export class CreateTreatmentDialogComponent implements OnInit {
+
   @Output() appointmentAdded = new EventEmitter<any>();
   treatmentForm!: FormGroup;
+
   rooms: Room[] = [];
   types: any[] = [];
   selectedRoomId: number | null = null;
-  showCalendar: boolean = false;
   roomEvents: any[] = [];
-  showOverlay: boolean = false;
+  showOverlay = false;
+
   constructor(
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
+    private roomsService: RoomsService,
+    private typesService: TypesService,
+    private patientService: PatientService,
+    private dialog: MatDialog,
     public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-  private roomsService: RoomsService,
-  private typesService: TypesService,
-  private patientService: PatientService,
-    private dialog: MatDialog
-    // private treatmentService: TreatmentService
-  ) {
-  this.treatmentForm = this.createForm();
-  // ברירת מחדל: טיפול פרונטלי
-  this.treatmentForm.get('mode')?.setValue('frontal');
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
+      this.treatmentForm = this.createForm();
+      if (data) {
+        this.treatmentForm.patchValue({
+          date: data.appointment_date || data.date || '',
+          place: data.room_id || data.place || '',
+          type: data.treatment_type_id || data.type || '',
+          startTime: data.start_time || data.startTime || '',
+          endTime: data.end_time || data.endTime || '',
+          notes: data.notes || '',
+          mode: data.mode || 'frontal',
+          patient_id: data.patient_id || null
+        });
+      } else {
+        this.treatmentForm.get('mode')?.setValue('frontal');
+      }
+    }
 
   ngOnInit(): void {
-    // אם מצב הטיפול משתנה לטלפוני, ננקה את שדה החדר
     this.treatmentForm.get('mode')?.valueChanges.subscribe(mode => {
       if (mode === 'phone') {
         this.treatmentForm.get('place')?.setValue(null);
       }
     });
-    this.roomsService.getRooms().subscribe({
-      next: (rooms) => {
-        this.rooms = rooms;
-      },
-      error: (error) => {
-        console.error('Error fetching rooms:', error);
-      }
-    });
-    if (this.data && this.data.patient_id) {
-      this.typesService.getTypes(this.data.patient_id).subscribe({
-        next: (type) => {
-          this.types = type;
-        },
-        error: (error) => {
-          console.error('Error fetching rooms:', error);
-        }
-      });
+
+    this.roomsService.getRooms().subscribe({ next: rooms => this.rooms = rooms });
+    if (this.data?.patient_id) {
+      this.typesService.getTypes(this.data.patient_id).subscribe({ next: types => this.types = types });
     }
-    if (this.data && this.data.initialData) {
-      this.treatmentForm.patchValue(this.data.initialData);
-    }
+
     this.treatmentForm.get('place')?.valueChanges.subscribe(roomId => {
       this.selectedRoomId = roomId;
-      this.showCalendar = !!roomId;
-      this.loadRoomEvents(roomId);
-      // פתח overlay ליומן בכל בחירת חדר
       this.showOverlay = !!roomId;
+      this.loadRoomEvents(roomId);
     });
-  }
-
-  loadRoomEvents(roomId: number) {
-    // טוען פגישות מהשרת לפי roomId וממיר לאירועים של FullCalendar
-    if (!roomId) {
-      this.roomEvents = [];
-      return;
-    }
-  this.patientService.getAppointmentsByRoom(roomId).subscribe({
-      next: (appointments) => {
-        this.roomEvents = appointments
-          .filter(app => app.status !== 'בוטלה')
-          .map(app => {
-            // המרת appointment_date מ-UTC לתאריך מקומי
-            let localDateObj = new Date(app.appointment_date);
-            const yyyy = localDateObj.getFullYear();
-            const mm = String(localDateObj.getMonth() + 1).padStart(2, '0');
-            const dd = String(localDateObj.getDate()).padStart(2, '0');
-            const localDate = `${yyyy}-${mm}-${dd}`;
-            // בנה תאריך מלא בפורמט ISO תקני ל-FullCalendar
-            const start = `${localDate}T${app.start_time}`;
-            const end = `${localDate}T${app.end_time}`;
-            // Prefer therapist_name from backend, fallback to therapist_id or 'פגישה'
-            const therapistName = (app as any).therapist_name;
-            return {
-              id: app.appointment_id,
-              title: therapistName ? therapistName : (app.therapist_id ? `פגישה של מטפל ${app.therapist_id}` : 'פגישה'),
-              start,
-              end,
-              color: '#1a237e',
-              allDay: false
-            };
-          });
-      },
-      error: (err) => {
-        this.roomEvents = [];
-      }
-    });
-  }
-
-  onOverlayDateSelected(event: any) {
-    // פותח דיאלוג לבחירת שעות לאחר בחירת תאריך ביומן הגדול
-    this.showOverlay = false;
-    if (event?.dateStr) {
-      const dateObj = new Date(event.dateStr);
-      const yyyy = dateObj.getFullYear();
-      const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const dd = String(dateObj.getDate()).padStart(2, '0');
-      const formattedDate = `${yyyy}-${mm}-${dd}`;
-      this.treatmentForm.patchValue({ date: formattedDate });
-    }
-    const dialogRef = this.dialog.open(SelectTimeDialogComponent, {
-      width: '350px',
-      data: { date: event.dateStr, roomEvents: this.roomEvents }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const selectedDate = this.treatmentForm.value.date || (event?.dateStr ? event.dateStr.split('T')[0] : null);
-        const overlap = this.roomEvents.some(ev => {
-          const evDate = ev.start.split('T')[0];
-          if (evDate !== selectedDate) return false;
-          const evStart = ev.start.split('T')[1];
-          const evEnd = ev.end.split('T')[1];
-          return (result.startTime < evEnd && result.endTime > evStart);
-        });
-        if (overlap) {
-          alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
-          return;
-        }
-        this.treatmentForm.patchValue({
-          startTime: result.startTime,
-          endTime: result.endTime
-        });
-      }
-    });
-  }
-
-  closeOverlay() {
-    this.showOverlay = false;
   }
 
   private createForm(): FormGroup {
@@ -176,109 +83,100 @@ export class CreateTreatmentDialogComponent implements OnInit {
     });
   }
 
-  getFieldLabel(field: string): string {
-    switch (field) {
-      case 'date': return 'תאריך';
-      case 'startTime': return 'שעת התחלה';
-      case 'endTime': return 'שעת סיום';
-      case 'place': return 'מקום';
-      case 'notes': return 'הערות';
-      default: return '';
-    }
+  loadRoomEvents(roomId: number | null) {
+    if (!roomId) { this.roomEvents = []; return; }
+
+    this.patientService.getAppointmentsByRoom(roomId).subscribe({
+      next: appointments => {
+        this.roomEvents = appointments
+          .filter((a: any) => a.status !== 'בוטלה')
+          .map((a: any) => ({
+            id: a.appointment_id,
+            title: (a as any).therapist_name || 'פגישה', // כאן נשתמש ב-any
+            start: `${a.appointment_date}T${a.start_time}`,
+            end: `${a.appointment_date}T${a.end_time}`
+          }));
+      },
+      error: () => this.roomEvents = []
+    });
   }
 
-getErrorMessage(field: string): string {
-  const control = this.treatmentForm.get(field);
-  if (!control) return '';
-  return this.errorHandler.getValidationErrorMessage(control, this.getFieldLabel(field));
-}
-  async save() {
-    if (this.treatmentForm.invalid) {
-      Object.keys(this.treatmentForm.controls).forEach(field => {
-        this.treatmentForm.get(field)?.markAsTouched();
-      });
-      return;
+  onOverlayDateSelected(event: any) {
+    this.showOverlay = false;
+    if (event?.dateStr) {
+      this.treatmentForm.patchValue({ date: event.dateStr.split('T')[0] });
     }
 
-    // בדיקת תפוסה לפני שמירה
-    const formValue = this.treatmentForm.value;
-    const newStart = formValue.startTime;
-    const newEnd = formValue.endTime;
-    const newDate = formValue.date;
-    const roomId = formValue.place;
-    // בדוק חפיפה רק אם מדובר בטיפול פרונטלי
-    if (formValue.mode === 'frontal') {
-      const overlap = this.roomEvents.some(ev => {
-        // השווה תאריך
-        const evDate = ev.start.split('T')[0];
-        if (evDate !== newDate) return false;
-        // השווה שעות
-        const evStart = ev.start.split('T')[1];
-        const evEnd = ev.end.split('T')[1];
-        return (newStart < evEnd && newEnd > evStart);
-      });
-      if (overlap) {
-        alert('השעה שבחרת תפוסה בחדר זה. אנא בחר שעה אחרת.');
-        return;
-      }
-    }
+    const dialogRef = this.dialog.open(SelectTimeDialogComponent, {
+      width: '350px',
+      data: { roomEvents: this.roomEvents }
+    });
 
-    // תיקון פורמט שדות לפני שליחה לשרת
-    let appointmentDate = formValue.date;
-    if (appointmentDate && appointmentDate.includes('T')) {
-      appointmentDate = appointmentDate.split('T')[0];
-    }
-    let startTime = formValue.startTime;
-    let endTime = formValue.endTime;
-    // הסר שניות אם קיימות
-    if (startTime && startTime.length > 5) {
-      startTime = startTime.substring(0,5);
-    }
-    if (endTime && endTime.length > 5) {
-      endTime = endTime.substring(0,5);
-    }
-    // שליפת therapist_id מתוך localStorage
-    const therapistIdStr = localStorage.getItem('therapist_id');
-    const therapist_id = therapistIdStr ? Number(therapistIdStr) : (this.data?.therapist_id || 1);
-    // Build appointment payload, omitting null/undefined fields
-    let roomIdToSend = null;
-    if (formValue.mode === 'frontal') {
-      const selectedRoom = Number(formValue.place);
-      roomIdToSend = selectedRoom && selectedRoom !== 0 ? selectedRoom : null;
-    }
-    const appointment: any = {
-      therapist_id,
-      patient_id: formValue.patient_id,
-      treatment_type_id: Number(formValue.type) || 0, // תמיד מספר
-      room_id: roomIdToSend,
-      appointment_date: appointmentDate,
-      start_time: startTime,
-      end_time: endTime,
-      notes: formValue.notes || '',
-      mode: formValue.mode
-    };
-    // שלח פגישה לשרת
-
-  console.log('Appointment payload:', appointment);
-  this.patientService.createAppointment(appointment).subscribe({
-      next: (response) => {
-        if (response.success) {
-          alert('הפגישה נוספה בהצלחה!');
-          this.appointmentAdded.emit(response.data || appointment);
-          this.dialogRef.close(response.data || appointment);
-        } else {
-          alert('אירעה שגיאה בשמירת הפגישה');
-        }
-      },
-      error: (err) => {
-        console.error('error from server:', err);
-        alert('שגיאה בשמירת הפגישה: ' + (err?.message || ''));
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.treatmentForm.patchValue({
+          startTime: result.startTime,
+          endTime: result.endTime
+        });
       }
     });
   }
 
-  close() {
-    this.dialogRef.close();
+  closeOverlay() { this.showOverlay = false; }
 
+  getErrorMessage(field: string): string {
+    const control = this.treatmentForm.get(field);
+    return control ? this.errorHandler.getValidationErrorMessage(control, field) : '';
   }
+
+  save() {
+    if (this.treatmentForm.invalid) {
+      this.treatmentForm.markAllAsTouched();
+      return;
+    }
+
+    const value = this.treatmentForm.value;
+
+    const appointment = {
+      therapist_id: Number(localStorage.getItem('therapist_id')) || 1,
+      patient_id: value.patient_id,
+      treatment_type_id: value.type ? Number(value.type) : 0,
+      room_id: value.mode === 'frontal' && value.place ? Number(value.place) : (value.mode === 'phone' ? undefined : 0),
+      appointment_date: value.date,
+      start_time: value.startTime,
+      end_time: value.endTime,
+      notes: value.notes || '',
+      mode: value.mode
+    };
+
+    this.patientService.createAppointment(appointment).subscribe({
+      next: res => {
+        this.appointmentAdded.emit(res.data || appointment);
+        this.dialogRef.close(res.data || appointment);
+      },
+      error: err => alert('שגיאה בשמירת הפגישה')
+    });
+  }
+
+  close() { this.dialogRef.close(); }
+  // add-treatment-dialog.component.ts
+public editorInit: any = {
+  language: 'he_IL',
+  directionality: 'rtl',
+  plugins: [
+    'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+    'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
+  ],
+  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+  tinycomments_mode: 'embedded',
+  tinycomments_author: 'Author name',
+  mergetags_list: [
+    { value: 'First.Name', title: 'First Name' },
+    { value: 'Email', title: 'Email' },
+  ],
+  ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+  uploadcare_public_key: '659c9ed48d8ceb29727a',
+  language_url: '/assets/tinymce/langs/he_IL.js'
+};
+
 }

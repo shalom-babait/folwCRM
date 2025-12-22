@@ -1,12 +1,14 @@
 import { CalendarOverlayComponent } from './components/personal-area/patient/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // הוספת ReactiveFormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './services/auth.interceptor'; // ודאי שהקובץ נמצא בנתיב הזה
+import { EditorModule } from '@tinymce/tinymce-angular';
+
+import { AuthInterceptor } from './services/auth.interceptor'; 
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from "./components/marketing/header/header.component";
@@ -97,6 +99,7 @@ import { UserFollowUpTableComponent } from './components/personal-area/company-m
 import { AddRoomDialogComponent } from './components/personal-area/company-manager/rooms/add-room-dialog/add-room-dialog.component';
 import { RoomSettingsComponent } from './components/personal-area/company-manager/rooms/room-settings/room-settings.component';
 import { RoomsHomeComponent } from './components/personal-area/company-manager/rooms/rooms-home/rooms-home.component';
+import { TextEditorComponent } from './components/personal-area/company-manager/text-editor/text-editor.component';
 
 
 @NgModule({
@@ -167,8 +170,10 @@ import { RoomsHomeComponent } from './components/personal-area/company-manager/r
     AddRoomDialogComponent,
     RoomSettingsComponent,
     RoomsHomeComponent,
+  TextEditorComponent,
   ],
   imports: [
+    EditorModule,
     MatMenuModule,
     MatIconModule,
     BrowserModule,
@@ -177,7 +182,7 @@ import { RoomsHomeComponent } from './components/personal-area/company-manager/r
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule, // הוספת ReactiveFormsModule
+    ReactiveFormsModule, 
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
@@ -192,10 +197,10 @@ import { RoomsHomeComponent } from './components/personal-area/company-manager/r
     MatDatepickerModule,
     MatTableModule,
     MatCheckboxModule,
-    MatCardModule, // הוספת MatCardModule
+    MatCardModule, 
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    FullCalendarModule
+    FullCalendarModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

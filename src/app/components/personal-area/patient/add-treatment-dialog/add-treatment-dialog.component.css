@@ -1,3 +1,14 @@
+/* Ensure CKEditor is always visible and looks like a Word page */
+.ck-editor__editable_inline {
+  min-height: 300px;
+  max-height: 600px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.1em;
+  padding: 16px;
+  box-sizing: border-box;
+}
 /* עיצוב בחירת סוג טיפול כמו add-transaction */
 .form-section {
   margin-bottom: 24px;
