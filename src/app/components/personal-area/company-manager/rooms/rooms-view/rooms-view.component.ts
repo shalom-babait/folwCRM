@@ -1,20 +1,3 @@
-// ...existing code...
-  // onRoomAction(event: {room: Room, tab: 'details' | 'settings' | 'delete'}): void {
-  //   this.selectedRoom = event.room;
-  //   switch (event.tab) {
-  //     case 'details':
-  //       this.activeTab = 'calendar'; // או 'details' אם יש טאב כזה
-  //       break;
-  //     case 'settings':
-  //       this.activeTab = 'settings';
-  //       break;
-  //     case 'delete':
-  //       if (confirm(`האם למחוק את החדר "${event.room.room_name}"?`)) {
-  //         // כאן יש להוסיף קריאה ל-roomsService למחיקה, או להעביר הלאה
-  //       }
-  //       break;
-  //   }
-  // }
 import { Component } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { Appointment } from 'src/app/models/appointment.model';
@@ -63,7 +46,6 @@ export class RoomsViewComponent {
         },
         error: () => {
           alert('שגיאה במחיקת החדר. אנא נסה שוב מאוחר יותר.');
-          // אפשר להוסיף הודעת שגיאה
         }
       });
     }
