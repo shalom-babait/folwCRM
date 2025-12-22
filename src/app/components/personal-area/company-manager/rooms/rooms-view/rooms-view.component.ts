@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { Appointment } from 'src/app/models/appointment.model';
 import { PatientService } from 'src/app/services/patient.service';
+import { RoomsService } from 'src/app/services/rooms.service';
 
 @Component({
   selector: 'app-rooms-view',
@@ -16,7 +17,39 @@ export class RoomsViewComponent {
   activeTab: string = 'home';
   selectedRoomEvents: Appointment[] = [];
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private roomsService: RoomsService
+  ) {}
+
+  onRoomAction(event: { room: Room, tab: 'details' | 'settings' | 'delete' }): void {
+    this.selectedRoom = event.room;
+    switch (event.tab) {
+      case 'details':
+        this.activeTab = 'calendar';
+        break;
+      case 'settings':
+        this.activeTab = 'settings';
+        break;
+      case 'delete':
+        this.activeTab = 'delete';
+        break;
+    }
+  }
+
+  confirmDeleteRoom(): void {
+    if (this.selectedRoom && this.selectedRoom.room_id) {
+      this.roomsService.deleteRoom(this.selectedRoom.room_id).subscribe({
+        next: () => {
+          this.selectedRoom = null;
+          this.activeTab = 'home';
+        },
+        error: () => {
+          alert('שגיאה במחיקת החדר. אנא נסה שוב מאוחר יותר.');
+        }
+      });
+    }
+  }
 
   onRoomSelected(room: Room): void {
     this.selectedRoom = room;
@@ -57,5 +90,4 @@ export class RoomsViewComponent {
   isActiveTab(tab: string): boolean {
     return this.activeTab === tab;
   }
-
 }
