@@ -1,8 +1,10 @@
+// ...
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Patient } from 'src/app/models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
 import { co } from '@fullcalendar/core/internal-common';
@@ -27,7 +29,8 @@ export class TreatmentListComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private apppointmentService: ApppointmentService
   ) { }
 
   ngOnInit(): void {
@@ -142,5 +145,33 @@ export class TreatmentListComponent implements OnInit {
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
     console.log('עריכת פגישה:', appointment);
+      const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
+        width: '600px',
+        data: { ...appointment, patient_id: appointment.patient_id }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // עדכן את הרשימה המקומית אם צריך
+          const idx = this.filteredAppointments.findIndex(a => a.appointment_id === result.appointment_id);
+          if (idx > -1) {
+            this.filteredAppointments[idx] = { ...this.filteredAppointments[idx], ...result };
+          }
+        }
+      });
+    }
+
+  // ...existing code...
+  // מחיקת פגישה
+  deleteAppointment(appointment: Appointment): void {
+    if (!appointment.appointment_id) return;
+    if (confirm('האם אתה בטוח שברצונך למחוק את הפגישה?')) {
+      this.apppointmentService.deleteAppointment(appointment.appointment_id).subscribe({
+        next: () => {
+          this.appointments = this.appointments.filter(a => a.appointment_id !== appointment.appointment_id);
+        },
+        error: err => console.error('שגיאה במחיקת פגישה:', err)
+      });
+    }
   }
 }

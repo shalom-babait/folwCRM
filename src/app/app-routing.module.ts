@@ -28,6 +28,7 @@ const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard], data: { expectedRole: 'admin' } },
   // { path: 'patient/:id', component: PatientDashboardComponent },
   { path: 'patientList', component: PatientListComponent },
+  { path: 'patient-view/:id', component: PatientViewComponent },
 
   {
     path: 'personal-area', children: [

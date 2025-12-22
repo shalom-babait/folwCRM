@@ -2,7 +2,7 @@ export interface CreateAppointmentRequest {
   therapist_id: number;
   patient_id: number;
   treatment_type_id?: number;
-  room_id: number;
+  room_id?: number;
   appointment_date: string;
   start_time: string;
   end_time: string;
@@ -19,7 +19,7 @@ export interface Appointment {
   therapist_id: number;
   patient_id: number;
   treatment_type_id: number;
-  room_id: number;
+  room_id?: number;
   appointment_date: string;  // YYYY-MM-DD
   start_time: string;        // HH:MM:SS
   end_time: string;          // HH:MM:SS
@@ -35,7 +35,7 @@ export interface AppointmentFormInput {
   therapist_id: number;
   patient_id: number;
   treatment_type_id: number;
-  room_id: number;
+  room_id?: number;
   appointment_date: string;
   start_time: string;
   end_time: string;
