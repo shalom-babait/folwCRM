@@ -17,29 +17,18 @@ import { TherapistCreationData } from 'src/app/models/therapist.model';
   ]
 })
 export class RoomListCalendarComponent implements OnInit {
+  @Output() roomAction = new EventEmitter<{room: Room, tab: 'details' | 'settings' | 'delete'}>();
+
   showRoomDetails(room: Room): void {
-    // TODO: Implement room details dialog
-    alert(`פרטי חדר: ${room.room_name}`);
+    this.roomAction.emit({ room, tab: 'details' });
   }
 
   deleteRoom(room: Room): void {
-    // TODO: Implement room deletion logic
-    if (confirm(`האם למחוק את החדר "${room.room_name}"?`)) {
-      this.roomsService.deleteRoom(room.room_id).subscribe({
-        next: () => {
-          this.rooms = this.rooms.filter(r => r.room_id !== room.room_id);
-        },
-        error: err => {
-          alert('מחיקת חדר נכשלה');
-          console.error('Delete room error:', err);
-        }
-      });
-    }
+    this.roomAction.emit({ room, tab: 'delete' });
   }
 
   openRoomSettings(room: Room): void {
-    // TODO: Implement room settings dialog
-    alert(`הגדרות לחדר: ${room.room_name}`);
+    this.roomAction.emit({ room, tab: 'settings' });
   }
   rooms: Room[] = [];
   selectedRoomId: number | null = null;
