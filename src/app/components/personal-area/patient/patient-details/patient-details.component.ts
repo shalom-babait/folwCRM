@@ -34,7 +34,7 @@ export class PatientDetailsComponent implements OnChanges {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.email]],
       birth_date: ['', Validators.required],
       address: ['', Validators.required]
     });
@@ -50,12 +50,11 @@ export class PatientDetailsComponent implements OnChanges {
 
     // טוען נתונים לטופס
     if (this.patient && this.patientForm && this.patient.person) {
-      
       this.patientForm.patchValue({
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address
       }, { emitEvent: false });
@@ -69,7 +68,7 @@ export class PatientDetailsComponent implements OnChanges {
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address
       }, { emitEvent: false });
@@ -83,7 +82,7 @@ export class PatientDetailsComponent implements OnChanges {
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address
       }, { emitEvent: false });

@@ -6,16 +6,16 @@
       <div class="form-section" style="margin-bottom: 0;">
         <label class="section-label">סוג טיפול:</label>
         <div class="treatment-mode-selector">
-          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'frontal'}">
-            <input type="radio" id="mode-frontal" formControlName="mode" value="frontal" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'frontal'">
-            <label for="mode-frontal" class="option-content" tabindex="0">
+          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('meeting_type')?.value === 'frontal'}">
+            <input type="radio" id="meeting_type-frontal" formControlName="meeting_type" value="frontal" style="display:none;" [checked]="treatmentForm.get('meeting_type')?.value === 'frontal'">
+            <label for="meeting_type-frontal" class="option-content" tabindex="0">
               <mat-icon>groups</mat-icon>
               <span class="label">פרונטלי</span>
             </label>
           </div>
-          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'phone'}">
-            <input type="radio" id="mode-phone" formControlName="mode" value="phone" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'phone'">
-            <label for="mode-phone" class="option-content" tabindex="0">
+          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('meeting_type')?.value === 'phone'}">
+            <input type="radio" id="meeting_type-phone" formControlName="meeting_type" value="phone" style="display:none;" [checked]="treatmentForm.get('meeting_type')?.value === 'phone'">
+            <label for="meeting_type-phone" class="option-content" tabindex="0">
               <mat-icon>call</mat-icon>
               <span class="label">טלפוני</span>
             </label>
@@ -25,7 +25,7 @@
 
 
       <!-- מקום (חדר) - מוצג רק אם פרונטלי -->
-      <div class="form-field" *ngIf="treatmentForm.get('mode')?.value === 'frontal'">
+  <div class="form-field" *ngIf="treatmentForm.get('meeting_type')?.value === 'frontal'">
         <label for="place">מקום</label>
         <select id="place" formControlName="place">
           <option [value]="null">בחר חדר</option>
@@ -88,15 +88,12 @@
       <!-- הערות (TextEditorComponent) -->
       <div class="form-field">
         <label for="notes">הערות</label>
-<app-text-editor
-  [content]="treatmentForm.get('notes')?.value"
-  (contentChange)="treatmentForm.get('notes')?.setValue($event)">
-</app-text-editor>
+          <app-text-editor formControlName="notes"></app-text-editor>
       </div>
 
       <div class="dialog-actions">
         <button type="button" mat-dialog-close>ביטול</button>
-        <button type="button" (click)="save()" [disabled]="treatmentForm.invalid">שמור</button>
+        <button type="button" (click)="save()">שמור</button>
       </div>
     </form>
   </div>

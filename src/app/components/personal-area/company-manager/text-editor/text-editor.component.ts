@@ -1,37 +1,64 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-text-editor',
   templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.css']
+  styleUrls: ['./text-editor.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TextEditorComponent),
+      multi: true
+    }
+  ]
 })
-export class TextEditorComponent {
+export class TextEditorComponent implements ControlValueAccessor {
   fullscreen = false;
-  @Input() content: string = '';
-  @Output() contentChange = new EventEmitter<string>();
   public editorInit: any = {
-  language: 'he_IL',
-  directionality: 'rtl',
-  plugins: [
-  'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-  'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
-  ],
-  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-  tinycomments_mode: 'embedded',
-  tinycomments_author: 'Author name',
-  mergetags_list: [
-    { value: 'First.Name', title: 'First Name' },
-    { value: 'Email', title: 'Email' },
-  ],
-  ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-  uploadcare_public_key: '659c9ed48d8ceb29727a',
-  language_url: '/assets/tinymce/langs/he_IL.js'
-};
+    height: 300,
+    menubar: false,
+    plugins: [
+      'link',
+      'lists',
+      'table',
+      'wordcount'
+    ],
+    toolbar:
+      'undo redo | bold italic underline | bullist numlist | link table | removeformat',
+    language: 'he',
+    language_url: '/assets/tinymce/langs/he_IL.js'
+  };
 
+  private _value: string = '';
+  onChange: (_: any) => void = () => {};
+  onTouched: () => void = () => {};
 
-  // Emit changes for two-way binding
+  // ControlValueAccessor methods
+  writeValue(value: string): void {
+    this._value = value || '';
+  }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+  setDisabledState?(isDisabled: boolean): void {
+    // Optionally handle disabled state
+  }
+
+  get content(): string {
+    return this._value;
+  }
+  set content(val: string) {
+    this._value = val;
+    this.onChange(val);
+    this.onTouched();
+  }
+
+  // Called by the editor (template)
   onContentChange(value: string) {
     this.content = value;
-    this.contentChange.emit(value);
   }
 }
