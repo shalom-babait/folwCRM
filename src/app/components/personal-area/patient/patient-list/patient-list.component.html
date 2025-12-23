@@ -3,10 +3,11 @@
   <div class="card-header">
     <h3>רשימת מטופלים</h3>
     <div class="header-actions">
+      <!-- דרופדאון סינון מטפל -->
+  
       <button class="add-item-btn" (click)="openAddPatientDialog()" [disabled]="isLoading"
         matTooltip="הוסף מטופל חדש" matTooltipPosition="below">
   <mat-icon>add</mat-icon>
-  <span>הוסף מטופל</span>
       </button>
       <div class="search-input-wrapper">
         <mat-icon class="search-icon">search</mat-icon>
@@ -19,6 +20,17 @@
         />
       </div>
     </div>
+    <ng-container *ngIf="!therapistId && therapists.length > 0">
+        <mat-form-field appearance="outline" class="therapist-filter">
+          <mat-label>סנן לפי מטפל</mat-label>
+          <mat-select [(ngModel)]="selectedTherapistId" (selectionChange)="onTherapistFilterChange($event.value)">
+            <mat-option [value]="null">כל המטפלים</mat-option>
+            <mat-option *ngFor="let t of therapists" [value]="t.therapist.therapist_id">
+              {{ t.person.first_name }} {{ t.person.last_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
   </div>
 
   <div class="card-content">
@@ -27,7 +39,7 @@
     </div>
 
     <div *ngIf="!isLoading && patients.length > 0">
-      <div class="list-item-card" *ngFor="let patient of patients | patientNameFilter:searchText"
+  <div class="list-item-card" *ngFor="let patient of filteredPatients | patientNameFilter:searchText"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
         <div class="item-info" (click)="viewPatientDetails(patient); logPatient(patient)">
           <span class="item-name">

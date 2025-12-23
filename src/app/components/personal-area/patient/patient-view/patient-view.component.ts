@@ -69,10 +69,11 @@ export class PatientViewComponent {
   saveNotes(): void {
     if (!this.selectedAppointment) return;
     const appointmentId = this.selectedAppointment.appointment_id;
-    const newNotes = this.editedNotes;
-    this.patientService.updateAppointmentNotes(appointmentId, newNotes).subscribe({
+    // Clone the appointment and update notes
+    const updatedAppointment = { ...this.selectedAppointment, notes: this.editedNotes };
+    this.patientService.updateAppointment(appointmentId, updatedAppointment).subscribe({
       next: () => {
-        this.selectedAppointment.notes = newNotes;
+        this.selectedAppointment.notes = this.editedNotes;
         this.editNotesMode = false;
       },
       error: () => {

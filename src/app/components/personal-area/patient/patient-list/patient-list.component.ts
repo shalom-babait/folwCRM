@@ -8,6 +8,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
 import { PatientCreationData } from 'src/app/models/patient.model';
+import { TherapistService } from 'src/app/services/therapist.service';
+import { TherapistCreationData } from 'src/app/models/therapist.model';
 
 @Component({
   selector: 'app-patient-list',
@@ -15,6 +17,8 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  therapists: TherapistCreationData[] = [];
+  selectedTherapistId: number | null = null;
 
   @Input() therapistId?: number;
   /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
@@ -37,6 +41,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   constructor(
     private patientService: PatientService,
+    private therapistService: TherapistService,
     private dialog: MatDialog,
     private router: Router
   ) { }
@@ -61,27 +66,30 @@ export class PatientListComponent implements OnInit, OnDestroy {
     // אחרת — נטען את כולם
     else {
       this.loadAllPatients();
+      this.loadAllTherapists();
     }
-    // האזנה לרשימת המטופלים
-    this.patientService.patientsList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(patients => {
-        this.patients = patients;
-      });
+  }
 
-    // האזנה לטעינה
-    this.patientService.loading$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(loading => {
-        this.isLoading = loading;
-      });
+  loadAllTherapists() {
+    this.therapistService.getAllTherapists().subscribe({
+      next: (therapists) => {
+        this.therapists = therapists || [];
+      },
+      error: (err) => {
+        console.error('Error loading therapists:', err);
+      }
+    });
+  }
 
-    // האזנה למטופל נבחר
-    this.patientService.selectedPatient$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(patient_id => {
-        this.selectedPatientId = patient_id;
-      });
+  get filteredPatients(): PatientCreationData[] {
+    if (!this.selectedTherapistId) {
+      return this.patients;
+    }
+    return this.patients.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
+  }
+
+  onTherapistFilterChange(id: number|null) {
+    this.selectedTherapistId = id;
   }
 
   ngOnDestroy() {

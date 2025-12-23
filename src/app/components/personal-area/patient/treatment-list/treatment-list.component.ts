@@ -144,7 +144,6 @@ export class TreatmentListComponent implements OnInit {
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
-    console.log('עריכת פגישה:', appointment);
       const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
         width: '600px',
         data: { ...appointment, patient_id: appointment.patient_id }
@@ -161,7 +160,6 @@ export class TreatmentListComponent implements OnInit {
       });
     }
 
-  // ...existing code...
   // מחיקת פגישה
   deleteAppointment(appointment: Appointment): void {
     if (!appointment.appointment_id) return;
