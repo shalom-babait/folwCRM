@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
@@ -6,15 +7,29 @@ import { environment } from 'src/environments/environment';
 import { ApiResponse } from 'src/app/models/api-response.model';
 import { Patient, CreatePatientRequest, UpdatePatientRequest, PatientCreationData } from 'src/app/models/patient.model';
 import { Appointment, CreateAppointmentRequest, AppointmentResponse } from 'src/app/models/appointment.model';
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-    /** עדכון הערות לפגישה */
-    updateAppointmentNotes(appointmentId: number, notes: string) {
-      return this.http.put(`${this.apiUrl}/appointments/updateAppointment/${appointmentId}`, { notes });
-    }
+  /** עדכון פגישה מלאה */
+  updateAppointment(appointmentId: number, appointment: Partial<Appointment>): Observable<ApiResponse<Appointment>> {
+    console.log('updateAppointment - sending object:', appointment);
+    const url = `${this.apiUrl}/appointments/updateAppointment/${appointmentId}`;
+    console.log('updateAppointment - url:', url);
+    return this.http.put<ApiResponse<Appointment>>(
+      url,
+      appointment,
+      this.httpOptions
+    ).pipe(
+      tap(
+        res => console.log('updateAppointment - response:', res),
+        err => console.error('updateAppointment - error:', err)
+      )
+    );
+  }
+
   /** עדכון פציינט ברשימה המקומית */
   updatePatientInList(updatedPatient: PatientCreationData): void {
     const current = this.patientsListSubject.value || [];
@@ -41,7 +56,7 @@ export class PatientService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private errorHandler: ErrorHandlerService) { }
 
   // --- יצירת מטופל חדש ---
   createPatient(patientData: PatientCreationData): Observable<ApiResponse<PatientCreationData>> {
@@ -259,45 +274,7 @@ export class PatientService {
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('An error occurred:', error);
-
-    let errorMessage = 'שגיאה לא ידועה בשרת';
-
-    if (error.error) {
-      if (typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error.message) {
-        errorMessage = error.error.message;
-      } else if (error.error.error) {
-        errorMessage = error.error.error;
-      }
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
-
-    switch (error.status) {
-      case 400:
-        errorMessage = 'נתונים שגויים או חסרים';
-        break;
-      case 401:
-        errorMessage = 'אין הרשאה לבצע פעולה זו';
-        break;
-      case 403:
-        errorMessage = 'גישה אסורה';
-        break;
-      case 404:
-        errorMessage = 'המטופל לא נמצא';
-        break;
-      case 409:
-        errorMessage = 'המטופל כבר קיים במערכת';
-        break;
-      case 500:
-        errorMessage = 'שגיאה בשרת - נסה שוב מאוחר יותר';
-        break;
-      case 0:
-        errorMessage = 'אין חיבור לשרת';
-        break;
-    }
-
+    const errorMessage = this.errorHandler.handleHttpError(error);
     return throwError(() => new Error(errorMessage));
   }
   getTherapistIdByUserId(user_id: number): Observable<number | null> {

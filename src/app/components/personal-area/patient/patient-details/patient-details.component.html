@@ -1,13 +1,18 @@
 <!-- patient-details.component.html -->
 <div class="patient-details-card">
   <div class="card-header">
-    <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
-    <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
-      עריכה
-    </button>
+    <ng-container *ngIf="!isEditing">
+      <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
+      <button class="edit-btn" (click)="startEdit()">
+        עריכה
+      </button>
+    </ng-container>
+    <ng-container *ngIf="isEditing">
+      <h3>עריכת פרטי מטופל</h3>
+    </ng-container>
   </div>
 
-  <div class="card-content" *ngIf="!isEditing">
+  
     <div class="detail-row">
       <span class="label">שם:</span>
       <span class="value">{{ patient.person.first_name }} {{ patient.person.last_name }}</span>
@@ -17,11 +22,11 @@
       <span class="label">טלפון:</span>
       <span class="value">{{ patient.person.phone }}</span>
     </div>
-<!--     
+    <div class="card-content" *ngIf="!isEditing">
     <div class="detail-row">
       <span class="label">מייל:</span>
-      <span class="value">{{ patient.user.email }}</span>
-    </div> -->
+      <span class="value">{{ patient.person.email || '' }}</span>
+    </div>
     
     <div class="detail-row">
   <span class="label">גיל:</span>
@@ -64,6 +69,9 @@
     <div class="form-field">
       <label>מייל:</label>
       <input type="email" formControlName="email" placeholder="example@email.com">
+      <div class="error-message" *ngIf="patientForm.get('email')?.invalid && (patientForm.get('email')?.dirty || patientForm.get('email')?.touched)">
+        <span *ngIf="patientForm.get('email')?.errors?.['email']">כתובת מייל לא תקינה</span>
+      </div>
     </div>
     
     <div class="form-field">
