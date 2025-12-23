@@ -1,0 +1,27 @@
+/* Fullscreen overlay for editor */
+.editor-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Force TinyMCE editor to fill fullscreen overlay */
+:host ::ng-deep .editor-fullscreen-overlay .tox.tox-tinymce {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+}
+:host ::ng-deep .editor-fullscreen-overlay .tox-editor-container,
+:host ::ng-deep .editor-fullscreen-overlay .tox-edit-area__iframe {
+  height: calc(100vh - 40px) !important;
+  min-height: calc(100vh - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+}

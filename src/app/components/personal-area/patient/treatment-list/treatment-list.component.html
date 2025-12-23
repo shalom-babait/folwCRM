@@ -24,7 +24,7 @@
     <div class="treatment-cell">שעת סיום</div>
     <div class="treatment-cell">סה"כ</div>
     <div class="treatment-cell">סטטוס</div>
-
+    <div class="treatment-cell">פעולות</div>
   </div>
 
   <!-- רשימת פגישות -->
@@ -38,13 +38,26 @@
 
     <!-- עמודת הסטטוס -->
     <mat-form-field class="status-select mat-center-select" appearance="outline" matTooltip="שינוי סטטוס">
-<mat-select class="no-backdrop-select"
-            [(ngModel)]="appointment.status"
-            (selectionChange)="saveStatus(appointment)">
+      <mat-select class="no-backdrop-select"
+                  [(ngModel)]="appointment.status"
+                  (selectionChange)="saveStatus(appointment)">
         <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
       </mat-select>
     </mat-form-field>
-
-
-
+    <!-- עמודת פעולות -->
+    <div class="treatment-cell actions-cell">
+      <button mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item (click)="editAppointment(appointment)">
+          <mat-icon>edit</mat-icon>
+          <span>ערוך</span>
+        </button>
+        <button mat-menu-item (click)="deleteAppointment(appointment)">
+          <mat-icon>delete</mat-icon>
+          <span>מחק</span>
+        </button>
+      </mat-menu>
+    </div>
   </div>

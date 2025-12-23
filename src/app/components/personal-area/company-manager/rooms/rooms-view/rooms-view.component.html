@@ -1,6 +1,6 @@
 <div class="view-container">
 	<div class="right-panel">
-		<app-room-list-calendar (roomSelected)="onRoomSelected($event)"></app-room-list-calendar>
+		<app-room-list-calendar (roomSelected)="onRoomSelected($event)" (roomAction)="onRoomAction($event)"></app-room-list-calendar>
 	</div>
 	<div class="left-panel">
 					<!-- קומפוננטת חדרים בית בעיצוב כרטיס כמו יומן חדר -->
@@ -54,6 +54,15 @@
 												<!-- הגדרות חדר -->
 												<div *ngIf="activeTab === 'settings'" class="settings-view">
 													<app-room-settings [room]="selectedRoom"></app-room-settings>
+												</div>
+												<!-- טאב מחיקת חדר -->
+												<div *ngIf="activeTab === 'delete'" class="delete-room-view">
+													<div class="delete-room-card">
+														<h3>מחיקת חדר</h3>
+														<p>האם אתה בטוח שברצונך למחוק את החדר <b>{{selectedRoom.room_name}}</b>?</p>
+														<button mat-raised-button color="warn" (click)="confirmDeleteRoom()">מחק</button>
+														<button mat-button (click)="setActiveTab('calendar')">ביטול</button>
+													</div>
 												</div>
 											</ng-container>
 										</div>
