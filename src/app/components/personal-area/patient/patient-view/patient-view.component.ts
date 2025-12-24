@@ -84,20 +84,26 @@ export class PatientViewComponent {
 
   /** טיפול בעדכון פרטי מטופל */
   onPatientUpdated(updated: any): void {
-    if (!updated || !updated.patient || !updated.patient.patient_id) return;
+    if (!updated || !updated.patient || !updated.patient.patient_id || !updated.person) return;
     this.loading = true;
 
-    const updateReq: any = {
+    // בניית אובייקט עדכון מאוחד
+    let updateReq: any = {
       ...updated.patient,
-      ...updated.user,
+      ...updated.person,
       patient_id: updated.patient.patient_id,
-      user_id: updated.user.user_id,
-      birth_date: updated.user.birth_date || updated.patient.birth_date
+      user_id: updated.person.user_id,
+      birth_date: updated.person.birth_date || updated.patient.birth_date
     };
 
-    if ('gender' in updateReq) {
-      delete updateReq.gender;
-    }
+    // המרת ערכים ריקים ל-null
+    Object.keys(updateReq).forEach(key => {
+      if (updateReq[key] === '') {
+        updateReq[key] = null;
+      }
+    });
+
+    console.log('נשלח לעדכון:', updateReq);
 
     this.patientService.updatePatient(updateReq.patient_id, updateReq).subscribe({
       next: (res) => {
