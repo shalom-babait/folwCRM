@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>יש שינויים שלא נשמרו</h2>
+<div mat-dialog-content>
+  <p>{{ data.message }}</p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button color="primary" (click)="onSave()">שמור</button>
+  <button mat-button color="warn" (click)="onCancel()"><b>ביטול</b></button>
+</div>
