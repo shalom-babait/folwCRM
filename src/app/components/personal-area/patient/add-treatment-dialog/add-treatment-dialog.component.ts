@@ -1,11 +1,12 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material/dialog';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { Room } from 'src/app/models/room.model';
+import { ConfirmUnsavedDialogComponent } from 'src/app/components/confirm-unsaved-dialog/confirm-unsaved-dialog.component';
 import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 
 @Component({
@@ -14,6 +15,31 @@ import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog
   styleUrls: ['./add-treatment-dialog.component.css']
 })
 export class CreateTreatmentDialogComponent implements OnInit {
+  async onCancel(): Promise<void> {
+    if (!this.treatmentForm.dirty) {
+      this.dialogRef.close();
+      return;
+    }
+    const result = await this.openUnsavedDialog();
+    if (result === 'cancel') {
+      this.dialogRef.close();
+    }
+  }
+
+  // Intercept dialog close (backdrop or X)
+  async canCloseDialog(): Promise<boolean> {
+    if (!this.treatmentForm.dirty) return true;
+    const result = await this.openUnsavedDialog();
+    return result === 'cancel';
+  }
+
+  openUnsavedDialog(): Promise<'save' | 'cancel' | undefined> {
+    const dialogRef = this.dialog.open(ConfirmUnsavedDialogComponent, {
+      width: '350px',
+      data: { message: 'יש שינויים שלא נשמרו. האם לצאת בלי לשמור?' }
+    });
+    return dialogRef.afterClosed().toPromise();
+  }
 
   @Output() appointmentAdded = new EventEmitter<any>();
   treatmentForm!: FormGroup;
@@ -24,15 +50,15 @@ export class CreateTreatmentDialogComponent implements OnInit {
   roomEvents: any[] = [];
   showOverlay = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private errorHandler: ErrorHandlerService,
-    private roomsService: RoomsService,
-    private typesService: TypesService,
-    private patientService: PatientService,
-    private dialog: MatDialog,
-    public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    constructor(
+      private fb: FormBuilder,
+      private errorHandler: ErrorHandlerService,
+      private roomsService: RoomsService,
+      private typesService: TypesService,
+      private patientService: PatientService,
+      private dialog: MatDialog,
+      public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.treatmentForm = this.createForm();
       if (data) {
@@ -49,7 +75,28 @@ export class CreateTreatmentDialogComponent implements OnInit {
       } else {
         this.treatmentForm.get('meeting_type')?.setValue('frontal');
       }
+      // Disable close on backdrop click or ESC
+      this.dialogRef.disableClose = true;
     }
+
+  // Intercept dialog close (backdrop or X)
+
+  ngAfterViewInit(): void {
+    // האזנה לאירועי סגירה (ESC, backdrop)
+    this.dialogRef.backdropClick().subscribe(async () => {
+      if (await this.canCloseDialog()) {
+        this.dialogRef.close();
+      }
+    });
+    this.dialogRef.keydownEvents().subscribe(async (event: any) => {
+      if (event.key === 'Escape') {
+        if (await this.canCloseDialog()) {
+          this.dialogRef.close();
+        }
+      }
+    });
+  }
+
 
   ngOnInit(): void {
     this.treatmentForm.get('meeting_type')?.valueChanges.subscribe(meetingType => {
@@ -185,21 +232,24 @@ export class CreateTreatmentDialogComponent implements OnInit {
     }
   }
 
-  close() { this.dialogRef.close(); }
-  // add-treatment-dialog.component.ts
-public editorInit: any = {
-  height: 300,
-  menubar: false,
-  plugins: [
-    'link',
-    'lists',
-    'table',
-    'wordcount'
-  ],
-  toolbar:
-    'undo redo | bold italic underline | bullist numlist | link table | removeformat',
-  language: 'he',
-   language_url: '/assets/tinymce/langs/he_IL.js'
-};
+  async close() {
+    if (await this.canCloseDialog()) {
+      this.dialogRef.close();
+    }
+  }
 
+  public editorInit: any = {
+    height: 300,
+    menubar: false,
+    plugins: [
+      'link',
+      'lists',
+      'table',
+      'wordcount'
+    ],
+    toolbar:
+      'undo redo | bold italic underline | bullist numlist | link table | removeformat',
+    language: 'he',
+    language_url: '/assets/tinymce/langs/he_IL.js'
+  };
 }

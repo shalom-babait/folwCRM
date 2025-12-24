@@ -100,6 +100,8 @@ import { AddRoomDialogComponent } from './components/personal-area/company-manag
 import { RoomSettingsComponent } from './components/personal-area/company-manager/rooms/room-settings/room-settings.component';
 import { RoomsHomeComponent } from './components/personal-area/company-manager/rooms/rooms-home/rooms-home.component';
 import { TextEditorComponent } from './components/personal-area/company-manager/text-editor/text-editor.component';
+import { ContactListComponent } from './components/personal-area/patient/PatientContacts/contact-list/contact-list.component';
+import { AddContactDialogComponent } from './components/personal-area/patient/PatientContacts/add-contact-dialog/add-contact-dialog.component';
 
 
 @NgModule({
@@ -171,6 +173,8 @@ import { TextEditorComponent } from './components/personal-area/company-manager/
     RoomSettingsComponent,
     RoomsHomeComponent,
   TextEditorComponent,
+  ContactListComponent,
+  AddContactDialogComponent,
   ],
   imports: [
     EditorModule,
