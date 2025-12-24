@@ -31,12 +31,12 @@ export class PatientDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.patientForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      phone: ['', Validators.required],
+      first_name: [''],
+      last_name: [''],
+      phone: [''],
       email: ['', [Validators.email]],
-      birth_date: ['', Validators.required],
-      address: ['', Validators.required]
+      birth_date: [''],
+      address: ['']
     });
   }
   ngOnChanges(): void {

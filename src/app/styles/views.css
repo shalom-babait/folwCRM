@@ -1,3 +1,16 @@
+/* === טופס עריכה עם כפתור שמור בתחתית === */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  justify-content: flex-end;
+}
 /* === DETAIL VIEWS === */
 .view-container {
   display: flex;
@@ -11,8 +24,8 @@
 
 .right-panel { 
   flex: 0 0 250px;
-  /* ביטול גלילה פנימית */
-  overflow-y: hidden;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .left-panel { 
@@ -20,15 +33,14 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  /* שמירת ביטול גלילה */
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* === תצוגת סיכום ברירת מחדל === */
 .summary-view { 
   height: 100%;
   /* אין גלילה פנימית */
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -38,8 +50,8 @@
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   height: 100%;
-  /* אין גלילה בתוך כרטיס הסיכום */
-  overflow: hidden;
+  max-height: 600px; /* אפשר לשנות את הגובה לפי הצורך */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -56,7 +68,7 @@
 .summary-card app-prospect-table {
   flex: 1;
   /* מונע גלילה פנימית של הטבלה המשולבת */
-  overflow: auto;
+  overflow-y: auto;
   display: block;
 }
 
@@ -81,7 +93,8 @@
   background: white;
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  overflow: auto;
+  height: 100%;
+  overflow-y: auto;
 }
 
 /* === כותרת עם טאבים === */
@@ -170,7 +183,8 @@
 /* === תוכן הטאבים - עם גלילה === */
 .tab-content {
   flex: 1;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
   padding: 2rem;
 }
 
