@@ -27,11 +27,10 @@ export class TextEditorComponent implements ControlValueAccessor {
   ],
   toolbar:
     'undo redo | bold italic underline | bullist numlist | link table | removeformat',
-
-  paste_as_text: true,  
-
+  paste_as_text: true,
   language: 'he',
-  language_url: '/assets/tinymce/langs/he_IL.js'
+  language_url: '/assets/tinymce/langs/he_IL.js',
+  directionality: 'rtl'
 };
 
   private _value: string = '';
