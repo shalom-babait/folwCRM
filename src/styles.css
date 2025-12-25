@@ -1,3 +1,7 @@
+/* עיצוב שדה חיפוש מטופלים */
+.search-input {
+  color: black !important;
+}
 @import "~@fortawesome/fontawesome-free/css/all.css";
 html, body {
   background-color:#022F39;

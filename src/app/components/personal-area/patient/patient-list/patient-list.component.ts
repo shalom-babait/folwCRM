@@ -173,14 +173,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
-        if (result && result.success && result.data) {
+        if (result) {
           // אחרי הוספה: טען את אותו סוג רשימה כמו בהתחלה
           if (this.therapistId && this.therapistId > 0) {
             this.loadPatientsByTherapist();
           } else {
             this.loadAllPatients();
           }
-          const newId = result.data.patient?.patient_id;
+          const newId = result.patient?.patient_id;
           if (newId) {
             setTimeout(() => this.patientService.selectPatient(newId), 500);
           }

@@ -137,6 +137,9 @@
 
     <!-- כפתורי פעולה -->
     <div class="dialog-actions">
+      <button type="button" class="add-contact-button" (click)="openAddContactDialog()">
+        הוספת איש קשר
+      </button>
       <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
         ביטול
       </button>
