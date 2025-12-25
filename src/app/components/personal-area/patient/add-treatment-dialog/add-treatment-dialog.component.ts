@@ -132,7 +132,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       place: [null],
       type: [null],
       patient_id: [this.data?.patient_id || null, Validators.required],
-      notes: ['', [Validators.maxLength(250)]]
+      notes: ['']
     });
   }
 

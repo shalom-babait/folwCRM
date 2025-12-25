@@ -1,9 +1,9 @@
 .calendar-view {
-	overflow-x: auto;
+  /* overflow-x: auto;  הסר גלילה אופקית */
 }
 
 .calendar-card full-calendar {
-	min-width: 900px !important;
-	width: 900px !important;
-	display: inline-block;
+  min-width: 0 !important;
+  width: 100% !important;
+  display: block;
 }

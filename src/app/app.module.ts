@@ -22,6 +22,7 @@ import { WeNumbersComponent } from "./components/marketing/we-numbers/we-numbers
 import { ContactComponent } from "./components/marketing/contact/contact.component";
 import { TheySayAboutUsComponent } from './components/marketing/they-say-about-us/they-say-about-us.component';
 
+import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -177,6 +178,7 @@ import { AddContactDialogComponent } from './components/personal-area/patient/Pa
   AddContactDialogComponent,
   ],
   imports: [
+    MatRadioModule,
     EditorModule,
     MatMenuModule,
     MatIconModule,

@@ -15,20 +15,24 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class TextEditorComponent implements ControlValueAccessor {
   fullscreen = false;
-  public editorInit: any = {
-    height: 300,
-    menubar: false,
-    plugins: [
-      'link',
-      'lists',
-      'table',
-      'wordcount'
-    ],
-    toolbar:
-      'undo redo | bold italic underline | bullist numlist | link table | removeformat',
-    language: 'he',
-    language_url: '/assets/tinymce/langs/he_IL.js'
-  };
+ public editorInit: any = {
+  height: 300,
+  menubar: false,
+  plugins: [
+    'paste',
+    'link',
+    'lists',
+    'table',
+    'wordcount'
+  ],
+  toolbar:
+    'undo redo | bold italic underline | bullist numlist | link table | removeformat',
+
+  paste_as_text: true,  
+
+  language: 'he',
+  language_url: '/assets/tinymce/langs/he_IL.js'
+};
 
   private _value: string = '';
   onChange: (_: any) => void = () => {};
