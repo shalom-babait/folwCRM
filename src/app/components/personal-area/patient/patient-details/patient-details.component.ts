@@ -5,7 +5,9 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-details',
   templateUrl: './patient-details.component.html',
-  styleUrls: ['./patient-details.component.css']
+  styleUrls: ['./patient-details.component.css',
+    '../../../../styles/report-view.css'
+  ]
 })
 export class PatientDetailsComponent implements OnChanges {
 
@@ -36,7 +38,8 @@ export class PatientDetailsComponent implements OnChanges {
       phone: [''],
       email: ['', [Validators.email]],
       birth_date: [''],
-      address: ['']
+      address: [''],
+      teudat_zehut: ['']
     });
   }
   ngOnChanges(): void {
@@ -56,7 +59,8 @@ export class PatientDetailsComponent implements OnChanges {
         phone: this.patient.person.phone,
         email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -70,7 +74,8 @@ export class PatientDetailsComponent implements OnChanges {
         phone: this.patient.person.phone,
         email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -84,7 +89,8 @@ export class PatientDetailsComponent implements OnChanges {
         phone: this.patient.person.phone,
         email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -102,10 +108,7 @@ export class PatientDetailsComponent implements OnChanges {
         ...this.patientForm.value
       }
     };
-    // הסר email מהאובייקט אם קיים
-    if ('email' in updatedPatient.person) {
-      delete updatedPatient.person.email;
-    }
+    // אל תמחק את email - שמור את כל השדות
     this.patientUpdated.emit(updatedPatient);
     this.isEditing = false;
   }

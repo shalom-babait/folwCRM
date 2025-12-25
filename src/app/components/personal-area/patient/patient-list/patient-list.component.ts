@@ -104,8 +104,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.patients = data || [];
-        
+          this.patients = (data || []).slice().reverse();
           this.isLoading = false;
         },
         error: (err) => {
@@ -124,7 +123,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.patients = data;
+          this.patients = (data || []).slice().reverse();
           this.isLoading = false;
         },
         error: (err) => {
