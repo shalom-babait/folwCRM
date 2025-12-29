@@ -1,0 +1,60 @@
+<div class="list-card">
+  <div class="card-header">
+    <h3>רשימת דוחות</h3>
+    <div class="header-actions">
+      <button class="add-item-btn" (click)="openAddReportDialog()" [disabled]="isLoading"
+        matTooltip="הוסף דוח חדש" matTooltipPosition="below">
+        <mat-icon>add</mat-icon>
+        <span>הוסף דוח</span>
+      </button>
+      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש דוח">
+        <mat-icon>search</mat-icon>
+        <span>חיפוש</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-content">
+    <!-- אינדיקטור טעינה -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- רשימת דוחות -->
+    <div *ngIf="!isLoading && reports.length > 0">
+      <div 
+        class="list-item-card" 
+        *ngFor="let report of reports"
+        [class.selected]="selectedReportId === report.id">
+        <div class="item-info" (click)="viewReportDetails(report)">
+          <span class="item-name">{{ report.name }}</span>
+        </div>
+        <div class="list-actions">
+          <button 
+            class="menu-button"
+            [matMenuTriggerFor]="reportMenu"
+            (click)="$event.stopPropagation()"
+            matTooltip="פעולות">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #reportMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+            <button mat-menu-item (click)="viewReportDetails(report)">
+              <mat-icon>description</mat-icon>
+              <span>הצג דוח</span>
+            </button>
+            <button mat-menu-item (click)="downloadReport(report)">
+              <mat-icon>download</mat-icon>
+              <span>הורד דוח</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+
+    <!-- הודעה אם אין דוחות -->
+    <div *ngIf="!isLoading && reports.length === 0" class="no-items">
+      <p>אין דוחות כרגע</p>
+      <p>לחץ על "הוסף דוח" כדי להתחיל</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+/* טבלת הכנסות - עיצוב מודרני, רקע לבן, יישור לימין */
+.income-table {
+	width: 100%;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+	border-collapse: separate;
+	border-spacing: 0;
+	direction: rtl;
+	margin-top: 16px;
+	overflow: hidden;
+}
+
+.income-table th, .income-table td {
+	text-align: right;
+	padding: 12px 16px;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 1.05em;
+}
+
+.income-table th {
+	background: #f8f8f8;
+	font-weight: bold;
+	color: #222;
+}
+
+.income-table tr:last-child td {
+	border-bottom: none;
+}
+
+.income-table tbody tr:hover {
+	background: #f5faff;
+}
+
+.total {
+	margin-top: 18px;
+	font-size: 1.15em;
+	text-align: right;
+	direction: rtl;
+	font-weight: bold;
+	color: #0a3d62;
+}

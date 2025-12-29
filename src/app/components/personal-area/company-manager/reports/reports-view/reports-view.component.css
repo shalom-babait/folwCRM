@@ -1,0 +1,23 @@
+.reports-view-container {
+  display: flex;
+  height: 100%;
+  min-height: 60vh;
+}
+
+.reports-list-panel {
+  width: 350px;
+  min-width: 250px;
+  max-width: 400px;
+  border-left: 1px solid #e0e0e0;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+  z-index: 1;
+}
+
+.report-details-panel {
+  height: 64rem;
+  flex: 1;
+  padding: 2rem 2.5rem;
+  background: #f7f7f7;
+  overflow-y: auto;
+}
