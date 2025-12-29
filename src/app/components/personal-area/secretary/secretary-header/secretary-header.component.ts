@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
   ]
 })
 export class SecretaryHeaderComponent implements OnInit {
-  selectedSection: string = 'home';
+  @Input() selectedSection: string = 'home';
+  @Output() sectionChange = new EventEmitter<string>();
   // איפוס state גלובלי כאשר מחליפים section
   resetSectionState(section: string) {
     this.selectedSection = section;
+    this.sectionChange.emit(section);
     // אפשר להוסיף כאן איפוס משתנים גלובליים אם צריך
   }
   showProfileMenu = false;

@@ -1,0 +1,31 @@
+<div class="filters">
+  <select [(ngModel)]="filterType" (change)="loadReport()" class="styled-select">
+    <option value="month">חודש</option>
+    <option value="quarter">3 חודשים</option>
+    <option value="range">טווח תאריכים</option>
+  </select>
+
+  <div *ngIf="filterType === 'range'" class="date-range">
+    <input matInput type="date" [(ngModel)]="startDate">
+    <input matInput type="date" [(ngModel)]="endDate">
+    <button mat-raised-button (click)="loadReport()">הצג</button>
+  </div>
+</div>
+<h3>הכנסות מטיפולים</h3>
+<table class="income-table">
+  <thead>
+    <tr>
+      <th>שם לקוח</th>
+      <th>סכום הכנסה</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows">
+      <td>{{ row.name }}</td>
+      <td>₪{{ row.amount }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="total">
+  סך הכל הכנסות מטיפולים: <strong>₪{{ totalIncome }}</strong>
+</div>

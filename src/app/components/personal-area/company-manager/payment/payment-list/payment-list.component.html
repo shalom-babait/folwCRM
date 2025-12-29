@@ -1,6 +1,4 @@
 <div class="payment-container">
-  <h2>כרטיס לקוח - היסטוריית תשלומים</h2>
-
   <div class="table-wrapper">
     <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
       <button class="btn-details" (click)="openAddTransaction()">הוסף פעולה חדשה</button>
@@ -34,20 +32,35 @@
       </thead>
       <tbody>
         <tr *ngFor="let transaction of filteredTransactions">
-          <td>{{ formatDate(transaction.date) }}</td>
-          <td>{{ transaction.description }}</td>
+          <td>{{ transaction.payment_date ? formatDate(transaction.payment_date) : '' }}</td>
+          <td>{{ transaction.method }}</td>
           <td class="debit">
-            <span *ngIf="transaction.debit > 0">₪{{ transaction.debit }}</span>
+            <span *ngIf="transaction.transaction_type === 'debit'">₪{{ transaction.amount }}</span>
           </td>
           <td class="credit">
-            <span *ngIf="transaction.credit > 0">₪{{ transaction.credit }}</span>
+            <span *ngIf="transaction.transaction_type === 'credit'">₪{{ transaction.amount }}</span>
           </td>
-          <td [ngClass]="getBalanceClass(transaction.balance)">
-            ₪{{ transaction.balance }}
+          <td class="balance-col" [ngClass]="{
+            'negative': (transaction.balance ?? 0) < 0,
+            'positive': (transaction.balance ?? 0) > 0,
+            'zero': (transaction.balance ?? 0) === 0
+          }">
+            ₪{{ transaction.balance ?? 0 }}
           </td>
           <td class="actions">
-            <button class="btn-details" (click)="showDetails(transaction)">פרטים</button>
-            <button class="btn-assign" (click)="assignPayment(transaction)" *ngIf="transaction.debit > 0">שייך תשלום</button>
+            <button mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()" matTooltip="פעולות">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+              <button mat-menu-item (click)="showDetails(transaction)">
+                <mat-icon>edit</mat-icon>
+                <span>ערוך</span>
+              </button>
+              <button mat-menu-item (click)="deletePayment(transaction)">
+                <mat-icon>delete</mat-icon>
+                <span>מחק</span>
+              </button>
+            </mat-menu>
           </td>
         </tr>
       </tbody>
@@ -66,25 +79,6 @@
     <div class="summary-row final">
       <span class="label">יתרה כוללת:</span>
       <span class="value" [ngClass]="getBalanceClass(finalBalance)">₪{{ finalBalance }}</span>
-    </div>
-  </div>
-
-  <div class="legend">
-    <div class="legend-item">
-      <span class="legend-dot debit"></span>
-      <span>חובה פתוחה</span>
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot credit"></span>
-      <span>תשלום</span>
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot balance-positive"></span>
-      <span>חוב</span>
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot balance-negative"></span>
-      <span>עודף תשלום</span>
     </div>
   </div>
 </div>

@@ -1,11 +1,12 @@
 <div class="patient-list-container">
   <!-- שורת חיפוש וכפתור הוספה -->
   <div class="search-container">
-    <button class="icon-button" mat-icon-button (click)="openCreateFollowupDialog()">
-      <mat-icon style="color: #BB7E2B;">add</mat-icon>
-    </button>
-
-    <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
+    <div class="search-actions-row">
+      <button class="icon-button" mat-icon-button (click)="openCreateFollowupDialog()">
+        <mat-icon style="color: #BB7E2B;">add</mat-icon>
+      </button>
+      <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
+    </div>
   </div>
 
   <!-- כותרות -->
@@ -19,25 +20,34 @@
 
   <!-- נתונים -->
   <ng-container *ngIf="filteredFollowups.length > 0; else noFollowups">
-    <div class="treatment-row data-row" *ngFor="let f of filteredFollowups">
-      <div class="treatment-cell">
-    <ng-container *ngIf="f.remind; else toggle">
+    <div class="scrollable-rows">
+      <div class="treatment-row data-row" *ngFor="let f of filteredFollowups">
+        <div class="treatment-cell">
+          <ng-container *ngIf="f.remind; else toggle">
             <mat-icon color="primary">check</mat-icon>
           </ng-container>
           <ng-template #toggle>
             <mat-slide-toggle name="remind" [(ngModel)]="f.remind" (change)="toggleReminder(f)"></mat-slide-toggle>
           </ng-template>
-      </div>
-      <div class="treatment-cell">{{ f.follow_date | date:'dd/MM/yyyy' }}</div>
-      <div class="treatment-cell">{{ f.follow_time }}</div>
-      <div class="treatment-cell">{{ f.notes }}</div>
-      <div class="treatment-cell actions">
-        <button mat-icon-button (click)="editFollowup(f)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="f.followup_id && deleteFollowup(f.followup_id)">
-          <mat-icon>delete</mat-icon>
-        </button>
+        </div>
+        <div class="treatment-cell">{{ f.follow_date | date:'dd/MM/yyyy' }}</div>
+        <div class="treatment-cell">{{ f.follow_time }}</div>
+        <div class="treatment-cell">{{ f.notes }}</div>
+        <div class="treatment-cell actions-cell">
+          <button mat-icon-button [matMenuTriggerFor]="followupMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #followupMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+            <button mat-menu-item (click)="editFollowup(f)">
+              <mat-icon>edit</mat-icon>
+              <span>ערוך</span>
+            </button>
+            <button mat-menu-item (click)="f.followup_id && deleteFollowup(f.followup_id)" color="warn">
+              <mat-icon>delete</mat-icon>
+              <span>מחק</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
     </div>
   </ng-container>

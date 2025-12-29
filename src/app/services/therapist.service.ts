@@ -10,6 +10,9 @@ import { TherapistCreationData, TherapistData } from '../models/therapist.model'
   providedIn: 'root'
 })
 export class TherapistService {
+  getTherapistMonthlyStats(therapistId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/therapists/${therapistId}/monthly-stats`);
+  }
   private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {}

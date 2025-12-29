@@ -73,6 +73,15 @@ header {
 
 .buttonLink button:hover::after { width: 80%; }
 
+.buttonLink button.selected {
+  color: #BB7E2B;
+}
+
+.buttonLink button.selected::after {
+  width: 80%;
+  background-color: #BB7E2B;
+}
+
 .user-profile-container {
   position: relative;
   margin-left: 2rem;
