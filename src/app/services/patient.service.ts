@@ -127,7 +127,6 @@ export class PatientService {
     return this.http.get<any>(`${this.apiUrl}/patients/getAllPatients/`).pipe(
       map(response => {
         const raw = response.data || [];
-        console.log(raw);
         return raw.map((item: any) => ({
           person: item.person,
           patient: item.patient,

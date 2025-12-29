@@ -1,3 +1,15 @@
-<app-therapist-header></app-therapist-header>
-<router-outlet></router-outlet>
+<app-therapist-header [selectedSection]="selectedSection" (sectionChange)="onSectionChange($event)"></app-therapist-header>
+<div class="dashboard-content">
+  <ng-container>
+    <app-therapist-home *ngIf="selectedSection === 'home'"></app-therapist-home>
+    <app-patient-view *ngIf="selectedSection === 'patients'" [therapistId]="therapistId"></app-patient-view>
+    <app-rooms-view *ngIf="selectedSection === 'rooms'"></app-rooms-view>
+    <!-- <app-mail *ngIf="selectedSection === 'mail'"></app-mail> -->
+    <!-- <app-declarations *ngIf="selectedSection === 'declarations'"></app-declarations> -->
+    <app-therapist-calendar *ngIf="selectedSection === 'calendar'"></app-therapist-calendar>
+    <app-user-follow-up-table *ngIf="selectedSection === 'followups'"></app-user-follow-up-table>
+    <app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
+    <div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'rooms' && selectedSection !== 'calendar' && selectedSection !== 'followups' && selectedSection !== 'reports'">בחר פעולה</div>
+  </ng-container>
+</div>
 

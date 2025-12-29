@@ -2,14 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { PaymentService } from 'src/app/services/payments.service';
-
-interface Transaction {
-  date: Date;
-  description: string;
-  debit: number;
-  credit: number;
-  balance: number;
-}
+import { Payment } from 'src/app/models/payment.model';
+import { ex } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-payment-list',
@@ -19,11 +13,11 @@ interface Transaction {
 export class PaymentListComponent implements OnInit {
   @Input() patientId!: number;
   sortOrder: 'asc' | 'desc' = 'asc'; // 'asc' למיון מהישן לחדש, 'desc' מהחדש לישן
-  transactions: Transaction[] = [];
+  transactions: Payment[] = [];
   totalDebits = 0;
   totalCredits = 0;
   finalBalance = 0;
-  filteredTransactions: Transaction[] = [];
+  filteredTransactions: Payment[] = [];
   dateFilter: string | null = null;
   amountFilter: number | null = null;
   constructor(private dialog: MatDialog, private paymentService: PaymentService) { }
@@ -42,30 +36,25 @@ export class PaymentListComponent implements OnInit {
         let runningBalance = 0;
 
         this.transactions = data.map((item: any) => {
-          const amount = Number(item.amount ?? 0);
-          const isCharge = item.transaction_type === 'debit';
-
-          const debit = isCharge ? amount : 0;
-          const credit = !isCharge ? amount : 0;
-
-          runningBalance += debit - credit;
-
-          const description = `${item.method || ''} ${item.status || ''}`.trim();
-
           return {
-            date: new Date(item.payment_date),
-            description,
-            debit,
-            credit,
-            balance: runningBalance
-          } as Transaction;
+            pay_id: item.pay_id ?? item.id ?? item.payment_id,
+            appointment_id: item.appointment_id,
+            therapist_id: item.therapist_id,
+            amount: Number(item.amount ?? 0),
+            payment_date: item.payment_date ? new Date(item.payment_date) : undefined,
+            method: item.method,
+            transaction_type: item.transaction_type,
+            status: item.status,
+            person_id: item.person_id,
+            // אפשר להוסיף כאן שדות נוספים אם צריך
+          } as Payment;
         });
 
         // מיון לפי תאריך מהישן לחדש
         this.transactions.sort((a, b) => {
           return this.sortOrder === 'asc'
-            ? a.date.getTime() - b.date.getTime()
-            : b.date.getTime() - a.date.getTime();
+            ? (a.payment_date?.getTime() ?? 0) - (b.payment_date?.getTime() ?? 0)
+            : (b.payment_date?.getTime() ?? 0) - (a.payment_date?.getTime() ?? 0);
         });
         this.recalculateBalances();
 
@@ -88,8 +77,8 @@ export class PaymentListComponent implements OnInit {
 
   applyFilters() {
     this.filteredTransactions = this.transactions.filter(transaction => {
-      const dateMatch = this.dateFilter ? transaction.date >= new Date(this.dateFilter) : true;
-      const amountMatch = this.amountFilter ? (transaction.debit >= this.amountFilter || transaction.credit >= this.amountFilter) : true;
+      const dateMatch = this.dateFilter ? (transaction.payment_date ? transaction.payment_date >= new Date(this.dateFilter) : false) : true;
+      const amountMatch = this.amountFilter ? (transaction.amount >= this.amountFilter) : true;
       return dateMatch && amountMatch;
     });
     this.calculateTotals(); // אם אתה רוצה לעדכן את הסכומים
@@ -97,9 +86,12 @@ export class PaymentListComponent implements OnInit {
 
   recalculateBalances() {
     let runningBalance = 0;
-
     this.transactions = this.transactions.map(t => {
-      runningBalance += t.debit - t.credit;
+      if (t.transaction_type === 'debit') {
+        runningBalance -= t.amount;
+      } else if (t.transaction_type === 'credit') {
+        runningBalance += t.amount;
+      }
       return { ...t, balance: runningBalance };
     });
   }
@@ -111,17 +103,36 @@ export class PaymentListComponent implements OnInit {
   }
 
   calculateTotals() {
-    this.totalDebits = this.transactions.reduce((sum, t) => sum + t.debit, 0);
-    this.totalCredits = this.transactions.reduce((sum, t) => sum + t.credit, 0);
-    this.finalBalance = this.totalDebits - this.totalCredits;
+    this.totalDebits = this.transactions
+      .filter(t => (t as any).transaction_type === 'debit')
+      .reduce((sum, t) => sum + t.amount, 0);
+    this.totalCredits = this.transactions
+      .filter(t => (t as any).transaction_type === 'credit')
+      .reduce((sum, t) => sum + t.amount, 0);
+    this.finalBalance = this.totalCredits - this.totalDebits;
   }
 
-  assignPayment(transaction: Transaction) {
-    console.log('שיוך תשלום:', transaction);
+
+  deletePayment(payment: Payment) {
+    if (!payment || !payment.pay_id) {
+      alert('לא נמצא מזהה תשלום למחיקה');
+      return;
+    }
+    if (confirm('האם אתה בטוח שברצונך למחוק את התשלום?')) {
+      this.paymentService.deletePayment(payment.pay_id).subscribe({
+        next: () => {
+          this.loadTransactions();
+        },
+        error: (err) => {
+          alert('שגיאה במחיקת תשלום');
+          console.error('שגיאה במחיקת תשלום:', err);
+        }
+      });
+    }
   }
 
-  showDetails(transaction: Transaction) {
-    console.log('פרטי פעולה:', transaction);
+  showDetails(payment: Payment) {
+    console.log('פרטי פעולה:', payment);
   }
   openAddTransaction(): void {
     const dialogRef = this.dialog.open(AddTransactionComponent, {
@@ -153,7 +164,8 @@ export class PaymentListComponent implements OnInit {
         method: methodMap[transaction.method] ?? 'מזומן',
         status: statusMap[transaction.status] ?? 'pending',
         transaction_type: transaction.transaction_type,
-        patient_id: this.patientId
+        patient_id: this.patientId,
+        therapist_id: transaction.therapist_id
       };
 
 

@@ -13,9 +13,10 @@ import { Person } from 'src/app/models/person.model';
   ]
 })
 export class AddFollowupDialogComponent {
-
   followupForm: FormGroup;
   isSubmitting = false;
+  isEdit: boolean = false;
+  followupData?: FollowUp;
 
   constructor(
     public dialogRef: MatDialogRef<AddFollowupDialogComponent>,
@@ -23,15 +24,36 @@ export class AddFollowupDialogComponent {
     private followupService: FollowupService,
     @Inject(MAT_DIALOG_DATA) public data: { followUp?: FollowUp, person?: Person, person_id?: number, created_by_person_id?: number }
   ) {
-    // אם יש followUp, זה עריכה. אחרת, הוספה חדשה
-    const isEdit = !!data.followUp;
-    const followup = data.followUp;
+    this.isEdit = !!data.followUp;
+    this.followupData = data.followUp;
     this.followupForm = this.fb.group({
-      follow_date: [isEdit ? followup?.follow_date : this.getTodayStr(), Validators.required],
-      follow_time: [isEdit ? followup?.follow_time : ''],
-      remind: [isEdit ? followup?.remind : false],
-      notes: [isEdit ? followup?.notes : '']
+      follow_date: [
+        this.isEdit && this.followupData?.follow_date
+          ? this.formatDateForInput(this.followupData.follow_date)
+          : this.getTodayStr(),
+        Validators.required
+      ],
+      follow_time: [this.isEdit ? this.followupData?.follow_time : ''],
+      remind: [this.isEdit ? this.followupData?.remind : true],
+      notes: [this.isEdit ? this.followupData?.notes : '']
     });
+
+  }
+
+  /**
+   * ממיר תאריך לפורמט yyyy-MM-dd עבור input[type=date]
+   */
+  formatDateForInput(date: string): string {
+    if (!date) return '';
+    // אם כבר בפורמט הנכון
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+    // נסה להמיר מ-YYYY-MM-DD HH:mm:ss או תאריך JS
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   getTodayStr(): string {

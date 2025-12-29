@@ -1,0 +1,8 @@
+<div class="reports-view-container">
+  <div class="reports-list-panel">
+    <app-reports-list (reportSelected)="onReportSelected($event)"></app-reports-list>
+  </div>
+  <div class="report-details-panel">
+    <app-report-details [report]="selectedReport"></app-report-details>
+  </div>
+</div>

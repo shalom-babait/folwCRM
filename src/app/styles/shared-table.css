@@ -1,3 +1,56 @@
+/* עיצוב דרופדאון HTML רגיל */
+.styled-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 0.7em center/1.2em; */
+  border: 1.5px solid #b0b0b0;
+  border-radius: 8px;
+  padding: 0.3em 2em 0.3em 0.7em;
+  font-size: 0.95em;
+  min-width: 80px;
+  max-width: 140px;
+  height: 32px;
+  color: #022F39;
+  box-shadow: 0 1px 3px rgba(2,47,57,0.07);
+  transition: border 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.styled-select:focus {
+  outline: none;
+  border: 2px solid #888;
+  box-shadow: 0 0 0 2px #e0e0e0;
+  background-color: #fff;
+}
+
+/* סימון וי ליד אופציה נבחרת בדרופדאון */
+.styled-select option:checked {
+  background-color: rgb(167, 195, 201);
+  color: #022F39;
+  font-weight: bold;
+  position: relative;
+}
+
+/* לא כל הדפדפנים תומכים ב-content ב-option, לכן הוספת וי תעבוד בעיקר בכרום/אדג' */
+.styled-select option:checked::before {
+  content: '\2713  ';
+  color: rgb(167, 195, 201);
+}
+/* שורה אופקית של כפתורי פעולה וחיפוש */
+.search-actions-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+/* גלילה פנימית רק על שורות הטיפולים */
+.table-records {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
 /* Utility class for centering content in table cells */
 .centered-cell {
   justify-content: center !important;
@@ -14,7 +67,7 @@
   /* הוסרו margin ו-height כדי לאפשר גלילה טבעית */
   /* אפשר גלילה פנימית אך שומרים על עיצוב הקונטיינר (rounded corners, shadow) */
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
   background-clip: padding-box; /* ensures rounded corners are preserved when content scrolls */
 }
@@ -87,9 +140,7 @@
 /* ==================== שורת כותרות ==================== */
 .header-row {
   display: grid;
-  grid-template-columns: 
-    50px minmax(150px, 1fr) 120px 120px minmax(150px, 1fr)
-    100px 120px minmax(150px, 1fr) 120px 80px 120px 120px 150px;
+  grid-template-columns: repeat(8, 1fr); /* 8 עמודות שוות */
   background-color: #022F39;
   color: white;
   font-weight: bold;
@@ -101,9 +152,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  /* ensure header keeps its intrinsic width so horizontal scrolling works */
   min-width: 0;
-  min-width: max-content;
 }
 
 .header-row .cell {
@@ -133,9 +182,7 @@
 /* ==================== שורות נתונים ==================== */
 .data-row {
   display: grid;
-  grid-template-columns: 
-    50px minmax(150px, 1fr) 120px 120px minmax(150px, 1fr)
-    100px 120px minmax(150px, 1fr) 120px 80px 120px 120px 150px;
+  grid-template-columns: repeat(8, 1fr); /* 8 עמודות שוות */
   background-color: #ffffff;
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
@@ -147,9 +194,7 @@
   gap: 0.5rem;
   align-items: center;
   animation: fadeIn 0.3s ease-in-out;
-  /* make each data row take its intrinsic width so the container can scroll horizontally */
   min-width: 0;
-  min-width: max-content;
 }
 
 .data-row:hover {

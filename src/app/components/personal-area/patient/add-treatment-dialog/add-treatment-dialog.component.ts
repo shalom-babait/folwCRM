@@ -238,18 +238,4 @@ export class CreateTreatmentDialogComponent implements OnInit {
     }
   }
 
-  public editorInit: any = {
-    height: 300,
-    menubar: false,
-    plugins: [
-      'link',
-      'lists',
-      'table',
-      'wordcount'
-    ],
-    toolbar:
-      'undo redo | bold italic underline | bullist numlist | link table | removeformat',
-    language: 'he',
-    language_url: '/assets/tinymce/langs/he_IL.js'
-  };
 }

@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./secretary-dashboard.component.css']
 })
 export class SecretaryDashboardComponent {
-
+  selectedSection: string = 'home';
+  onSectionChange(section: string) {
+    this.selectedSection = section;
+  }
 }
