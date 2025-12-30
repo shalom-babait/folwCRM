@@ -26,7 +26,11 @@ export class LogInComponent {
     private router: Router
   ) {}
     // Removed duplicate constructor
-
+  onEnter() {
+    if (this.user_name && this.password) {
+      this.onLogin();
+    }
+  }
   onLogin() {
   this.authService.login(this.user_name, this.password).subscribe({
       next: (res: any) => {
