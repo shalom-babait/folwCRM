@@ -12,7 +12,10 @@ import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog
 @Component({
   selector: 'app-add-treatment-dialog',
   templateUrl: './add-treatment-dialog.component.html',
-  styleUrls: ['./add-treatment-dialog.component.css']
+  styleUrls: [
+    './add-treatment-dialog.component.css',
+     '../../../../styles/dialog-forms.css'
+  ]
 })
 export class CreateTreatmentDialogComponent implements OnInit {
   async onCancel(): Promise<void> {

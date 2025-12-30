@@ -1,45 +1,78 @@
-header {
+.menu-vertical {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  background-color: #022F39;
-  height: 8rem;
+  justify-content: center;
+  gap: 0.2rem;
+}
+.menu-vertical .menu-icon {
+  font-size: 2rem;
+  margin-bottom: 0.1rem;
+}
+.menu-vertical span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0;
   padding: 0;
-  position: sticky;
+}
+header {
+  position: fixed;
   top: 0;
-  z-index: 100;
+  right: 0;
+  width: 8rem;
+  height: 100vh;
+  background-color: #F4F8FA;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  box-shadow: -2px 0 12px rgba(40,157,185,0.07);
+  border-left: 1px solid #e0e0e0;
+  padding: 0;
 }
 
 .divLogo {
-  width: 15%;
+  width: 100%;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 110px;
   cursor: pointer;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1.5rem;
 }
 
 .logo {
-  height: 8rem;
+  height: 80px;
   width: auto;
   object-fit: contain;
 }
 
 .buttonLink {
+  width: 100%;
   flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-top: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .buttonLink ul {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 0.5rem;
   list-style-type: none;
   margin: 0;
   padding: 0;
-  align-items: center;
+  align-items: center;   /* 🔹 חדש — מרכז את הכפתורים */
 }
 
 .buttonLink li { margin: 0; }
@@ -47,7 +80,7 @@ header {
 .buttonLink button {
   background: none;
   border: none;
-  color: white;
+  color: #6FA79A;
   font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
@@ -55,9 +88,16 @@ header {
   transition: all 0.3s;
   position: relative;
   white-space: nowrap;
+
+  /* ⭐️ רק תוספות למרכז */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.buttonLink button:hover { color: #BB7E2B; }
+
+.buttonLink button:hover { color: #2A5448; }
 
 .buttonLink button::after {
   content: '';
@@ -67,19 +107,19 @@ header {
   transform: translateX(-50%);
   width: 0;
   height: 2px;
-  background-color: #BB7E2B;
+  background-color: #2A5448;
   transition: width 0.3s;
 }
 
 .buttonLink button:hover::after { width: 80%; }
 
 .buttonLink button.selected {
-  color: #BB7E2B;
+  color: #2A5448;
 }
 
 .buttonLink button.selected::after {
   width: 80%;
-  background-color: #BB7E2B;
+  background-color: #2F5D50;
 }
 
 .user-profile-container {
@@ -94,61 +134,24 @@ header {
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #BB7E2B;
+  border: 2px solid #2A5448;
   transition: all 0.3s;
   background-color: white;
 }
 
 .user-avatar:hover {
-  border-color: #d89b3d;
+  border-color: #6FA79A;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(187,126,43,0.3);
+  box-shadow: 0 4px 12px rgba(40,157,185,0.18);
 }
 
-.user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
-.profile-menu {
-  position: absolute;
-  top: 60px;
-  right: 0;
-  transform: translateX(calc(100% - 50px));
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  min-width: 180px;
-  z-index: 1000;
-  animation: slideDown 0.15s ease-out;
-  direction: rtl;
-  overflow: hidden;
-  border: 1px solid #e0e0e0;
-}
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateX(calc(100% - 50px)) translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(calc(100% - 50px)) translateY(0);
-  }
-}
-
-.profile-menu-header {
-  padding: 12px 16px;
-  background: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
-}
 
 .user-name {
   font-weight: 500;
   font-size: 14px;
   color: #333;
-}
 
 .menu-divider { display: none; }
 
@@ -188,3 +191,4 @@ header {
 
 .profile-menu-items li.logout .menu-icon { color: #d32f2f; }
 .profile-menu-items li.logout:hover { background: #ffebee; }
+}

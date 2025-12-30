@@ -1,107 +1,11 @@
-.logInComponent {
-    background-color: #BB7E2B;
-    padding: 5rem;
-}
-
-.titleContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    margin-bottom: 2rem;
-}
-
-/* .dialogTitle.active {
-    text-decoration: underline;
-} */
-
-.enrollment {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    width: 100%;
-    padding: 2rem 0;
-    direction: rtl;
-}
-
-.WantToBeUpdatedTiteleInput {
-  width: 100%;
-  padding: 0.5rem 0.8rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  color: black;
-  background-color: white;
-  transition: box-shadow 0.2s ease;
-  margin-bottom: 0.7rem;
-}
-
-.WantToBeUpdatedTiteleInput:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #022F39;
-}
-
-.WantToBeUpdatedTiteleInput.ng-invalid.ng-touched {
-  border: 2px solid #e57373;
-}
-
-/* הסרת חיצים ממספרים (אם יהיו) */
-.WantToBeUpdatedTiteleInput[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-.WantToBeUpdatedTiteleInput[type="number"]::-webkit-outer-spin-button,
-.WantToBeUpdatedTiteleInput[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.password-container {
-    position: relative;
-    width: 100%;
-}
-
-.password-container input {
-    padding-left: 2.5rem;
-}
-
-.eye-icon {
-    position: absolute;
-    left: 0.7rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'%3E%3C/path%3E%3Cline x1='1' y1='1' x2='23' y2='23'%3E%3C/line%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.eye-icon.visible {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
-}
-
-.fullWidth {
-    grid-column: span 2;
-}
-
-.SubmitNewPasswordButton {
-    width: 20rem;
-}
-
-/* --- Login Fullpage Styles --- */
+/* עיצוב בשימוש בפועל בלוגאין */
 .login-fullpage-container {
   min-height: 100vh;
   min-width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('/assets/login-bg.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
 }
 
 .login-center-box {
@@ -125,6 +29,14 @@
   font-weight: bold;
 }
 
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 2rem;
+}
+
 .connection {
   width: 100%;
   display: flex;
@@ -132,9 +44,74 @@
   align-items: center;
 }
 
+.WantToBeUpdatedTiteleInput {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+  transition: box-shadow 0.2s ease;
+  margin-bottom: 0.7rem;
+}
+
+.WantToBeUpdatedTiteleInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #022F39;
+}
+
 .submitButton {
   width: 100%;
   margin-top: 1.2rem;
+  background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.7rem 0;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(2,47,57,0.08);
+}
+.submitButton:hover {
+  background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+  box-shadow: 0 4px 16px rgba(2,47,57,0.13);
+}
+.submitButton:disabled {
+  background: #8ca0ad !important;
+  color: #f5f5f5 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input {
+  padding-left: 2.5rem;
+}
+
+.eye-icon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'%3E%3C/path%3E%3Cline x1='1' y1='1' x2='23' y2='23'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.eye-icon.visible {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
 }
 
 .login-logo {
@@ -155,4 +132,18 @@
   .WantToBeUpdatedTiteleInput {
     width: 90vw;
   }
+}
+.login-fullpage-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+}
+
+.login-center-box {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+
 }

@@ -6,8 +6,8 @@
 /* מכולה ראשית */
 .create-treatment-dialog,
 .create-patient-dialog {
-  max-width: 900px;
-  background-color: #022F39;
+  /* max-width: 900px; */
+  /* background-color: #022F39; */
   color: black;
   border-radius: 1rem;
   font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
 
 /* כותרת */
 .dialog-title {
-  background-color: #022F39;
+  background-color: #2A5448;
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
@@ -150,14 +150,14 @@
   background-color: #e0e0e0;
 }
 .save-button {
-  background-color: #022F39;
+  background-color: #2A5448;
   color: white;
 }
 .save-button:hover:not(:disabled) {
-  background-color: #034752;
+  background-color: #2A5448;
 }
 .save-button:disabled {
-  background-color: #ccc;
+  background-color: #2A5448;
   color: #666;
   cursor: not-allowed;
 }
