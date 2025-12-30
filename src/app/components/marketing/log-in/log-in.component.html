@@ -1,4 +1,4 @@
-<div class="login-fullpage-container">
+<div class="login-fullpage-container" (keydown.enter)="onEnter()">
   <div class="login-center-box">
     <div class="titleContainer">
         <img src="../../../../assets/photoes/LOGO.png" alt="לוגו" class="login-logo" style="max-width: 120px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;" />
@@ -15,8 +15,8 @@
                    [(ngModel)]="password">
             <span class="eye-icon" (click)="togglePasswordVisibility()" [class.visible]="showPassword"></span>
         </div>
-        <a class="subtitle" (click)="showSendingPasswordToMail()">?שכחת סיסמה</a>
-        <button class="submitButton" (click)="onLogin()">כניסה</button>
+    <button class="submitButton" (click)="onLogin()" [disabled]="!user_name || !password">כניסה</button>
+        <a class="subtitle" (click)="showSendingPasswordToMail()">שכחתי שם משתמש/סיסמה</a>
     </div>
     <div *ngIf="SendingPasswordToMail">
         <div class="showSendingPasswordToMail">

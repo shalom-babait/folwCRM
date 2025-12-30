@@ -4,14 +4,44 @@
   </div>
   <div class="buttonLink">
     <ul>
-      <li><button [ngClass]="{selected: selectedSection === 'home'}" (click)="sectionChange.emit('home')">בית</button></li>
-      <li><button [ngClass]="{selected: selectedSection === 'patients'}" (click)="onPatientsClick()">רשימת מטופלים</button></li>
-      <li><button [ngClass]="{selected: selectedSection === 'rooms'}" (click)="sectionChange.emit('rooms')">חדרים</button></li>
-      <!-- <li><button [ngClass]="{selected: selectedSection === 'mail'}" (click)="sectionChange.emit('mail')">דואר</button></li> -->
-      <!-- <li><button (click)="sectionChange.emit('declarations')">הצהרות</button></li> -->
-      <li><button [ngClass]="{selected: selectedSection === 'calendar'}" (click)="sectionChange.emit('calendar')">יומן טיפולים</button></li>
-      <li><button [ngClass]="{selected: selectedSection === 'followups'}" (click)="sectionChange.emit('followups')">מעקבים</button></li>
-      <li><button [ngClass]="{selected: selectedSection === 'reports'}" (click)="sectionChange.emit('reports')">דוחות</button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'home'}" (click)="sectionChange.emit('home')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">home</mat-icon>
+      <span>בית</span>
+    </span>
+  </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'patients'}" (click)="onPatientsClick()">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">groups</mat-icon>
+      <span>רשימת מטופלים</span>
+    </span>
+  </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'rooms'}" (click)="sectionChange.emit('rooms')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">meeting_room</mat-icon>
+      <span>חדרים</span>
+    </span>
+  </button></li>
+  <!-- <li><button [ngClass]="{selected: selectedSection === 'mail'}" (click)="sectionChange.emit('mail')"><span class="menu-vertical"><mat-icon class="menu-icon">mail</mat-icon><span>דואר</span></span></button></li> -->
+  <!-- <li><button (click)="sectionChange.emit('declarations')"><span class="menu-vertical"><mat-icon class="menu-icon">assignment</mat-icon><span>הצהרות</span></span></button></li> -->
+  <li><button [ngClass]="{selected: selectedSection === 'calendar'}" (click)="sectionChange.emit('calendar')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">calendar_month</mat-icon>
+      <span>יומן טיפולים</span>
+    </span>
+  </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'followups'}" (click)="sectionChange.emit('followups')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">notifications</mat-icon>
+      <span>מעקבים</span>
+    </span>
+  </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'reports'}" (click)="sectionChange.emit('reports')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">bar_chart</mat-icon>
+      <span>דוחות</span>
+    </span>
+  </button></li>
     </ul>
   </div>
 

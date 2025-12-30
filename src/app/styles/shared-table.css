@@ -87,7 +87,7 @@
 
 .icon-button {
   background-color: transparent;
-  border: 2px solid #BB7E2B;
+  border: 2px solid #2A5448;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -100,10 +100,14 @@
 }
 
 .icon-button:hover {
-  background-color: #BB7E2B;
+  background-color: #2A5448;
   transform: scale(1.05);
 }
 
+/* שינוי צבע האיקון בתוך הכפתור ל-#2A5448 */
+.icon-button mat-icon {
+  color: #2A5448 !important;
+}
 .icon-button:hover mat-icon {
   color: white !important;
 }
@@ -120,15 +124,15 @@
   border-radius: 1rem;
   padding: 0 1rem;
   font-size: 16px;
-  background: rgb(167, 195, 201);
+  background: #84B6AB;
   color: #022F39;
   transition: all 0.2s ease;
 }
 
 .search-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #022F39;
-  background: rgb(177, 205, 211);
+  box-shadow: 0 0 0 2px #2A5448;
+  background: #8FBFB4;
 }
 
 .search-input::placeholder {
@@ -141,7 +145,7 @@
 .header-row {
   display: grid;
   grid-template-columns: repeat(8, 1fr); /* 8 עמודות שוות */
-  background-color: #022F39;
+  background-color: #2A5448;
   color: white;
   font-weight: bold;
   padding: 1rem 0.5rem;

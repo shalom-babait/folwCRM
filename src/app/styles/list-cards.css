@@ -1,14 +1,14 @@
 /* === GENERIC LIST CLASSES === */
 .list-card {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  max-width: 350px;
-  max-height: 92vh;
+  /* max-width: 350px; */
+  max-height: 97%;
   display: flex;
   flex-direction: column;
   direction: rtl;
 /* === CARD HEADER - generic for all lists === */
 .card-header {
-  background-color: #022F39;
+  background-color: #2F5D50;
   color: white;
   padding: 1.2rem 1.5rem;
   text-align: center;
@@ -20,8 +20,7 @@
   font-family: Arial, sans-serif;
   direction: rtl;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  max-width: 350px;
-  max-height: 80vh;
+  max-height: 97%;
   display: flex;
   flex-direction: column;
 }
@@ -48,7 +47,7 @@
   transform: translateY(0);
 }
 .list-item-card.selected {
-  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  background: #4A7A6D;
   color: white;
   box-shadow: 0 6px 12px rgba(2,47,57,0.3);
 }
@@ -180,7 +179,6 @@
   padding: 1rem;
   overflow-y: auto;
   flex: 1;
-  max-height: calc(92vh - 8rem);
 }
 
 .card-content::-webkit-scrollbar { width: 8px; }
