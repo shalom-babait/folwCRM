@@ -8,10 +8,17 @@
         <mat-icon>add</mat-icon>
         <span>הוסף מטפל</span>
       </button>
-      <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטפל">
-        <mat-icon>search</mat-icon>
-        <span>חיפוש</span>
-      </button>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
+        <button class="search-btn" (click)="openSearchDialog()" [disabled]="isLoading" matTooltip="חיפוש מטפל">
+          <mat-icon>search</mat-icon>
+          <span>חיפוש</span>
+        </button>
+        <select id="statusFilter" [(ngModel)]="statusFilter" (change)="applyFilters()" style="margin-right: 0.5rem; padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid #cfd8dc; background: #f5f5f5; font-size: 1rem; min-width: 90px; color: #000000;">
+          <option value="all">הכל</option>
+          <option value="active">פעילים</option>
+          <option value="inactive">לא פעילים</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -22,10 +29,10 @@
     </div>
 
     <!-- רשימת מטפלים -->
-    <div *ngIf="!isLoading && therapists.length > 0">
+    <div *ngIf="!isLoading && filteredTherapists.length > 0">
       <div 
         class="list-item-card" 
-        *ngFor="let therapist of therapists"
+        *ngFor="let therapist of filteredTherapists"
         [class.selected]="selectedTherapistId === (therapist.therapist.therapist_id)">
         <div class="item-info" (click)="viewTherapistDetails(therapist)">
           <span class="item-name">{{ therapist.person.first_name }} {{ therapist.person.last_name }}</span>
@@ -53,7 +60,7 @@
     </div>
 
     <!-- הודעה אם אין מטפלים -->
-  <div *ngIf="!isLoading && therapists.length === 0" class="no-items">
+  <div *ngIf="!isLoading && filteredTherapists.length === 0" class="no-items">
       <p>אין מטפלים כרגע</p>
       <p>לחץ על "הוסף מטפל" כדי להתחיל</p>
     </div>

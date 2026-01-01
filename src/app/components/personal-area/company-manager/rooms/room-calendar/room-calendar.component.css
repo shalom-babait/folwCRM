@@ -98,7 +98,8 @@ full-calendar {
   letter-spacing: 1px;
   text-shadow: 0 1px 0 #fff;
 }
-.fc-button {
+/* עיצוב כפתור "היום" בסגנון Google Calendar */
+.fc-button, .fc-todayButton-button {
   background: #fff;
   color: #1976d2;
   border: 1.5px solid #1976d2;
@@ -110,7 +111,7 @@ full-calendar {
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
   transition: background 0.2s, color 0.2s;
 }
-.fc-button:hover, .fc-button.fc-button-active {
+.fc-button:hover, .fc-button.fc-button-active, .fc-todayButton-button:hover, .fc-todayButton-button.fc-button-active {
   background: #1976d2;
   color: #fff;
   border-color: #1976d2;
