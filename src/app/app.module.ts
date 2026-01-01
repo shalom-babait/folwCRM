@@ -42,7 +42,6 @@ import { MatCardModule } from '@angular/material/card'; // הוספת MatCardMod
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatRadioModule } from '@angular/material/radio';
 
 import { SignUpForCourseComponent } from './components/marketing/sign-up-for-course/sign-up-for-course.component';
 import { HomeComponent } from './components/marketing/home/home.component';
@@ -223,7 +222,6 @@ import { IncomeReportComponent } from './components/personal-area/company-manage
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
-    MatRadioModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

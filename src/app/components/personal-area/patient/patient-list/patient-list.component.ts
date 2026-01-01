@@ -33,7 +33,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
   @Output() patientSelected = new EventEmitter<PatientCreationData>();
   searchText: string = '';
   patients: PatientCreationData[] = [];
-  filteredPatients: PatientCreationData[] = [];
   statusFilter: 'all' | 'active' | 'inactive' = 'active';
   selectedPatientId: number | null = null;
   therapist_id: number = 0;
@@ -60,13 +59,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
       this.loadAllPatients();
       this.loadAllTherapists();
     }
-<<<<<<< HEAD
     // האזנה לרשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
       .subscribe(patients => {
         this.patients = patients;
-        this.applyFilters();
       });
     // האזנה לטעינה
     this.patientService.loading$
@@ -80,7 +77,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe(patient_id => {
         this.selectedPatientId = patient_id;
       });
-=======
   }
 
   loadAllTherapists() {
@@ -95,15 +91,26 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   get filteredPatients(): PatientCreationData[] {
-    if (!this.selectedTherapistId) {
-      return this.patients;
+    let filtered = this.patients;
+
+    // סינון לפי מטפל
+    if (this.selectedTherapistId) {
+      filtered = filtered.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
     }
-    return this.patients.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
+
+    // סינון לפי סטטוס
+    if (this.statusFilter === 'active') {
+      filtered = filtered.filter(p => p.patient?.status === 'פעיל');
+    } else if (this.statusFilter === 'inactive') {
+      filtered = filtered.filter(p => p.patient?.status !== 'פעיל');
+    }
+    // אם 'all' - לא מסננים לפי סטטוס
+
+    return filtered;
   }
 
   onTherapistFilterChange(id: number|null) {
     this.selectedTherapistId = id;
->>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -117,12 +124,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-<<<<<<< HEAD
-          this.patients = data || [];
-          this.applyFilters();
-=======
           this.patients = (data || []).slice().reverse();
->>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
           this.isLoading = false;
         },
         error: (err) => {
@@ -137,14 +139,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.patientService.getPatientsByTherapist(this.therapist_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-<<<<<<< HEAD
-        next: (data: any) => {
-          this.patients = data || [];
-          this.applyFilters();
-=======
         next: (data) => {
           this.patients = (data || []).slice().reverse();
->>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
           this.isLoading = false;
         },
         error: (err: any) => {
@@ -152,18 +148,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         }
       });
-  }
-  /** סינון לפי סטטוס */
-  applyFilters(): void {
-    if (this.statusFilter === 'all') {
-      this.filteredPatients = [...this.patients];
-    } else if (this.statusFilter === 'active') {
-      this.filteredPatients = this.patients.filter(p => p.patient?.status === 'פעיל');
-    } else if (this.statusFilter === 'inactive') {
-      this.filteredPatients = this.patients.filter(p => p.patient?.status !== 'פעיל');
-    } else {
-      this.filteredPatients = [...this.patients];
-    }
   }
 
   /** הצגת רשימת פגישות עבור מטופל */

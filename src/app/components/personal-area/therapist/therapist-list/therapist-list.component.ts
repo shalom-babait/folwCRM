@@ -17,7 +17,6 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   @Output() therapistSelected = new EventEmitter<TherapistCreationData>();
   // להצגה: מערך מטפלים קיימים
   therapists: TherapistCreationData[] = [];
-  filteredTherapists: TherapistCreationData[] = [];
   statusFilter: 'all' | 'active' | 'inactive' = 'active';
   selectedTherapistId: number | null = null;
   secretaryId: number = 1; // שנה לפי המזכיר המחובר
@@ -38,9 +37,22 @@ export class TherapistListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.therapists = [];
-    this.filteredTherapists = [];
     this.selectedTherapistId = null;
     this.isLoading = false;
+  }
+
+  get filteredTherapists(): TherapistCreationData[] {
+    let filtered = this.therapists;
+
+    // סינון לפי סטטוס
+    if (this.statusFilter === 'active') {
+      filtered = filtered.filter(t => t.therapist?.status === 'פעיל');
+    } else if (this.statusFilter === 'inactive') {
+      filtered = filtered.filter(t => t.therapist?.status !== 'פעיל');
+    }
+    // אם 'all' - לא מסננים לפי סטטוס
+
+    return filtered;
   }
 
   loadTherapists() {
@@ -50,7 +62,6 @@ export class TherapistListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (therapists) => {
           this.therapists = therapists;
-          this.applyFilters();
           this.isLoading = false;
           console.log('Therapists loaded:', this.therapists);
         },
@@ -60,19 +71,6 @@ export class TherapistListComponent implements OnInit, OnDestroy {
           // אפשר להוסיף הודעת שגיאה למשתמש
         }
       });
-  }
-
-  /** סינון לפי סטטוס */
-  applyFilters(): void {
-    if (this.statusFilter === 'all') {
-      this.filteredTherapists = [...this.therapists];
-    } else if (this.statusFilter === 'active') {
-      this.filteredTherapists = this.therapists.filter(t => t.therapist?.status === 'פעיל');
-    } else if (this.statusFilter === 'inactive') {
-      this.filteredTherapists = this.therapists.filter(t => t.therapist?.status !== 'פעיל');
-    } else {
-      this.filteredTherapists = [...this.therapists];
-    }
   }
 
   openTherapistCalendar(therapist: TherapistData) {
@@ -127,7 +125,6 @@ export class TherapistListComponent implements OnInit, OnDestroy {
             console.log('תוצאות חיפוש:', results);
             if (results.length > 0) {
               this.therapists = results;
-              this.applyFilters();
             } else {
               alert('לא נמצאו תוצאות');
             }
