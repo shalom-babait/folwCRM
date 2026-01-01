@@ -33,6 +33,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   @Output() patientSelected = new EventEmitter<PatientCreationData>();
   searchText: string = '';
   patients: PatientCreationData[] = [];
+  statusFilter: 'all' | 'active' | 'inactive' = 'active';
   selectedPatientId: number | null = null;
   therapist_id: number = 0;
   isLoading = false;
@@ -47,27 +48,35 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
     // קבלת מזהה מטפל מה-@Input אם קיים, אחרת מה-localStorage
     if (this.therapistId && this.therapistId > 0) {
       this.therapist_id = this.therapistId;
+      this.loadPatientsByTherapist();
     } else {
       const therapistStr = localStorage.getItem('therapist');
       const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
       this.therapist_id = therapistObj.therapist_id || 0;
-    }
-    console.log(this.therapist_id, " therapist_id");
-
-
-    // אם יש therapist_id תקין — נטען מטופלים של מטפל
-    if (this.therapist_id && this.therapist_id > 0) {
-      this.loadPatientsByTherapist();
-    }
-    // אחרת — נטען את כולם
-    else {
       this.loadAllPatients();
       this.loadAllTherapists();
     }
+    // האזנה לרשימת המטופלים
+    this.patientService.patientsList$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(patients => {
+        this.patients = patients;
+      });
+    // האזנה לטעינה
+    this.patientService.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(loading => {
+        this.isLoading = loading;
+      });
+    // האזנה למטופל נבחר
+    this.patientService.selectedPatient$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(patient_id => {
+        this.selectedPatientId = patient_id;
+      });
   }
 
   loadAllTherapists() {
@@ -82,16 +91,27 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   get filteredPatients(): PatientCreationData[] {
-    if (!this.selectedTherapistId) {
-      return this.patients;
+    let filtered = this.patients;
+
+    // סינון לפי מטפל
+    if (this.selectedTherapistId) {
+      filtered = filtered.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
     }
-    return this.patients.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
+
+    // סינון לפי סטטוס
+    if (this.statusFilter === 'active') {
+      filtered = filtered.filter(p => p.patient?.status === 'פעיל');
+    } else if (this.statusFilter === 'inactive') {
+      filtered = filtered.filter(p => p.patient?.status !== 'פעיל');
+    }
+    // אם 'all' - לא מסננים לפי סטטוס
+
+    return filtered;
   }
 
   onTherapistFilterChange(id: number|null) {
     this.selectedTherapistId = id;
   }
-
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -108,14 +128,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (err) => {
-          console.error('Error loading ALL patients:', err);
+          console.error('Error loading all patients:', err);
           this.isLoading = false;
         }
       });
   }
-
-
-
   /** טעינת מטופלים לפי מטפל */
   loadPatientsByTherapist() {
     this.isLoading = true;
@@ -126,21 +143,11 @@ export class PatientListComponent implements OnInit, OnDestroy {
           this.patients = (data || []).slice().reverse();
           this.isLoading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading patients by therapist:', err);
           this.isLoading = false;
         }
       });
-  }
-
-  /** הצגת פרטי מטופל */
-  viewPatientDetails(patient: PatientCreationData) {
-    const patient_id = patient.patient?.patient_id;
-    if (patient_id) {
-      this.selectedPatientId = patient_id;
-      console.log('Selected patient id from list:', patient_id);
-      this.patientSelected.emit(patient);
-    }
   }
 
   /** הצגת רשימת פגישות עבור מטופל */
@@ -204,6 +211,15 @@ export class PatientListComponent implements OnInit, OnDestroy {
         },
         error: (error) => console.error('Error searching patients:', error)
       });
+  }
+
+  /** הצגת פרטי מטופל (שימושי ל-template) */
+  viewPatientDetails(patient: PatientCreationData) {
+    const patient_id = patient.patient?.patient_id;
+    if (patient_id) {
+      this.selectedPatientId = patient_id;
+      this.patientSelected.emit(patient);
+    }
   }
 
   logPatient(patient: any) {
