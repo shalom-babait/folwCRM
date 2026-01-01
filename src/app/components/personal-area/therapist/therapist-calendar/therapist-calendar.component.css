@@ -1,9 +1,52 @@
-.calendar-view {
-	overflow-x: auto;
+:host ::ng-deep .fc-timegrid-now-indicator {
+  border-top: 2px solid #d32f2f !important; /* Red line */
+  z-index: 10 !important;
 }
 
-.calendar-card full-calendar {
-	min-width: 900px !important;
-	width: 900px !important;
-	display: inline-block;
+:host ::ng-deep .fc-timegrid-now-indicator-arrow {
+  border-color: #d32f2f transparent transparent transparent !important;
+}
+:host ::ng-deep .fc-daygrid-day.fc-day-future,
+:host ::ng-deep .fc-daygrid-day.fc-day-future .fc-daygrid-day-frame,
+:host ::ng-deep .fc-timegrid-col.fc-future,
+:host ::ng-deep .fc-day-future {
+  background: #fff !important;
+  color: inherit !important;
+}
+
+:host ::ng-deep .mini-calendar .fc-daygrid-day.fc-day-future,
+:host ::ng-deep .mini-calendar .fc-daygrid-day.fc-day-future .fc-daygrid-day-frame {
+  background: #fff !important;
+}
+
+/* עיצוב ימים שעברו בלוח השנה - רקע תכלת בהיר */
+
+:host ::ng-deep .fc-daygrid-day.fc-day-past,
+:host ::ng-deep .fc-daygrid-day.fc-day-past .fc-daygrid-day-frame,
+:host ::ng-deep .fc-timegrid-col.fc-past,
+:host ::ng-deep .fc-day-past {
+  background: #6FA79A !important;
+  color: #1976d2 !important;
+}
+
+/* עיצוב לוח שנה קטן (אם יש צורך) */
+:host ::ng-deep .mini-calendar .fc-daygrid-day.fc-day-past,
+:host ::ng-deep .mini-calendar .fc-daygrid-day.fc-day-past .fc-daygrid-day-frame {
+  background: #6FA79A !important;
+}
+
+
+/* חיזוק עיצוב פס זמן נוכחי (now-indicator) */
+:host ::ng-deep .fc-timegrid-now-indicator {
+  border-top: 3px solid #d32f2f !important;
+  background: #d32f2f !important;
+  height: 2px !important;
+  z-index: 9999 !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+:host ::ng-deep .fc-timegrid-now-indicator-arrow {
+  border-color: #d32f2f transparent transparent transparent !important;
+  display: block !important;
+  opacity: 1 !important;
 }

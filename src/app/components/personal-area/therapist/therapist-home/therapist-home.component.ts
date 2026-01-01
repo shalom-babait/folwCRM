@@ -12,7 +12,9 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['./therapist-home.component.css']
 })
 export class TherapistHomeComponent {
-selectedPatient: PatientCreationData | null = null;
+
+  therapistId: number | undefined = undefined;
+  selectedPatient: PatientCreationData | null = null;
   appointments: Appointment[] = [];
   monthlyStats: { total_hours: number, total_appointments: number, total_payments: number } | null = null;
 
@@ -25,9 +27,10 @@ selectedPatient: PatientCreationData | null = null;
 
   ngOnInit() {
     // נטען נתוני סטטיסטיקה חודשית של המטפל הנוכחי
-    const therapistId = Number(localStorage.getItem('therapist_id'));
-    if (therapistId) {
-      this.therapistService.getTherapistMonthlyStats(therapistId)
+  const id = localStorage.getItem('therapist_id');
+  this.therapistId = id ? Number(id) : undefined;
+    if (this.therapistId) {
+      this.therapistService.getTherapistMonthlyStats(this.therapistId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: any) => {

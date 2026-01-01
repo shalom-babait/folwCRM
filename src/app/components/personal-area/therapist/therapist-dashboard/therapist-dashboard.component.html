@@ -8,8 +8,9 @@
     <!-- <app-declarations *ngIf="selectedSection === 'declarations'"></app-declarations> -->
     <app-therapist-calendar *ngIf="selectedSection === 'calendar'"></app-therapist-calendar>
     <app-user-follow-up-table *ngIf="selectedSection === 'followups'"></app-user-follow-up-table>
-    <app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
-    <div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'rooms' && selectedSection !== 'calendar' && selectedSection !== 'followups' && selectedSection !== 'reports'">בחר פעולה</div>
+  <app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
+  <app-user-settings *ngIf="selectedSection === 'settings'"></app-user-settings>
+  <div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'rooms' && selectedSection !== 'calendar' && selectedSection !== 'followups' && selectedSection !== 'reports' && selectedSection !== 'settings'">בחר פעולה</div>
   </ng-container>
 </div>
 

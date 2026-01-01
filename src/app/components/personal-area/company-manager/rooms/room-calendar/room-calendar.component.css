@@ -1,3 +1,28 @@
+/* ימים שעברו בלוח השנה - רקע תכלת בהיר */
+.fc-day-past,
+.fc-daygrid-day-past,
+.fc-timegrid-col.fc-past {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+}
+/* עיצוב לוח שנה קטן */
+.mini-calendar {
+  max-width: 340px;
+  min-width: 220px;
+  font-size: 0.85em;
+  margin: 0 auto;
+}
+.mini-calendar .calendar-wrapper,
+.mini-calendar full-calendar {
+  min-width: 220px !important;
+  width: 100% !important;
+  max-width: 340px !important;
+}
+.mini-calendar .add-meeting-btn {
+  font-size: 0.9em;
+  padding: 0.3em 0.7em;
+  margin-bottom: 0.5em;
+}
 
 /* Make parent container flex and fill viewport minus header */
 :host {

@@ -21,6 +21,7 @@ import { ListOfActivitiesComponent } from './components/marketing/list-of-activi
 import { WeNumbersComponent } from "./components/marketing/we-numbers/we-numbers.component";
 import { ContactComponent } from "./components/marketing/contact/contact.component";
 import { TheySayAboutUsComponent } from './components/marketing/they-say-about-us/they-say-about-us.component';
+import { NgChartsModule } from 'ng2-charts';
 
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -110,6 +111,7 @@ import { ReportsViewComponent } from './components/personal-area/company-manager
 import { AddReportsComponent } from './components/personal-area/company-manager/reports/add-reports/add-reports.component';
 import { ReportDetailsComponent } from './components/personal-area/company-manager/reports/report-details/report-details.component';
 import { IncomeReportComponent } from './components/personal-area/company-manager/reports/income-report/income-report.component';
+import { UserSettingsComponent } from './components/personal-area/company-manager/user-settings/user-settings.component';
 
 
 @NgModule({
@@ -191,8 +193,10 @@ import { IncomeReportComponent } from './components/personal-area/company-manage
   AddReportsComponent,
   ReportDetailsComponent,
   IncomeReportComponent,
+  UserSettingsComponent,
   ],
   imports: [
+    NgChartsModule,
     QuillModule.forRoot(),
     MatRadioModule,
     MatMenuModule,

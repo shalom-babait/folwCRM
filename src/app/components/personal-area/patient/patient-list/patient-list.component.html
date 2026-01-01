@@ -9,17 +9,15 @@
         matTooltip="הוסף מטופל חדש" matTooltipPosition="below">
   <mat-icon>add</mat-icon>
       </button>
-      <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
-        <div class="search-input-wrapper">
-          <mat-icon class="search-icon">search</mat-icon>
-          <input
-            type="text"
-            [(ngModel)]="searchText"
-            [disabled]="isLoading"
-            placeholder="חפש מטופל..."
-            class="search-input"
-          />
-        </div>
+      <div class="search-input-wrapper">
+  <mat-icon class="search-icon">search</mat-icon>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          [disabled]="isLoading"
+          placeholder="חפש מטופל..."
+          class="search-input"
+        />
           <select id="statusFilter" [(ngModel)]="statusFilter" style="margin-right: 0.5rem; padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid #cfd8dc; background: #f5f5f5; font-size: 1rem; min-width: 90px; color: #000000;">
             <option value="all">הכל</option>
             <option value="active">פעילים</option>
@@ -66,6 +64,10 @@
             <button mat-menu-item (click)="viewPatientMeetings(patient)">
               <mat-icon>calendar_today</mat-icon>
               <span>רשימת פגישות</span>
+            </button>
+            <button mat-menu-item (click)="deletePatient(patient)" class="delete-patient-btn">
+              <mat-icon color="warn">delete</mat-icon>
+              <span style="color: #c62828;">מחק מטופל</span>
             </button>
           </mat-menu>
         </div>

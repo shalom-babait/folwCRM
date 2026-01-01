@@ -1,5 +1,6 @@
 <!-- <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar> -->
- <div class="calendar-container">
+<div class="calendar-container" [ngClass]="{'mini-calendar': miniCalendar}">
+  <button class="add-meeting-btn" (click)="openAddMeetingDialog()">הוספת פגישה</button>
   <div class="calendar-wrapper">
     <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
   </div>

@@ -124,7 +124,7 @@
   border-radius: 1rem;
   padding: 0 1rem;
   font-size: 16px;
-  background: #84B6AB;
+  background: #C7DED8;
   color: #022F39;
   transition: all 0.2s ease;
 }
@@ -132,7 +132,6 @@
 .search-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #2A5448;
-  background: #8FBFB4;
 }
 
 .search-input::placeholder {
@@ -491,7 +490,7 @@
 .action-btn:focus,
 .icon-button:focus,
 .search-input:focus {
-  outline: 2px solid #2196F3;
+  outline: 0.01rem solid #2A5448;
   outline-offset: 2px;
 }
 

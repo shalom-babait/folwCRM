@@ -1,3 +1,10 @@
+/* רקע לבן לאזור הטופס */
+.income-report-form-area {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+	padding: 24px;
+}
 /* טבלת הכנסות - עיצוב מודרני, רקע לבן, יישור לימין */
 .income-table {
 	width: 100%;

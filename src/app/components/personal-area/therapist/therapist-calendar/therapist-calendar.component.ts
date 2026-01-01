@@ -12,6 +12,7 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 })
 export class TherapistCalendarComponent implements OnInit, OnDestroy {
   @Input() therapistId?: number;
+  @Input() compact: boolean = false;
   allAppointments: Appointment[] = [];
   calendarEvents: any[] = [];
   private destroy$ = new Subject<void>();
@@ -53,7 +54,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
                 if (p && p.patient && p.patient.patient_id) {
               patientMap[p.patient.patient_id] = (p.person.first_name || '') + ' ' + (p.person.last_name || '');                }
               });
-              console.log('patientMap:', patientMap);
+              // console.log('patientMap:', patientMap);
 
               this.calendarEvents = appointments.map(app => {
                 const dateStr = app.appointment_date ? app.appointment_date.substring(0, 10) : '';
@@ -61,8 +62,8 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
                 const endTimeStr = app.end_time ? app.end_time.substring(0, 5) : '00:00';
                 return { title: patientMap[app.patient_id!] || 'פגישה', start: this.formatWithAddedDays(dateStr, startTimeStr), end: this.formatWithAddedDays(dateStr, endTimeStr), color: '#1a237e' };
               });
-              console.log('All therapist appointments loaded:', this.allAppointments);
-              console.log('calendarEvents:', this.calendarEvents);
+              // console.log('All therapist appointments loaded:', this.allAppointments);
+              // console.log('calendarEvents:', this.calendarEvents);
             });
           },
           error: (error) => {
