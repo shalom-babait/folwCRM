@@ -5,7 +5,9 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-patient-details',
   templateUrl: './patient-details.component.html',
-  styleUrls: ['./patient-details.component.css']
+  styleUrls: ['./patient-details.component.css',
+    '../../../../styles/report-view.css'
+  ]
 })
 export class PatientDetailsComponent implements OnChanges {
 
@@ -31,12 +33,13 @@ export class PatientDetailsComponent implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.patientForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      birth_date: ['', Validators.required],
-      address: ['', Validators.required]
+      first_name: [''],
+      last_name: [''],
+      phone: [''],
+      email: ['', [Validators.email]],
+      birth_date: [''],
+      address: [''],
+      teudat_zehut: ['']
     });
   }
   ngOnChanges(): void {
@@ -50,14 +53,14 @@ export class PatientDetailsComponent implements OnChanges {
 
     // טוען נתונים לטופס
     if (this.patient && this.patientForm && this.patient.person) {
-      
       this.patientForm.patchValue({
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -69,9 +72,10 @@ export class PatientDetailsComponent implements OnChanges {
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -83,9 +87,10 @@ export class PatientDetailsComponent implements OnChanges {
         first_name: this.patient.person.first_name,
         last_name: this.patient.person.last_name,
         phone: this.patient.person.phone,
-        // email: this.patient.user.email,
+        email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
-        address: this.patient.person.address
+        address: this.patient.person.address,
+        teudat_zehut: this.patient.person.teudat_zehut
       }, { emitEvent: false });
     }
   }
@@ -103,10 +108,7 @@ export class PatientDetailsComponent implements OnChanges {
         ...this.patientForm.value
       }
     };
-    // הסר email מהאובייקט אם קיים
-    if ('email' in updatedPatient.person) {
-      delete updatedPatient.person.email;
-    }
+    // אל תמחק את email - שמור את כל השדות
     this.patientUpdated.emit(updatedPatient);
     this.isEditing = false;
   }

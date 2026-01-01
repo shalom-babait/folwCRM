@@ -1,26 +1,18 @@
-      <div class="form-field">
-        <div *ngIf="!fullscreen">
-       <button mat-icon-button (click)="fullscreen = true" style="float:left;" title="הגדלת תצוגה">
-          <mat-icon>fullscreen</mat-icon>
-        </button>
-
-          <editor
-            apiKey="mvz8p55qifku2r2zos5hex8m2cnktqjz4ofe31x8pqj9e9lt"
-            [ngModel]="content"
-            (ngModelChange)="onContentChange($event)"
-            [init]="editorInit">
-          </editor>
-        </div>
-
-        <div *ngIf="fullscreen" class="editor-fullscreen-overlay">
-          <button mat-icon-button (click)="fullscreen = false" style="position:absolute;top:10px;left:10px;z-index:1001;" title="סגור תצוגה מלאה">
-            <mat-icon>close</mat-icon>
-          </button>
-          <editor
-            apiKey="mvz8p55qifku2r2zos5hex8m2cnktqjz4ofe31x8pqj9e9lt"
-            [ngModel]="content"
-            (ngModelChange)="onContentChange($event)"
-            [init]="editorInit">
-          </editor>
-        </div>
-      </div>
+<div [ngClass]="{'full-height-editor': isFullHeight}">
+  <div class="editor-header">
+    <button class="icon-btn" (click)="toggleFullHeight()" title="הגדל עורך">
+      <mat-icon>{{ isFullHeight ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+    </button>
+    <!-- כאן אפשר להוסיף טקסט 'הערות' או כל כותרת -->
+    <span class="editor-title">הערות</span>
+  </div>
+  <quill-editor
+    [(ngModel)]="content"
+    [modules]="modules"
+    (onContentChanged)="onContentChanged($event)"
+    dir="rtl"
+    [style.height]="isFullHeight ? 'calc(100vh - 200px)' : '56px'"
+    [style.minHeight]="isFullHeight ? 'calc(100vh - 200px)' : '56px'"
+    [style.maxHeight]="isFullHeight ? '100vh' : '300px'">
+  </quill-editor>
+</div>

@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>הוספת איש קשר</h2>
+<mat-dialog-content>
+	<mat-radio-group [(ngModel)]="mode" class="mode-radio-group">
+		<mat-radio-button value="existing">איש קשר קיים</mat-radio-button>
+		<mat-radio-button value="new">יצירת איש קשר חדש</mat-radio-button>
+	</mat-radio-group>
+
+	<ng-container *ngIf="mode === 'existing'">
+		<mat-form-field appearance="fill" class="full-width">
+			<input matInput placeholder="חיפוש לפי שם / ז  טלפון" [(ngModel)]="searchTerm">
+			<!-- כאן תוצג רשימת תוצאות חיפוש -->
+		</mat-form-field>
+		<mat-form-field appearance="fill" class="full-width">
+			<mat-select placeholder="סוג קשר" [(ngModel)]="relationType">
+				<mat-option value="אמא">אמא</mat-option>
+				<mat-option value="אבא">אבא</mat-option>
+				<mat-option value="אפוטרופוס">אפוטרופוס</mat-option>
+				<mat-option value="אחר">אחר</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-checkbox [(ngModel)]="isMainContact">איש קשר ראשי</mat-checkbox>
+	</ng-container>
+
+	<ng-container *ngIf="mode === 'new'">
+		<mat-form-field appearance="fill" class="full-width">
+			<input matInput placeholder="שם פרטי" [(ngModel)]="firstName" required>
+		</mat-form-field>
+		<mat-form-field appearance="fill" class="full-width">
+			<input matInput placeholder="שם משפחה" [(ngModel)]="lastName" required>
+		</mat-form-field>
+		<mat-form-field appearance="fill" class="full-width">
+			<input matInput placeholder="טלפון" [(ngModel)]="phone" required>
+		</mat-form-field>
+		<mat-form-field appearance="fill" class="full-width">
+			<input matInput placeholder="אימייל (אופציונלי)" [(ngModel)]="email">
+		</mat-form-field>
+		<mat-checkbox [(ngModel)]="isAlsoPatient">האיש קשר הוא גם מטופל במערכת</mat-checkbox>
+		<ng-container *ngIf="isAlsoPatient">
+			<mat-form-field appearance="fill" class="full-width">
+				<mat-select placeholder="סטטוס מטופל" [(ngModel)]="patientStatus">
+					<mat-option value="פעיל">פעיל</mat-option>
+					<mat-option value="לא פעיל">לא פעיל</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<!-- כאן אפשר להוסיף שדות טיפוליים נוספים -->
+		</ng-container>
+	</ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+	<button mat-button color="primary" (click)="save()">✔ שמירה</button>
+</mat-dialog-actions>

@@ -29,7 +29,7 @@
 .settings-header h2 {
 	flex: 1;
 	margin: 0;
-	background-color: #022F39;
+	background-color: #2F5D50;
 	color: white;
 	font-size: 1.4rem;
 	font-weight: bold;
@@ -37,11 +37,6 @@
 	padding: 1rem;
 	border-radius: 0.7rem;
 }
-.settings-header .edit-icon {
-	margin-right: 1rem;
-	margin-left: 0.5rem;
-}
-/* === ROOM SETTINGS CARD === */
 
 .room-settings-card {
 	max-width: 500px;
@@ -110,7 +105,7 @@
 	margin-top: 1.5rem;
 }
 .settings-actions .save-button {
-	background-color: #022F39;
+	background-color: #2F5D50;
 	color: white;
 	padding: 0.5rem 1.5rem;
 	border-radius: 0.5rem;

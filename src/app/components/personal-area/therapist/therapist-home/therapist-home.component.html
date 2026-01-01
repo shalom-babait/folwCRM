@@ -1,0 +1,8 @@
+<div *ngIf="monthlyStats" class="therapist-monthly-stats">
+	<h3>סטטיסטיקה חודשית</h3>
+	<ul>
+		<li>סך שעות טיפול: {{ monthlyStats.total_hours }}</li>
+		<li>סך פגישות: {{ monthlyStats.total_appointments }}</li>
+		<li>סך תשלומים: {{ monthlyStats.total_payments | number:'1.0-2' }} ₪</li>
+	</ul>
+</div>

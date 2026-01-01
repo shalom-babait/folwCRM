@@ -1,19 +1,48 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material/dialog';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { Room } from 'src/app/models/room.model';
+import { ConfirmUnsavedDialogComponent } from 'src/app/components/confirm-unsaved-dialog/confirm-unsaved-dialog.component';
 import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 
 @Component({
   selector: 'app-add-treatment-dialog',
   templateUrl: './add-treatment-dialog.component.html',
-  styleUrls: ['./add-treatment-dialog.component.css']
+  styleUrls: [
+    './add-treatment-dialog.component.css',
+     '../../../../styles/dialog-forms.css'
+  ]
 })
 export class CreateTreatmentDialogComponent implements OnInit {
+  async onCancel(): Promise<void> {
+    if (!this.treatmentForm.dirty) {
+      this.dialogRef.close();
+      return;
+    }
+    const result = await this.openUnsavedDialog();
+    if (result === 'cancel') {
+      this.dialogRef.close();
+    }
+  }
+
+  // Intercept dialog close (backdrop or X)
+  async canCloseDialog(): Promise<boolean> {
+    if (!this.treatmentForm.dirty) return true;
+    const result = await this.openUnsavedDialog();
+    return result === 'cancel';
+  }
+
+  openUnsavedDialog(): Promise<'save' | 'cancel' | undefined> {
+    const dialogRef = this.dialog.open(ConfirmUnsavedDialogComponent, {
+      width: '350px',
+      data: { message: 'יש שינויים שלא נשמרו. האם לצאת בלי לשמור?' }
+    });
+    return dialogRef.afterClosed().toPromise();
+  }
 
   @Output() appointmentAdded = new EventEmitter<any>();
   treatmentForm!: FormGroup;
@@ -24,15 +53,15 @@ export class CreateTreatmentDialogComponent implements OnInit {
   roomEvents: any[] = [];
   showOverlay = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private errorHandler: ErrorHandlerService,
-    private roomsService: RoomsService,
-    private typesService: TypesService,
-    private patientService: PatientService,
-    private dialog: MatDialog,
-    public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    constructor(
+      private fb: FormBuilder,
+      private errorHandler: ErrorHandlerService,
+      private roomsService: RoomsService,
+      private typesService: TypesService,
+      private patientService: PatientService,
+      private dialog: MatDialog,
+      public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.treatmentForm = this.createForm();
       if (data) {
@@ -43,17 +72,38 @@ export class CreateTreatmentDialogComponent implements OnInit {
           startTime: data.start_time || data.startTime || '',
           endTime: data.end_time || data.endTime || '',
           notes: data.notes || '',
-          mode: data.mode || 'frontal',
+          meeting_type: data.meeting_type || data.mode || 'frontal',
           patient_id: data.patient_id || null
         });
       } else {
-        this.treatmentForm.get('mode')?.setValue('frontal');
+        this.treatmentForm.get('meeting_type')?.setValue('frontal');
       }
+      // Disable close on backdrop click or ESC
+      this.dialogRef.disableClose = true;
     }
 
+  // Intercept dialog close (backdrop or X)
+
+  ngAfterViewInit(): void {
+    // האזנה לאירועי סגירה (ESC, backdrop)
+    this.dialogRef.backdropClick().subscribe(async () => {
+      if (await this.canCloseDialog()) {
+        this.dialogRef.close();
+      }
+    });
+    this.dialogRef.keydownEvents().subscribe(async (event: any) => {
+      if (event.key === 'Escape') {
+        if (await this.canCloseDialog()) {
+          this.dialogRef.close();
+        }
+      }
+    });
+  }
+
+
   ngOnInit(): void {
-    this.treatmentForm.get('mode')?.valueChanges.subscribe(mode => {
-      if (mode === 'phone') {
+    this.treatmentForm.get('meeting_type')?.valueChanges.subscribe(meetingType => {
+      if (meetingType === 'phone') {
         this.treatmentForm.get('place')?.setValue(null);
       }
     });
@@ -72,14 +122,20 @@ export class CreateTreatmentDialogComponent implements OnInit {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      mode: ['frontal', Validators.required],
+      meeting_type: ['frontal', Validators.required],
       date: [null, Validators.required],
-      startTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
-      endTime: ['', [Validators.required, Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d$/)]],
+      startTime: ['', [
+        Validators.required,
+        Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/)
+      ]],
+      endTime: ['', [
+        Validators.required,
+        Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/)
+      ]],
       place: [null],
       type: [null],
       patient_id: [this.data?.patient_id || null, Validators.required],
-      notes: ['', [Validators.maxLength(250)]]
+      notes: ['']
     });
   }
 
@@ -136,47 +192,53 @@ export class CreateTreatmentDialogComponent implements OnInit {
     }
 
     const value = this.treatmentForm.value;
-
     const appointment = {
       therapist_id: Number(localStorage.getItem('therapist_id')) || 1,
       patient_id: value.patient_id,
       treatment_type_id: value.type ? Number(value.type) : 0,
-      room_id: value.mode === 'frontal' && value.place ? Number(value.place) : (value.mode === 'phone' ? undefined : 0),
+      room_id: value.meeting_type === 'frontal' && value.place ? Number(value.place) : (value.meeting_type === 'phone' ? undefined : 0),
       appointment_date: value.date,
       start_time: value.startTime,
       end_time: value.endTime,
       notes: value.notes || '',
-      mode: value.mode
+      meeting_type: value.meeting_type
     };
+    console.log('Prepared appointment object:', appointment);
 
-    this.patientService.createAppointment(appointment).subscribe({
-      next: res => {
-        this.appointmentAdded.emit(res.data || appointment);
-        this.dialogRef.close(res.data || appointment);
-      },
-      error: err => alert('שגיאה בשמירת הפגישה')
-    });
+    if (this.data && this.data.appointment_id) {
+      console.log('Calling updateAppointment with:', this.data.appointment_id, appointment);
+      this.patientService.updateAppointment(this.data.appointment_id, appointment).subscribe({
+        next: res => {
+          console.log('updateAppointment response:', res);
+          const result = (res && 'data' in res) ? (res as any).data : null;
+          this.appointmentAdded.emit(result || { ...appointment, appointment_id: this.data.appointment_id });
+          this.dialogRef.close(result || { ...appointment, appointment_id: this.data.appointment_id });
+        },
+        error: err => {
+          console.error('updateAppointment error:', err);
+          alert('שגיאה בעדכון הפגישה');
+        }
+      });
+    } else {
+      console.log('Calling createAppointment with:', appointment);
+      this.patientService.createAppointment(appointment).subscribe({
+        next: res => {
+          console.log('createAppointment response:', res);
+          this.appointmentAdded.emit(res.data || appointment);
+          this.dialogRef.close(res.data || appointment);
+        },
+        error: err => {
+          console.error('createAppointment error:', err);
+          alert('שגיאה בשמירת הפגישה');
+        }
+      });
+    }
   }
 
-  close() { this.dialogRef.close(); }
-  // add-treatment-dialog.component.ts
-public editorInit: any = {
-  language: 'he_IL',
-  directionality: 'rtl',
-  plugins: [
-    'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-    'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
-  ],
-  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-  tinycomments_mode: 'embedded',
-  tinycomments_author: 'Author name',
-  mergetags_list: [
-    { value: 'First.Name', title: 'First Name' },
-    { value: 'Email', title: 'Email' },
-  ],
-  ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-  uploadcare_public_key: '659c9ed48d8ceb29727a',
-  language_url: '/assets/tinymce/langs/he_IL.js'
-};
+  async close() {
+    if (await this.canCloseDialog()) {
+      this.dialogRef.close();
+    }
+  }
 
 }

@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { QuillModule } from 'ngx-quill';
 
 import { AuthInterceptor } from './services/auth.interceptor'; 
 
@@ -22,6 +22,7 @@ import { WeNumbersComponent } from "./components/marketing/we-numbers/we-numbers
 import { ContactComponent } from "./components/marketing/contact/contact.component";
 import { TheySayAboutUsComponent } from './components/marketing/they-say-about-us/they-say-about-us.component';
 
+import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -101,10 +102,20 @@ import { AddRoomDialogComponent } from './components/personal-area/company-manag
 import { RoomSettingsComponent } from './components/personal-area/company-manager/rooms/room-settings/room-settings.component';
 import { RoomsHomeComponent } from './components/personal-area/company-manager/rooms/rooms-home/rooms-home.component';
 import { TextEditorComponent } from './components/personal-area/company-manager/text-editor/text-editor.component';
+import { ContactListComponent } from './components/personal-area/patient/PatientContacts/contact-list/contact-list.component';
+import { AddContactDialogComponent } from './components/personal-area/patient/PatientContacts/add-contact-dialog/add-contact-dialog.component';
+import { TherapistHomeComponent } from './components/personal-area/therapist/therapist-home/therapist-home.component';
+import { TherapistReportsComponent } from './components/personal-area/therapist/therapist-reports/therapist-reports.component';
+import { ReportsListComponent } from './components/personal-area/company-manager/reports/reports-list/reports-list.component';
+import { ReportsViewComponent } from './components/personal-area/company-manager/reports/reports-view/reports-view.component';
+import { AddReportsComponent } from './components/personal-area/company-manager/reports/add-reports/add-reports.component';
+import { ReportDetailsComponent } from './components/personal-area/company-manager/reports/report-details/report-details.component';
+import { IncomeReportComponent } from './components/personal-area/company-manager/reports/income-report/income-report.component';
 
 
 @NgModule({
   declarations: [
+    SecretaryHomeComponent,
     AppComponent,
     HeaderComponent,
     AdvertisingComponent,
@@ -172,9 +183,19 @@ import { TextEditorComponent } from './components/personal-area/company-manager/
     RoomSettingsComponent,
     RoomsHomeComponent,
   TextEditorComponent,
+  ContactListComponent,
+  AddContactDialogComponent,
+  TherapistHomeComponent,
+  TherapistReportsComponent,
+  ReportsListComponent,
+  ReportsViewComponent,
+  AddReportsComponent,
+  ReportDetailsComponent,
+  IncomeReportComponent,
   ],
   imports: [
-    EditorModule,
+    QuillModule.forRoot(),
+    MatRadioModule,
     MatMenuModule,
     MatIconModule,
     BrowserModule,

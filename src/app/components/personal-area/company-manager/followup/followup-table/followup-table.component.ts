@@ -63,7 +63,7 @@ export class FollowupTableComponent implements OnInit {
     const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
       width: '450px',
       direction: 'rtl',
-      data: f
+      data: { followUp: f }
     });
 
     dialogRef.afterClosed().subscribe(result => {

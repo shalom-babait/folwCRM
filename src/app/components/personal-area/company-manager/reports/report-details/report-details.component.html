@@ -1,0 +1,30 @@
+<div *ngIf="report; else noReport">
+  <div #reportContent>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>{{ report.name }}</h2>
+    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+      <span style="font-weight: bold; margin-bottom: 4px;">שיתוף המסמך</span>
+      <div style="display: flex; gap: 8px;">
+        <button mat-icon-button (click)="onShareEmail()" title="שליחה במייל">
+          <mat-icon>email</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onDownloadPDF()" title="הורדה PDF">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onPrint()" title="הדפסה">
+          <mat-icon>print</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+    <ng-container *ngIf="report.name === 'דוח הכנסות'; else otherReport">
+      <app-income-report></app-income-report>
+    </ng-container>
+    <ng-template #otherReport>
+      <p>כאן יוצגו פרטי הדוח המלאים (דמו).</p>
+    </ng-template>
+  </div>
+</div>
+<ng-template #noReport>
+  <p>בחר דוח להצגה</p>
+</ng-template>

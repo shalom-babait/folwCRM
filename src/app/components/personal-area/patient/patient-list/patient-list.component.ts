@@ -8,6 +8,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
 import { AddPatientDialogComponent } from '../add-patient-dialog/add-patient-dialog.component';
 import { PatientCreationData } from 'src/app/models/patient.model';
+import { TherapistService } from 'src/app/services/therapist.service';
+import { TherapistCreationData } from 'src/app/models/therapist.model';
 
 @Component({
   selector: 'app-patient-list',
@@ -15,6 +17,8 @@ import { PatientCreationData } from 'src/app/models/patient.model';
   styleUrls: ['../../../../styles/list-cards.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  therapists: TherapistCreationData[] = [];
+  selectedTherapistId: number | null = null;
 
   @Input() therapistId?: number;
   /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
@@ -39,6 +43,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   constructor(
     private patientService: PatientService,
+    private therapistService: TherapistService,
     private dialog: MatDialog,
     private router: Router
   ) { }
@@ -53,7 +58,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
       const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
       this.therapist_id = therapistObj.therapist_id || 0;
       this.loadAllPatients();
+      this.loadAllTherapists();
     }
+<<<<<<< HEAD
     // האזנה לרשימת המטופלים
     this.patientService.patientsList$
       .pipe(takeUntil(this.destroy$))
@@ -73,6 +80,30 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .subscribe(patient_id => {
         this.selectedPatientId = patient_id;
       });
+=======
+  }
+
+  loadAllTherapists() {
+    this.therapistService.getAllTherapists().subscribe({
+      next: (therapists) => {
+        this.therapists = therapists || [];
+      },
+      error: (err) => {
+        console.error('Error loading therapists:', err);
+      }
+    });
+  }
+
+  get filteredPatients(): PatientCreationData[] {
+    if (!this.selectedTherapistId) {
+      return this.patients;
+    }
+    return this.patients.filter(p => p.patient?.therapist_id === this.selectedTherapistId);
+  }
+
+  onTherapistFilterChange(id: number|null) {
+    this.selectedTherapistId = id;
+>>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -86,8 +117,12 @@ export class PatientListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
+<<<<<<< HEAD
           this.patients = data || [];
           this.applyFilters();
+=======
+          this.patients = (data || []).slice().reverse();
+>>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
           this.isLoading = false;
         },
         error: (err) => {
@@ -102,9 +137,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.patientService.getPatientsByTherapist(this.therapist_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
+<<<<<<< HEAD
         next: (data: any) => {
           this.patients = data || [];
           this.applyFilters();
+=======
+        next: (data) => {
+          this.patients = (data || []).slice().reverse();
+>>>>>>> 9c817448dd925ad50b107aa53b462d07c0de3c29
           this.isLoading = false;
         },
         error: (err: any) => {
@@ -155,14 +195,14 @@ export class PatientListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
-        if (result && result.success && result.data) {
+        if (result) {
           // אחרי הוספה: טען את אותו סוג רשימה כמו בהתחלה
           if (this.therapistId && this.therapistId > 0) {
             this.loadPatientsByTherapist();
           } else {
             this.loadAllPatients();
           }
-          const newId = result.data.patient?.patient_id;
+          const newId = result.patient?.patient_id;
           if (newId) {
             setTimeout(() => this.patientService.selectPatient(newId), 500);
           }

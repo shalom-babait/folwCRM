@@ -1,5 +1,5 @@
 <div class="create-treatment-dialog">
-  <h2 class="dialog-title">הוספת מעקב חדש</h2>
+  <h2 class="dialog-title">{{ isEdit ? 'עריכת מעקב' : 'הוספת מעקב חדש' }}</h2>
 
   <form class="input-dialog" [formGroup]="followupForm" (ngSubmit)="onSubmit()">
 

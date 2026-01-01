@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { TherapistSessionService } from 'src/app/services/therapist-session.service';
 
@@ -8,7 +8,8 @@ import { TherapistSessionService } from 'src/app/services/therapist-session.serv
   styleUrls: ['./therapist-header.component.css', '../../../../styles/header.css']
 })
 export class TherapistHeaderComponent implements OnInit {
-  selectedSection: string = 'home';
+  @Input() selectedSection: string = 'home';
+  @Output() sectionChange = new EventEmitter<string>();
   showProfileMenu = false;
   user_name = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
@@ -29,7 +30,7 @@ export class TherapistHeaderComponent implements OnInit {
 
   onPatientsClick() {
     this.therapistId = this.therapistSessionService.getTherapistId();
-    this.selectedSection = 'patients';
+    this.sectionChange.emit('patients');
   }
 
   toggleProfileMenu() {

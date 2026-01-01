@@ -1,3 +1,5 @@
+import { MatDialog } from '@angular/material/dialog';
+import { AddContactDialogComponent } from '../PatientContacts/add-contact-dialog/add-contact-dialog.component';
 import { TherapistCreationData } from 'src/app/models/therapist.model';
 import { TherapistService } from 'src/app/services/therapist.service';
 
@@ -18,6 +20,25 @@ import { SelectedDepartmentForSave } from 'src/app/models/department-group.model
   ]
 })
 export class AddPatientDialogComponent implements OnInit {
+
+  constructor(
+    private fb: FormBuilder,
+    private patientService: PatientService,
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<AddPatientDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public errorHandler: ErrorHandlerService,
+    private therapistService: TherapistService,
+    private dialog: MatDialog
+  ) {
+    this.patientForm = this.createForm();
+  }
+
+  openAddContactDialog(): void {
+    this.dialog.open(AddContactDialogComponent, {
+      width: '600px'
+    });
+  }
   isTriedToSubmit = false;
   therapists: TherapistCreationData[] = [];
   selectedDepartments: SelectedDepartmentForSave[] = [];
@@ -99,17 +120,6 @@ export class AddPatientDialogComponent implements OnInit {
     { value: 'בהמתנה', label: 'בהמתנה' }
   ];
 
-  constructor(
-    private fb: FormBuilder,
-    private patientService: PatientService,
-    private snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<AddPatientDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public errorHandler: ErrorHandlerService,
-  private therapistService: TherapistService
-  ) {
-    this.patientForm = this.createForm();
-  }
 
   ngOnInit(): void {
     // טען מטפלים רק אם לא הגיע מבחוץ

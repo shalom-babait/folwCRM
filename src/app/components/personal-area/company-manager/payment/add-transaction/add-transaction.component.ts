@@ -1,26 +1,8 @@
-import { PaymentService } from 'src/app/services/payments.service';
-import { Component, EventEmitter, Output, OnInit, Input, Inject } from '@angular/core';
+
+import { Component, EventEmitter, Output, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-interface DebitTransaction {
-  transaction_type: 'debit';
-  appointment_id: null | string | number;
-  amount: number;
-  payment_date: string;   // <-- STRING
-  status: 'pending' | 'paid' | 'failed' | 'refunded';
-  method: 'cash' | 'transfer' | 'card';
-}
-
-interface CreditTransaction {
-  appointment_id?: string;
-  transaction_type: 'credit';
-  amount: number;
-  payment_date: string;   // <-- STRING
-  method: 'cash' | 'transfer' | 'card';
-  status: 'paid' | 'pending' | 'failed' | 'refunded';
-}
-
-type Transaction = DebitTransaction | CreditTransaction;
+import { PaymentService } from 'src/app/services/payments.service';
+import { DebitTransaction, CreditTransaction, Transaction } from 'src/app/models/payment.model';
 
 @Component({
   selector: 'app-add-transaction',
@@ -96,40 +78,42 @@ export class AddTransactionComponent implements OnInit {
     return this.creditForm.amount > 0 && !!this.creditForm.payment_date;
   }
 
+
   onSubmit() {
-    let transaction: Transaction;
+    let transaction: Transaction & { therapist_id?: number };
+     const therapistId = Number(localStorage.getItem('therapist_id')); // Declare therapistId once
 
     if (this.transactionType === 'debit') {
-
       if (!this.validateDebitForm()) return;
-
       transaction = {
         transaction_type: 'debit',
         appointment_id: this.debitForm.appointment_id
           ? Number(this.debitForm.appointment_id)
           : null,
-
         amount: this.debitForm.amount,
         payment_date: this.debitForm.payment_date,  // <-- STRING
         status: 'pending',
-        method: 'cash'
+        method: 'cash',
+         therapist_id: therapistId // Use therapistId from the top declaration
       };
-
     } else {
-
       if (!this.validateCreditForm()) return;
-
       transaction = {
         transaction_type: 'credit',
         amount: this.creditForm.amount,
         payment_date: this.creditForm.payment_date,  // <-- STRING
         method: this.creditForm.method,
-        status: this.creditForm.status
+        status: this.creditForm.status,
+         therapist_id: therapistId // Use therapistId from the top declaration
       };
     }
-
-    this.transactionAdded.emit(transaction);
-    this.resetForms();
+    // ודא שמזהה המטפל נשלח תמיד
+    if (therapistId) {
+      (transaction as any).therapist_id = therapistId;
+    }
+  console.log('Transaction sent to server:', transaction);
+  this.transactionAdded.emit(transaction);
+  this.resetForms();
   }
 
   onCancel() {

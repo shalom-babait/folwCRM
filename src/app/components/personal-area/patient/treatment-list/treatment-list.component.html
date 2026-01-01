@@ -1,20 +1,22 @@
 <!-- treatment-list.component.html -->
 <div class="patient-list-container">
-  <h1>טיפולים</h1>
-
   <!-- שדה חיפוש -->
   <div class="search-container">
-    <button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
-      <mat-icon style="color: #BB7E2B;">add</mat-icon>
-    </button>
-    <!-- כפתור הצגת פגישות ביומן -->
-    <button class="icon-button" mat-icon-button (click)="openCalendarDialog()" style="margin-right: 8px;">
-      <mat-icon style="color: #BB7E2B;">calendar_today</mat-icon>
-    </button>
-    <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
-
+    <div class="search-actions-row">
+      <button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
+        <mat-icon style="color: #BB7E2B;">add</mat-icon>
+      </button>
+      <button class="icon-button" mat-icon-button (click)="openCalendarDialog()" style="margin-right: 8px;">
+        <mat-icon style="color: #BB7E2B;">calendar_today</mat-icon>
+      </button>
+      <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
+      <select class="styled-select" [(ngModel)]="selectedStatus">
+        <option value="">הכל</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
   </div>
-
+  <div class="table-records">
   <!-- כותרות השדות -->
   <div class="treatment-row header-row">
     <div class="treatment-cell">תאריך</div>
@@ -28,36 +30,38 @@
   </div>
 
   <!-- רשימת פגישות -->
-  <div class="treatment-row data-row" *ngFor="let appointment of filteredAppointments">
-    <div class="treatment-cell">{{appointment.appointment_date | date:'dd/MM/yyyy'}}</div>
-    <div class="treatment-cell">{{appointment.group_name}}</div>
-    <div class="treatment-cell">{{appointment.room}}</div>
-    <div class="treatment-cell">{{appointment.start_time | slice:0:5}}</div>
-    <div class="treatment-cell">{{appointment.end_time | slice:0:5}}</div>
-    <div class="treatment-cell">{{appointment.total_minutes}} דקות</div>
-
-    <!-- עמודת הסטטוס -->
-    <mat-form-field class="status-select mat-center-select" appearance="outline" matTooltip="שינוי סטטוס">
-      <mat-select class="no-backdrop-select"
-                  [(ngModel)]="appointment.status"
-                  (selectionChange)="saveStatus(appointment)">
-        <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <!-- עמודת פעולות -->
-    <div class="treatment-cell actions-cell">
-      <button mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #actionsMenu="matMenu">
-        <button mat-menu-item (click)="editAppointment(appointment)">
-          <mat-icon>edit</mat-icon>
-          <span>ערוך</span>
+    <div class="treatment-row data-row" *ngFor="let appointment of filteredAppointments">
+      <div class="treatment-cell">{{appointment.appointment_date | date:'dd/MM/yyyy'}}</div>
+      <div class="treatment-cell">{{appointment.group_name}}</div>
+      <div class="treatment-cell">{{appointment.room}}</div>
+      <div class="treatment-cell">{{appointment.start_time | slice:0:5}}</div>
+      <div class="treatment-cell">{{appointment.end_time | slice:0:5}}</div>
+      <div class="treatment-cell">{{ formatMinutes(appointment.total_minutes) }}</div>
+      <!-- עמודת הסטטוס -->
+      <select class="styled-select" [(ngModel)]="appointment.status" (change)="saveStatus(appointment)">
+        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+      <!-- עמודת פעולות -->
+      <div class="treatment-cell actions-cell">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+          <mat-icon>more_vert</mat-icon>
         </button>
-        <button mat-menu-item (click)="deleteAppointment(appointment)">
-          <mat-icon>delete</mat-icon>
-          <span>מחק</span>
-        </button>
-      </mat-menu>
+        <mat-menu #actionsMenu="matMenu">
+          <button mat-menu-item (click)="editAppointment(appointment)">
+            <mat-icon>edit</mat-icon>
+            <span>ערוך</span>
+          </button>
+          <button mat-menu-item (click)="deleteAppointment(appointment)">
+            <mat-icon>delete</mat-icon>
+            <span>מחק</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+  <!-- שורת סיכום: סה"כ כמות טיפולים -->
+  <div class="treatment-row summary-row sticky-summary-row">
+  <div class="treatment-cell" colspan="8">
+     כמות טיפולים: {{ filteredAppointments.length }}
     </div>
   </div>

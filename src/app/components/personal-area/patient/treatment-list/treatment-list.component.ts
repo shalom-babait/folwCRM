@@ -12,9 +12,30 @@ import { co } from '@fullcalendar/core/internal-common';
   selector: 'app-treatment-list',
   templateUrl: './treatment-list.component.html',
   styleUrls: ['./treatment-list.component.css',
-    '../../../../styles/list-cards.css']
+    '../../../../styles/shared-table.css']
 })
 export class TreatmentListComponent implements OnInit {
+  selectedStatus: string = '';
+
+  // פורמט דקות לשעות ודקות בעברית
+  formatMinutes(minutes: number | undefined): string {
+    if (minutes === undefined || minutes === null) {
+      return '';
+    }
+    if (minutes < 60) {
+      return `${minutes} דקות`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    // שעות שלמות
+    if (mins === 0) {
+      return `${hours} שעות`;
+    }
+    // שעה ומשהו
+    let result = `${hours} שעות`;
+    result += ` ו-${mins} דקות`;
+    return result;
+  }
 
   @Input() appointments: Appointment[] = [];
   @Input() patientId: number | undefined;
@@ -83,16 +104,17 @@ export class TreatmentListComponent implements OnInit {
   // פילטר טיפולים לפי תאריך
   get filteredAppointments(): Appointment[] {
     let filtered = this.appointments;
-    // if (this.appointments.length > 0 && this.appointments[0].patient_id) {
-    //   const patientId = this.appointments[0].patient_id;
-    //   filtered = filtered.filter(a => a.patient_id === patientId);
-    // }
-    if (!this.searchTerm.trim()) {
-      return filtered;
+    // סינון לפי סטטוס
+    if (this.selectedStatus) {
+      filtered = filtered.filter(a => a.status === this.selectedStatus);
     }
-    return filtered.filter(appointment =>
-      appointment.appointment_date.includes(this.searchTerm)
-    );
+    // סינון לפי תאריך
+    if (this.searchTerm.trim()) {
+      filtered = filtered.filter(appointment =>
+        appointment.appointment_date.includes(this.searchTerm)
+      );
+    }
+    return filtered;
   }
 
   // פתיחת דיאלוג הוספת טיפול
@@ -144,7 +166,6 @@ export class TreatmentListComponent implements OnInit {
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
-    console.log('עריכת פגישה:', appointment);
       const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
         width: '600px',
         data: { ...appointment, patient_id: appointment.patient_id }
@@ -161,7 +182,6 @@ export class TreatmentListComponent implements OnInit {
       });
     }
 
-  // ...existing code...
   // מחיקת פגישה
   deleteAppointment(appointment: Appointment): void {
     if (!appointment.appointment_id) return;

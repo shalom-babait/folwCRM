@@ -1,87 +1,85 @@
-<!-- patient-details.component.html -->
-<div class="patient-details-card">
-  <div class="card-header">
-    <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
-    <button *ngIf="!isEditing" class="edit-btn" (click)="startEdit()">
-      עריכה
-    </button>
-  </div>
-
-  <div class="card-content" *ngIf="!isEditing">
-    <div class="detail-row">
-      <span class="label">שם:</span>
-      <span class="value">{{ patient.person.first_name }} {{ patient.person.last_name }}</span>
+<div class="report-card" dir="rtl">
+  <div *ngIf="!isEditing">
+    <div class="report-header">
+      <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
+  <button class="main-action-btn" (click)="startEdit()" title="עריכה">
+    <mat-icon>edit</mat-icon>
+  </button>
     </div>
-
-    <div class="detail-row">
-      <span class="label">טלפון:</span>
-      <span class="value">{{ patient.person.phone }}</span>
-    </div>
-<!--     
-    <div class="detail-row">
-      <span class="label">מייל:</span>
-      <span class="value">{{ patient.user.email }}</span>
-    </div> -->
-    
-    <div class="detail-row">
-  <span class="label">גיל:</span>
-  <span class="value">{{ calculateAge() }}</span>
-    </div>
-    
-    <div class="detail-row">
-      <span class="label">תאריך לידה:</span>
-<span class="value">{{ patient.person.birth_date | date:'dd/MM/yyyy' }}</span>  </div>
-    
-    <div class="detail-row">
-      <span class="label">כתובת:</span>
-      <span class="value">{{ patient.person.address }}</span>
-    </div>
-   
-      <div class="detail-row">
-        <span class="label">תעודת זהות:</span>
-        <span class="value">{{ patient.person.teudat_zehut }}</span>
+    <div class="report-content">
+      <div class="report-row">
+        <span class="report-label">שם:</span>
+        <span class="report-value">{{ patient.person.first_name }} {{ patient.person.last_name }}</span>
       </div>
-      
+      <div class="report-row">
+        <span class="report-label">טלפון:</span>
+        <span class="report-value">{{ patient.person.phone }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">מייל:</span>
+        <span class="report-value">{{ patient.person.email || '' }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">גיל:</span>
+        <span class="report-value">{{ calculateAge() }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">תאריך לידה:</span>
+        <span class="report-value">{{ patient.person.birth_date | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">כתובת:</span>
+        <span class="report-value">{{ patient.person.address }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">תעודת זהות:</span>
+        <span class="report-value">{{ patient.person.teudat_zehut }}</span>
+      </div>
+    </div>
   </div>
-
-  <!-- מצב עריכה -->
-  <form *ngIf="isEditing" [formGroup]="patientForm" class="edit-form">
-    
-    <div class="form-field">
-      <label>שם פרטי:</label>
-      <input type="text" formControlName="first_name" placeholder="הכנס שם פרטי">
-    </div>
-    <div class="form-field">
-      <label>שם משפחה:</label>
-      <input type="text" formControlName="last_name" placeholder="הכנס שם משפחה">
-    </div>
-    
-    <div class="form-field">
-      <label>טלפון:</label>
-      <input type="tel" formControlName="phone" placeholder="050-123-4567">
-    </div>
-    
-    <div class="form-field">
-      <label>מייל:</label>
-      <input type="email" formControlName="email" placeholder="example@email.com">
-    </div>
-    
-    <div class="form-field">
-      <label>תאריך לידה:</label>
-      <input type="date" formControlName="birth_date">
-    </div>
-    
-    <div class="form-field">
-      <label>כתובת:</label>
-      <textarea formControlName="address" rows="3" placeholder="הכנס כתובת מלאה"></textarea>
-    </div>
-
-    <div class="form-actions">
-      <button type="button" class="cancel-btn" (click)="cancelEdit()">ביטול</button>
-      <button type="button" class="save-btn" (click)="saveChanges()" [disabled]="!patientForm.valid">
-        שמור
+  <form *ngIf="isEditing" [formGroup]="patientForm" class="report-card">
+  <div class="report-header">
+      <h3>עריכת מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
+      <button class="main-action-btn" (click)="cancelEdit()" title="ביטול">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
+  <div class="report-content">
+      <div class="report-row">
+        <span class="report-label">שם פרטי:</span>
+        <input class="report-value" type="text" formControlName="first_name" placeholder="הכנס שם פרטי" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">שם משפחה:</span>
+        <input class="report-value" type="text" formControlName="last_name" placeholder="הכנס שם משפחה" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">טלפון:</span>
+        <input class="report-value" type="tel" formControlName="phone" placeholder="050-123-4567" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">מייל:</span>
+        <input class="report-value" type="email" formControlName="email" placeholder="example@email.com" />
+        <div class="error-message" *ngIf="patientForm.get('email')?.invalid && (patientForm.get('email')?.dirty || patientForm.get('email')?.touched)">
+          <span *ngIf="patientForm.get('email')?.errors?.['email']">כתובת מייל לא תקינה</span>
+        </div>
+      </div>
+      <div class="report-row">
+        <span class="report-label">תאריך לידה:</span>
+        <input class="report-value" type="date" formControlName="birth_date" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">כתובת:</span>
+        <input class="report-value" type="text" formControlName="address" placeholder="הכנס כתובת" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">תעודת זהות:</span>
+        <input class="report-value" type="text" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות" />
+      </div>
+    </div>
+  <div class="dialog-actions" *ngIf="isEditing">
+    <button type="button" class="main-action-btn" (click)="saveChanges()" [disabled]="!patientForm.valid">שמור</button>
+    <!-- <button type="button" class="main-action-btn" (click)="saveChanges()">שמור</button> -->
+  </div>
   </form>
-
 </div>

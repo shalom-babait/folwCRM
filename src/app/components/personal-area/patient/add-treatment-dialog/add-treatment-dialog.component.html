@@ -1,31 +1,30 @@
 <div class="create-treatment-dialog">
   <h2 class="dialog-title">טיפול חדש</h2>
 
-  <div class="input-dialog">
-    <form [formGroup]="treatmentForm">
-      <div class="form-section" style="margin-bottom: 0;">
-        <label class="section-label">סוג טיפול:</label>
-        <div class="treatment-mode-selector">
-          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'frontal'}">
-            <input type="radio" id="mode-frontal" formControlName="mode" value="frontal" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'frontal'">
-            <label for="mode-frontal" class="option-content" tabindex="0">
-              <mat-icon>groups</mat-icon>
-              <span class="label">פרונטלי</span>
-            </label>
-          </div>
-          <div class="mode-option" [ngClass]="{'active': treatmentForm.get('mode')?.value === 'phone'}">
-            <input type="radio" id="mode-phone" formControlName="mode" value="phone" style="display:none;" [checked]="treatmentForm.get('mode')?.value === 'phone'">
-            <label for="mode-phone" class="option-content" tabindex="0">
-              <mat-icon>call</mat-icon>
-              <span class="label">טלפוני</span>
-            </label>
-          </div>
+  <form [formGroup]="treatmentForm">
+    <div class="form-section">
+      <label class="section-label">סוג טיפול:</label>
+      <div class="treatment-mode-selector">
+        <div class="mode-option" [ngClass]="{'active': treatmentForm.get('meeting_type')?.value === 'frontal'}">
+          <input type="radio" id="meeting_type-frontal" formControlName="meeting_type" value="frontal" style="display:none;" [checked]="treatmentForm.get('meeting_type')?.value === 'frontal'">
+          <label for="meeting_type-frontal" class="option-content" tabindex="0">
+            <mat-icon>groups</mat-icon>
+            <span class="label">פרונטלי</span>
+          </label>
+        </div>
+        <div class="mode-option" [ngClass]="{'active': treatmentForm.get('meeting_type')?.value === 'phone'}">
+          <input type="radio" id="meeting_type-phone" formControlName="meeting_type" value="phone" style="display:none;" [checked]="treatmentForm.get('meeting_type')?.value === 'phone'">
+          <label for="meeting_type-phone" class="option-content" tabindex="0">
+            <mat-icon>call</mat-icon>
+            <span class="label">טלפוני</span>
+          </label>
         </div>
       </div>
+    </div>
 
-
+    <div class="input-dialog">
       <!-- מקום (חדר) - מוצג רק אם פרונטלי -->
-      <div class="form-field" *ngIf="treatmentForm.get('mode')?.value === 'frontal'">
+      <div class="form-field" *ngIf="treatmentForm.get('meeting_type')?.value === 'frontal'">
         <label for="place">מקום</label>
         <select id="place" formControlName="place">
           <option [value]="null">בחר חדר</option>
@@ -37,14 +36,15 @@
       </div>
 
       <!-- יומן חדר ב-overlay -->
-      <app-calendar-overlay
-        *ngIf="showOverlay"
-        [showOverlay]="showOverlay"
-        [selectedRoomId]="selectedRoomId"
-        [roomEvents]="roomEvents"
-        (overlayDateSelected)="onOverlayDateSelected($event)"
-        (closeOverlayEvent)="closeOverlay()">
-      </app-calendar-overlay>
+      <ng-container *ngIf="showOverlay">
+        <app-calendar-overlay
+          [showOverlay]="showOverlay"
+          [selectedRoomId]="selectedRoomId"
+          [roomEvents]="roomEvents"
+          (overlayDateSelected)="onOverlayDateSelected($event)"
+          (closeOverlayEvent)="closeOverlay()">
+        </app-calendar-overlay>
+      </ng-container>
 
       <!-- תאריך -->
       <div class="form-field">
@@ -72,7 +72,7 @@
           חובה לבחור שעת סיום תקינה
         </div>
       </div>
-   
+
       <!-- סוג טיפול -->
       <div class="form-field">
         <label for="type">סוג טיפול</label>
@@ -86,19 +86,16 @@
       <input type="hidden" formControlName="patient_id">
 
       <!-- הערות (TextEditorComponent) -->
-      <div class="form-field">
+      <div class="form-field" style="grid-column: 1 / -1;">
         <label for="notes">הערות</label>
-<app-text-editor
-  [content]="treatmentForm.get('notes')?.value"
-  (contentChange)="treatmentForm.get('notes')?.setValue($event)">
-</app-text-editor>
+        <app-text-editor formControlName="notes"></app-text-editor>
       </div>
+    </div>
 
-      <div class="dialog-actions">
-        <button type="button" mat-dialog-close>ביטול</button>
-        <button type="button" (click)="save()" [disabled]="treatmentForm.invalid">שמור</button>
-      </div>
-    </form>
-  </div>
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+      <button type="button" class="save-button" (click)="save()">שמור</button>
+    </div>
+  </form>
 
 </div>

@@ -1,27 +1,50 @@
-/* Fullscreen overlay for editor */
-.editor-fullscreen-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.5);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* כפתור אייקון עגול */
+.icon-btn {
+	background: none;
+	border: none;
+	padding: 0;
+	margin-left: 0.5rem;
+	cursor: pointer;
+	font-size: 1.5em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s;
 }
-
-/* Force TinyMCE editor to fill fullscreen overlay */
-:host ::ng-deep .editor-fullscreen-overlay .tox.tox-tinymce {
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-  width: 100vw !important;
+.icon-btn:hover {
+	color: #a96c1f;
 }
-:host ::ng-deep .editor-fullscreen-overlay .tox-editor-container,
-:host ::ng-deep .editor-fullscreen-overlay .tox-edit-area__iframe {
-  height: calc(100vh - 40px) !important;
-  min-height: calc(100vh - 40px) !important;
-  max-height: calc(100vh - 40px) !important;
+/* כותרת העורך וכפתור הגדלה */
+.editor-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 0.5rem;
+	position: relative;
+}
+.editor-title {
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #022F39;
+}
+/* עורך בגובה מלא */
+.full-height-editor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: #fff;
+	z-index: 9999;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: flex-start;
+	padding: 32px 0 0 0;
+}
+.full-height-editor quill-editor {
+		flex: 1 1 auto;
+		height: 100% !important;
+		min-height: 0 !important;
+		max-height: 100% !important;
 }

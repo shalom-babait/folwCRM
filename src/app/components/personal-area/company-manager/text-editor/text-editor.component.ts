@@ -1,37 +1,101 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, forwardRef, OnInit } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-text-editor',
   templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.css']
+  styleUrls: ['./text-editor.component.css'
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TextEditorComponent),
+      multi: true
+    }
+  ]
 })
-export class TextEditorComponent {
-  fullscreen = false;
-  @Input() content: string = '';
-  @Output() contentChange = new EventEmitter<string>();
-  public editorInit: any = {
-  language: 'he_IL',
-  directionality: 'rtl',
-  plugins: [
-  'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-  'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'advtemplate', 'ai', 'uploadcare', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
-  ],
-  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-  tinycomments_mode: 'embedded',
-  tinycomments_author: 'Author name',
-  mergetags_list: [
-    { value: 'First.Name', title: 'First Name' },
-    { value: 'Email', title: 'Email' },
-  ],
-  ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-  uploadcare_public_key: '659c9ed48d8ceb29727a',
-  language_url: '/assets/tinymce/langs/he_IL.js'
-};
+export class TextEditorComponent implements ControlValueAccessor, OnInit {
+  content = '';
+  activeInput: 'text' | 'list' | 'bullet' | null = null;
+  textValue = '';
+  listValue = '';
+  bulletValue = '';
 
+  modules = {
+   toolbar: [
+  ['bold', 'italic', 'underline'],       // כפתורי טקסט
+  [{ color: [] }, { background: [] }], // שורת צבעים
+  [{ list: 'ordered' }, { list: 'bullet' }], // רשימות
+  [{ direction: 'rtl' }, { direction: 'ltr' }], // הוספת כפתור ימין-לשמאל ושמאל-לימין
+  ['clean']
+]
 
-  // Emit changes for two-way binding
-  onContentChange(value: string) {
+  };
+
+  defaultDirection: 'rtl' | 'ltr' = 'rtl';
+  isFullHeight = false;
+
+  onChange = (_: any) => {};
+  onTouched = () => {};
+
+  writeValue(value: any): void {
     this.content = value;
-    this.contentChange.emit(value);
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  ngOnInit() {
+    // קבע ברירת מחדל לימין לשמאל
+    setTimeout(() => {
+      const editor = document.querySelector('.ql-editor') as HTMLElement;
+      if (editor) {
+        editor.setAttribute('dir', this.defaultDirection);
+        editor.style.textAlign = this.defaultDirection === 'rtl' ? 'right' : 'left';
+      }
+    }, 0);
+  }
+
+  // אפשר גם לעדכן את onChange כשמשתמשים ב-ngModel
+  onContentChanged(event: any) {
+    this.onChange(this.content);
+    // עדכן כיוון ברירת מחדל אם המשתמש שינה
+    if (event && event.source === 'user' && event.delta && event.delta.ops) {
+      const editor = document.querySelector('.ql-editor') as HTMLElement;
+      if (editor) {
+        if (event.delta.ops.some((op: any) => op.insert && op.attributes && op.attributes.direction === 'ltr')) {
+          editor.setAttribute('dir', 'ltr');
+          editor.style.textAlign = 'left';
+        } else if (event.delta.ops.some((op: any) => op.insert && op.attributes && op.attributes.direction === 'rtl')) {
+          editor.setAttribute('dir', 'rtl');
+          editor.style.textAlign = 'right';
+        }
+      }
+    }
+  }
+
+  openInput(type: 'text' | 'list' | 'bullet') {
+    this.activeInput = type;
+  }
+
+  saveInput(type: 'text' | 'list' | 'bullet') {
+    this.activeInput = null;
+    if (type === 'text') {
+      this.content = this.textValue;
+    } else if (type === 'list') {
+      this.content = this.listValue.split('\n').map(item => `- ${item}`).join('\n');
+    } else if (type === 'bullet') {
+      this.content = this.bulletValue.split('\n').map(item => `• ${item}`).join('\n');
+    }
+    this.onChange(this.content);
+  }
+
+  toggleFullHeight() {
+    this.isFullHeight = !this.isFullHeight;
   }
 }
