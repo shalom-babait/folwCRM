@@ -24,13 +24,18 @@ export class RoomCalendarComponent implements OnInit {
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
-    initialView: 'timeGridWeek', // ברירת מחדל שבועי
+    initialView: 'timeGridWeek',
+    initialDate: new Date(),
     headerToolbar: {
-      left: 'prev,next',
+      left: 'todayButton,prev,next',
       center: 'title',
       right: 'heMonth,heWeek,heDay'
     },
     customButtons: {
+      todayButton: {
+        text: 'היום',
+        click: () => this.goToToday()
+      },
       heMonth: {
         text: 'חודש',
         click: () => this.changeView('dayGridMonth')
@@ -53,7 +58,6 @@ export class RoomCalendarComponent implements OnInit {
     firstDay: 0,
     nowIndicator: true,
     eventContent: function(arg) {
-      // Prefer therapist_name if available, fallback to title
       const therapistName = arg.event.extendedProps && arg.event.extendedProps['therapist_name'];
       const displayTitle = therapistName || arg.event.title;
       return {
@@ -61,6 +65,7 @@ export class RoomCalendarComponent implements OnInit {
       };
     }
   };
+
 
   openAddMeetingDialog(date?: string, startTime?: string) {
     if (this.dialog) {
@@ -73,6 +78,14 @@ export class RoomCalendarComponent implements OnInit {
       });
     }
   }
+
+  goToToday() {
+    if (this.calendarComponent && this.calendarComponent.getApi) {
+      const api = this.calendarComponent.getApi();
+      api.changeView('timeGridDay', new Date());
+    }
+  }
+
   changeView(viewName: string) {
     if (this.calendarComponent && this.calendarComponent.getApi) {
       this.calendarComponent.getApi().changeView(viewName);
