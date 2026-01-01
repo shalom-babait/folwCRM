@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
@@ -115,9 +114,11 @@ export class PatientService {
     );
   }
 
-  // --- מחיקת מטופל ---
-  deletePatient(patientId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/patients/deletePatient/${patientId}`);
+
+  /** מחיקת מטופל כולל הכל */
+  deletePatientFull(patientId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/patients/deleteFull/${patientId}`);
+    // אם ה-API שלך מתחיל ב-/api, השתמשי ב-/api/patients/deleteFull/${patientId}
   }
 
   // --- שליפת מטופלים ---

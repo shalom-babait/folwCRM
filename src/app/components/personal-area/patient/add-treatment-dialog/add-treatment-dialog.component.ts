@@ -52,6 +52,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
   selectedRoomId: number | null = null;
   roomEvents: any[] = [];
   showOverlay = false;
+  patients: any[] = [];
 
     constructor(
       private fb: FormBuilder,
@@ -77,6 +78,16 @@ export class CreateTreatmentDialogComponent implements OnInit {
         });
       } else {
         this.treatmentForm.get('meeting_type')?.setValue('frontal');
+      }
+      // אם לא הועבר patient_id נטען את רשימת המטופלים של המטפל
+      if (!data?.patient_id) {
+        const therapistId = Number(localStorage.getItem('therapist_id'));
+        if (therapistId) {
+          this.patientService.getPatientsByTherapist(therapistId).subscribe({
+            next: (patients) => this.patients = patients,
+            error: () => this.patients = []
+          });
+        }
       }
       // Disable close on backdrop click or ESC
       this.dialogRef.disableClose = true;

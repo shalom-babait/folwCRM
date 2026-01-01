@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
 import { TherapistSessionService } from 'src/app/services/therapist-session.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class TherapistHeaderComponent implements OnInit {
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
   therapistId: number | undefined;
 
-  constructor(private router: Router, private therapistSessionService: TherapistSessionService) { }
+  constructor(private therapistSessionService: TherapistSessionService) { }
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -47,15 +46,10 @@ export class TherapistHeaderComponent implements OnInit {
     }
   }
 
-  goToSettings() {
-    this.showProfileMenu = false;
-    this.router.navigate(['/settings']);
-  }
-
   logout() {
     this.showProfileMenu = false;
     localStorage.clear();
-    this.router.navigate(['/']);
+    window.location.href = '/';
   }
 }
 

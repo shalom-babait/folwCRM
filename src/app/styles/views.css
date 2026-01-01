@@ -42,7 +42,7 @@
 .summary-view { 
   height: 100%;
   /* אין גלילה פנימית */
-  overflow-y: auto;
+  /* overflow-y: auto; */
   display: flex;
   flex-direction: column;
 }
@@ -52,7 +52,7 @@
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   height: 97.5%;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   display: flex;
   flex-direction: column;
 }
@@ -69,7 +69,7 @@
 .summary-card app-prospect-table {
   flex: 1;
   /* מונע גלילה פנימית של הטבלה המשולבת */
-  overflow-y: auto;
+  /* overflow-y: auto; */
   display: block;
 }
 

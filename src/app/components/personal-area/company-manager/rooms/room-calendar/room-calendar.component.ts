@@ -1,3 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
+import { CreateTreatmentDialogComponent } from 'src/app/components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
+
 import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -12,10 +15,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   styleUrls: ['./room-calendar.component.css']
 })
 export class RoomCalendarComponent implements OnInit {
+
   @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
   @Input() roomId?: number; // אופציונלי, לשימושים אחרים
   @Input() events: any[] = [];
   @Output() dateSelected = new EventEmitter<any>();
+  @Input() miniCalendar: boolean = false;
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
@@ -46,6 +51,7 @@ export class RoomCalendarComponent implements OnInit {
     direction: 'rtl',
     dayHeaders: true,
     firstDay: 0,
+    nowIndicator: true,
     eventContent: function(arg) {
       // Prefer therapist_name if available, fallback to title
       const therapistName = arg.event.extendedProps && arg.event.extendedProps['therapist_name'];
@@ -56,13 +62,27 @@ export class RoomCalendarComponent implements OnInit {
     }
   };
 
+  openAddMeetingDialog(date?: string, startTime?: string) {
+    if (this.dialog) {
+      this.dialog.open(CreateTreatmentDialogComponent, {
+        width: '700px',
+        data: {
+          ...(date ? { date } : {}),
+          ...(startTime ? { startTime } : {})
+        }
+      });
+    }
+  }
   changeView(viewName: string) {
     if (this.calendarComponent && this.calendarComponent.getApi) {
       this.calendarComponent.getApi().changeView(viewName);
     }
   }
 
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data?: any) {
+  constructor(
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: any,
+    private dialog?: MatDialog
+  ) {
     // לוגים לאבחון
     if (data) {
       console.log('RoomCalendarComponent dialog data:', data);
@@ -96,10 +116,20 @@ export class RoomCalendarComponent implements OnInit {
     const clickedDate = new Date(arg.dateStr);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    if (clickedDate < today) {
-      alert('תאריך זה חלף / לא ניתן לקבוע פגישה חדשה');
-      return;
+    // if (clickedDate < today) {
+    //   alert('תאריך זה חלף / לא ניתן לקבוע פגישה חדשה');
+    //   return;
+    // }
+    // חילוץ תאריך ושעה
+    const dateTime = arg.dateStr;
+    const [date, timeRaw] = dateTime.split('T');
+    let startTime = '';
+    if (timeRaw) {
+      const match = timeRaw.match(/^(\d{2}:\d{2})/);
+      startTime = match ? match[1] : '';
+      console.log('השעה שנלחצה:', startTime);
     }
+    this.openAddMeetingDialog(date, startTime);
     this.dateSelected.emit(arg);
   }
 }

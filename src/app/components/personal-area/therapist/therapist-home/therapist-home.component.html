@@ -1,8 +1,65 @@
-<div *ngIf="monthlyStats" class="therapist-monthly-stats">
-	<h3>סטטיסטיקה חודשית</h3>
-	<ul>
-		<li>סך שעות טיפול: {{ monthlyStats.total_hours }}</li>
-		<li>סך פגישות: {{ monthlyStats.total_appointments }}</li>
-		<li>סך תשלומים: {{ monthlyStats.total_payments | number:'1.0-2' }} ₪</li>
-	</ul>
+<div class="stats-container">
+  <h2 class="stats-title">📊 סטטיסטיקה חודשית</h2>
+  
+  <div class="stats-grid" *ngIf="monthlyStats">
+    <div class="stat-card hours">
+      <div class="stat-icon">🕐</div>
+      <div class="stat-label">סך שעות טיפול</div>
+      <div class="stat-value">
+        <span>{{ monthlyStats.total_hours }}</span>
+        <span class="stat-unit">שעות</span>
+      </div>
+    </div>
+
+    <div class="stat-card appointments">
+      <div class="stat-icon">📅</div>
+      <div class="stat-label">סך פגישות</div>
+      <div class="stat-value">
+        <span>{{ monthlyStats.total_appointments }}</span>
+        <span class="stat-unit">פגישות</span>
+      </div>
+    </div>
+
+    <div class="stat-card payments">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">סך תשלומים</div>
+      <div class="stat-value">
+        <span>{{ monthlyStats.total_payments | number:'1.0-2' }}</span>
+        <span class="stat-unit">₪</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="stats-grid" *ngIf="!monthlyStats">
+    <div class="stat-card loading">
+      <div class="loading-skeleton"></div>
+    </div>
+    <div class="stat-card loading">
+      <div class="loading-skeleton"></div>
+    </div>
+    <div class="stat-card loading">
+      <div class="loading-skeleton"></div>
+    </div>
+  </div>
+
+  <div class="mini-calendar-container">
+    <app-therapist-calendar [compact]="true"></app-therapist-calendar>
+  </div>
+</div>
+
+<!-- שאר הקומפוננטות שלך -->
+<app-patient-list></app-patient-list>
+
+<div *ngIf="selectedPatient">
+  <app-patient-details
+    [patient]="selectedPatient"
+    (patientUpdated)="onPatientUpdated($event)">
+  </app-patient-details>
+
+  <!-- <app-appointments-list
+    [appointments]="appointments"
+    [totalHours]="totalHours"
+    [totalCost]="totalCost">
+  </app-appointments-list> -->
 </div>

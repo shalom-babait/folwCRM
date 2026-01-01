@@ -209,4 +209,25 @@ export class PatientListComponent implements OnInit, OnDestroy {
   logPatient(patient: any) {
     console.log('Patient:', patient);
   }
+
+  /** מחיקת מטופל */
+  deletePatient(patient: PatientCreationData) {
+    const name = patient.person?.first_name + ' ' + patient.person?.last_name;
+    if (confirm(`האם אתה בטוח שברצונך למחוק את המטופל ${name}? פעולה זו אינה הפיכה!`)) {
+      const patientId = patient.patient?.patient_id;
+      if (!patientId) return;
+      this.isLoading = true;
+      this.patientService.deletePatientFull(patientId).pipe(takeUntil(this.destroy$)).subscribe({
+        next: () => {
+          this.patients = this.patients.filter(p => p.patient?.patient_id !== patientId);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          alert('שגיאה במחיקת מטופל');
+          this.isLoading = false;
+          console.error('Error deleting patient:', err);
+        }
+      });
+    }
+  }
 }

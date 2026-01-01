@@ -10,7 +10,7 @@
   <mat-icon>add</mat-icon>
       </button>
       <div class="search-input-wrapper">
-        <span class="search-icon">🔍</span>
+  <mat-icon class="search-icon">search</mat-icon>
         <input
           type="text"
           [(ngModel)]="searchText"
@@ -59,6 +59,10 @@
             <button mat-menu-item (click)="viewPatientMeetings(patient)">
               <mat-icon>calendar_today</mat-icon>
               <span>רשימת פגישות</span>
+            </button>
+            <button mat-menu-item (click)="deletePatient(patient)" class="delete-patient-btn">
+              <mat-icon color="warn">delete</mat-icon>
+              <span style="color: #c62828;">מחק מטופל</span>
             </button>
           </mat-menu>
         </div>

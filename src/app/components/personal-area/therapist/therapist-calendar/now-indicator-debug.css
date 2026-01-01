@@ -1,0 +1,15 @@
+/* Debug helper: highlight now-indicator for FullCalendar */
+:host ::ng-deep .fc-timegrid-now-indicator {
+  border-top: 3px solid #d32f2f !important;
+  background: #d32f2f !important;
+  height: 2px !important;
+  z-index: 9999 !important;
+}
+:host ::ng-deep .fc-timegrid-now-indicator-arrow {
+  border-color: #d32f2f transparent transparent transparent !important;
+}
+:host ::ng-deep .fc-timegrid-now-indicator, 
+:host ::ng-deep .fc-timegrid-now-indicator-arrow {
+  display: block !important;
+  opacity: 1 !important;
+}

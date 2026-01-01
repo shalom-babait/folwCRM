@@ -22,6 +22,17 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   isLoading = false;
   private destroy$ = new Subject<void>();
 
+  searchText: string = '';
+  get filteredTherapists(): TherapistCreationData[] {
+    if (!this.searchText) {
+      return this.therapists;
+    }
+    const search = this.searchText.trim().toLowerCase();
+    return this.therapists.filter(t =>
+      (t.person.first_name + ' ' + t.person.last_name).toLowerCase().includes(search)
+    );
+  }
+
   constructor(
   private therapistService: TherapistService,
     private dialog: MatDialog
