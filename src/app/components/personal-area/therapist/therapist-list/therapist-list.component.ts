@@ -24,15 +24,6 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   searchText: string = '';
-  get filteredTherapists(): TherapistCreationData[] {
-    if (!this.searchText) {
-      return this.therapists;
-    }
-    const search = this.searchText.trim().toLowerCase();
-    return this.therapists.filter(t =>
-      (t.person.first_name + ' ' + t.person.last_name).toLowerCase().includes(search)
-    );
-  }
 
   constructor(
   private therapistService: TherapistService,
@@ -55,13 +46,21 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   get filteredTherapists(): TherapistCreationData[] {
     let filtered = this.therapists;
 
-    // סינון לפי סטטוס
+    // Filter by status
     if (this.statusFilter === 'active') {
       filtered = filtered.filter(t => t.therapist?.status === 'פעיל');
     } else if (this.statusFilter === 'inactive') {
       filtered = filtered.filter(t => t.therapist?.status !== 'פעיל');
     }
-    // אם 'all' - לא מסננים לפי סטטוס
+    // If 'all', do not filter by status
+
+    // Filter by search text
+    if (this.searchText && this.searchText.trim()) {
+      const search = this.searchText.trim().toLowerCase();
+      filtered = filtered.filter(t =>
+        (t.person.first_name + ' ' + t.person.last_name).toLowerCase().includes(search)
+      );
+    }
 
     return filtered;
   }
