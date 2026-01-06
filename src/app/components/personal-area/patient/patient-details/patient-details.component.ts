@@ -39,7 +39,8 @@ export class PatientDetailsComponent implements OnChanges {
       email: ['', [Validators.email]],
       birth_date: [''],
       address: [''],
-      teudat_zehut: ['']
+      teudat_zehut: [''],
+      status: ['']
     });
   }
   ngOnChanges(): void {
@@ -60,7 +61,8 @@ export class PatientDetailsComponent implements OnChanges {
         email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address,
-        teudat_zehut: this.patient.person.teudat_zehut
+        teudat_zehut: this.patient.person.teudat_zehut,
+        status: this.patient.patient.status || ''
       }, { emitEvent: false });
     }
   }
@@ -75,7 +77,8 @@ export class PatientDetailsComponent implements OnChanges {
         email: this.patient.person.email || '',
         birth_date: this.formatDateForInput(this.getBirthDate()),
         address: this.patient.person.address,
-        teudat_zehut: this.patient.person.teudat_zehut
+        teudat_zehut: this.patient.person.teudat_zehut,
+        status: this.patient.patient.status || ''
       }, { emitEvent: false });
     }
   }
@@ -105,7 +108,8 @@ export class PatientDetailsComponent implements OnChanges {
       },
       patient: {
         ...this.patient.patient,
-        ...this.patientForm.value
+          ...this.patientForm.value,
+          status: this.patientForm.value.status
       }
     };
     // אל תמחק את email - שמור את כל השדות

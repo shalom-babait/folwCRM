@@ -1,0 +1,49 @@
+<button mat-raised-button color="primary" (click)="openAddRatingDialog()">
+  הוסף דירוג
+</button>
+<div *ngIf="loading">טוען דירוגים...</div>
+<div *ngIf="error">{{ error }}</div>
+<div *ngIf="!loading && !error && ratings.length === 0">אין דירוגים להצגה.</div>
+<div *ngIf="!loading && !error && ratings.length > 0">
+	<canvas baseChart
+		[datasets]="lineChartData"
+		[labels]="lineChartLabels"
+		[options]="lineChartOptions"
+		[legend]="lineChartLegend"
+		[type]="lineChartType">
+	</canvas>
+
+	<!-- טבלת דירוגים -->
+		<div>
+					<table class="problem-row ratings-table">
+						<thead>
+							<tr class="header-row">
+								<th class="problem-cell">תאריך</th>
+								<th class="problem-cell">דירוג</th>
+								<th class="problem-cell">הערות</th>
+								<th class="problem-cell">מגמה</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="data-row" *ngFor="let r of sortedRatings; let i = index">
+								<td class="problem-cell">{{ r.rating_date | date:'dd/MM/yyyy' }}</td>
+								<td class="problem-cell">{{ r.score }}</td>
+								<td class="problem-cell">{{ r.notes }}</td>
+								<td class="problem-cell">
+									<ng-container *ngIf="i > 0">
+										<ng-container *ngIf="sortedRatings[i-1].score < r.score">
+											<mat-icon color="warn">trending_down</mat-icon>
+										</ng-container>
+										<ng-container *ngIf="sortedRatings[i-1].score > r.score">
+											<mat-icon style="color: #4CAF50;">trending_up</mat-icon>
+										</ng-container>
+										<ng-container *ngIf="sortedRatings[i-1].score === r.score">
+											<mat-icon style="color: #222;">trending_flat</mat-icon>
+										</ng-container>
+									</ng-container>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+		</div>
+</div>

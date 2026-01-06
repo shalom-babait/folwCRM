@@ -30,7 +30,7 @@ input.report-value:focus {
 }
 /* עיצוב כפתור עריכה כמו ברשימות */
 .main-action-btn {
-  background: #034752;
+  background: #4A7A6D;
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 0.5rem 1rem;

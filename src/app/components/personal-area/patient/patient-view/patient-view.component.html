@@ -34,14 +34,19 @@
           <span>פרטי מטופל</span>
         </button>
 
-        <button class="tab-link" [class.active]="activeTab === 'mail'" (click)="setActiveTab('mail')">
-          <mat-icon>mail</mat-icon>
-          <span>דואר</span>
+
+        <button class="tab-link" [class.active]="activeTab === 'treatmentPlan'" (click)="setActiveTab('treatmentPlan')">
+          <mat-icon>assignment</mat-icon>
+          <span>תוכנית טיפול</span>
         </button>
 
         <button class="tab-link" [class.active]="activeTab === 'treatments'" (click)="setActiveTab('treatments')">
           <mat-icon>medical_services</mat-icon>
           <span>טיפולים</span>
+        </button>
+        <button class="tab-link" [class.active]="activeTab === 'problems'" (click)="setActiveTab('problems')">
+          <mat-icon>report_problem</mat-icon>
+          <span>בעיות של מטופל</span>
         </button>
 
         <button class="tab-link" [class.active]="activeTab === 'payments'" (click)="setActiveTab('payments')">
@@ -87,13 +92,12 @@
           </app-patient-details>
         </div>
 
-        <!-- דואר -->
-        <div *ngIf="activeTab === 'mail'" class="mail-view">
-          <div class="mail-card">
-            <h3>התכתבויות</h3>
-          </div>
-        </div>
 
+
+        <!-- בעיות של מטופל -->
+        <div *ngIf="activeTab === 'problems'" class="problems-view">
+          <app-patient-problem-table [patientId]="selectedPatient!.patient.patient_id || 0"></app-patient-problem-table>
+        </div>
         <!-- תשלומים -->
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">

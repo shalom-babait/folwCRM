@@ -112,6 +112,10 @@ import { AddReportsComponent } from './components/personal-area/company-manager/
 import { ReportDetailsComponent } from './components/personal-area/company-manager/reports/report-details/report-details.component';
 import { IncomeReportComponent } from './components/personal-area/company-manager/reports/income-report/income-report.component';
 import { UserSettingsComponent } from './components/personal-area/company-manager/user-settings/user-settings.component';
+import { AddPatientProblemComponent } from './components/personal-area/patient/PatientProblem/add-patient-problem/add-patient-problem.component';
+import { PatientProblemTableComponent } from './components/personal-area/patient/PatientProblem/patient-problem-table/patient-problem-table.component';
+import { AddPatientProblemRatingComponent } from './components/personal-area/patient/PatientProblem/add-patient-problem-rating/add-patient-problem-rating.component';
+import { PatientProblemRatingListComponent } from './components/personal-area/patient/PatientProblem/patient-problem-rating-list/patient-problem-rating-list.component';
 
 
 @NgModule({
@@ -194,6 +198,10 @@ import { UserSettingsComponent } from './components/personal-area/company-manage
   ReportDetailsComponent,
   IncomeReportComponent,
   UserSettingsComponent,
+  AddPatientProblemComponent,
+  PatientProblemTableComponent,
+  AddPatientProblemRatingComponent,
+  PatientProblemRatingListComponent,
   ],
   imports: [
     NgChartsModule,

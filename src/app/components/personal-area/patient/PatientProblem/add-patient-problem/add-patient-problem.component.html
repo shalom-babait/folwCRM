@@ -1,0 +1,41 @@
+<div class="create-problem-dialog">
+	<h2 class="dialog-title">הוספת בעיה חדשה למטופל</h2>
+	<form class="input-dialog" [formGroup]="problemForm" (ngSubmit)="onSubmit()">
+		<!-- שם בעיה -->
+		<div class="form-field">
+			<label for="title">בעיה *</label>
+			<input id="title" type="text" formControlName="title" required />
+			<div class="error-message" *ngIf="isFieldInvalid('title')">
+				{{ getFieldError('title', 'בעיה') }}
+			</div>
+		</div>
+
+
+
+		<!-- סטטוס -->
+		<div class="form-field">
+			<label for="status">סטטוס *</label>
+			<select id="status" formControlName="status" required>
+				<option value="active">פעילה</option>
+				<option value="resolved">נסגרה</option>
+			</select>
+			<div class="error-message" *ngIf="isFieldInvalid('status')">
+				{{ getFieldError('status', 'סטטוס') }}
+			</div>
+		</div>
+
+
+
+		<!-- הערות -->
+		<div class="form-field">
+			<label for="notes">הערות</label>
+			<textarea id="notes" formControlName="notes"></textarea>
+		</div>
+
+		<!-- פעולות -->
+		<div class="dialog-actions">
+			<button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+			<button type="submit" class="save-button" [disabled]="!problemForm.valid || isSubmitting">שמירה</button>
+		</div>
+	</form>
+</div>
