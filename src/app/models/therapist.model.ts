@@ -13,6 +13,7 @@ export interface TherapistCreationData {
 export interface TherapistData {
   // נתונים להצגת מטפל קיים
   therapist_id?: number;
+  status?: 'פעיל' | 'לא פעיל' | 'בהמתנה';
   // specialization?: string;
   // experience_years?: number;
 }

@@ -1,3 +1,28 @@
+/* ימים שעברו בלוח השנה - רקע תכלת בהיר */
+.fc-day-past,
+.fc-daygrid-day-past,
+.fc-timegrid-col.fc-past {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+}
+/* עיצוב לוח שנה קטן */
+.mini-calendar {
+  max-width: 340px;
+  min-width: 220px;
+  font-size: 0.85em;
+  margin: 0 auto;
+}
+.mini-calendar .calendar-wrapper,
+.mini-calendar full-calendar {
+  min-width: 220px !important;
+  width: 100% !important;
+  max-width: 340px !important;
+}
+.mini-calendar .add-meeting-btn {
+  font-size: 0.9em;
+  padding: 0.3em 0.7em;
+  margin-bottom: 0.5em;
+}
 
 /* Make parent container flex and fill viewport minus header */
 :host {
@@ -72,7 +97,8 @@ full-calendar {
   letter-spacing: 1px;
   text-shadow: 0 1px 0 #fff;
 }
-.fc-button {
+/* עיצוב כפתור "היום" בסגנון Google Calendar */
+.fc-button, .fc-todayButton-button {
   background: #fff;
   color: #1976d2;
   border: 1.5px solid #1976d2;
@@ -84,7 +110,7 @@ full-calendar {
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
   transition: background 0.2s, color 0.2s;
 }
-.fc-button:hover, .fc-button.fc-button-active {
+.fc-button:hover, .fc-button.fc-button-active, .fc-todayButton-button:hover, .fc-todayButton-button.fc-button-active {
   background: #1976d2;
   color: #fff;
   border-color: #1976d2;

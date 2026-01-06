@@ -17,10 +17,13 @@ export class TherapistListComponent implements OnInit, OnDestroy {
   @Output() therapistSelected = new EventEmitter<TherapistCreationData>();
   // להצגה: מערך מטפלים קיימים
   therapists: TherapistCreationData[] = [];
+  statusFilter: 'all' | 'active' | 'inactive' = 'active';
   selectedTherapistId: number | null = null;
   secretaryId: number = 1; // שנה לפי המזכיר המחובר
   isLoading = false;
   private destroy$ = new Subject<void>();
+
+  searchText: string = '';
 
   constructor(
   private therapistService: TherapistService,
@@ -38,6 +41,28 @@ export class TherapistListComponent implements OnInit, OnDestroy {
     this.therapists = [];
     this.selectedTherapistId = null;
     this.isLoading = false;
+  }
+
+  get filteredTherapists(): TherapistCreationData[] {
+    let filtered = this.therapists;
+
+    // Filter by status
+    if (this.statusFilter === 'active') {
+      filtered = filtered.filter(t => t.therapist?.status === 'פעיל');
+    } else if (this.statusFilter === 'inactive') {
+      filtered = filtered.filter(t => t.therapist?.status !== 'פעיל');
+    }
+    // If 'all', do not filter by status
+
+    // Filter by search text
+    if (this.searchText && this.searchText.trim()) {
+      const search = this.searchText.trim().toLowerCase();
+      filtered = filtered.filter(t =>
+        (t.person.first_name + ' ' + t.person.last_name).toLowerCase().includes(search)
+      );
+    }
+
+    return filtered;
   }
 
   loadTherapists() {

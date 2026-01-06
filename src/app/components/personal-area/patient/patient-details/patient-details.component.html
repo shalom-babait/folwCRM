@@ -1,7 +1,17 @@
 <div class="report-card" dir="rtl">
   <div *ngIf="!isEditing">
     <div class="report-header">
-      <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
+      <h3>מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}
+        <span *ngIf="patient.patient.status"
+              class="patient-status-box"
+              [ngClass]="{
+                'status-active': patient.patient.status === 'פעיל',
+                'status-inactive': patient.patient.status === 'לא פעיל',
+                'status-pending': patient.patient.status === 'בהמתנה'
+              }">
+          {{ patient.patient.status }}
+        </span>
+      </h3>
   <button class="main-action-btn" (click)="startEdit()" title="עריכה">
     <mat-icon>edit</mat-icon>
   </button>
@@ -39,7 +49,19 @@
   </div>
   <form *ngIf="isEditing" [formGroup]="patientForm" class="report-card">
   <div class="report-header">
-      <h3>עריכת מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}</h3>
+      <h3 style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span>
+          עריכת מטופל: {{ patient.person.first_name }} {{ patient.person.last_name }}
+        </span>
+        <mat-form-field appearance="outline" style="min-width: 110px; margin: 0;">
+          <mat-label>סטטוס</mat-label>
+          <mat-select formControlName="status" [value]="patient.patient.status">
+            <mat-option value="פעיל">פעיל</mat-option>
+            <mat-option value="לא פעיל">לא פעיל</mat-option>
+            <mat-option value="בהמתנה">בהמתנה</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </h3>
       <button class="main-action-btn" (click)="cancelEdit()" title="ביטול">
         <mat-icon>close</mat-icon>
       </button>

@@ -1,0 +1,39 @@
+<form [formGroup]="settingsForm" class="settings-page">
+
+  <!-- שדות מטופל -->
+  <h3>שדות מטופל</h3>
+  <div formGroupName="patientFields" class="settings-section">
+    <label class="settings-label"><input type="checkbox" formControlName="firstName"> שם פרטי</label>
+    <label class="settings-label"><input type="checkbox" formControlName="lastName"> שם משפחה</label>
+    <label class="settings-label"><input type="checkbox" formControlName="idNumber"> תעודת זהות</label>
+    <label class="settings-label"><input type="checkbox" formControlName="phone"> טלפון</label>
+    <label class="settings-label"><input type="checkbox" formControlName="email"> אימייל</label>
+  </div>
+
+  <hr>
+
+  <!-- מודולים -->
+  <h3>מודולים במערכת</h3>
+  <div formGroupName="modules" class="settings-section">
+    <label class="settings-label"><input type="checkbox" formControlName="calendar"> יומן</label>
+    <label class="settings-label"><input type="checkbox" formControlName="rooms"> חדרים</label>
+    <label class="settings-label"><input type="checkbox" formControlName="followUps"> מעקבים</label>
+    <label class="settings-label"><input type="checkbox" formControlName="reports"> דוחות</label>
+  </div>
+
+  <hr>
+
+  <!-- דף הבית -->
+  <h3>דף הבית</h3>
+  <div formGroupName="dashboard" class="settings-section">
+    <label class="settings-label"><input type="checkbox" formControlName="todayAppointments"> טיפולים היום</label>
+    <label class="settings-label"><input type="checkbox" formControlName="alerts"> התראות</label>
+    <label class="settings-label"><input type="checkbox" formControlName="quickActions"> פעולות מהירות</label>
+  </div>
+
+  <hr>
+
+  <button type="button" (click)="save()">
+    שמור הגדרות
+  </button>
+</form>

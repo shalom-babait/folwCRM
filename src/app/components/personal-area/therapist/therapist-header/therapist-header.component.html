@@ -57,7 +57,7 @@
       </div>
       <div class="menu-divider"></div>
       <ul class="profile-menu-items">
-        <li (click)="goToSettings()">
+        <li (click)="sectionChange.emit('settings'); showProfileMenu = false;">
           <mat-icon class="menu-icon">settings</mat-icon>
           <span>הגדרות</span>
         </li>

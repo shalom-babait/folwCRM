@@ -1,3 +1,13 @@
+
+<div class="view-switcher">
+  <button mat-icon-button [color]="viewMode === 'chart' ? 'primary' : ''" (click)="viewMode = 'chart'" aria-label="הצג גרף">
+    <mat-icon>show_chart</mat-icon>
+  </button>
+  <button mat-icon-button [color]="viewMode === 'table' ? 'primary' : ''" (click)="viewMode = 'table'" aria-label="הצג טבלה">
+    <mat-icon>table_chart</mat-icon>
+  </button>
+</div>
+
 <div class="filters">
   <select [(ngModel)]="filterType" (change)="loadReport()" class="styled-select">
     <option value="month">חודש</option>
@@ -11,21 +21,37 @@
     <button mat-raised-button (click)="loadReport()">הצג</button>
   </div>
 </div>
-<h3>הכנסות מטיפולים</h3>
-<table class="income-table">
-  <thead>
-    <tr>
-      <th>שם לקוח</th>
-      <th>סכום הכנסה</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let row of rows">
-      <td>{{ row.name }}</td>
-      <td>₪{{ row.amount }}</td>
-    </tr>
-  </tbody>
-</table>
-<div class="total">
-  סך הכל הכנסות מטיפולים: <strong>₪{{ totalIncome }}</strong>
+
+<div class="income-report-form-area">
+  <h3>הכנסות מטיפולים</h3>
+
+  <ng-container *ngIf="viewMode === 'table'; else chartBlock">
+    <table class="income-table">
+      <thead>
+        <tr>
+          <th>שם לקוח</th>
+          <th>סכום הכנסה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows">
+          <td>{{ row.name }}</td>
+          <td>₪{{ row.amount }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="total">
+      סך הכל הכנסות מטיפולים: <strong>₪{{ totalIncome }}</strong>
+    </div>
+  </ng-container>
+  <ng-template #chartBlock>
+    <div class="chart-container">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [type]="chartType"
+        [options]="chartOptions">
+      </canvas>
+    </div>
+  </ng-template>
 </div>

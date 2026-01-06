@@ -1,0 +1,53 @@
+<div class="create-problem-rating-dialog">
+    <h2 class="dialog-title" style="margin: 0;">הוספת דירוג לבעיה</h2>
+	<div *ngIf="data && data.last_score != null" class="last-rating-display" style="flex-direction: column; align-items: center; gap: 0; margin-bottom: 12px;">
+	<span style="font-size: 1rem; color: #2A5448; margin-bottom: 2px;">דירוג אחרון:</span>
+		<span class="star-rating" style="vertical-align: middle; margin-bottom: 2px;">
+			<ng-container *ngFor="let star of stars; let i = index">
+				<span class="star filled" *ngIf="i < data.last_score">★</span><span class="star" *ngIf="i >= data.last_score">★</span>
+			</ng-container>
+		</span>
+	<span style="font-size: 1.1rem; font-weight: bold; color: #2A5448;">{{ data.last_score }}</span>
+	</div>
+		<form class="input-dialog" [formGroup]="ratingForm" (ngSubmit)="onSubmit()">
+			<!-- תאריך דירוג -->
+			<div class="form-field">
+				<label for="rating_date">תאריך דירוג *</label>
+				<input id="rating_date" type="date" formControlName="rating_date" required />
+				<div class="error-message" *ngIf="isFieldInvalid('rating_date')">
+					{{ getFieldError('rating_date', 'תאריך דירוג') }}
+				</div>
+			</div>
+
+			<!-- דירוג -->
+			<div class="form-field">
+				<label for="score">דירוג (1-10) *</label>
+				<input id="score" type="number" min="1" max="10" formControlName="score" required (input)="onScoreInput()" />
+						<div class="star-rating">
+							<ng-container *ngFor="let star of stars; let i = index">
+								<span (click)="setScore(i+1)"
+									class="star"
+									[class.filled]="(ratingForm.get('score')?.value || 0) >= i+1"
+									[class.unfilled]="(ratingForm.get('score')?.value || 0) < i+1">
+									★
+								</span>
+							</ng-container>
+						</div>
+				<div class="error-message" *ngIf="isFieldInvalid('score')">
+					{{ getFieldError('score', 'דירוג') }}
+				</div>
+			</div>
+
+			<!-- הערות -->
+			<div class="form-field">
+				<label for="notes">הערות</label>
+				<textarea id="notes" formControlName="notes"></textarea>
+			</div>
+
+			<!-- פעולות -->
+			<div class="dialog-actions">
+				<button type="button" class="cancel-button" (click)="onCancel()">ביטול</button>
+				<button type="submit" class="save-button" [disabled]="!ratingForm.valid || isSubmitting">שמירה</button>
+			</div>
+		</form>
+</div>

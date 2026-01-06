@@ -1,0 +1,58 @@
+<div class="patient-problem-list-container">
+	<!-- שורת חיפוש וכפתור הוספה -->
+	<div class="search-container">
+		<div class="search-actions-row">
+			<button class="icon-button" mat-icon-button (click)="openCreateProblemDialog()">
+				<mat-icon style="color: #BB7E2B;">add</mat-icon>
+			</button>
+			<input type="text" placeholder="חיפוש לפי שם בעיה" class="search-input" [(ngModel)]="searchTerm">
+		</div>
+	</div>
+
+	<!-- כותרות -->
+	<div class="problem-row header-row">
+		<div class="problem-cell">שם בעיה</div>
+		<div class="problem-cell">תיאור</div>
+		<div class="problem-cell">תאריך עדכון אחרון</div>
+		<div class="problem-cell">פעולות</div>
+	</div>
+
+	<!-- נתונים -->
+	<ng-container *ngIf="filteredProblems.length > 0; else noProblems">
+		<div class="scrollable-rows">
+			<div class="problem-row data-row" *ngFor="let p of filteredProblems">
+				<div class="problem-cell">{{ p.title }}</div>
+				<div class="problem-cell">{{ p.description }}</div>
+				<div class="problem-cell">{{ p.created_at | date:'dd/MM/yyyy' }}</div>
+				<div class="problem-cell actions-cell">
+					<button mat-icon-button [matMenuTriggerFor]="problemMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+					<mat-menu #problemMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+						<button mat-menu-item (click)="editProblem(p)">
+							<mat-icon>edit</mat-icon>
+							<span>ערוך</span>
+						</button>
+						<button mat-menu-item (click)="addProblemRating(p)">
+							<mat-icon>star_rate</mat-icon>
+							<span>הוסף דירוג</span>
+						</button>
+						<button mat-menu-item (click)="showRatings(p)">
+							<mat-icon>bar_chart</mat-icon>
+							<span>הצג דירוגים</span>
+						</button>
+						<button mat-menu-item (click)="p.patient_problem_id && deleteProblem(p.patient_problem_id)" color="warn">
+							<mat-icon>delete</mat-icon>
+							<span>מחק</span>
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-template #noProblems>
+		<div class="no-problems-message">
+			אין עדיין בעיות. לחץ על הוספה להוספת בעיה.
+		</div>
+	</ng-template>
+</div>

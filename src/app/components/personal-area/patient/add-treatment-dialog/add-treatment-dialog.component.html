@@ -23,6 +23,7 @@
     </div>
 
     <div class="input-dialog">
+     
       <!-- מקום (חדר) - מוצג רק אם פרונטלי -->
       <div class="form-field" *ngIf="treatmentForm.get('meeting_type')?.value === 'frontal'">
         <label for="place">מקום</label>
@@ -72,7 +73,19 @@
           חובה לבחור שעת סיום תקינה
         </div>
       </div>
-
+ <!-- דרופדאון בחירת מטופל אם לא הועבר patient_id -->
+      <div class="form-field" *ngIf="!data?.patient_id">
+        <label for="patient_id">בחר מטופל</label>
+        <select id="patient_id" formControlName="patient_id" required>
+          <option [value]="null">בחר מטופל</option>
+          <option *ngFor="let p of patients" [value]="p.patient.patient_id">
+            {{ p.person.first_name }} {{ p.person.last_name }}
+          </option>
+        </select>
+        <div class="error-message" *ngIf="treatmentForm.get('patient_id')?.invalid && treatmentForm.get('patient_id')?.touched">
+          חובה לבחור מטופל
+        </div>
+      </div>
       <!-- סוג טיפול -->
       <div class="form-field">
         <label for="type">סוג טיפול</label>
