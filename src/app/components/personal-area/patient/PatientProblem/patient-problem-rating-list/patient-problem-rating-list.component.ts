@@ -82,13 +82,15 @@ export class PatientProblemRatingListComponent implements OnInit {
       return `${day}/${month}/${year}`;
     });
 
-    // פונקציה שמחזירה צבע בין צהוב לאדום לפי ערך (1=צהוב, 10=אדום)
+    // פונקציה שמחזירה צבע בין ירוק לאדום לפי ערך (1=ירוק, 10=אדום)
     function getColor(score: number): string {
-      // 1 -> yellow (#FFFF00), 10 -> red (#FF0000)
+      // 1 -> green (#4CAF50), 10 -> red (#FF0000)
+      // נבנה גרדיאנט RGB בין ירוק לאדום
       const percent = (score - 1) / 9;
-      const r = 255;
-      const g = Math.round(255 * (1 - percent));
-      const b = 0;
+      // ירוק: 76, 175, 80 | אדום: 255, 0, 0
+      const r = Math.round(76 + (255 - 76) * percent);
+      const g = Math.round(175 + (0 - 175) * percent);
+      const b = Math.round(80 + (0 - 80) * percent);
       return `rgb(${r},${g},${b})`;
     }
 
@@ -100,17 +102,7 @@ export class PatientProblemRatingListComponent implements OnInit {
         data: dataArr,
         label: 'דירוג',
         fill: false,
-        borderColor: function(ctx: any) {
-          // צבע קו משתנה בין נקודות (גרדיאנט)
-          const chart = ctx.chart;
-          const {ctx: canvasCtx, chartArea} = chart;
-          if (!chartArea) return '#FF0000';
-          // גרדיאנט לינארי בין צהוב לאדום
-          const gradient = canvasCtx.createLinearGradient(chartArea.left, 0, chartArea.right, 0);
-          gradient.addColorStop(0, '#FFFF00');
-          gradient.addColorStop(1, '#FF0000');
-          return gradient;
-        },
+        borderColor: '#2A5448',
         backgroundColor: pointColors,
         pointBackgroundColor: pointColors,
         pointBorderColor: pointColors,

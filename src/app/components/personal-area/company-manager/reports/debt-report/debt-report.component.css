@@ -1,0 +1,49 @@
+
+.debt-report-form-area {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+	padding: 24px;
+}
+
+.debt-table {
+	width: 100%;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+	border-collapse: separate;
+	border-spacing: 0;
+	direction: rtl;
+	margin-top: 16px;
+	overflow: hidden;
+}
+
+.debt-table th, .debt-table td {
+	text-align: right;
+	padding: 12px 16px;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 1.05em;
+}
+
+.debt-table th {
+	background: #f8f8f8;
+	font-weight: bold;
+	color: #222;
+}
+
+.debt-table tr:last-child td {
+	border-bottom: none;
+}
+
+.debt-table tbody tr:hover {
+	background: #f5faff;
+}
+
+.total {
+	margin-top: 18px;
+	font-size: 1.15em;
+	text-align: right;
+	direction: rtl;
+	font-weight: bold;
+	color: #c0392b;
+}

@@ -49,18 +49,10 @@
   </div>
 </div>
 
-<!-- שאר הקומפוננטות שלך -->
-<app-patient-list></app-patient-list>
-
-<div *ngIf="selectedPatient">
-  <app-patient-details
-    [patient]="selectedPatient"
-    (patientUpdated)="onPatientUpdated($event)">
-  </app-patient-details>
 
   <!-- <app-appointments-list
     [appointments]="appointments"
     [totalHours]="totalHours"
     [totalCost]="totalCost">
   </app-appointments-list> -->
-</div>
+<!-- </div> -->

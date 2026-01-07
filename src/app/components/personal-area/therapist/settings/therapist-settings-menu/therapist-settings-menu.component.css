@@ -1,0 +1,72 @@
+.settings-layout {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	gap: 32px;
+	align-items: flex-start;
+	direction: rtl;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.settings-menu {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.12);
+	padding: 32px 24px;
+	min-width: 240px;
+	max-width: 320px;
+}
+
+.settings-view {
+	background: #f7faf9;
+	border-radius: 16px;
+	min-height: 500px;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.08);
+	padding: 40px 32px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.settings-menu {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.12);
+	direction: rtl;
+}
+
+.settings-menu h2 {
+	font-size: 1.5rem;
+	color: #2A5448;
+	margin-bottom: 24px;
+	text-align: right;
+}
+
+.settings-menu ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.settings-menu li {
+	margin-bottom: 16px;
+}
+
+.settings-menu button {
+	width: 100%;
+	background: #2A5448;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 12px 0;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background 0.2s, box-shadow 0.2s;
+	box-shadow: 0 1px 4px rgba(42, 84, 72, 0.08);
+}
+
+.settings-menu button:hover {
+	background: #1e3a32;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.16);
+}
