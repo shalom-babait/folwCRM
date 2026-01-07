@@ -10,6 +10,7 @@ import { AddReportsComponent } from '../add-reports/add-reports.component';
   ]
 })
 export class ReportsListComponent {
+  selectedReport: string | null = null;
   @Output() reportSelected = new EventEmitter<{ id: number, name: string }>();
   reports: { id: number, name: string }[] = [
     { id: 1, name: 'דוח הכנסות' },
@@ -59,9 +60,17 @@ export class ReportsListComponent {
     }
   }
 
+
   viewReportDetails(report: { id: number, name: string }): void {
     this.selectedReportId = report.id;
+    this.selectedReport = null;
     this.reportSelected.emit(report);
+  }
+
+  selectDebtsReport(): void {
+    this.selectedReport = 'debts';
+    this.selectedReportId = null;
+  this.reportSelected.emit({ id: -1, name: 'דוח חובות פתוחות' });
   }
 
   downloadReport(report: { id: number, name: string }): void {

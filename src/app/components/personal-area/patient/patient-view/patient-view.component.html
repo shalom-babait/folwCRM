@@ -78,6 +78,11 @@
       <!-- תוכן הטאבים -->
       <div class="tab-content">
 
+        <!-- תוכנית טיפול -->
+        <div *ngIf="activeTab === 'treatmentPlan'" class="treatment-plan-view">
+          <app-task-list [patientId]="selectedPatient.patient?.patient_id ?? null"></app-task-list>
+        </div>
+
         <!-- טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">

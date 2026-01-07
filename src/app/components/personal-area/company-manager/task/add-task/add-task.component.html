@@ -1,0 +1,104 @@
+<div class="create-treatment-dialog" dir="rtl">
+  <h2 class="dialog-title">הוספת משימה חדשה</h2>
+
+  <form class="input-dialog" [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+
+    <!-- כותרת -->
+    <div class="form-field">
+      <label for="title">כותרת משימה *</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="הכנס כותרת משימה"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('title')">
+        יש להזין כותרת
+      </div>
+    </div>
+
+    <!-- שיוך למטופל -->
+    <div class="form-field">
+      <label for="patient_id">מטופל (אופציונלי)</label>
+      <input
+        type="number"
+        id="patient_id"
+        formControlName="patient_id"
+        placeholder="מזהה מטופל"
+      >
+    </div>
+
+    <!-- מבצע המשימה -->
+    <div class="form-field">
+      <label for="assigned_to_user_id">מי מבצע את המשימה *</label>
+      <input
+        type="number"
+        id="assigned_to_user_id"
+        formControlName="assigned_to_user_id"
+        placeholder="מזהה משתמש"
+      >
+      <div class="error-message" *ngIf="isFieldInvalid('assigned_to_user_id')">
+        יש לבחור מבצע משימה
+      </div>
+    </div>
+
+    <!-- סטטוס -->
+    <div class="form-field">
+      <label for="status">סטטוס *</label>
+      <select id="status" formControlName="status">
+        <option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- עדיפות -->
+    <div class="form-field">
+      <label for="priority">עדיפות</label>
+      <select id="priority" formControlName="priority">
+        <option [ngValue]="null">ללא</option>
+        <option *ngFor="let p of priorityOptions" [value]="p.value">
+          {{ p.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- תאריך יעד -->
+    <div class="form-field">
+      <label for="due_date">תאריך יעד</label>
+      <input type="date" id="due_date" formControlName="due_date">
+    </div>
+
+    <!-- תיאור - שתי עמודות -->
+    <div class="form-field" style="grid-column: 1 / -1;">
+      <label for="description">תיאור משימה</label>
+      <textarea
+        id="description"
+        rows="3"
+        formControlName="description"
+        placeholder="הכנס תיאור נוסף למשימה"
+      ></textarea>
+    </div>
+
+    <!-- כפתורי פעולה -->
+    <div class="dialog-actions">
+      <button
+        type="button"
+        class="cancel-button"
+        (click)="onCancel()"
+        [disabled]="isSubmitting"
+      >
+        ביטול
+      </button>
+
+      <button
+        type="submit"
+        class="save-button"
+        [disabled]="taskForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'שומר...' : 'שמור משימה' }}
+      </button>
+    </div>
+
+  </form>
+</div>

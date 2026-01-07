@@ -1,0 +1,104 @@
+<div class="task-list">
+  <div class="task-list-header">
+    <button mat-raised-button color="primary" (click)="showAddTaskCard()" *ngIf="!addMode">
+      <mat-icon>add</mat-icon>
+      הוספת משימה
+    </button>
+
+  <!-- כרטיס הוספת משימה -->
+  <div class="task-card add-task-card" *ngIf="addMode" [formGroup]="addTaskForm" [style.borderRightColor]="addTaskForm.get('color')?.value || '#FFD54F'">
+    <div class="task-header">
+      <input class="task-title-input" formControlName="title" placeholder="כותרת משימה *" />
+      <div class="task-actions-group">
+        <select class="custom-select" formControlName="status">
+          <option value="open">פתוחה</option>
+          <option value="in_progress">בטיפול</option>
+          <option value="completed">הושלמה</option>
+          <option value="cancelled">בוטלה</option>
+        </select>
+      </div>
+    </div>
+    <textarea class="description-input" formControlName="description" placeholder="תיאור משימה"></textarea>
+    <div class="task-meta">
+      <input type="date" formControlName="due_date" />
+      <select class="custom-select" formControlName="priority">
+        <option value="low">נמוכה</option>
+        <option value="medium">בינונית</option>
+        <option value="high">גבוהה</option>
+      </select>
+    <input type="color" formControlName="color" title="בחר צבע למשימה" style="margin-right:8px; width:32px; height:32px; border:none; background:none; cursor:pointer; vertical-align:middle;"
+  (input)="onAddTaskColorChange($event)" />
+    </div>
+    <div class="add-task-actions">
+      <button mat-stroked-button color="primary" (click)="saveNewTask()" [disabled]="addTaskForm.invalid">שמור</button>
+      <button mat-button (click)="cancelAddTask()">ביטול</button>
+    </div>
+  </div>
+  </div>
+
+
+  <div
+    class="task-card"
+    *ngFor="let task of tasks"
+    [style.borderRightColor]="task.color || '#ccc'"
+  >
+    <ng-container *ngIf="editTaskId === task.task_id && editTaskForm; else displayTask">
+      <form [formGroup]="editTaskForm" (ngSubmit)="saveEditTask(task)" [style.borderRightColor]="editTaskForm.get('color')?.value || task.color || '#FFD54F'" class="task-card">
+        <div class="task-header">
+          <input class="task-title-input" formControlName="title" placeholder="כותרת משימה *" />
+          <div class="task-actions-group">
+            <select class="custom-select" formControlName="status">
+              <option value="open">פתוחה</option>
+              <option value="in_progress">בטיפול</option>
+              <option value="completed">הושלמה</option>
+              <option value="cancelled">בוטלה</option>
+            </select>
+          </div>
+        </div>
+        <textarea class="description-input" formControlName="description" placeholder="תיאור משימה"></textarea>
+        <div class="task-meta">
+          <input type="date" formControlName="due_date" />
+          <select class="custom-select" formControlName="priority">
+            <option value="low">נמוכה</option>
+            <option value="medium">בינונית</option>
+            <option value="high">גבוהה</option>
+          </select>
+          <input type="color" formControlName="color" title="בחר צבע למשימה" style="margin-right:8px; width:32px; height:32px; border:none; background:none; cursor:pointer; vertical-align:middle;"
+            (input)="onEditTaskColorChange($event)" />
+        </div>
+        <div class="add-task-actions">
+          <button mat-stroked-button color="primary" type="submit" [disabled]="editTaskForm.invalid">שמור</button>
+          <button mat-button type="button" (click)="cancelEditTask()">ביטול</button>
+        </div>
+      </form>
+    </ng-container>
+    <ng-template #displayTask>
+      <div class="task-header">
+        <h3 class="task-title">{{ task.title }}</h3>
+        <div class="task-actions-group">
+          <span class="status" [class]="task.status">
+            {{ getStatusLabel(task.status) }}
+          </span>
+          <button mat-icon-button class="edit-btn" (click)="editTask(task)" title="ערוך">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button class="delete-btn" (click)="deleteTask(task)" title="מחק">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <p class="description" *ngIf="task.description">
+        {{ task.description }}
+      </p>
+      <div class="task-meta">
+        <span *ngIf="task.due_date">
+          יעד: {{ task.due_date | date:'dd/MM/yyyy' }}
+        </span>
+        <span *ngIf="task.priority">
+          עדיפות: {{ task.priority }}
+        </span>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

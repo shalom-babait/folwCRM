@@ -116,6 +116,11 @@ import { AddPatientProblemComponent } from './components/personal-area/patient/P
 import { PatientProblemTableComponent } from './components/personal-area/patient/PatientProblem/patient-problem-table/patient-problem-table.component';
 import { AddPatientProblemRatingComponent } from './components/personal-area/patient/PatientProblem/add-patient-problem-rating/add-patient-problem-rating.component';
 import { PatientProblemRatingListComponent } from './components/personal-area/patient/PatientProblem/patient-problem-rating-list/patient-problem-rating-list.component';
+import { TherapistSettingsMenuComponent } from './components/personal-area/therapist/settings/therapist-settings-menu/therapist-settings-menu.component';
+import { TherapistSettingsViewComponent } from './components/personal-area/therapist/settings/therapist-settings-view/therapist-settings-view.component';
+import { AddTaskComponent } from './components/personal-area/company-manager/task/add-task/add-task.component';
+import { TaskListComponent } from './components/personal-area/company-manager/task/task-list/task-list.component';
+import { DebtReportComponent } from './components/personal-area/company-manager/reports/debt-report/debt-report.component';
 
 
 @NgModule({
@@ -202,6 +207,11 @@ import { PatientProblemRatingListComponent } from './components/personal-area/pa
   PatientProblemTableComponent,
   AddPatientProblemRatingComponent,
   PatientProblemRatingListComponent,
+  TherapistSettingsMenuComponent,
+  TherapistSettingsViewComponent,
+  AddTaskComponent,
+  TaskListComponent,
+  DebtReportComponent,
   ],
   imports: [
     NgChartsModule,

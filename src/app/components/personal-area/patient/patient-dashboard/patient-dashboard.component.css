@@ -1,6 +1,6 @@
 /* patient-dashboard.component.css */
+
 .patient-area-container {
-    max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
     font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
   
   .patient-area-content {
     display: grid;
-    grid-template-columns: 350px 1fr;
+    /* grid-template-columns: 350px 1fr; */
     gap: 2rem;
     align-items: start;
   }

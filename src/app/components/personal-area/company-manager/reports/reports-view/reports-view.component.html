@@ -3,6 +3,7 @@
     <app-reports-list (reportSelected)="onReportSelected($event)"></app-reports-list>
   </div>
   <div class="report-details-panel">
-    <app-report-details [report]="selectedReport"></app-report-details>
+    <app-debt-report *ngIf="selectedReport?.id === -1"></app-debt-report>
+    <app-report-details *ngIf="selectedReport?.id !== -1" [report]="selectedReport"></app-report-details>
   </div>
 </div>

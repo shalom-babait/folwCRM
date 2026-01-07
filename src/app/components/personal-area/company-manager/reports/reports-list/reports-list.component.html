@@ -20,7 +20,14 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
 
-    <!-- רשימת דוחות -->
+    <!-- דוח חובות פתוחות -->
+  <div class="list-item-card" (click)="selectDebtsReport()" [class.selected]="selectedReport === 'debts'">
+      <div class="item-info">
+        <span class="item-name">דוח חובות פתוחות</span>
+      </div>
+    </div>
+
+    <!-- רשימת דוחות קיימים (אם יש) -->
     <div *ngIf="!isLoading && reports.length > 0">
       <div 
         class="list-item-card" 
@@ -56,5 +63,6 @@
       <p>אין דוחות כרגע</p>
       <p>לחץ על "הוסף דוח" כדי להתחיל</p>
     </div>
+
   </div>
 </div>
