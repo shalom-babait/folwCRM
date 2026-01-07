@@ -1,0 +1,57 @@
+.settings-layout {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	gap: 32px;
+	align-items: flex-start;
+	direction: rtl;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.settings-menu {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.12);
+}
+
+.settings-view {
+	background: #f7faf9;
+	border-radius: 16px;
+	min-height: 500px;
+	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.08);
+	padding: 40px 32px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.settings-view-content {
+	text-align: center;
+	color: #2A5448;
+}
+
+.settings-view-content h1 {
+	font-size: 2rem;
+	margin-bottom: 16px;
+}
+
+.settings-view-content p {
+	font-size: 1.2rem;
+	color: #444;
+}
+.settings-view-content {
+	text-align: center;
+	color: #2A5448;
+}
+
+.settings-view-content h1 {
+	font-size: 2rem;
+	margin-bottom: 16px;
+}
+
+.settings-view-content p {
+	font-size: 1.2rem;
+	color: #444;
+}

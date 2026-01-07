@@ -1,0 +1,144 @@
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #fffbe7 url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center/18px 18px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 6px 36px 6px 10px;
+  font-size: 15px;
+  color: #333;
+  min-width: 120px;
+  margin: 0 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px #FFD54F22;
+  cursor: pointer;
+}
+.custom-select:focus {
+  border-color: #FFD54F;
+  outline: none;
+  box-shadow: 0 0 0 2px #FFD54F44;
+}
+.custom-select option {
+  background: #fff;
+  color: #333;
+}
+.dropdown-mat-field {
+  min-width: 120px;
+  margin-left: 8px;
+  margin-right: 8px;
+  background: transparent;
+  direction: rtl;
+}
+.add-task-card {
+  border-right-color: #FFD54F !important;
+  box-shadow: 0 2px 8px #FFD54F33;
+  margin-bottom: 8px;
+}
+.task-title-input {
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  background: #fffbe7;
+  border-radius: 6px;
+  padding: 6px 10px;
+  width: 220px;
+}
+.description-input {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+  padding: 6px 10px;
+  margin: 8px 0;
+  background: #fffbe7;
+}
+.add-task-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border-right: 6px solid;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-btn, .delete-btn {
+  opacity: 0;
+  transition: opacity 0.2s;
+  margin-right: 2px;
+}
+
+.task-card:hover .edit-btn,
+.task-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.task-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.open {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.status.in_progress {
+  background: #e3f2fd;
+  color: #1e88e5;
+}
+
+.status.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status.cancelled {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.description {
+  margin: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.task-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #666;
+}
