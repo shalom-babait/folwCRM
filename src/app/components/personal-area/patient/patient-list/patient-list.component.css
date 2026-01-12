@@ -18,7 +18,6 @@
 	height: 38px;
 	width: 140px;
 	direction: rtl;
-	color: #111;
 }
 .search-icon {
 	color: #607d8b;
@@ -29,7 +28,7 @@
 .menu-button[mat-icon-button], .menu-button {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	color: #000 !important;
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;

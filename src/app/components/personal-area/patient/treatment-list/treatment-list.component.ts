@@ -169,21 +169,21 @@ export class TreatmentListComponent implements OnInit {
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
-      const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
-        width: '600px',
-        data: { ...appointment, patient_id: appointment.patient_id }
-      });
+    const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
+      width: '600px',
+      data: { ...appointment, patient_id: this.patientId || appointment.patient_id }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          // עדכן את הרשימה המקומית אם צריך
-          const idx = this.filteredAppointments.findIndex(a => a.appointment_id === result.appointment_id);
-          if (idx > -1) {
-            this.filteredAppointments[idx] = { ...this.filteredAppointments[idx], ...result };
-          }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // עדכן את הרשימה המקומית אם צריך
+        const idx = this.filteredAppointments.findIndex(a => a.appointment_id === result.appointment_id);
+        if (idx > -1) {
+          this.filteredAppointments[idx] = { ...this.filteredAppointments[idx], ...result };
         }
-      });
-    }
+      }
+    });
+  }
 
   // מחיקת פגישה
   deleteAppointment(appointment: Appointment): void {
