@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { Appointment } from 'src/app/models/appointment.model';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { RoomsService } from 'src/app/services/rooms.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class RoomsViewComponent {
 
   constructor(
     private patientService: PatientService,
+    private apppointmentService: ApppointmentService,
     private roomsService: RoomsService
   ) {}
 
@@ -55,7 +57,7 @@ export class RoomsViewComponent {
     this.selectedRoom = room;
     this.activeTab = 'calendar';
     if (room?.room_id) {
-      this.patientService.getAppointmentsByRoom(room.room_id).subscribe((appointments: Appointment[]) => {
+  this.apppointmentService.getAppointmentsByRoom(room.room_id).subscribe((appointments: Appointment[]) => {
         this.selectedRoomEvents = appointments.map(app => {
           let dateStr = '';
           if (app.appointment_date) {

@@ -40,6 +40,7 @@ export class TreatmentListComponent implements OnInit {
   @Input() appointments: Appointment[] = [];
   @Input() patientId: number | undefined;
   @Input() patient?: Patient;
+  @Input() therapistId?: number;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
 
@@ -49,14 +50,14 @@ export class TreatmentListComponent implements OnInit {
   statusOptions: string[] = ['מתוזמנת', 'בוטלה', 'נדחתה', 'הושלמה'];
 
   constructor(
-    private dialog: MatDialog,
-    private patientService: PatientService,
-    private apppointmentService: ApppointmentService
+  private dialog: MatDialog,
+  private patientService: PatientService,
+  private apppointmentService: ApppointmentService
   ) { }
 
   ngOnInit(): void {
-    if (this.patientId) {
-      this.patientService.getAppointments(this.patientId).subscribe(data => {
+    if (typeof this.patientId === 'number') {
+      this.apppointmentService.getAppointmentsByPatient(this.patientId, this.therapistId).subscribe(data => {
         this.appointments = data;
       });
     }
@@ -128,9 +129,11 @@ export class TreatmentListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // רענון מלא של הרשימה מהשרת
-  this.patientService.getAppointments(this.patientId).subscribe(data => {
-          this.appointments = data;
-        });
+        if (typeof this.patientId === 'number') {
+          this.apppointmentService.getAppointmentsByPatient(this.patientId, this.therapistId).subscribe(data => {
+            this.appointments = data;
+          });
+        }
       }
     });
   }
@@ -148,7 +151,7 @@ export class TreatmentListComponent implements OnInit {
     }
 
     const status = appointment.status ?? '';
-    this.patientService.updateAppointmentStatus(id, status)
+    this.apppointmentService.updateAppointmentStatus(id, status)
       .subscribe({
         next: () => console.log('סטטוס עודכן בהצלחה'),
         error: err => console.error('שגיאה בעדכון סטטוס:', err)
@@ -186,7 +189,7 @@ export class TreatmentListComponent implements OnInit {
   deleteAppointment(appointment: Appointment): void {
     if (!appointment.appointment_id) return;
     if (confirm('האם אתה בטוח שברצונך למחוק את הפגישה?')) {
-      this.apppointmentService.deleteAppointment(appointment.appointment_id).subscribe({
+  this.apppointmentService.deleteAppointment(appointment.appointment_id).subscribe({
         next: () => {
           this.appointments = this.appointments.filter(a => a.appointment_id !== appointment.appointment_id);
         },

@@ -10,26 +10,6 @@ import { PatientService } from 'src/app/services/patient.service';
 })
 export class PatientViewComponent {
   @Input() therapistId?: number;
-  /** פתיחת רשימת פגישות ישירות מהתפריט */
-  onPatientMeetingsRequested(patient: PatientCreationData): void {
-    this.selectedPatient = patient;
-    this.activeTab = 'meetings';
-    this.appointments = [];
-    if (patient && patient.patient && patient.patient.patient_id) {
-  this.patientService.getAppointmentsByPatient(patient.patient.patient_id).subscribe(
-        (appointments) => {
-          this.appointments = appointments || [];
-        },
-        (err) => {
-          this.appointments = [];
-        }
-      );
-    }
-  }
-  editNotesMode: boolean = false;
-  editedNotes: string = '';
-  selectedAppointment: any = null;
-  appointments: any[] = [];
   selectedPatient: PatientCreationData | null = null;
   activeTab: string = 'details';
   searchTerm: string = '';
@@ -41,46 +21,13 @@ export class PatientViewComponent {
 
   userId: number | null = null;
 
-  constructor(private patientService: PatientService, private authService: AuthService) {
+  constructor(
+    private patientService: PatientService,
+    private authService: AuthService
+  ) {
     this.userId = this.authService.getCurrentUserId();
   }
 
-  openAppointmentNotes(appointment: any): void {
-    this.editNotesMode = false;
-    this.editedNotes = appointment.notes || '';
-    this.selectedAppointment = appointment;
-  }
-
-  closeAppointmentNotes(): void {
-    this.editNotesMode = false;
-    this.selectedAppointment = null;
-  }
-
-  enableEditNotes(): void {
-    this.editNotesMode = true;
-    this.editedNotes = this.selectedAppointment?.notes || '';
-  }
-
-  cancelEditNotes(): void {
-    this.editNotesMode = false;
-    this.editedNotes = this.selectedAppointment?.notes || '';
-  }
-
-  saveNotes(): void {
-    if (!this.selectedAppointment) return;
-    const appointmentId = this.selectedAppointment.appointment_id;
-    // Clone the appointment and update notes
-    const updatedAppointment = { ...this.selectedAppointment, notes: this.editedNotes };
-    this.patientService.updateAppointment(appointmentId, updatedAppointment).subscribe({
-      next: () => {
-        this.selectedAppointment.notes = this.editedNotes;
-        this.editNotesMode = false;
-      },
-      error: () => {
-        alert('שמירת ההערות נכשלה');
-      }
-    });
-  }
 
   /** טיפול בעדכון פרטי מטופל */
   onPatientUpdated(updated: any): void {
@@ -136,17 +83,6 @@ export class PatientViewComponent {
   onPatientSelected(patient: PatientCreationData): void {
     this.selectedPatient = patient;
     this.activeTab = 'details';
-    this.appointments = [];
-    if (patient && patient.patient && patient.patient.patient_id) {
-  this.patientService.getAppointmentsByPatient(patient.patient.patient_id).subscribe(
-        (appointments) => {
-          this.appointments = appointments || [];
-        },
-        (err) => {
-          this.appointments = [];
-        }
-      );
-    }
   }
 
   /** החלפת טאב */

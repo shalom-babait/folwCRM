@@ -5,7 +5,7 @@
     <app-patient-list
       [therapistId]="therapistId"
       (patientSelected)="onPatientSelected($event)"
-      (patientMeetingsRequested)="onPatientMeetingsRequested($event)">
+       >
     </app-patient-list>
   </div>
 
@@ -62,13 +62,6 @@
           <span>מעקבים</span>
         </button>
 
-              <!-- טאב חדש — רשימת פגישות -->
-              <button class="tab-link"
-                [class.active]="activeTab === 'meetings'"
-                (click)="setActiveTab('meetings')">
-                <mat-icon>calendar_today</mat-icon>
-                <span>רשימת פגישות</span>
-              </button>
 
         <button class="close-btn" (click)="onCloseDetails()">
           <mat-icon>close</mat-icon>
@@ -86,7 +79,11 @@
         <!-- טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list [patient]="selectedPatient.patient" [patientId]="selectedPatient.patient.patient_id">
+            <app-treatment-list 
+              [patient]="selectedPatient.patient" 
+              [patientId]="selectedPatient.patient.patient_id" 
+              [therapistId]="therapistId"
+            >
             </app-treatment-list>
           </div>
         </div>
@@ -119,41 +116,6 @@
           </div>
         </div>
 
-        <!-- טאב חדש — רשימת פגישות -->
-        <div *ngIf="activeTab === 'meetings'" class="meetings-view">
-          <div class="meetings-card">
-            <h3>רשימת פגישות</h3>
-            <div class="meetings-list">
-              <div *ngFor="let appointment of appointments; let i = index" class="meeting-row" (click)="openAppointmentNotes(appointment)">
-                <div class="meeting-index">פגישה {{ i + 1 }}</div>
-                <div class="meeting-date">{{ appointment.appointment_date | date:'dd/MM/yyyy' }}</div>
-              </div>
-
-            <!-- דף הערות על פגישה -->
-            <div *ngIf="selectedAppointment" class="appointment-notes-overlay">
-              <div class="appointment-notes-content" style="max-width: 900px; width: 90vw; margin: 40px auto; background: #fff; border: 2px solid #d1d1d1; border-radius: 16px; box-shadow: 0 4px 24px #0002; padding: 32px 40px; min-height: 600px; height: 80vh; display: flex; flex-direction: column; align-items: stretch;">
-                <button class="close-btn" (click)="closeAppointmentNotes()">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <h2>הערות עבור פגישה בתאריך {{ selectedAppointment.appointment_date | date:'dd/MM/yyyy' }}</h2>
-                <div class="notes-section">
-                  <ng-container *ngIf="!editNotesMode; else editNotesBlock">
-                    <div style="white-space: pre-line; font-size: 1.25em; padding: 18px; background: #fff; border: 2px solid #d1d1d1; border-radius: 8px; min-height: 120px; box-shadow: 0 2px 8px #0001; margin-bottom: 16px; width: 100%;">{{ selectedAppointment.notes || 'אין הערות לפגישה זו.' }}</div>
-                    <button class="edit-notes-btn" (click)="enableEditNotes()">ערוך הערות</button>
-                  </ng-container>
-                  <ng-template #editNotesBlock>
-                    <textarea [(ngModel)]="editedNotes" class="notes-textarea" style="width: 100%; font-size: 1.25em; padding: 18px; background: #fff; border: 2px solid #d1d1d1; border-radius: 8px; min-height: 300px; height: 100%; box-shadow: 0 2px 8px #0001; margin-bottom: 16px;"></textarea>
-                    <div class="notes-actions">
-                      <button class="save-notes-btn" (click)="saveNotes()">שמור</button>
-                      <button class="cancel-notes-btn" (click)="cancelEditNotes()">ביטול</button>
-                    </div>
-                  </ng-template>
-                </div>
-              </div>
-            </div>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>

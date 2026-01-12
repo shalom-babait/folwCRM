@@ -1,3 +1,12 @@
+.task-color-input {
+  margin-right: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
 .custom-select {
   appearance: none;
   -webkit-appearance: none;
@@ -23,15 +32,7 @@
   background: #fff;
   color: #333;
 }
-.dropdown-mat-field {
-  min-width: 120px;
-  margin-left: 8px;
-  margin-right: 8px;
-  background: transparent;
-  direction: rtl;
-}
 .add-task-card {
-  border-right-color: #FFD54F !important;
   box-shadow: 0 2px 8px #FFD54F33;
   margin-bottom: 8px;
 }

@@ -2,13 +2,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PaymentService } from 'src/app/services/payments.service';
 import { ChartConfiguration, ChartType } from 'chart.js';
-
-interface IncomeRow {
-  name: string;
-  amount: number;
-}
-
-
+import { IncomeRow } from 'src/app/models/reports.model';
 @Component({
   selector: 'app-income-report',
   templateUrl: './income-report.component.html',

@@ -1,19 +1,5 @@
 /* === GENERIC LIST CLASSES === */
 .list-card {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  /* max-width: 350px; */
-  max-height: 97%;
-  display: flex;
-  flex-direction: column;
-  direction: rtl;
-/* === CARD HEADER - generic for all lists === */
-.card-header {
-  background-color: #2F5D50;
-  color: white;
-  padding: 1.2rem 1.5rem;
-  text-align: center;
-  flex-shrink: 0;
-}
   background: white;
   border-radius: 1rem;
   overflow: hidden;
@@ -23,6 +9,13 @@
   max-height: 97%;
   display: flex;
   flex-direction: column;
+}
+.card-header {
+  background-color: #2F5D50;
+  color: white;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .list-item-card {
