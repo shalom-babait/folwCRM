@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
-import { Appointment } from 'src/app/models/appointment.model'; import { ActivatedRoute } from '@angular/router';
+import { Appointment } from 'src/app/models/appointment.model';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ActivatedRoute } from '@angular/router';
 //import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,6 +23,7 @@ export class PatientDashboardComponent implements OnInit {
 
   constructor(
     private patientService: PatientService,
+    private apppointmentService: ApppointmentService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) { }
@@ -41,7 +44,7 @@ export class PatientDashboardComponent implements OnInit {
             selectedDepartments: data.selectedDepartments ?? []
           };
           // קריאת הפגישות רק אחרי שהמטופל נטען
-          this.patientService.getAppointmentsByPatient(id).subscribe(data => {
+          this.apppointmentService.getAppointmentsByPatient(id).subscribe(data => {
             // ניתן להחזיר לוגים אם צריך דיבאג
             // console.log('Appointments raw from API:', data);
             this.appointments = (data || []).map((a: any) => ({
@@ -63,7 +66,7 @@ export class PatientDashboardComponent implements OnInit {
             // console.log('Appointments array for child:', this.appointments);
           });
         });
-  this.patientService.getAppointmentsByPatient(id).subscribe(data => {
+  this.apppointmentService.getAppointmentsByPatient(id).subscribe(data => {
           this.appointments = (data || []).map((a: any) => ({
             ...a,
             appointment_id: a.appointment_id ?? 0,

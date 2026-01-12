@@ -1,21 +1,12 @@
-/* ===============================================
-   SHARED DIALOG FORMS STYLES
-   עיצוב משותף לכל דיאלוגי הטפסים במערכת
-   =============================================== */
 
-/* מכולה ראשית */
 .create-treatment-dialog,
 .create-patient-dialog {
-  /* max-width: 900px; */
-  /* background-color: #022F39; */
   color: black;
   border-radius: 1rem;
   font-family: Arial, sans-serif;
   overflow: hidden;
   direction: rtl;
 }
-
-/* כותרת */
 .dialog-title {
   background-color: #2A5448;
   color: white;
@@ -25,8 +16,6 @@
   padding: 1rem;
   margin: 0;
 }
-
-/* תוכן הדיאלוג */
 .input-dialog {
   background-color: whitesmoke;
   padding: 2rem;
@@ -36,194 +25,52 @@
   max-height: 70vh;
   overflow-y: auto;
 }
-
-/* Scrollbar */
-.input-dialog::-webkit-scrollbar {
-  width: 8px;
-}
-.input-dialog::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.input-dialog::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-.input-dialog::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* שדות טופס */
-.form-field {
-  display: flex;
-  flex-direction: column;
-}
-.form-field label {
-  color: black;
-  font-weight: bold;
-  margin-bottom: 0.3rem;
-  text-align: right;
-  font-size: 0.9rem;
-}
-
-/* שדות קלט */
+.input-dialog::-webkit-scrollbar { width: 8px; }
+.input-dialog::-webkit-scrollbar-track { background: #f1f1f1; }
+.input-dialog::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+.input-dialog::-webkit-scrollbar-thumb:hover { background: #555; }
+.form-field { display: flex; flex-direction: column; }
+.form-field label { color: black; font-weight: bold; margin-bottom: 0.3rem; text-align: right; font-size: 0.9rem; }
 .form-field :is(input, select, textarea) {
-  width: 100%;
-  padding: 0.5rem 0.8rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  color: black;
-  background-color: white;
-  transition: box-shadow 0.2s ease;
+  width: 100%; padding: 0.5rem 0.8rem; font-size: 1rem; border: none; border-radius: 0.5rem; box-sizing: border-box; color: black; background-color: white; transition: box-shadow 0.2s ease;
 }
-.form-field :is(input, select, textarea):focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #022F39;
-}
-
-/* שדות לא תקינים */
-.form-field :is(input, select, textarea).ng-invalid.ng-touched {
-  border: 2px solid #e57373;
-}
-
-/* הסרת חיצים מ-input number */
-.form-field input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
+.form-field :is(input, select, textarea):focus { outline: none; box-shadow: 0 0 0 2px #022F39; }
+.form-field :is(input, select, textarea).ng-invalid.ng-touched { border: 2px solid #e57373; }
+.form-field input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 .form-field input[type="number"]::-webkit-outer-spin-button,
-.form-field input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* הודעות שגיאה */
-.error-message {
-  color: #e53935;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
-  font-weight: normal;
-}
-
-/* הערות תווים */
-.hint {
-  text-align: left;
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 0.2rem;
-}
-
-/* סקשן שתופס שתי עמודות */
+.form-field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.error-message { color: #e53935; font-size: 0.8rem; margin-top: 0.3rem; font-weight: normal; }
+.hint { text-align: left; font-size: 0.8rem; color: #666; margin-top: 0.2rem; }
 .full-width-section,
-.departments-section {
-  grid-column: 1 / -1;
-  margin-top: 0.5rem;
-}
-
-/* כפתורי פעולה */
-.dialog-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  background-color: whitesmoke;
-  grid-column: 1 / -1;
-  margin-top: 0.5rem;
-}
-.dialog-actions button {
-  padding: 0.5rem 1.5rem;
-  font-weight: bold;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-  min-width: 100px;
-}
-.cancel-button {
-  background-color: white;
-  color: #022F39;
-  border: 1px solid #022F39 !important;
-}
-.cancel-button:hover {
-  background-color: #e0e0e0;
-}
-.save-button {
-  background-color: #2A5448;
-  color: white;
-}
-.save-button:hover:not(:disabled) {
-  background-color: #2A5448;
-}
-.save-button:disabled {
-  background-color: #2A5448;
-  color: #666;
-  cursor: not-allowed;
-}
-
-/* רספונסיביות */
+.departments-section { grid-column: 1 / -1; margin-top: 0.5rem; }
+.dialog-actions { display: flex; justify-content: center; gap: 1rem; padding: 1rem 2rem; background-color: whitesmoke; grid-column: 1 / -1; margin-top: 0.5rem; }
+.dialog-actions button { padding: 0.5rem 1.5rem; font-weight: bold; border-radius: 0.5rem; border: none; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem; min-width: 100px; }
+.cancel-button { background-color: white; color: #022F39; border: 1px solid #022F39 !important; }
+.cancel-button:hover { background-color: #e0e0e0; }
+.save-button { background-color: #2A5448; color: white; }
+.save-button:hover:not(:disabled) { background-color: #2A5448; }
+.save-button:disabled { background-color: #2A5448; color: #666; cursor: not-allowed; }
 @media (max-width: 768px) {
   .create-treatment-dialog,
-  .create-patient-dialog {
-    max-width: 95vw;
-  }
-  .input-dialog {
-    grid-template-columns: 1fr;
-    padding: 1.5rem;
-    gap: 1rem;
-    max-height: 65vh;
-  }
+  .create-patient-dialog { max-width: 95vw; }
+  .input-dialog { grid-template-columns: 1fr; padding: 1.5rem; gap: 1rem; max-height: 65vh; }
   .full-width-section,
-  .departments-section {
-    grid-column: 1;
-  }
-  .dialog-actions {
-    flex-direction: column;
-  }
-  .dialog-actions button {
-    width: 100%;
-  }
+  .departments-section { grid-column: 1; }
+  .dialog-actions { flex-direction: column; }
+  .dialog-actions button { width: 100%; }
 }
-
 @media (max-width: 600px) {
   .create-treatment-dialog,
-  .create-patient-dialog {
-    border-radius: 0.8rem;
-  }
-  .dialog-title {
-    font-size: 1.3rem;
-    padding: 0.8rem;
-  }
-  .input-dialog {
-    padding: 1.5rem 1rem;
-    gap: 0.9rem;
-    max-height: 60vh;
-  }
-  .form-field label {
-    font-size: 0.85rem;
-  }
-  .form-field :is(input, select, textarea) {
-    font-size: 0.95rem;
-    padding: 0.5rem 0.7rem;
-  }
-  .dialog-actions {
-    padding: 1rem;
-    gap: 0.8rem;
-  }
-  .dialog-actions button {
-    padding: 0.7rem;
-  }
+  .create-patient-dialog { border-radius: 0.8rem; }
+  .dialog-title { font-size: 1.3rem; padding: 0.8rem; }
+  .input-dialog { padding: 1.5rem 1rem; gap: 0.9rem; max-height: 60vh; }
+  .form-field label { font-size: 0.85rem; }
+  .form-field :is(input, select, textarea) { font-size: 0.95rem; padding: 0.5rem 0.7rem; }
+  .dialog-actions { padding: 1rem; gap: 0.8rem; }
+  .dialog-actions button { padding: 0.7rem; }
 }
-
 @media (max-width: 400px) {
-  .input-dialog {
-    padding: 1rem 0.8rem;
-  }
-  .dialog-title {
-    font-size: 1.2rem;
-  }
-  .form-field :is(input, select) {
-    font-size: 0.9rem;
-  }
+  .input-dialog { padding: 1rem 0.8rem; }
+  .dialog-title { font-size: 1.2rem; }
+  .form-field :is(input, select) { font-size: 0.9rem; }
 }

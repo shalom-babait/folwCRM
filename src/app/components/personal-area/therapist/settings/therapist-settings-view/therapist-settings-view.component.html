@@ -1,11 +1,12 @@
 <div class="settings-layout">
-		<app-therapist-settings-menu (menuSelect)="onMenuSelect($event)"></app-therapist-settings-menu>
+	<app-therapist-settings-menu (menuSelect)="onMenuSelect($event)"></app-therapist-settings-menu>
 	<div class="settings-view">
-			<app-user-settings *ngIf="selectedSetting === 'system'"></app-user-settings>
-			<div *ngIf="!selectedSetting" class="settings-view-content">
-				<h1>ברוך הבא להגדרות</h1>
-				<p>בחר הגדרה מהתפריט כדי להציג כאן את התוכן.</p>
-			</div>
-			<!-- אפשר להוסיף כאן קומפוננטות נוספות לפי סוג הגדרה בעתיד -->
+		<app-user-settings *ngIf="selectedSetting === 'system'"></app-user-settings>
+		<app-therapist-home-setting *ngIf="selectedSetting === 'homepage-display'"></app-therapist-home-setting>
+		<div *ngIf="!selectedSetting" class="settings-view-content">
+			<h1>ברוך הבא להגדרות</h1>
+			<p>בחר הגדרה מהתפריט כדי להציג כאן את התוכן.</p>
+		</div>
+		<!-- אפשר להוסיף כאן קומפוננטות נוספות לפי סוג הגדרה בעתיד -->
 	</div>
 </div>

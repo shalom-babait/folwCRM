@@ -93,6 +93,14 @@ export class PatientProblemTableComponent implements OnInit {
   }
 
   deleteProblem(id: number): void {
-    this.problems = this.problems.filter(p => p.patient_problem_id !== id);
+    this.patientProblemsService.deletePatientProblem(id).subscribe({
+      next: () => {
+        this.problems = this.problems.filter(p => p.patient_problem_id !== id);
+      },
+      error: (err) => {
+        console.error('שגיאה במחיקת בעיה:', err);
+        // אפשר להציג הודעת שגיאה למשתמש
+      }
+    });
   }
 }

@@ -2,6 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { TherapistService } from 'src/app/services/therapist.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
@@ -21,7 +22,8 @@ export class TherapistHomeComponent {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private patientService: PatientService,
+  private patientService: PatientService,
+  private apppointmentService: ApppointmentService,
     private therapistService: TherapistService
   ) {}
 
@@ -47,7 +49,7 @@ export class TherapistHomeComponent {
     }
 
     // האזנה לבחירת מטופל מרשימת המטופלים
-    this.patientService.selectedPatient$
+  this.patientService.selectedPatient$
       .pipe(takeUntil(this.destroy$))
       .subscribe(patientId => {
         if (patientId) {
@@ -66,14 +68,14 @@ export class TherapistHomeComponent {
 
   // טעינת נתוני המטופל מהשרת
   loadPatientData(patientId: number) {
-    this.patientService.getPatientById(patientId)
+  this.patientService.getPatientById(patientId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (patient) => {
           this.selectedPatient = patient;
           console.log('Selected patient data:', this.selectedPatient);
           // טוענים את הפגישות של המטופל
-          this.loadPatientAppointments(patientId);
+        this.loadPatientAppointments(patientId);
         },
         error: (error) => {
           console.error('Error loading patient:', error);
@@ -84,7 +86,7 @@ export class TherapistHomeComponent {
 
   // טעינת פגישות של המטופל מהשרת
   loadPatientAppointments(patientId: number) {
-  this.patientService.getAppointments(patientId)
+  this.apppointmentService.getAppointmentsByPatient(patientId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (appointments) => {

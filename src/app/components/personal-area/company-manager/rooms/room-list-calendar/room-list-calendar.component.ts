@@ -4,6 +4,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Room } from 'src/app/models/room.model';
 import { RoomsService } from 'src/app/services/rooms.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { TherapistService } from 'src/app/services/therapist.service';
 import { TherapistCreationData } from 'src/app/models/therapist.model';
@@ -41,7 +42,8 @@ export class RoomListCalendarComponent implements OnInit {
   constructor(
     private roomsService: RoomsService,
     private patientService: PatientService,
-  private therapistService: TherapistService,
+    private apppointmentService: ApppointmentService,
+    private therapistService: TherapistService,
     private dialog: MatDialog
   ) {}
 
@@ -89,7 +91,7 @@ export class RoomListCalendarComponent implements OnInit {
     if (selectedRoom) {
       this.roomSelected.emit(selectedRoom);
     }
-  this.patientService.getAppointmentsByRoom(roomId).subscribe((appointments: Appointment[]) => {
+  this.apppointmentService.getAppointmentsByRoom(roomId).subscribe((appointments: Appointment[]) => {
       this.roomEvents = appointments.map((app: Appointment) => {
         let dateStr = '';
         if (app.appointment_date) {

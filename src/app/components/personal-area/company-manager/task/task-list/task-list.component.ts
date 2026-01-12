@@ -33,9 +33,15 @@ export class TaskListComponent implements OnInit {
       due_date: [null],
       completed_at: [null],
       color: ['#FFD54F'],
-      created_at: [null],
+  created_at: [this.getTodayDate()],
       updated_at: [null]
     });
+  }
+
+  private getTodayDate(): string {
+    // Returns YYYY-MM-DD format
+    const today = new Date();
+    return today.toISOString().split('T')[0];
   }
 
   onAddTaskColorChange(event: Event): void {
@@ -64,8 +70,26 @@ export class TaskListComponent implements OnInit {
       status: 'open',
       priority: 'medium',
       color: '#FFD54F',
-      created_by_user_id: this.getCurrentUserId()
+      created_by_user_id: this.getCurrentUserId(),
+      created_at: this.getTodayDate()
     });
+  }
+
+  formatDateDDMMYYYY(dateStr: string | null | undefined): string {
+    if (!dateStr) return '';
+    // Support both 'YYYY-MM-DD' and ISO string
+    let dateObj: Date;
+    if (dateStr.length > 10) {
+      // ISO string
+      dateObj = new Date(dateStr);
+    } else {
+      // YYYY-MM-DD
+      dateObj = new Date(dateStr + 'T00:00:00');
+    }
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   cancelAddTask(): void {
@@ -74,7 +98,8 @@ export class TaskListComponent implements OnInit {
       status: 'open',
       priority: 'medium',
       color: '#FFD54F',
-      created_by_user_id: this.getCurrentUserId()
+      created_by_user_id: this.getCurrentUserId(),
+      created_at: this.getTodayDate()
     });
   }
 
@@ -120,6 +145,7 @@ export class TaskListComponent implements OnInit {
       due_date: [task.due_date],
       color: [task.color],
       assigned_to_user_id: [task.assigned_to_user_id],
+      created_at: [{ value: task.created_at, disabled: true }],
     });
   }
 

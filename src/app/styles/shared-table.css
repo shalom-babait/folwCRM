@@ -203,10 +203,11 @@
   background-color: transparent;
 }
 
+
 /* ==================== שורות נתונים ==================== */
 .data-row {
   display: grid;
-  grid-template-columns: repeat(8, 1fr); /* 8 עמודות שוות */
+  grid-template-columns: repeat(var(--table-cols, 8), 1fr); /* ברירת מחדל 8 עמודות שוות */
   background-color: #ffffff;
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
@@ -220,13 +221,11 @@
   animation: fadeIn 0.3s ease-in-out;
   min-width: 0;
 }
-
 .data-row:hover {
   background-color: #f8f9fa;
   transform: translateX(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
 .data-row.selected {
   background: linear-gradient(135deg, #022F39 0%, #034752 100%);
   color: white;

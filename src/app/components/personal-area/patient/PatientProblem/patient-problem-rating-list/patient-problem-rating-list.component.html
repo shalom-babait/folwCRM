@@ -22,6 +22,7 @@
 								<th class="problem-cell">דירוג</th>
 								<th class="problem-cell">הערות</th>
 								<th class="problem-cell">מגמה</th>
+								<th class="problem-cell">פעולות</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -41,6 +42,21 @@
 											<mat-icon style="color: #222;">trending_flat</mat-icon>
 										</ng-container>
 									</ng-container>
+								</td>
+								<td class="problem-cell">
+									<button mat-icon-button [matMenuTriggerFor]="ratingMenu" (click)="$event.stopPropagation()">
+										<mat-icon>more_vert</mat-icon>
+									</button>
+									<mat-menu #ratingMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+										<button mat-menu-item (click)="editRating(r)">
+											<mat-icon>edit</mat-icon>
+											<span>עריכה</span>
+										</button>
+										<button mat-menu-item (click)="deleteRating(r)">
+											<mat-icon color="warn">delete</mat-icon>
+											<span style="color: #c62828;">מחיקה</span>
+										</button>
+									</mat-menu>
 								</td>
 							</tr>
 						</tbody>

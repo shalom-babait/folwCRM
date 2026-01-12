@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angu
 import { RoomsService } from 'src/app/services/rooms.service';
 import { TypesService } from 'src/app/services/types.service';
 import { PatientService } from 'src/app/services/patient.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { Room } from 'src/app/models/room.model';
 import { ConfirmUnsavedDialogComponent } from 'src/app/components/confirm-unsaved-dialog/confirm-unsaved-dialog.component';
@@ -59,7 +60,8 @@ export class CreateTreatmentDialogComponent implements OnInit {
       private errorHandler: ErrorHandlerService,
       private roomsService: RoomsService,
       private typesService: TypesService,
-      private patientService: PatientService,
+  private patientService: PatientService,
+  private apppointmentService: ApppointmentService,
       private dialog: MatDialog,
       public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
@@ -153,13 +155,13 @@ export class CreateTreatmentDialogComponent implements OnInit {
   loadRoomEvents(roomId: number | null) {
     if (!roomId) { this.roomEvents = []; return; }
 
-    this.patientService.getAppointmentsByRoom(roomId).subscribe({
+    this.apppointmentService.getAppointmentsByRoom(roomId).subscribe({
       next: appointments => {
         this.roomEvents = appointments
           .filter((a: any) => a.status !== 'בוטלה')
           .map((a: any) => ({
             id: a.appointment_id,
-            title: (a as any).therapist_name || 'פגישה', // כאן נשתמש ב-any
+            title: (a as any).therapist_name || 'פגישה',
             start: `${a.appointment_date}T${a.start_time}`,
             end: `${a.appointment_date}T${a.end_time}`
           }));
@@ -218,7 +220,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
 
     if (this.data && this.data.appointment_id) {
       console.log('Calling updateAppointment with:', this.data.appointment_id, appointment);
-      this.patientService.updateAppointment(this.data.appointment_id, appointment).subscribe({
+  this.apppointmentService.updateAppointment(this.data.appointment_id, appointment).subscribe({
         next: res => {
           console.log('updateAppointment response:', res);
           const result = (res && 'data' in res) ? (res as any).data : null;
@@ -232,7 +234,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       });
     } else {
       console.log('Calling createAppointment with:', appointment);
-      this.patientService.createAppointment(appointment).subscribe({
+  this.apppointmentService.createAppointment(appointment).subscribe({
         next: res => {
           console.log('createAppointment response:', res);
           this.appointmentAdded.emit(res.data || appointment);
