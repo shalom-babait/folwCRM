@@ -55,22 +55,46 @@ export class CreateTreatmentDialogComponent implements OnInit {
   showOverlay = false;
   patients: any[] = [];
 
+    isEditMode = false;
+    dialogTitle = 'טיפול חדש';
+
     constructor(
       private fb: FormBuilder,
       private errorHandler: ErrorHandlerService,
       private roomsService: RoomsService,
       private typesService: TypesService,
-  private patientService: PatientService,
-  private apppointmentService: ApppointmentService,
+      private patientService: PatientService,
+      private apppointmentService: ApppointmentService,
       private dialog: MatDialog,
       public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.treatmentForm = this.createForm();
+      if (data && data.appointment_id) {
+        this.isEditMode = true;
+        this.dialogTitle = 'עריכת טיפול';
+      }
       if (data) {
+        // תאריך בפורמט YYYY-MM-DD
+        let dateStr = '';
+        if (data.appointment_date) {
+          const d = new Date(data.appointment_date);
+          if (!isNaN(d.getTime())) {
+            dateStr = d.toISOString().slice(0, 10);
+          }
+        } else if (data.date) {
+          dateStr = data.date;
+        }
+        // מקום כ-number
+        let placeVal = '';
+        if (data.room_id) {
+          placeVal = String(data.room_id);
+        } else if (data.place) {
+          placeVal = String(data.place);
+        }
         this.treatmentForm.patchValue({
-          date: data.appointment_date || data.date || '',
-          place: data.room_id || data.place || '',
+          date: dateStr,
+          place: placeVal,
           type: data.treatment_type_id || data.type || '',
           startTime: data.start_time || data.startTime || '',
           endTime: data.end_time || data.endTime || '',
