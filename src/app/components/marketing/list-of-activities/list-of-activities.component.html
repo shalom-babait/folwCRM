@@ -1,9 +1,0 @@
-<div class="ListOfActivitiesComponent">
-    <label class="title">|המומלצים שלנו  </label><br>
-    <div *ngFor="let activity of activitiesList" class="card">
-      <a href="javascript:void(0)" class="card-link" (click)="openDialog(activity)">
-        <img [src]="activity.urlImage" class="card-img-top" alt="Activity Image">
-        <h5 class="card-title">{{ activity.titleActivities }}</h5>
-      </a>
-    </div>
-</div>

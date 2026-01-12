@@ -1,27 +1,39 @@
-# Ssd
+# Follow CRM
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.0.
+Follow CRM היא מערכת לניהול קליניקות ומטפלים, המיועדת לשימוש כמוצר בתשלום חודשי (SaaS).
 
-## Development server
+המערכת מאפשרת למטפלים ולמנהלי קליניקות לנהל את כל פעילות הקליניקה במקום אחד:  
+מטופלים, יומנים, חדרים, תשלומים, דוחות וניהול משתמשים.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+הממשק מותאם לעבודה יומיומית ומיועד לעשות סדר, לחסוך זמן ולתת תמונת מצב ברורה על פעילות הקליניקה.
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Target Users
+- מטפלים
+- מזכירות קליניקה
+- מנהלי קליניקה
 
-## Build
+לכל סוג משתמש קיים ממשק והרשאות ייעודיות.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## Tech Stack
+- Angular 16
+- TypeScript
+- Node.js (Backend)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## Prerequisites
+לפני הרצת הפרויקט יש לוודא שמותקנים:
+- Node.js
+- npm
+- Angular CLI
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## Installation
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm install

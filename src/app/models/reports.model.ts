@@ -3,3 +3,8 @@ export interface OpenDebtReportItem {
 	patient_name: string;
 	open_balance: number;
 }
+export interface IncomeRow {
+  name: string;
+  amount: number;
+}
+

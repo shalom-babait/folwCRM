@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPatientProblemRatingComponent } from '../add-patient-problem-rating/add-patient-problem-rating.component';
@@ -110,4 +111,32 @@ export class PatientProblemRatingListComponent implements OnInit {
       }
     ];
   }
+  
+    editRating(rating: PatientProblemRating): void {
+      // פותח דיאלוג עריכה (אפשר להחליף לדיאלוג עריכה אמיתי)
+      this.dialog.open(AddPatientProblemRatingComponent, {
+        width: '400px',
+        data: { patient_problem_id: this.patientProblemId, rating }
+      }).afterClosed().subscribe(result => {
+        if (result) {
+          this.ngOnInit(); // רענון דירוגים
+        }
+      });
+    }
+
+    deleteRating(rating: PatientProblemRating): void {
+      if (!confirm('האם למחוק דירוג זה?')) return;
+      if (!rating.patient_problem_rating_id && rating.patient_problem_rating_id !== 0) {
+        alert('לא ניתן למחוק דירוג ללא מזהה תקין');
+        return;
+      }
+      this.patientProblemsService.deleteProblemRating(rating.patient_problem_rating_id).subscribe({
+        next: () => {
+          this.ngOnInit(); // רענון דירוגים
+        },
+        error: () => {
+          alert('שגיאה במחיקת דירוג');
+        }
+      });
+    }
 }

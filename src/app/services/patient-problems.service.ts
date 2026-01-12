@@ -33,7 +33,12 @@ export class PatientProblemsService {
   getRatingsByProblemId(patient_problem_id: number): Observable<PatientProblemRating[]> {
     return this.http.get<PatientProblemRating[]>(`${this.apiUrl}/${patient_problem_id}/problem-ratings-list`);[]
   }
-
+  /**
+   * הוספת בעיה חדשה למטופל
+   */
+  addPatientProblem(problem: Omit<PatientProblem, 'patient_problem_id'>): Observable<PatientProblem> {
+    return this.http.post<PatientProblem>(`${this.apiUrl}/add`, problem);
+  }
   /**
    * הוספת דירוג לבעיה קיימת (נתיב חדש)
    */
@@ -46,14 +51,12 @@ export class PatientProblemsService {
    * מחיקת דירוג לבעיה
    */
   deleteProblemRating(patient_problem_rating_id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/problem-ratings/${patient_problem_rating_id}`);
+    return this.http.delete<any>(`${this.apiUrl}/delete-problem-rating-by-ratingId/${patient_problem_rating_id}`);
   }
-
   /**
-   * הוספת בעיה חדשה למטופל
+   * מחיקת בעיה של מטופל לפי מזהה בעיה
    */
-  addPatientProblem(problem: Omit<PatientProblem, 'patient_problem_id'>): Observable<PatientProblem> {
-    return this.http.post<PatientProblem>(`${this.apiUrl}/add`, problem);
+  deletePatientProblem(patient_problem_id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/delete-problem-rating-by-ratingId/${patient_problem_id}`);
   }
 }
-

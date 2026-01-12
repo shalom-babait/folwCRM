@@ -1,0 +1,28 @@
+<div class="home-settings-list">
+	<h2>הגדרות תצוגת דף הבית</h2>
+	<ul>
+		<div class="settings-cards">
+			<div class="setting-card">
+				<label>
+					<input type="checkbox" [(ngModel)]="showTodayCalendar" />
+					<span class="icon-calendar"></span>
+					<span class="setting-label">לוח שנה של היום</span>
+				</label>
+			</div>
+			<div class="setting-card">
+				<label>
+					<input type="checkbox" [(ngModel)]="showScheduledTreatments" />
+					<span class="icon-treatments"></span>
+					<span class="setting-label">רשימת טיפולים מתוזמנים</span>
+				</label>
+			</div>
+			<div class="setting-card">
+				<label>
+					<input type="checkbox" [(ngModel)]="showWaitingClients" />
+					<span class="icon-clients"></span>
+					<span class="setting-label">רשימת לקוחות בהמתנה</span>
+				</label>
+			</div>
+		</div>
+	</ul>
+</div>

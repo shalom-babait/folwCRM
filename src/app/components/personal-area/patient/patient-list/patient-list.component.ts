@@ -21,8 +21,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
   selectedTherapistId: number | null = null;
 
   @Input() therapistId?: number;
-  /** שליחה למעלה כאשר בוחרים מטופל לצפייה בפגישות */
-  @Output() patientMeetingsRequested = new EventEmitter<PatientCreationData>();
 
   /** אם true — נטען את כל המטופלים */
 
@@ -150,14 +148,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
       });
   }
 
-  /** הצגת רשימת פגישות עבור מטופל */
-  viewPatientMeetings(patient: PatientCreationData) {
-    const patient_id = patient.patient?.patient_id;
-    if (patient_id) {
-      this.selectedPatientId = patient_id;
-      this.patientMeetingsRequested.emit(patient);
-    }
-  }
 
   /** פתיחת דיאלוג הוספת מטופל */
   openAddPatientDialog(): void {

@@ -12,23 +12,7 @@ import { ErrorHandlerService } from './error-handler.service';
   providedIn: 'root'
 })
 export class PatientService {
-  /** עדכון פגישה מלאה */
-  updateAppointment(appointmentId: number, appointment: Partial<Appointment>): Observable<ApiResponse<Appointment>> {
-    console.log('updateAppointment - sending object:', appointment);
-    const url = `${this.apiUrl}/appointments/updateAppointment/${appointmentId}`;
-    console.log('updateAppointment - url:', url);
-    return this.http.put<ApiResponse<Appointment>>(
-      url,
-      appointment,
-      this.httpOptions
-    ).pipe(
-      tap(
-        res => console.log('updateAppointment - response:', res),
-        err => console.error('updateAppointment - error:', err)
-      )
-    );
-  }
-
+  
   /** עדכון פציינט ברשימה המקומית */
   updatePatientInList(updatedPatient: PatientCreationData): void {
     const current = this.patientsListSubject.value || [];
@@ -182,90 +166,6 @@ export class PatientService {
     const currentList = this.patientsListSubject.value;
     this.patientsListSubject.next([...currentList, patient]);
   }
-
-  // --- פגישות ---
-  createAppointment(appointmentData: CreateAppointmentRequest): Observable<ApiResponse<Appointment>> {
-    this.setLoading(true);
-    return this.http.post<ApiResponse<Appointment>>(
-      `${this.apiUrl}/appointments`,
-      appointmentData,
-      this.httpOptions
-    ).pipe(
-      tap(response => console.log('Appointment created successfully:', response)),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
-    );
-  }
-
-
-  getAppointmentsByRoom(roomId: number): Observable<Appointment[]> {
-    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byRoom/${roomId}`).pipe(
-      map(response => response.data || []),
-      catchError(() => of([]))
-    );
-  }
-
-
-  getAppointmentById(appointmentId: number): Observable<Appointment> {
-    return this.http.get<ApiResponse<Appointment>>(`${this.apiUrl}/appointments/${appointmentId}`).pipe(
-      map(response => response.data as Appointment)
-    );
-  }
-
-
-  getAppointmentsByPatient(patientId: number): Observable<Appointment[]> {
-    return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/appointments/byPatient/${patientId}`)
-      .pipe(
-        map(response => response.data || []),
-        tap(appointments => {
-          console.log('Appointments returned from getAppointmentsByPatient:', appointments);
-        }),
-        catchError(error => {
-          console.error('Error fetching appointments for patient:', error);
-          return of([]);
-        })
-      );
-  }
-
-  updateAppointmentStatus(appointmentId: number, status: string): Observable<ApiResponse<any>> {
-    this.setLoading(true);
-    const body = { status };
-    return this.http.put<ApiResponse<any>>(
-      `${this.apiUrl}/appointments/${appointmentId}/status`,
-      body,
-      this.httpOptions
-    ).pipe(
-      tap(response => console.log('Appointment status updated:', response)),
-      catchError(this.handleError.bind(this)),
-      tap(() => this.setLoading(false))
-    );
-  }
-
-
-  getAppointments(patient_id?: number): Observable<AppointmentResponse[]> {
-    if (patient_id) {
-      return this.http.get<any>(
-        `${this.apiUrl}/appointments/patient/${patient_id}`
-      ).pipe(
-        map((response: any) => {
-          const arr = Array.isArray(response) ? response : (response.data || []);
-          return arr.map((item: any) => ({
-            ...item,
-            group_name: item.type_name ?? '',
-            room: item.room ?? '',
-            end_time: item.end_time ?? '',
-            total_minutes: item.total_minutes ?? 0,
-            status: item.status ?? '',
-          }));
-        }),
-        catchError(error => {
-          return of([]);
-        })
-      );
-    }
-    return of([]);
-  }
-
 
   // --- עזר לניהול טעינה ושגיאות ---
   private setLoading(loading: boolean): void {
