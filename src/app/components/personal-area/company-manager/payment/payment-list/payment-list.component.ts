@@ -32,9 +32,6 @@ export class PaymentListComponent implements OnInit {
     this.paymentService.getPaymentsByPatientId(this.patientId).subscribe({
       next: (data) => {
         console.log('Transactions from server:', data);
-
-        let runningBalance = 0;
-
         this.transactions = data.map((item: any) => {
           return {
             pay_id: item.pay_id ?? item.id ?? item.payment_id,
@@ -46,7 +43,6 @@ export class PaymentListComponent implements OnInit {
             transaction_type: item.transaction_type,
             status: item.status,
             person_id: item.person_id,
-            // אפשר להוסיף כאן שדות נוספים אם צריך
           } as Payment;
         });
 
@@ -56,7 +52,8 @@ export class PaymentListComponent implements OnInit {
             ? (a.payment_date?.getTime() ?? 0) - (b.payment_date?.getTime() ?? 0)
             : (b.payment_date?.getTime() ?? 0) - (a.payment_date?.getTime() ?? 0);
         });
-        this.recalculateBalances();
+        this.transactions = this.recalculateBalances(this.transactions);
+        this.filteredTransactions = [...this.transactions];
 
         this.calculateTotals();
         this.applyFilters();
@@ -76,17 +73,28 @@ export class PaymentListComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredTransactions = this.transactions.filter(transaction => {
-      const dateMatch = this.dateFilter ? (transaction.payment_date ? transaction.payment_date >= new Date(this.dateFilter) : false) : true;
-      const amountMatch = this.amountFilter ? (transaction.amount >= this.amountFilter) : true;
-      return dateMatch && amountMatch;
-    });
-    this.calculateTotals(); // אם אתה רוצה לעדכן את הסכומים
+    let list = [...this.transactions];
+
+    if (this.dateFilter) {
+      const filterDate = new Date(this.dateFilter);
+      list = list.filter(t =>
+        t.payment_date ? t.payment_date >= filterDate : false
+      );
+    }
+
+    if (this.amountFilter) {
+      list = list.filter(t => t.amount >= this.amountFilter!);
+    }
+
+    this.filteredTransactions = this.recalculateBalances(list);
+    this.calculateTotals();
   }
 
-  recalculateBalances() {
+
+
+  recalculateBalances(list: Payment[]) {
     let runningBalance = 0;
-    this.transactions = this.transactions.map(t => {
+    return list.map(t => {
       if (t.transaction_type === 'debit') {
         runningBalance -= t.amount;
       } else if (t.transaction_type === 'credit') {
@@ -95,6 +103,7 @@ export class PaymentListComponent implements OnInit {
       return { ...t, balance: runningBalance };
     });
   }
+
 
   clearFilters() {
     this.dateFilter = null;
@@ -131,9 +140,50 @@ export class PaymentListComponent implements OnInit {
     }
   }
 
-  showDetails(payment: Payment) {
-    console.log('פרטי פעולה:', payment);
+  showDetails(payment: Payment): void {
+    console.log(payment);
+  
+    const dialogRef = this.dialog.open(AddTransactionComponent, {
+      width: '500px',
+      direction: 'rtl',
+      data: {
+        mode: 'edit',
+        patient_id: this.patientId,
+        transaction: { ...payment }
+      }
+    });    
+    dialogRef.componentInstance.transactionUpdated.subscribe((updatedPayment: Payment) => {
+      const methodMap: any = {
+        cash: 'מזומן',
+        transfer: 'העברה בנקאית',
+        card: 'כרטיס אשראי'
+      };
+
+      const payload = {
+        amount: updatedPayment.amount,
+        payment_date: updatedPayment.payment_date,
+        method: methodMap[updatedPayment.method] ?? updatedPayment.method,
+        transaction_type: updatedPayment.transaction_type,
+        status: updatedPayment.status,
+        therapist_id: updatedPayment.therapist_id,
+        appointment_id: updatedPayment.appointment_id,
+      };
+
+      this.paymentService
+        .updatePayment(updatedPayment.pay_id!, payload)
+        .subscribe({
+          next: () => this.loadTransactions(),
+          error: err => console.error('שגיאה בעדכון תשלום', err)
+        });
+
+      dialogRef.close();
+    });
+
+    dialogRef.componentInstance.cancelled.subscribe(() => {
+      dialogRef.close();
+    });
   }
+
   openAddTransaction(): void {
     const dialogRef = this.dialog.open(AddTransactionComponent, {
       width: '500px',
@@ -188,7 +238,12 @@ export class PaymentListComponent implements OnInit {
 
 
   formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('he-IL');
+    const d = new Date(date);
+    // שימוש בתאריך המקומי של המשתמש
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${day}/${month}/${year}`;
   }
 
   getBalanceClass(balance: number): string {

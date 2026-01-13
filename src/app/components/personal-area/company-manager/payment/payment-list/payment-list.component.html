@@ -37,7 +37,7 @@
           <td class="debit">
             <span *ngIf="transaction.transaction_type === 'debit'">₪{{ transaction.amount }}</span>
           </td>
-          <td class="credit">
+          <td class="credit">       
             <span *ngIf="transaction.transaction_type === 'credit'">₪{{ transaction.amount }}</span>
           </td>
           <td class="balance-col" [ngClass]="{

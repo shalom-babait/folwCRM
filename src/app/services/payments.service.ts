@@ -26,15 +26,18 @@ export class PaymentService {
 
   createPayment(paymentData: any) {
     console.log(paymentData);
-    
+
     return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
   }
 
   getAppointments(patientId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/patient/${patientId}`);
   }
-    /** מוחק תשלום לפי payment_id */
+  /** מוחק תשלום לפי payment_id */
   deletePayment(paymentId: number) {
     return this.http.delete(`${this.apiUrl}/payments/delete/${paymentId}`);
+  }
+  updatePayment(paymentId: number, paymentData: any) {
+    return this.http.put(`${this.apiUrl}/payments/update/${paymentId}`, paymentData);
   }
 }
