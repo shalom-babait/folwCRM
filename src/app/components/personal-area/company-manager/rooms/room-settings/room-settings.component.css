@@ -1,3 +1,26 @@
+/* זמינות חדר - טבלה */
+.room-availability-table table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 8px;
+}
+.room-availability-table th, .room-availability-table td {
+	padding: 10px 12px;
+	text-align: center;
+}
+.room-availability-table th {
+	background: #f5f5f5;
+	font-weight: bold;
+	font-size: 1.05em;
+	border-bottom: 2px solid #e0e0e0;
+}
+.room-availability-table td {
+	background: #fff;
+	border-bottom: 1px solid #eee;
+}
+.room-availability-table td > div {
+	margin-bottom: 6px;
+}
 .settings-header .edit-icon {
 	background: #f5f5f5;
 	border: none;
