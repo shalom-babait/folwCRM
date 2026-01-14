@@ -1,4 +1,12 @@
 <div class="user-followup-list-container">
+	<ng-container [ngSwitch]="dateFilter">
+		<h3 *ngSwitchCase="'today'">מעקבים להיום</h3>
+		<h3 *ngSwitchCase="'tomorrow'">מעקבים למחר</h3>
+		<h3 *ngSwitchCase="'thisWeek'">מעקבים לשבוע זה</h3>
+		<h3 *ngSwitchCase="'thisMonth'">מעקבים לחודש זה</h3>
+		<h3 *ngSwitchCase="'nextWeek'">מעקבים לשבוע הבא</h3>
+		<h3 *ngSwitchCase="'nextMonth'">מעקבים לחודש הבא</h3>
+	</ng-container>
 		<div class="search-container">
 			<input type="text" placeholder="חיפוש לפי שם/טלפון/תאריך" class="search-input" [(ngModel)]="searchTerm">
 				<select [(ngModel)]="dateFilter" class="date-filter-dropdown">
