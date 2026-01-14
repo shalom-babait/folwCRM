@@ -37,7 +37,7 @@ private toDateInputValue(date: Date | string): string {
       this.mode = 'edit';
 
       const t = this.data.transaction;
-      this.editingPaymentId = t.pay_id;
+      this.editingPaymentId = t.payment_id;
       this.transactionType = t.transaction_type;
 
       if (t.transaction_type === 'debit') {
@@ -158,7 +158,7 @@ private toDateInputValue(date: Date | string): string {
     if (therapistId) {
       (transaction as any).therapist_id = therapistId;
     }
-    (transaction as any).pay_id = this.editingPaymentId;
+    (transaction as any).payment_id = this.editingPaymentId;
 
     if (this.mode === 'edit') {
       this.transactionUpdated.emit(transaction);
