@@ -6,7 +6,7 @@
 
     <!-- שם פרטי -->
     <div class="form-field">
-      <label for="first_name">שם פרטי *</label>
+  <label for="first_name">שם פרטי *</label>
       <input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי">
       <div class="error-message" *ngIf="isFieldInvalid('first_name')">
         {{ getFieldError('first_name', 'שם פרטי') }}
@@ -15,7 +15,7 @@
 
     <!-- שם משפחה -->
     <div class="form-field">
-      <label for="last_name">שם משפחה *</label>
+  <label for="last_name">שם משפחה *</label>
       <input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה">
       <div class="error-message" *ngIf="isFieldInvalid('last_name')">
         {{ getFieldError('last_name', 'שם משפחה') }}
@@ -24,7 +24,7 @@
 
     <!-- תעודת זהות -->
     <div class="form-field">
-      <label for="teudat_zehut">תעודת זהות</label>
+  <label for="teudat_zehut">תעודת זהות</label>
       <input type="text" id="teudat_zehut" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות" maxlength="9">
       <div class="error-message" *ngIf="isFieldInvalid('teudat_zehut')">
         {{ getFieldError('teudat_zehut', 'תעודת זהות') }}
@@ -33,7 +33,7 @@
 
     <!-- טלפון -->
     <div class="form-field">
-      <label for="phone">טלפון *</label>
+  <label for="phone">טלפון</label>
       <input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון" maxlength="10">
       <div class="error-message" *ngIf="isFieldInvalid('phone')">
         {{ getFieldError('phone', 'טלפון') }}
@@ -42,7 +42,7 @@
 
     <!-- עיר -->
     <div class="form-field">
-      <label for="city">עיר *</label>
+  <label for="city">עיר</label>
       <input type="text" id="city" formControlName="city" placeholder="הכנס עיר">
       <div class="error-message" *ngIf="isFieldInvalid('city')">
         {{ getFieldError('city', 'עיר') }}
@@ -51,7 +51,7 @@
 
     <!-- כתובת -->
     <div class="form-field">
-      <label for="address">כתובת</label>
+  <label for="address">כתובת</label>
       <input type="text" id="address" formControlName="address" placeholder="הכנס כתובת">
       <div class="error-message" *ngIf="isFieldInvalid('address')">
         {{ getFieldError('address', 'כתובת') }}
@@ -61,7 +61,7 @@
 
     <!-- אימייל -->
     <div class="form-field">
-      <label for="email">אימייל</label>
+  <label for="email">אימייל</label>
       <input type="email" id="email" formControlName="email" placeholder="הכנס אימייל">
       <div class="error-message" *ngIf="isFieldInvalid('email')">
         {{ getFieldError('email', 'אימייל') }}
@@ -70,7 +70,7 @@
 
     <!-- בחירת מטפל אם לא הגיע מבחוץ -->
     <div class="form-field" *ngIf="!data?.therapist_id">
-      <label for="therapist_id">בחר מטפל *</label>
+  <label for="therapist_id">בחר מטפל</label>
       <select id="therapist_id" formControlName="therapist_id" required>
         <option [value]="null" disabled selected>בחר מטפל</option>
         <option *ngFor="let therapist of therapists" [value]="therapist.therapist.therapist_id">
@@ -84,7 +84,7 @@
 
     <!-- תאריך לידה -->
     <div class="form-field">
-      <label for="birth_date">תאריך לידה</label>
+  <label for="birth_date">תאריך לידה</label>
       <input type="date" id="birth_date" formControlName="birth_date" [max]="maxDate">
       <div class="error-message" *ngIf="isFieldInvalid('birth_date')">
         {{ getFieldError('birth_date', 'תאריך לידה') }}
@@ -93,7 +93,7 @@
 
     <!-- מין -->
     <div class="form-field">
-      <label for="gender">מין *</label>
+  <label for="gender">מין</label>
       <select id="gender" formControlName="gender">
         <option *ngFor="let gender of genderOptions" [value]="gender.value">
           {{ gender.label }}
@@ -106,7 +106,7 @@
 
     <!-- סטטוס -->
     <div class="form-field">
-      <label for="status">סטטוס *</label>
+  <label for="status">סטטוס</label>
       <select id="status" formControlName="status">
         <option *ngFor="let status of statusOptions" [value]="status.value">
           {{ status.label }}

@@ -1,47 +1,5 @@
 
 <div class="stats-container">  
-  <div class="stats-grid" *ngIf="monthlyStats">
-    <div class="stat-card hours">
-      <div class="stat-icon">🕐</div>
-      <div class="stat-label">סך שעות טיפול</div>
-      <div class="stat-value">
-        <span>{{ monthlyStats.total_hours }}</span>
-        <span class="stat-unit">שעות</span>
-      </div>
-    </div>
-
-    <div class="stat-card appointments">
-      <div class="stat-icon">📅</div>
-      <div class="stat-label">סך פגישות</div>
-      <div class="stat-value">
-        <span>{{ monthlyStats.total_appointments }}</span>
-        <span class="stat-unit">פגישות</span>
-      </div>
-    </div>
-
-    <div class="stat-card payments">
-      <div class="stat-icon">💰</div>
-      <div class="stat-label">סך תשלומים</div>
-      <div class="stat-value">
-        <span>{{ monthlyStats.total_payments | number:'1.0-2' }}</span>
-        <span class="stat-unit">₪</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Loading State -->
-  <div class="stats-grid" *ngIf="!monthlyStats">
-    <div class="stat-card loading">
-      <div class="loading-skeleton"></div>
-    </div>
-    <div class="stat-card loading">
-      <div class="loading-skeleton"></div>
-    </div>
-    <div class="stat-card loading">
-      <div class="loading-skeleton"></div>
-    </div>
-  </div>
-
   <div class="mini-calendar-container">
     <app-therapist-calendar [compact]="true"></app-therapist-calendar>
   </div>

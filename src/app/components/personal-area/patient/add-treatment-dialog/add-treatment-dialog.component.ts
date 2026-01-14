@@ -76,34 +76,42 @@ export class CreateTreatmentDialogComponent implements OnInit {
       }
       if (data) {
         // תאריך בפורמט YYYY-MM-DD
-        let dateStr = '';
+        let patchObj: any = {};
         if (data.appointment_date) {
           const d = new Date(data.appointment_date);
           if (!isNaN(d.getTime())) {
-            dateStr = d.toISOString().slice(0, 10);
+            patchObj.date = d.toISOString().slice(0, 10);
           }
         } else if (data.date) {
-          dateStr = data.date;
+          patchObj.date = data.date;
         }
-        // מקום כ-number
-        let placeVal = '';
         if (data.room_id) {
-          placeVal = String(data.room_id);
+          patchObj.place = String(data.room_id);
         } else if (data.place) {
-          placeVal = String(data.place);
+          patchObj.place = String(data.place);
         }
-        this.treatmentForm.patchValue({
-          date: dateStr,
-          place: placeVal,
-          type: data.treatment_type_id || data.type || '',
-          startTime: data.start_time || data.startTime || '',
-          endTime: data.end_time || data.endTime || '',
-          notes: data.notes || '',
-          meeting_type: data.meeting_type || data.mode || 'frontal',
-          patient_id: data.patient_id || null
-        });
+        if (data.treatment_type_id || data.type) {
+          patchObj.type = data.treatment_type_id || data.type;
+        }
+        if (data.start_time || data.startTime) {
+          patchObj.startTime = data.start_time || data.startTime;
+        }
+        if (data.end_time || data.endTime) {
+          patchObj.endTime = data.end_time || data.endTime;
+        }
+        if (data.notes) {
+          patchObj.notes = data.notes;
+        }
+        if (data.meeting_type || data.mode) {
+          patchObj.meeting_type = data.meeting_type || data.mode;
+        }
+        if (data.patient_id) {
+          patchObj.patient_id = data.patient_id;
+        }
+        // רק אם יש ערך, נעדכן את השדה
+        this.treatmentForm.patchValue(patchObj);
       } else {
-        this.treatmentForm.get('meeting_type')?.setValue('frontal');
+        // אין צורך ב-patchValue, הערכים מוזנים ישירות ב-createForm
       }
       // אם לא הועבר patient_id נטען את רשימת המטופלים של המטפל
       if (!data?.patient_id) {
@@ -158,14 +166,22 @@ export class CreateTreatmentDialogComponent implements OnInit {
   }
 
   private createForm(): FormGroup {
+    // ערכי ברירת מחדל תמיד יוזנו כאן
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const todayStr = now.toISOString().slice(0, 10);
+    const startTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const endDate = new Date(now.getTime() + 60 * 60 * 1000);
+    const endTimeStr = `${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
+
     return this.fb.group({
       meeting_type: ['frontal', Validators.required],
-      date: [null, Validators.required],
-      startTime: ['', [
+      date: [todayStr, Validators.required],
+      startTime: [startTimeStr, [
         Validators.required,
         Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/)
       ]],
-      endTime: ['', [
+      endTime: [endTimeStr, [
         Validators.required,
         Validators.pattern(/^([0-1]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/)
       ]],

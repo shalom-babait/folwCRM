@@ -15,8 +15,8 @@
 	<div class="treatment-row header-row">
 		<div class="treatment-cell">שם</div>
 		<div class="treatment-cell">טלפון</div>
-		<!-- <div class="treatment-cell">מייל</div> -->
-		<div class="treatment-cell">תזכורת?</div>
+		<div class="treatment-cell">מייל</div>
+		<!-- <div class="treatment-cell">תזכורת?</div> -->
 		<div class="treatment-cell">תאריך מעקב</div>
 		<div class="treatment-cell">שעה</div>
 		<div class="treatment-cell">הערות</div>
@@ -27,25 +27,32 @@
 		<div class="treatment-row data-row" *ngFor="let f of filteredFollowups">
 			<div class="treatment-cell">{{ f.person.first_name }} {{ f.person.last_name }}</div>
 			<div class="treatment-cell">{{ f.person.phone }}</div>
-			<!-- <div class="treatment-cell">{{ f.person?.email }}</div> -->
-			<div class="treatment-cell">
+			<div class="treatment-cell">{{ f.person.email }}</div>
+			<!-- <div class="treatment-cell">
 				<ng-container *ngIf="f.followUp.remind; else toggle">
 					<mat-icon color="primary">check</mat-icon>
 				</ng-container>
 				<ng-template #toggle>
 					<mat-slide-toggle name="remind" [(ngModel)]="f.followUp.remind"></mat-slide-toggle>
 				</ng-template>
-			</div>
+			</div> -->
 			<div class="treatment-cell">{{ f.followUp.follow_date | date:'dd/MM/yyyy' }}</div>
 			<div class="treatment-cell">{{ f.followUp.follow_time }}</div>
 			<div class="treatment-cell">{{ f.followUp.notes }}</div>
 			<div class="treatment-cell actions-cell">
-				<button mat-icon-button color="primary" (click)="editFollowup(f)">
-					<mat-icon>edit</mat-icon>
+				<button class="menu-button" [matMenuTriggerFor]="followupMenu" (click)="$event.stopPropagation()" matTooltip="פעולות">
+					<mat-icon>more_vert</mat-icon>
 				</button>
-				<button mat-icon-button color="warn" (click)="deleteFollowup(f)">
-					<mat-icon>delete</mat-icon>
-				</button>
+				<mat-menu #followupMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+					<button mat-menu-item (click)="editFollowup(f)">
+						<mat-icon>edit</mat-icon>
+						<span>ערוך</span>
+					</button>
+					<button mat-menu-item (click)="deleteFollowup(f)">
+						<mat-icon color="warn">delete</mat-icon>
+						<span style="color: #c62828;">מחק</span>
+					</button>
+				</mat-menu>
 			</div>
 				<ng-container *ngIf="isToday(f.followUp.follow_date)">
 				  <mat-icon class="bell-animate" color="accent">notifications_active</mat-icon>

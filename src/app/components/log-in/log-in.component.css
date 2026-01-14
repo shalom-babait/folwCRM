@@ -1,3 +1,11 @@
+/* עיצוב לוגו במסך כניסה */
+.login-logo {
+  max-width: 120px;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 /* עיצוב בשימוש בפועל בלוגאין */
 .login-fullpage-container {
   min-height: 100vh;
@@ -5,7 +13,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  background: linear-gradient(135deg, #3F6B60 0%, #3F6B60 100%);
+  color: #2A5448;
 }
 
 .login-center-box {
@@ -23,7 +32,6 @@
 
 .login-title {
   text-align: center;
-  color: #022F39;
   font-size: 2rem;
   margin-bottom: 1.5rem;
   font-weight: bold;
@@ -44,7 +52,7 @@
   align-items: center;
 }
 
-.WantToBeUpdatedTiteleInput {
+.login-input {
   width: 100%;
   padding: 0.5rem 0.8rem;
   font-size: 1rem;
@@ -57,7 +65,7 @@
   margin-bottom: 0.7rem;
 }
 
-.WantToBeUpdatedTiteleInput:focus {
+.login-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #022F39;
 }
@@ -129,21 +137,7 @@
     max-width: 98vw;
     padding: 1.2rem 0.5rem;
   }
-  .WantToBeUpdatedTiteleInput {
+  .login-input {
     width: 90vw;
   }
-}
-.login-fullpage-container {
-  min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
-}
-
-.login-center-box {
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
-
 }

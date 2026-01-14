@@ -1,13 +1,13 @@
 <div class="login-fullpage-container" (keydown.enter)="onEnter()">
   <div class="login-center-box">
     <div class="titleContainer">
-        <img src="../../../../assets/photoes/LOGO.png" alt="לוגו" class="login-logo" style="max-width: 120px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;" />
+    <img src="../../../../assets/photoes/LOGO.png" alt="לוגו" class="login-logo" />
         <h2 class="login-title">כניסה לאזור האישי</h2>
     </div>
     <div class="connection">
-    <input class="WantToBeUpdatedTiteleInput" type="text" name="user_name" placeholder="*שם משתמש" required [(ngModel)]="user_name">
+    <input class="login-input" type="text" name="user_name" placeholder="*שם משתמש" required [(ngModel)]="user_name">
         <div class="password-container">
-            <input class="WantToBeUpdatedTiteleInput" 
+            <input class="login-input" 
                    [type]="showPassword ? 'text' : 'password'" 
                    name="password" 
                    placeholder="*סיסמה" 
@@ -16,12 +16,12 @@
             <span class="eye-icon" (click)="togglePasswordVisibility()" [class.visible]="showPassword"></span>
         </div>
     <button class="submitButton" (click)="onLogin()" [disabled]="!user_name || !password">כניסה</button>
-        <a class="subtitle" (click)="showSendingPasswordToMail()">שכחתי שם משתמש/סיסמה</a>
+        <a class="subtitle" (click)="showSendingPasswordToMail()" style="color: #3F6B60 ;">שכחתי שם משתמש/סיסמה</a>
     </div>
     <div *ngIf="SendingPasswordToMail">
         <div class="showSendingPasswordToMail">
             <label class="dialogTitle">שחזור סיסמה</label>
-            <input class="WantToBeUpdatedTiteleInput" type="email" name="email" placeholder="מייל" required>
+            <input class="login-input" type="email" name="email" placeholder="מייל" required>
             <button class="submitButton SubmitNewPasswordButton" (click)="showPasswordHasBeenSent()">שלח למייל סיסימה חדשה</button>
         </div>
     </div>
@@ -34,9 +34,9 @@
     <div *ngIf="forgatPassword">
         <div class="showForgotPassword">
             <label class="dialogTitle">שחזור סיסמה</label>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="סיסמה" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="בחר סיסמה חדשה" required>
-            <input class="WantToBeUpdatedTiteleInput" type="password" name="password" placeholder="אימות סיסמה חדשה" required>
+            <input class="login-input" type="password" name="password" placeholder="סיסמה" required>
+            <input class="login-input" type="password" name="password" placeholder="בחר סיסמה חדשה" required>
+            <input class="login-input" type="password" name="password" placeholder="אימות סיסמה חדשה" required>
             <button class="submitButton">כניסה</button>
         </div>
     </div>

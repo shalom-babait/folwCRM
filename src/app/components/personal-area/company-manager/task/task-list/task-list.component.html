@@ -1,9 +1,12 @@
 <div class="task-list">
   <div class="task-list-header">
-  <button mat-raised-button color="primary" (click)="showAddTaskCard()" *ngIf="!addMode" title="הוספת משימה">
-      <mat-icon>add</mat-icon>
-    </button>
-
+  <button class="add-item-btn" (click)="showAddTaskCard()" *ngIf="!addMode" title="הוספת משימה">
+    <mat-icon>add</mat-icon>
+  </button>
+  <div *ngIf="tasks.length === 0 && !addMode" class="no-tasks-message">
+    <p>אין משימות להצגה</p>
+    <p>לחץ על כפתור הוספה כדי להוסיף משימה חדשה</p>
+  </div>
   <!-- כרטיס הוספת משימה -->
   <div class="task-card add-task-card" *ngIf="addMode" [formGroup]="addTaskForm" [style.borderRightColor]="addTaskForm.get('color')?.value || '#FFD54F'">
     <div class="task-header">
@@ -44,6 +47,7 @@
     *ngFor="let task of tasks"
     [style.borderRightColor]="editTaskId === task.task_id && editTaskForm ? (editTaskForm.get('color')?.value || task.color || '#FFD54F') : (task.color || '#ccc')"
   >
+
     <ng-container *ngIf="editTaskId === task.task_id && editTaskForm; else displayTask">
       <form [formGroup]="editTaskForm" (ngSubmit)="saveEditTask(task)">
         <div class="task-header">

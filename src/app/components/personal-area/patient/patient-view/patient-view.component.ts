@@ -1,31 +1,54 @@
-import { Component, Input } from '@angular/core';
+
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { PatientCreationData } from 'src/app/models/patient.model';
 import { PatientService } from 'src/app/services/patient.service';
+import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
   selector: 'app-patient-view',
   templateUrl: './patient-view.component.html',
   styleUrls: ['./patient-view.component.css', '../../../../styles/views.css']
 })
-export class PatientViewComponent {
+export class PatientViewComponent implements OnInit {
+  currentDate: Date = new Date();
+
   @Input() therapistId?: number;
   selectedPatient: PatientCreationData | null = null;
   activeTab: string = 'details';
   searchTerm: string = '';
   loading: boolean = false;
   payments: any[] = [];
+  monthlyStats: { total_hours: number, total_appointments: number, total_payments: number } | null = null;
 
 
   /** עדכון פרטי מטופל */
 
+
   userId: number | null = null;
+
 
   constructor(
     private patientService: PatientService,
-    private authService: AuthService
+    private authService: AuthService,
+    private therapistService: TherapistService
   ) {
     this.userId = this.authService.getCurrentUserId();
+  }
+
+  ngOnInit(): void {
+    if (this.therapistId) {
+      this.therapistService.getTherapistMonthlyStats(this.therapistId).subscribe({
+        next: (res: any) => {
+          if (res && res.success && res.data) {
+            this.monthlyStats = res.data;
+          }
+        },
+        error: (err) => {
+          this.monthlyStats = null;
+        }
+      });
+    }
   }
 
 
