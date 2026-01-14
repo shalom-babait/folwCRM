@@ -22,14 +22,14 @@ export class TextEditorComponent implements ControlValueAccessor, OnInit {
   bulletValue = '';
 
   modules = {
-   toolbar: [
-  ['bold', 'italic', 'underline'],       // כפתורי טקסט
-  [{ color: [] }, { background: [] }], // שורת צבעים
-  [{ list: 'ordered' }, { list: 'bullet' }], // רשימות
-  [{ direction: 'rtl' }, { direction: 'ltr' }], // הוספת כפתור ימין-לשמאל ושמאל-לימין
-  ['clean']
-]
-
+    toolbar: [
+  [{ 'size': ['small', false, 'large', 'huge'] }], // שורת גדלי פונט באנגלית (ערך תקני)
+      ['bold', 'italic', 'underline'],       // כפתורי טקסט
+      [{ color: [] }, { background: [] }], // שורת צבעים
+      [{ list: 'ordered' }, { list: 'bullet' }], // רשימות
+      [{ direction: 'rtl' }, { direction: 'ltr' }], // הוספת כפתור ימין-לשמאל ושמאל-לימין
+      ['clean']
+    ]
   };
 
   defaultDirection: 'rtl' | 'ltr' = 'rtl';

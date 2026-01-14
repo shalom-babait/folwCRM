@@ -17,7 +17,7 @@ export class TherapistHomeComponent {
   therapistId: number | undefined = undefined;
   selectedPatient: PatientCreationData | null = null;
   appointments: Appointment[] = [];
-  monthlyStats: { total_hours: number, total_appointments: number, total_payments: number } | null = null;
+
 
   private destroy$ = new Subject<void>();
 
@@ -28,25 +28,10 @@ export class TherapistHomeComponent {
   ) {}
 
   ngOnInit() {
-    // נטען נתוני סטטיסטיקה חודשית של המטפל הנוכחי
-  const id = localStorage.getItem('therapist_id');
-  this.therapistId = id ? Number(id) : undefined;
-    if (this.therapistId) {
-      this.therapistService.getTherapistMonthlyStats(this.therapistId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: any) => {
-            console.log('Therapist monthly stats response:', res);
-            if (res && res.success && res.data) {
-              this.monthlyStats = res.data;
-            }
-          },
-          error: (err) => {
-            console.error('Error loading therapist monthly stats:', err);
-            this.monthlyStats = null;
-          }
-        });
-    }
+
+    // קביעת מזהה מטפל
+    const id = localStorage.getItem('therapist_id');
+    this.therapistId = id ? Number(id) : undefined;
 
     // האזנה לבחירת מטופל מרשימת המטופלים
   this.patientService.selectedPatient$

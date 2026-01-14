@@ -8,16 +8,23 @@ import { Room, RoomAvailability } from 'src/app/models/room.model';
   styleUrls: ['./room-settings.component.css']
 })
 export class RoomSettingsComponent {
+    saveMessage: string = '';
+
+  // ימים בשבוע: 0=ראשון, 1=שני, ... 6=שבת
   daysOfWeek: string[] = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-  roomAvailability: (RoomAvailability & { available?: boolean })[] = [
-    { day_of_week: 0, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 1, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 2, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 3, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 4, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 5, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-    { day_of_week: 6, start_time: '08:00', end_time: '20:00', company_id: 0, room_id: 0, available: true },
-  ];
+
+  groupedAvailabilityOrEmpty: { day_of_week: number, dayName: string, availabilities: (RoomAvailability & { available?: boolean })[] }[] = [];
+  get groupedAvailability() {
+    const groups: { day_of_week: number, dayName: string, availabilities: (RoomAvailability & { available?: boolean })[] }[] = [];
+    for (let i = 0; i < 7; i++) {
+        const avails = this.roomAvailability.filter(a => (a.day_of_week - 1) === i);
+      if (avails.length > 0) {
+        groups.push({ day_of_week: i, dayName: this.daysOfWeek[i], availabilities: avails });
+      }
+    }
+    return groups;
+  }
+  roomAvailability: (RoomAvailability & { available?: boolean })[] = [];
   @Input() room!: Room;
   roomColor: string = '#ffffff';
   editMode: boolean = false;
@@ -32,12 +39,25 @@ export class RoomSettingsComponent {
       this.editedName = this.room.room_name;
       this.roomColor = this.room.color || '#ffffff';
       this.editedDescription = this.room.description || '';
-      // כאן נטען זמינות אמיתית מהשרת בעתיד
-      this.roomAvailability.forEach(a => {
-        a.room_id = this.room.room_id;
-        // company_id יש להכניס מההקשר שלך
+      this.roomsService.getRoomAvailability(this.room.room_id).subscribe({
+        next: (availability) => {
+          this.roomAvailability = availability;
+          this.updateGroupedAvailability();
+        },
+        error: (err) => {
+          console.error('Failed to load room availability:', err);
+        }
       });
     }
+  }
+
+  updateGroupedAvailability() {
+    const groups: { day_of_week: number, dayName: string, availabilities: (RoomAvailability & { available?: boolean })[] }[] = [];
+    for (let i = 0; i < 7; i++) {
+        const avails = this.roomAvailability.filter(a => (a.day_of_week - 1) === i);
+      groups.push({ day_of_week: i, dayName: this.daysOfWeek[i], availabilities: avails });
+    }
+    this.groupedAvailabilityOrEmpty = groups;
   }
 
   applySameHoursToAll() {
@@ -59,21 +79,50 @@ export class RoomSettingsComponent {
         color: this.roomColor,
         description: this.editedDescription
       };
-      // כאן יש לשמור גם את זמינות החדר לשרת
       this.roomsService.updateRoom(updatedRoom).subscribe({
         next: () => {
           this.room.room_name = this.editedName;
           this.room.color = this.roomColor;
           this.room.description = this.editedDescription;
-          // כאן יש לשמור את this.roomAvailability לשרת
-          this.editMode = false;
-          this.isSaving = false;
+          this.roomsService.saveRoomAvailability(this.room.room_id, this.roomAvailability).subscribe({
+            next: () => {
+              this.editMode = false;
+              this.isSaving = false;
+            },
+            error: (err) => {
+              this.isSaving = false;
+              console.error('Failed to save room availability:', err);
+            }
+          });
         },
         error: (err) => {
           this.isSaving = false;
           console.error('Failed to update room:', err);
         }
       });
+    }
+  }
+    addTimeRange(dayIdx: number) {
+    // company_id נלקח מהטווח הראשון הקיים, ואם אין אז 0
+    const companyId = this.roomAvailability[0]?.company_id ?? 0;
+    const newRange: RoomAvailability = {
+      company_id: companyId,
+      room_id: this.room.room_id,
+      day_of_week: dayIdx + 1, // ב-DB 1=ראשון
+      start_time: '08:00',
+      end_time: '17:00',
+    };
+    this.roomAvailability.push(newRange);
+    this.updateGroupedAvailability();
+  }
+
+  removeTimeRange(dayIdx: number, availIdx: number) {
+    const dayRanges = this.roomAvailability.filter(a => (a.day_of_week - 1) === dayIdx);
+    const toRemove = dayRanges[availIdx];
+    const idx = this.roomAvailability.indexOf(toRemove);
+    if (idx > -1) {
+      this.roomAvailability.splice(idx, 1);
+      this.updateGroupedAvailability();
     }
   }
 }

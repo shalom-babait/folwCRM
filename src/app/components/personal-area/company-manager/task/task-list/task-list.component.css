@@ -1,3 +1,23 @@
+
+/* עיצוב כפתור הוספת משימה כמו add-item-btn */
+.add-item-btn {
+    background-color: #4A7A6D;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.add-item-btn mat-icon {
+  font-size: 22px;
+  color: inherit;
+}
 .task-color-input {
   margin-right: 8px;
   width: 32px;

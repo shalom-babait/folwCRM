@@ -1,14 +1,13 @@
 <div class="transaction-form">
-  <h3>הוספת עסקה חדשה</h3>
+  <h2>{{ mode === 'edit' ? 'עריכת עסקה' : 'הוספת עסקה חדשה' }}</h2>
 
   <!-- בחירת סוג העסקה -->
   <div class="form-section">
     <label class="section-label">סוג העסקה:</label>
     <div class="transaction-type-selector">
       <label class="type-option" [class.active]="transactionType === 'debit'">
-        <input type="radio" name="transactionType" value="debit"
-               [(ngModel)]="transactionType"
-               (change)="onTransactionTypeChange()">
+        <input type="radio" name="transactionType" value="debit" [(ngModel)]="transactionType"
+          (change)="onTransactionTypeChange()">
         <div class="option-content">
           <mat-icon>assignment</mat-icon>
           <span class="label">חוב (טיפול)</span>
@@ -16,9 +15,8 @@
       </label>
 
       <label class="type-option" [class.active]="transactionType === 'credit'">
-        <input type="radio" name="transactionType" value="credit"
-               [(ngModel)]="transactionType"
-               (change)="onTransactionTypeChange()">
+        <input type="radio" name="transactionType" value="credit" [(ngModel)]="transactionType"
+          (change)="onTransactionTypeChange()">
         <div class="option-content">
           <mat-icon>payment</mat-icon>
           <span class="label">תשלום</span>
@@ -46,18 +44,14 @@
     <div class="form-row">
       <div class="form-group">
         <label>סכום החוב (₪):</label>
-        <input type="number" [(ngModel)]="debitForm.amount"
-               min="0" step="10" placeholder="0"
-               class="form-control">
+        <input type="number" [(ngModel)]="debitForm.amount" min="0" step="10" placeholder="0" class="form-control">
       </div>
 
       <div class="form-group">
         <label>תאריך:</label>
 
         <!-- עכשיו זה עובד תקין: מציג היום כברירת מחדל -->
-        <input type="date"
-               [(ngModel)]="debitForm.payment_date"
-               class="form-control">
+        <input type="date" [(ngModel)]="debitForm.payment_date" class="form-control">
       </div>
     </div>
   </div>
@@ -68,31 +62,24 @@
     <div class="form-row">
       <div class="form-group">
         <label>סכום התשלום (₪):</label>
-        <input type="number" [(ngModel)]="creditForm.amount"
-               min="0" step="10" placeholder="0"
-               class="form-control">
+        <input type="number" [(ngModel)]="creditForm.amount" min="0" step="10" placeholder="0" class="form-control">
       </div>
 
       <div class="form-group">
         <label>תאריך תשלום:</label>
 
         <!-- מציג תאריך ברירת מחדל = היום -->
-        <input type="date"
-               [(ngModel)]="creditForm.payment_date"
-               class="form-control">
+        <input type="date" [(ngModel)]="creditForm.payment_date" class="form-control">
       </div>
     </div>
 
     <div class="form-group">
       <label>אמצעי תשלום:</label>
       <div class="payment-methods">
-        <label *ngFor="let method of paymentMethods"
-               class="method-option"
-               [class.selected]="creditForm.method === method.value">
+        <label *ngFor="let method of paymentMethods" class="method-option"
+          [class.selected]="creditForm.method === method.value">
 
-          <input type="radio" name="paymentMethod"
-                 [value]="method.value"
-                 [(ngModel)]="creditForm.method">
+          <input type="radio" name="paymentMethod" [value]="method.value" [(ngModel)]="creditForm.method">
 
           <span>{{ method.label }}</span>
         </label>
@@ -120,8 +107,13 @@
   <div class="form-actions">
     <button class="btn-cancel" (click)="onCancel()">ביטול</button>
     <button class="btn-submit" (click)="onSubmit()">
-      {{ transactionType === 'debit' ? 'הוסף חוב' : 'רשום תשלום' }}
+      {{
+      mode === 'edit'
+      ? 'שמור שינויים'
+      : (transactionType === 'debit' ? 'הוסף חוב' : 'רשום תשלום')
+      }}
     </button>
+
   </div>
 
 </div>

@@ -17,57 +17,72 @@
 			<input type="text" [(ngModel)]="editedName" />
 		</ng-template>
 	</div>
-		<div class="settings-section">
-			<label>צבע חדר:</label>
-			<input type="color" [(ngModel)]="roomColor" [disabled]="!editMode" />
-		</div>
-		<div class="settings-section">
-			<label>הערות:</label>
-			<ng-container *ngIf="!editMode; else editDesc">
-				<span>{{ room.description || '-' }}</span>
-			</ng-container>
-			<ng-template #editDesc>
-				<textarea [(ngModel)]="editedDescription" rows="2" style="width:100%"></textarea>
-			</ng-template>
-		</div>
+	<div class="settings-section">
+		<label>צבע חדר:</label>
+		<input type="color" [(ngModel)]="roomColor" [disabled]="!editMode" />
+	</div>
+	<div class="settings-section">
+		<label>הערות:</label>
+		<ng-container *ngIf="!editMode; else editDesc">
+			<span>{{ room.description || '-' }}</span>
+		</ng-container>
+		<ng-template #editDesc>
+			<textarea [(ngModel)]="editedDescription" rows="2" style="width:100%"></textarea>
+		</ng-template>
+	</div>
 	<!-- זמינות חדר -->
 	<div class="settings-section">
 		<label>זמינות חדר:</label>
 	</div>
-		<div class="room-availability-table">
-			<table>
-				<thead>
-					<tr>
-						<th>יום</th>
-						<th>שעת התחלה</th>
-						<th>שעת סיום</th>
-						<th *ngIf="editMode">זמין</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let avail of roomAvailability; let i = index">
-						<td>{{ daysOfWeek[i] }}</td>
-						<td *ngIf="!editMode">{{ avail.available === false ? '-' : avail.start_time }}</td>
-						<td *ngIf="editMode">
-							<input type="time" [(ngModel)]="roomAvailability[i].start_time" [disabled]="!roomAvailability[i].available" />
-						</td>
-						<td *ngIf="!editMode">{{ avail.available === false ? '-' : avail.end_time }}</td>
-						<td *ngIf="editMode">
-							<input type="time" [(ngModel)]="roomAvailability[i].end_time" [disabled]="!roomAvailability[i].available" />
-						</td>
-						<td *ngIf="editMode">
-							<input type="checkbox" [(ngModel)]="roomAvailability[i].available" [checked]="roomAvailability[i].available !== false" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div *ngIf="editMode" class="availability-actions">
-				<button (click)="applySameHoursToAll()">החל שעות על כל הימים</button>
-			</div>
-			<div *ngIf="editMode" class="settings-actions" style="margin-top: 1.5rem;">
-				<button class="save-button" (click)="onSave()">
-					שמור
-				</button>
-			</div>
+	<div class="room-availability-table">
+		<table>
+			<thead>
+				   <tr>
+					   <th>יום</th>
+					   <th>שעת התחלה</th>
+					   <th>שעת סיום</th>
+				   </tr>
+			</thead>
+			<tbody>
+				   <tr *ngFor="let group of groupedAvailabilityOrEmpty; let dayIdx = index">
+					   <td>{{ group.dayName }}</td>
+					   <td>
+						   <ng-container *ngIf="group.availabilities.length > 0; else noStart">
+							   <div *ngFor="let avail of group.availabilities; let availIdx = index">
+								   <span *ngIf="!editMode">{{ avail.start_time }}</span>
+								   <input *ngIf="editMode" type="time" [(ngModel)]="avail.start_time" />
+								   <button *ngIf="editMode" (click)="removeTimeRange(dayIdx, availIdx)" style="margin-right:6px; color:#b00; background:none; border:none; cursor:pointer; font-size:1.1em;">🗑️</button>
+							   </div>
+						   </ng-container>
+						   <ng-template #noStart>
+							   <span>----------</span>
+						   </ng-template>
+					   </td>
+					   <td>
+						   <ng-container *ngIf="group.availabilities.length > 0; else noEnd">
+							   <div *ngFor="let avail of group.availabilities">
+								   <span *ngIf="!editMode">{{ avail.end_time }}</span>
+								   <input *ngIf="editMode" type="time" [(ngModel)]="avail.end_time" />
+							   </div>
+						   </ng-container>
+						   <ng-template #noEnd>
+							   <span>----------</span>
+						   </ng-template>
+					   </td>
+					   <td *ngIf="editMode">
+						   <button (click)="addTimeRange(dayIdx)" style="color:#2F5D50; background:none; border:1px solid #2F5D50; border-radius:4px; padding:2px 8px; cursor:pointer; font-size:0.95em;">הוסף טווח</button>
+					   </td>
+					   <!-- עמודת מחיקה/הוספה תתווסף בשלב הבא -->
+				</tr>
+			</tbody>
+		</table>
+		<div *ngIf="editMode" class="availability-actions">
+			<button (click)="applySameHoursToAll()">החל שעות על כל הימים</button>
 		</div>
+		<div *ngIf="editMode" class="settings-actions" style="margin-top: 1.5rem;">
+			<button class="save-button" (click)="onSave()">
+				שמור
+			</button>
+		</div>
+	</div>
 </div>
