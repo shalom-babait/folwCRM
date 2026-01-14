@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FollowupService } from 'src/app/services/followup.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowUpWithPerson } from 'src/app/models/followup.model';
@@ -12,7 +12,10 @@ import { AddFollowupDialogComponent } from '../add-followup-dialog/add-followup-
     , '../../../../../styles/shared-table.css'
   ]
 })
+
 export class UserFollowUpTableComponent implements OnInit {
+  @Input() dateFilter: string = 'all';
+
   isToday(dateStr: string): boolean {
     if (!dateStr) return false;
     const date = new Date(dateStr);
@@ -23,7 +26,7 @@ export class UserFollowUpTableComponent implements OnInit {
   }
   followups: FollowUpWithPerson[] = [];
   searchTerm: string = '';
-  dateFilter: string = 'all';
+  // dateFilter is now settable via @Input
 
   constructor(
     private followupService: FollowupService,
@@ -32,6 +35,7 @@ export class UserFollowUpTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // If dateFilter is not set by parent, keep 'all' as default
     const userId = this.authService.getCurrentUserId();
     if (userId) {
       this.followupService.getFollowupsByCreator(userId).subscribe(data => {

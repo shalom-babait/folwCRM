@@ -15,6 +15,7 @@ import { co } from '@fullcalendar/core/internal-common';
     '../../../../styles/shared-table.css']
 })
 export class TreatmentListComponent implements OnInit {
+  @Input() statusFilter: string = 'מתוזמנת';
   selectedStatus: string = '';
 
   // פורמט דקות לשעות ודקות בעברית
@@ -38,9 +39,9 @@ export class TreatmentListComponent implements OnInit {
   }
 
   @Input() appointments: Appointment[] = [];
-  @Input() patientId: number | undefined;
-  @Input() patient?: Patient;
+  @Input() patientId?: number;
   @Input() therapistId?: number;
+  @Input() patient?: Patient;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
   @Output() appointmentDeleted = new EventEmitter<number>();
 
@@ -56,8 +57,17 @@ export class TreatmentListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // אם מוצגים כל הפגישות של מטפל (ולא של מטופל מסוים) - סנן כברירת מחדל לפי "מתוזמנת"
+    if (typeof this.therapistId === 'number' && typeof this.patientId !== 'number') {
+      this.selectedStatus = this.statusFilter;
+    }
+    // אם הועבר מזהה מטופל, נטען לפי מטופל, אחרת אם הועבר מזהה מטפל - נטען לפי מטפל
     if (typeof this.patientId === 'number') {
       this.apppointmentService.getAppointmentsByPatient(this.patientId, this.therapistId).subscribe(data => {
+        this.appointments = data;
+      });
+    } else if (typeof this.therapistId === 'number') {
+      this.apppointmentService.getAppointmentsForTherapist(this.therapistId).subscribe((data: Appointment[]) => {
         this.appointments = data;
       });
     }
