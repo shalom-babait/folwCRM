@@ -1,3 +1,46 @@
+/* Hebrew labels for Quill font size dropdown */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::after {
+	content: "קטן" !important;
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::after {
+	content: "גדול" !important;
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::after {
+	content: "ענק";
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::after {
+	content: "קטן";
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::after {
+	content: "גדול";
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::after {
+	content: "ענק";
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	margin-right: 4px;
+}
 /* כפתור אייקון עגול */
 .icon-btn {
 	background: none;

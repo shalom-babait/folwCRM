@@ -1,5 +1,7 @@
+
 <div class="view-container">
 
+  
   <div class="right-panel">
     <!-- טוען את כל המטופלים -->
     <app-patient-list
@@ -16,6 +18,38 @@
       <div class="summary-card">
         <h2>סיכום מטופלים</h2>
         <p class="instruction">בחר מטופל מהרשימה לצפייה בפרטים</p>
+        <!-- ריבועי סטטיסטיקה של המטפל -->
+  <div class="stats-container" *ngIf="monthlyStats">
+    <div class="stats-grid">
+      <div class="stat-card hours">
+        <div class="stat-icon">🕐</div>
+        <div class="stat-label">סך שעות טיפול</div>
+        <div class="stat-value">
+          <span>{{ monthlyStats.total_hours }}</span>
+          <span class="stat-unit">שעות</span>
+        </div>
+      </div>
+      <div class="stat-card appointments">
+        <div class="stat-icon">📅</div>
+        <div class="stat-label">סך פגישות</div>
+        <div class="stat-value">
+          <span>{{ monthlyStats.total_appointments }}</span>
+          <span class="stat-unit">פגישות</span>
+        </div>
+      </div>
+      <div class="stat-card payments">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">סך תשלומים</div>
+        <div class="stat-value">
+          <span>{{ monthlyStats.total_payments | number:'1.0-2' }}</span>
+          <span class="stat-unit">₪</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:12px; font-size:1.1em; color:#555;">
+  נתונים לחודש {{ (currentDate | date:'M/yyyy') }}
+    </div>
+  </div>
       </div>
     </div>
 
@@ -73,7 +107,7 @@
 
         <!-- תוכנית טיפול -->
         <div *ngIf="activeTab === 'treatmentPlan'" class="treatment-plan-view">
-          <app-task-list [patientId]="selectedPatient.patient?.patient_id ?? null"></app-task-list>
+          <app-task-list [patientId]="selectedPatient.patient.patient_id ?? null"></app-task-list>
         </div>
 
         <!-- טיפולים -->

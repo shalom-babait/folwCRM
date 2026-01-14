@@ -140,15 +140,15 @@ export class AddPatientDialogComponent implements OnInit {
       first_name: ['', [Validators.required, Validators.minLength(2)]],
       last_name: ['', [Validators.required, Validators.minLength(2)]],
       teudat_zehut: ['', [Validators.pattern(/^\d{9}$/)]],
-      phone: ['', [Validators.required, Validators.pattern(/^05\d{8}$/)]],
-      city: ['', Validators.required],
+      phone: ['', [Validators.pattern(/^05\d{8}$/)]],
+      city: [''],
       address: [''],
       email: ['', [Validators.email]],
       birth_date: [''],
-      gender: ['male', Validators.required],
-      status: ['פעיל', Validators.required],
+      gender: ['male'],
+      status: ['פעיל'],
       history_notes: ['', [Validators.maxLength(500)]],
-      therapist_id: [null, this.data?.therapist_id ? [] : [Validators.required]]
+      therapist_id: [null]
     });
   }
 
