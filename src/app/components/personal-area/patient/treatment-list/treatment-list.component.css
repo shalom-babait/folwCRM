@@ -1,8 +1,42 @@
-/* שורת סיכום דביקה בתחתית הרשימה */
+/* ===== Grid בסיסי ===== */
+.header-row,
+.data-row {
+  display: grid;
+  grid-template-columns: var(--cols-template);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ===== תאים ===== */
+.treatment-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* ===== פעולות ===== */
+.actions-cell {
+  display: flex;
+  flex-wrap: nowrap;    
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* ===== שורת סיכום דביקה ===== */
 .sticky-summary-row {
-    color: white;
-	position: sticky;
-	bottom: 0;
-	z-index: 10;
-	background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+  color: white;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: 1fr;
 }
