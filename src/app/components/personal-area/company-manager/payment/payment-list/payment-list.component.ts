@@ -34,7 +34,7 @@ export class PaymentListComponent implements OnInit {
         console.log('Transactions from server:', data);
         this.transactions = data.map((item: any) => {
           return {
-            pay_id: item.pay_id ?? item.id ?? item.payment_id,
+            payment_id: item.payment_id ?? item.id ?? item.payment_id,
             appointment_id: item.appointment_id,
             therapist_id: item.therapist_id,
             amount: Number(item.amount ?? 0),
@@ -123,12 +123,12 @@ export class PaymentListComponent implements OnInit {
 
 
   deletePayment(payment: Payment) {
-    if (!payment || !payment.pay_id) {
+    if (!payment || !payment.payment_id) {
       alert('לא נמצא מזהה תשלום למחיקה');
       return;
     }
     if (confirm('האם אתה בטוח שברצונך למחוק את התשלום?')) {
-      this.paymentService.deletePayment(payment.pay_id).subscribe({
+      this.paymentService.deletePayment(payment.payment_id).subscribe({
         next: () => {
           this.loadTransactions();
         },
@@ -170,7 +170,7 @@ export class PaymentListComponent implements OnInit {
       };
 
       this.paymentService
-        .updatePayment(updatedPayment.pay_id!, payload)
+        .updatePayment(updatedPayment.payment_id!, payload)
         .subscribe({
           next: () => this.loadTransactions(),
           error: err => console.error('שגיאה בעדכון תשלום', err)

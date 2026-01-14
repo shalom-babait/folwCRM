@@ -1,14 +1,15 @@
 
-<div class="stats-container">  
-  <div class="mini-calendar-container">
-    <app-therapist-calendar [compact]="true"></app-therapist-calendar>
+
+<div class="therapist-home-grid">
+  <div class="top-row">
+    <div class="followup-col">
+      <app-user-follow-up-table [dateFilter]="'today'"></app-user-follow-up-table>
+    </div>
+    <div class="calendar-col">
+      <app-therapist-calendar [compact]="true"></app-therapist-calendar>
+    </div>
+  </div>
+  <div class="appointments-row">
+    <app-treatment-list [therapistId]="therapistId" [statusFilter]="'מתוזמנת'"></app-treatment-list>
   </div>
 </div>
-
-
-  <!-- <app-appointments-list
-    [appointments]="appointments"
-    [totalHours]="totalHours"
-    [totalCost]="totalCost">
-  </app-appointments-list> -->
-<!-- </div> -->

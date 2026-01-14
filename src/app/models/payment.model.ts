@@ -21,7 +21,7 @@ export interface CreditTransaction {
 
 export type Transaction = DebitTransaction | CreditTransaction;
 export interface Payment {
-  pay_id?: number; // או payment_id, לפי מה שמחזיר ה-API
+  payment_id?: number; // או payment_id, לפי מה שמחזיר ה-API
   appointment_id: number;
   amount: number;
   payment_date?: Date; // או string אם לא ממירים ל-Date
