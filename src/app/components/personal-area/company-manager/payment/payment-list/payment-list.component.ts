@@ -12,6 +12,7 @@ import { ex } from '@fullcalendar/core/internal-common';
 })
 export class PaymentListComponent implements OnInit {
   @Input() patientId!: number;
+  @Input() therapistId?: number;
   sortOrder: 'asc' | 'desc' = 'asc'; // 'asc' למיון מהישן לחדש, 'desc' מהחדש לישן
   transactions: Payment[] = [];
   totalDebits = 0;
@@ -89,8 +90,6 @@ export class PaymentListComponent implements OnInit {
     this.filteredTransactions = this.recalculateBalances(list);
     this.calculateTotals();
   }
-
-
 
   recalculateBalances(list: Payment[]) {
     let runningBalance = 0;

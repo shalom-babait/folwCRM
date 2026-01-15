@@ -21,6 +21,7 @@ export class PaymentService {
 
   /** דוח הכנסות לפי מטפל */
   getTherapistMonthlyPaymentsList(therapistId: number) {
+    alert("ddddddddddd");
     return this.http.get<any[]>(`${this.apiUrl}/payments/monthly-list/${therapistId}`);
   }
 

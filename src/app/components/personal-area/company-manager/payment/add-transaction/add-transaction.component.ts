@@ -1,8 +1,9 @@
 
-import { Component, EventEmitter, Output, OnInit, Inject } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Inject, Input } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentService } from 'src/app/services/payments.service';
 import { DebitTransaction, CreditTransaction, Transaction } from 'src/app/models/payment.model';
+
 
 @Component({
   selector: 'app-add-transaction',
@@ -10,6 +11,7 @@ import { DebitTransaction, CreditTransaction, Transaction } from 'src/app/models
   styleUrls: ['./add-transaction.component.css']
 })
 export class AddTransactionComponent implements OnInit {
+  @Input() therapistId?: number;
   @Output() transactionUpdated = new EventEmitter<Transaction>();
   @Output() transactionAdded = new EventEmitter<Transaction>();
   @Output() cancelled = new EventEmitter<void>();
@@ -22,13 +24,14 @@ export class AddTransactionComponent implements OnInit {
   transactionType: 'debit' | 'credit' = 'debit';
 
   constructor(private paymentService: PaymentService, @Inject(MAT_DIALOG_DATA) public data: any) { }
-private toDateInputValue(date: Date | string): string {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+
+  private toDateInputValue(date: Date | string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnInit() {
     this.patientId = this.data.patient_id;
@@ -128,7 +131,8 @@ private toDateInputValue(date: Date | string): string {
 
   onSubmit() {
     let transaction: Transaction & { therapist_id?: number };
-    const therapistId = Number(localStorage.getItem('therapist_id')); // Declare therapistId once
+  // קבלת מזהה מטפל מהאינפוט, ואם לא קיים - מה-localStorage
+  const therapistId = this.therapistId ?? Number(localStorage.getItem('therapist_id'));
 
     if (this.transactionType === 'debit') {
       if (!this.validateDebitForm()) return;
