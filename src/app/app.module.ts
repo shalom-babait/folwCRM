@@ -42,9 +42,9 @@ import { PatientListComponent } from './components/personal-area/patient/patient
 import { PatientNameFilterPipe } from './components/personal-area/patient/patient-list/patient-name-filter.pipe';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component'
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
-import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
+import { AppointmentListComponent } from './components/personal-area/patient/appointment-list/appointment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
-import { CreateTreatmentDialogComponent } from './components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
+import { AddAppointmentDialogComponent } from './components/personal-area/patient/add-appointment-dialog/add-appointment-dialog.component';
 import { RoomCalendarComponent } from './components/personal-area/company-manager/rooms/room-calendar/room-calendar.component';
 import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -122,9 +122,9 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     TherapistCalendarComponent,
     PatientDashboardComponent,
     TherapistDashboardComponent,
-    TreatmentListComponent,
+    AppointmentListComponent,
     AddPatientDialogComponent,
-    CreateTreatmentDialogComponent,
+  AddAppointmentDialogComponent,
     TreatmentSummaryComponent,
     PatientDetailsComponent,
     TherapistListComponent,

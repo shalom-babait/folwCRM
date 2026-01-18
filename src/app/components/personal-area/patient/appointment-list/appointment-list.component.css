@@ -1,6 +1,6 @@
 /* שורת סיכום דביקה בתחתית הרשימה */
 .sticky-summary-row {
-    color: white;
+	color: white;
 	position: sticky;
 	bottom: 0;
 	z-index: 10;

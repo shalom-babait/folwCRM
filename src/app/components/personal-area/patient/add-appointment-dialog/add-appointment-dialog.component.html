@@ -1,5 +1,8 @@
 <div class="create-treatment-dialog">
-  <h2 class="dialog-title">{{ dialogTitle }}</h2>
+  <h2 class="dialog-title">
+    {{ dialogTitle }}
+    <span *ngIf="patientFirstName && patientLastName">({{ patientFirstName }} {{ patientLastName }})</span>
+  </h2>
 
   <form [formGroup]="treatmentForm">
     <div class="form-section">

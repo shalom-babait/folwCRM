@@ -1,30 +1,142 @@
-/* ימים שעברו בלוח השנה - רקע תכלת בהיר */
+
+/* =========================
+   כותרת ימים מותאמת
+   ========================= */
+
+.fc-custom-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  padding: 0.5rem 0;
+}
+
+/* שם היום */
+.fc-custom-day {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+
+/* מספר היום */
+.fc-custom-date {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #263238;
+}
+
+/* יום נוכחי – הדגשה */
+.fc-day-today .fc-custom-header {
+  background: #1976d2;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fc-day-today .fc-custom-date {
+  color: #fff;
+}
+
+.fc-day-today .fc-custom-day {
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* הסרת רקע ברירת המחדל ליום נוכחי */
+.fc-col-header-cell.fc-day-today {
+  background: transparent;
+}
+
+/* =========================
+   ניקוי עיצוב ברירת מחדל
+   ========================= */
+
+.fc-col-header-cell-cushion {
+  padding: 0.4rem 0;
+  text-decoration: none;
+  display: block;
+}
+
+/* קו תחתון עדין לכל שורת הכותרת */
+.fc-scrollgrid-section-header {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* הסרת גבולות מיותרים בכותרת */
+.fc-col-header-cell {
+  border: none !important;
+  border-bottom: 1px solid #ddd !important;
+}
+
+/* גבולות בין עמודות - רק קווים אנכיים דקים */
+.fc-timegrid-col,
+.fc-daygrid-day {
+  border-right: 1px solid #ddd !important;
+  border-left: none !important;
+  border-top: none !important;
+}
+
+/* גבולות אופקיים בין השעות */
+.fc-timegrid-slot {
+  border-top: 1px solid #ddd !important;
+}
+
+/* הסרת גבולות מיותרים */
+.fc-scrollgrid {
+  border: none !important;
+}
+
+.fc-scrollgrid-section > * {
+  border: none !important;
+}
+
+/* שמירה על קו תחתית הכותרת בלבד */
+.fc-scrollgrid-section-header > * {
+  border-bottom: 1px solid #ddd !important;
+}
+
+/* =========================
+   ימים שעברו
+   ========================= */
+
 .fc-day-past,
 .fc-daygrid-day-past,
 .fc-timegrid-col.fc-past {
-  background: #e3f0ff !important;
-  color: #1976d2 !important;
+  background: #fafafa !important;
 }
-/* עיצוב לוח שנה קטן */
+
+/* =========================
+   לוח שנה קטן
+   ========================= */
+
 .mini-calendar {
   max-width: 340px;
   min-width: 220px;
   font-size: 0.85em;
   margin: 0 auto;
 }
+
 .mini-calendar .calendar-wrapper,
 .mini-calendar full-calendar {
   min-width: 220px !important;
   width: 100% !important;
   max-width: 340px !important;
 }
+
 .mini-calendar .add-meeting-btn {
   font-size: 0.9em;
   padding: 0.3em 0.7em;
   margin-bottom: 0.5em;
 }
 
-/* Make parent container flex and fill viewport minus header */
+/* =========================
+   מבנה כללי
+   ========================= */
+
 :host {
   display: flex;
   flex-direction: column;
@@ -33,18 +145,6 @@
   box-sizing: border-box;
 }
 
-/* If you have a header, set its height and let calendar fill the rest */
-.calendar-wrapper {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-full-calendar {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-/* Container for header and calendar */
 .calendar-container {
   display: flex;
   flex-direction: column;
@@ -53,7 +153,6 @@ full-calendar {
   box-sizing: border-box;
 }
 
-/* Calendar wrapper fills remaining space */
 .calendar-wrapper {
   flex: 1 1 auto;
   min-height: 0;
@@ -67,79 +166,145 @@ full-calendar {
   min-width: 0;
   min-height: 0;
   margin: 0 auto;
-  background: linear-gradient(135deg, #e3f0ff 0%, #f8fdff 100%);
-  border-radius: 2rem;
-  box-shadow: 0 6px 24px rgba(30, 64, 175, 0.10), 0 1.5px 6px rgba(30, 64, 175, 0.08);
-  border: 2px solid #1976d2;
-  color: #1a237e;
+  background-color: white;
+  box-shadow: 0 6px 24px rgba(30, 64, 175, 0.10),
+              0 1.5px 6px rgba(30, 64, 175, 0.08);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   font-family: 'Varela Round', 'Heebo', Arial, sans-serif;
-  flex: 1 1 auto;
 }
+
+/* =========================
+   Toolbar
+   ========================= */
 
 .fc-toolbar {
   background: transparent;
-  border-radius: 2rem 2rem 0 0;
-  padding: 1.2rem 2rem 0.5rem 2rem;
+  padding: 1.2rem 2rem 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 10;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
+
+@media (max-width: 700px) {
+  .fc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.7rem 0.5rem 0.5rem;
+    gap: 0.7rem;
+  }
+  .fc-toolbar-title {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .fc-button, .fc-todayButton-button {
+    font-size: 0.95rem !important;
+    padding: 0.3rem 0.7rem !important;
+    min-width: 90px;
+  }
+}
+
+
 .fc-toolbar-title {
   font-size: 2.1rem;
   font-weight: bold;
-  color: #1976d2;
+  color: #2A5448;
   letter-spacing: 1px;
   text-shadow: 0 1px 0 #fff;
 }
-/* עיצוב כפתור "היום" בסגנון Google Calendar */
-.fc-button, .fc-todayButton-button {
+
+/* =========================
+   כפתורים
+   ========================= */
+
+.fc-button,
+.fc-todayButton-button {
+  background: #fff !important;
+  color: #2A5448 !important;
+  border: 1.5px solid #2A5448 !important;
+  border-radius: 2rem !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  margin: 0 0.2rem !important;
+  padding: 0.4rem 1.2rem !important;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08) !important;
+  transition: background 0.2s, color 0.2s !important;
+}
+
+.fc-button:hover,
+.fc-button.fc-button-active {
+  background: #2A5448 !important;
+  color: #fff !important;
+}
+
+/* =========================
+   אירועים
+   ========================= */
+
+.fc-event,
+.fc-timegrid-event {
+  background: #fff !important;
+  border: 2px solid #7c4dff !important;
+  border-radius: 1rem !important;
+  padding: 0 !important;
+  text-align: center !important;
+  box-shadow: none !important;
+}
+
+.fc-event-main {
+  color: #7c4dff !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  padding: 6px 12px !important;
+}
+
+.fc-event-main-frame {
+  padding: 0 !important;
+}
+
+.custom-event {
   background: #fff;
-  color: #1976d2;
-  border: 1.5px solid #1976d2;
+  border-radius: 1rem;
+  padding: 2% 7%;
+  text-align: center;
+  margin: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-event-text {
+  color: #7c4dff;
+  font-weight: 600;
+  background: transparent;
+  padding: 0;
+  display: inline-block;
+}
+
+/* כפתור הוספת פגישה */
+.add-meeting-btn {
+  background: #2A5448;
+  color: #fff;
+  border: none;
   border-radius: 2rem;
   font-weight: bold;
-  font-size: 1.1rem;
-  margin: 0 0.2rem;
-  padding: 0.4rem 1.2rem;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+  transition: background 0.2s;
 }
-.fc-button:hover, .fc-button.fc-button-active, .fc-todayButton-button:hover, .fc-todayButton-button.fc-button-active {
-  background: #1976d2;
-  color: #fff;
-  border-color: #1976d2;
-}
-.fc-daygrid-day, .fc-timegrid-slot {
-  background: rgba(255,255,255,0.7);
-}
-.fc-day-today {
-  background: #e3f0ff !important;
-  border-radius: 1.2rem;
-}
-.custom-event {
-  background: #1976d2;
-  border: 2px solid #fff;
-  border-radius: 1.5rem;
-  padding: 2px 8px;
-  text-align: center;
-  margin: 2px 0;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
-}
-.custom-event-text {
-  color: #1976d2;
-  font-weight: bold;
-  background: #fff;
-  border-radius: 1.5rem;
-  padding: 2px 8px;
-  border: none;
-}
-.fc-scrollgrid {
-  border-radius: 0 0 2rem 2rem;
-  overflow: hidden;
+
+.add-meeting-btn:hover,
+.add-meeting-btn:active {
+  background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%) !important;
 }

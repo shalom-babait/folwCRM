@@ -11,14 +11,14 @@ import { ConfirmUnsavedDialogComponent } from 'src/app/components/confirm-unsave
 import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 
 @Component({
-  selector: 'app-add-treatment-dialog',
-  templateUrl: './add-treatment-dialog.component.html',
+  selector: 'app-add-appointment-dialog',
+  templateUrl: './add-appointment-dialog.component.html',
   styleUrls: [
-    './add-treatment-dialog.component.css',
+    './add-appointment-dialog.component.css',
      '../../../../styles/dialog-forms.css'
   ]
 })
-export class CreateTreatmentDialogComponent implements OnInit {
+export class AddAppointmentDialogComponent implements OnInit {
   async onCancel(): Promise<void> {
     if (!this.treatmentForm.dirty) {
       this.dialogRef.close();
@@ -55,8 +55,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
   showOverlay = false;
   patients: any[] = [];
 
-    isEditMode = false;
-    dialogTitle = 'טיפול חדש';
+  isEditMode = false;
+  dialogTitle = 'טיפול חדש';
+  patientFirstName?: string;
+  patientLastName?: string;
 
     constructor(
       private fb: FormBuilder,
@@ -66,7 +68,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       private patientService: PatientService,
       private apppointmentService: ApppointmentService,
       private dialog: MatDialog,
-      public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
+  public dialogRef: MatDialogRef<AddAppointmentDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.treatmentForm = this.createForm();
@@ -74,7 +76,14 @@ export class CreateTreatmentDialogComponent implements OnInit {
         this.isEditMode = true;
         this.dialogTitle = 'עריכת טיפול';
       }
+      // שמירת שם המטופל אם הועבר
       if (data) {
+        if (data.first_name) {
+          this.patientFirstName = data.first_name;
+        }
+        if (data.last_name) {
+          this.patientLastName = data.last_name;
+        }
         // תאריך בפורמט YYYY-MM-DD
         let patchObj: any = {};
         if (data.appointment_date) {
@@ -125,6 +134,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
       }
       // Disable close on backdrop click or ESC
       this.dialogRef.disableClose = true;
+      // עדכון כותרת אם יש שם מטופל
+      if (!this.isEditMode && this.patientFirstName && this.patientLastName) {
+        this.dialogTitle = `הוספת טיפול ל${this.patientFirstName} ${this.patientLastName}`;
+      }
     }
 
   // Intercept dialog close (backdrop or X)

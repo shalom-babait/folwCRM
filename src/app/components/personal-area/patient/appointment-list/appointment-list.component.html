@@ -1,13 +1,13 @@
-<!-- treatment-list.component.html -->
+<!-- appointment-list.component.html -->
 <div class="patient-list-container">
   <!-- שדה חיפוש -->
   <div class="search-container">
     <div class="search-actions-row">
       <button class="icon-button" mat-icon-button (click)="openCreateAppointmentDialog()">
-        <mat-icon style="color: #BB7E2B;">add</mat-icon>
+        <mat-icon>add</mat-icon>
       </button>
       <button class="icon-button" mat-icon-button (click)="openCalendarDialog()" style="margin-right: 8px;">
-        <mat-icon style="color: #BB7E2B;">calendar_today</mat-icon>
+        <mat-icon>calendar_today</mat-icon>
       </button>
       <input type="text" placeholder="חיפוש לפי תאריך" class="search-input" [(ngModel)]="searchTerm">
       <select class="styled-select" [(ngModel)]="selectedStatus">
