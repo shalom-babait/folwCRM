@@ -15,6 +15,7 @@ export interface AppointmentResponse extends Appointment {
 }
 // מודל Appointment מייצג פגישה טיפולית בין מטפל למטופל בהתאם לטבלת 
 export interface Appointment {
+  patient_name?: string;
   appointment_id?: number;
   therapist_id: number;
   patient_id: number;

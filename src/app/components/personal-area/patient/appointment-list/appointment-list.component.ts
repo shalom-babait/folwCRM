@@ -50,9 +50,9 @@ export class AppointmentListComponent implements OnInit {
   statusOptions: string[] = ['מתוזמנת', 'בוטלה', 'נדחתה', 'הושלמה'];
 
   constructor(
-  private dialog: MatDialog,
-  private patientService: PatientService,
-  private apppointmentService: ApppointmentService
+    private dialog: MatDialog,
+    private patientService: PatientService,
+    private apppointmentService: ApppointmentService
   ) { }
 
   ngOnInit(): void {
@@ -93,7 +93,7 @@ export class AppointmentListComponent implements OnInit {
       endDate.setHours(Number(endHour), Number(endMinute), 0, 0);
       return {
         id: app.appointment_id,
-        title: (app.group_name ) + (app.room ? ' - ' + app.room : ''),
+        title: (app.group_name) + (app.room ? ' - ' + app.room : ''),
         start: startDate.toISOString().slice(0, 16),
         end: endDate.toISOString().slice(0, 16),
         extendedProps: {
@@ -165,7 +165,7 @@ export class AppointmentListComponent implements OnInit {
   startEditStatus(appointment: Appointment): void {
     this.editingAppointment = appointment;
   }
-  
+
   saveStatus(appointment: Appointment): void {
     const id = appointment.appointment_id;
     if (id == null) {
@@ -184,6 +184,9 @@ export class AppointmentListComponent implements OnInit {
     this.editingAppointment = null;
   }
 
+  get showPatientColumn(): boolean {
+    return typeof this.patientId !== 'number';
+  }
   // פורמט תאריך לתצוגה
   formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -213,7 +216,7 @@ export class AppointmentListComponent implements OnInit {
   deleteAppointment(appointment: Appointment): void {
     if (!appointment.appointment_id) return;
     if (confirm('האם אתה בטוח שברצונך למחוק את הפגישה?')) {
-  this.apppointmentService.deleteAppointment(appointment.appointment_id).subscribe({
+      this.apppointmentService.deleteAppointment(appointment.appointment_id).subscribe({
         next: () => {
           this.appointments = this.appointments.filter(a => a.appointment_id !== appointment.appointment_id);
         },

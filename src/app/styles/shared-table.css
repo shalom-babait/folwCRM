@@ -761,3 +761,26 @@
   word-wrap: break-word; /* הוספה */
   word-break: break-word; /* הוספה */
 }
+/* ================= טיפול בטבלת טיפולים בלבד ================= */
+
+.treatment-table .header-row,
+.treatment-table .data-row {
+  display: grid;
+  grid-template-columns: var(--cols-template);
+  width: 100%;
+  min-width: 0;
+}
+
+.treatment-table .treatment-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.treatment-table .actions-cell {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  justify-content: center;
+}
