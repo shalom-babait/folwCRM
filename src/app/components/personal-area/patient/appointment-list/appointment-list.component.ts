@@ -185,8 +185,7 @@ export class AppointmentListComponent implements OnInit {
   }
 
   get showPatientColumn(): boolean {
-    return typeof this.patientId !== 'number';
-  }
+    return typeof this.patient?.patient_id !== 'number';  }
   // פורמט תאריך לתצוגה
   formatDate(dateString: string): string {
     const date = new Date(dateString);
