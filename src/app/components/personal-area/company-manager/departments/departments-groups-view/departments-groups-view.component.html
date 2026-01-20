@@ -48,7 +48,7 @@
             </div>
             <div *ngIf="activeTab === 'calendar'" class="tab-item">
                 <h3>יומן פגישות</h3>
-                <app-room-calendar [events]="groupAppointments"></app-room-calendar>
+                <app-display-calendar [events]="groupAppointments"></app-display-calendar>
             </div>
             <div *ngIf="activeTab === 'payments'" class="tab-item">
                 <h3>תשלומים</h3>
