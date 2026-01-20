@@ -31,12 +31,18 @@
         <tr>
           <th>שם לקוח</th>
           <th>סכום הכנסה</th>
+          <th>פעולות</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of rows">
           <td>{{ row.name }}</td>
           <td>₪{{ row.amount }}</td>
+          <td>
+            <button class="menu-button" matTooltip="דיווח על תשלום" (click)="reportPayment(row)">
+              <mat-icon>payments</mat-icon>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

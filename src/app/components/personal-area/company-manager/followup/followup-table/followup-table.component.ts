@@ -83,4 +83,10 @@ export class FollowupTableComponent implements OnInit {
       this.followups = this.followups.filter(x => x.followup_id !== id);
     });
   }
+
+  updateStatus(f: FollowUp): void {
+    if (typeof f.followup_id === 'number' && f.status) {
+      this.followupService.updateFollowupStatus(f.followup_id, f.status).subscribe();
+    }
+  }
 }

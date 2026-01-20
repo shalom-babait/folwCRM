@@ -9,6 +9,7 @@ export interface FollowUp {
   notes?: string;
   created_at?: string;
   created_by_person_id?: number;
+  status?: 'open' | 'completed' | 'cancelled'; // סטטוס מעקב
 }
 
 export interface FollowUpWithPerson {

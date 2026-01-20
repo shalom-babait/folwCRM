@@ -136,8 +136,8 @@
         <!-- תשלומים -->
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">
-            <app-payment-list [patientId]="selectedPatient.patient.patient_id!">
-            </app-payment-list>
+            <app-payment-list [patient]="selectedPatient">
+                        </app-payment-list>
           </div>
         </div>
 

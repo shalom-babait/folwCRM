@@ -18,7 +18,7 @@
 }
 .input-dialog {
   background-color: whitesmoke;
-  padding: 2rem;
+  padding: 1rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem 1.5rem;

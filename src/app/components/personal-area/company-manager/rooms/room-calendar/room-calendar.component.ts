@@ -26,7 +26,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   selector: 'app-room-calendar',
   templateUrl: './room-calendar.component.html',
   styleUrls: ['./room-calendar.component.css'],
-  encapsulation: ViewEncapsulation.None   // ⭐ חובה כדי שה-CSS ישפיע
+  encapsulation: ViewEncapsulation.None
 })
 export class RoomCalendarComponent implements OnInit {
 
@@ -77,13 +77,19 @@ export class RoomCalendarComponent implements OnInit {
     nowIndicator: true,
     dayHeaders: true,
 
-    /* =========================
-       ⭐ שינוי מרכזי – כותרת ימים
-       ========================= */
     dayHeaderContent: (args) => {
-      const dayName = args.text.replace(/\d+/g, '').trim();
+      let dayName = args.text.replace(/\d+/g, '').trim();
+      if (dayName.endsWith('.')) {
+        dayName = dayName.slice(0, -1).trim();
+      }
+      // במצב מיני ותצוגת חודש - הצג רק אותיות (א, ב, ג, ...)
+      if (this.miniCalendar && this.selectedView === 'month') {
+        return {
+          html: `<div class="fc-custom-header"><div class="fc-custom-day">${dayName}</div></div>`
+        };
+      }
+      // בשאר המצבים - הצג גם מספר
       const dayNumber = args.date.getDate();
-
       return {
         html: `
           <div class="fc-custom-header">
@@ -124,7 +130,49 @@ export class RoomCalendarComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  selectedView: string = 'month';
+
+  ngOnInit(): void {
+    // אם זה מצב מיני, אלץ תצוגת חודש והסתר toolbar
+    if (this.miniCalendar) {
+      this.calendarOptions = {
+        ...this.calendarOptions,
+        initialView: 'dayGridMonth',
+        headerToolbar: false,
+        dayHeaderFormat: { weekday: 'narrow' }
+      };
+    }
+  }
+
+  onViewChange(view: string): void {
+    this.selectedView = view;
+    let viewName = '';
+    
+    switch(view) {
+      case 'month':
+        viewName = 'dayGridMonth';
+        break;
+      case 'week':
+        viewName = 'timeGridWeek';
+        break;
+      case 'day':
+        viewName = 'timeGridDay';
+        break;
+    }
+    
+    this.changeView(viewName);
+  }
+
+  getCurrentMonthYear(): string {
+    if (this.calendarComponent?.getApi) {
+      const currentDate = this.calendarComponent.getApi().getDate();
+      return currentDate.toLocaleDateString('he-IL', { 
+        year: 'numeric', 
+        month: 'long' 
+      });
+    }
+    return '';
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['events']) {
@@ -142,7 +190,7 @@ export class RoomCalendarComponent implements OnInit {
   }
 
   goToToday() {
-if (this.calendarComponent?.getApi) {
+    if (this.calendarComponent?.getApi) {
       this.calendarComponent.getApi().changeView('timeGridDay', new Date());
     }
   }
@@ -154,6 +202,11 @@ if (this.calendarComponent?.getApi) {
   }
 
   onDateClick(arg: any) {
+    // אל תפתח דיאלוג במצב מיני
+    if (this.miniCalendar) {
+      return;
+    }
+
     const dateTime = arg.dateStr;
     const [date, timeRaw] = dateTime.split('T');
 

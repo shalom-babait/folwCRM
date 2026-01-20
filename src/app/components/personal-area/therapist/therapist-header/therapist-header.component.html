@@ -13,7 +13,7 @@
   <li><button [ngClass]="{selected: selectedSection === 'patients'}" (click)="onPatientsClick()">
     <span class="menu-vertical">
       <mat-icon class="menu-icon">groups</mat-icon>
-      <span>רשימת מטופלים</span>
+      <span>מטופלים</span>
     </span>
   </button></li>
   <li><button [ngClass]="{selected: selectedSection === 'rooms'}" (click)="sectionChange.emit('rooms')">
@@ -40,6 +40,12 @@
     <span class="menu-vertical">
       <mat-icon class="menu-icon">bar_chart</mat-icon>
       <span>דוחות</span>
+    </span>
+  </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'help'}" (click)="sectionChange.emit('help')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">help_outline</mat-icon>
+      <span>עזרה</span>
     </span>
   </button></li>
     </ul>

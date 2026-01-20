@@ -118,8 +118,8 @@ header {
   position: fixed;
   top: 0;
   right: 0;
-  width: 8rem;
-  height: 100vh;
+  width: 5rem;
+  height: 100%;
   background-color: #F4F8FA;
   display: flex;
   flex-direction: column;
@@ -183,7 +183,6 @@ header {
   font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
-  padding: 0.5rem 1rem;
   transition: all 0.3s;
   position: relative;
   white-space: nowrap;

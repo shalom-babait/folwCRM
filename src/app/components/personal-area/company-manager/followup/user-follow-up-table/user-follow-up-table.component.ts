@@ -64,7 +64,11 @@ export class UserFollowUpTableComponent implements OnInit {
         }
       });
     }
-
+  updateStatus(f: FollowUpWithPerson): void {
+    if (f.followUp?.followup_id && f.followUp.status) {
+      this.followupService.updateFollowupStatus(f.followUp.followup_id, f.followUp.status).subscribe();
+    }
+  }
     deleteFollowup(followup: FollowUpWithPerson): void {
       if (!followup.followUp?.followup_id) return;
       if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {

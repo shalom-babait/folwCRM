@@ -11,6 +11,7 @@ import { Patient, PatientCreationData } from 'src/app/models/patient.model';
   selector: 'app-therapist-home',
   templateUrl: './therapist-home.component.html',
   styleUrls: ['./therapist-home.component.css']
+
 })
 export class TherapistHomeComponent {
 
