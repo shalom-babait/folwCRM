@@ -1,14 +1,14 @@
 import { CalendarOverlayComponent } from './components/personal-area/company-manager/calendars/calendar-overlay/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 
-import { AuthInterceptor } from './services/auth.interceptor'; 
+import { AuthInterceptor } from './services/auth.interceptor';
 import { AppComponent } from './app.component';
 import { NgChartsModule } from 'ng2-charts';
 
@@ -107,7 +107,7 @@ import { AddTaskComponent } from './components/personal-area/company-manager/tas
 import { TaskListComponent } from './components/personal-area/company-manager/task/task-list/task-list.component';
 import { DebtReportComponent } from './components/personal-area/company-manager/reports/debt-report/debt-report.component';
 import { TherapistHomeSettingComponent } from './components/personal-area/therapist/settings/therapist-home-setting/therapist-home-setting.component';
-
+import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
 
 @NgModule({
   declarations: [
@@ -165,27 +165,28 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     AddRoomDialogComponent,
     RoomSettingsComponent,
     RoomsHomeComponent,
-  TextEditorComponent,
-  ContactListComponent,
-  AddContactDialogComponent,
-  TherapistHomeComponent,
-  TherapistReportsComponent,
-  ReportsListComponent,
-  ReportsViewComponent,
-  AddReportsComponent,
-  ReportDetailsComponent,
-  IncomeReportComponent,
-  UserSettingsComponent,
-  AddPatientProblemComponent,
-  PatientProblemTableComponent,
-  AddPatientProblemRatingComponent,
-  PatientProblemRatingListComponent,
-  TherapistSettingsMenuComponent,
-  TherapistSettingsViewComponent,
-  AddTaskComponent,
-  TaskListComponent,
-  DebtReportComponent,
-  TherapistHomeSettingComponent,
+    TextEditorComponent,
+    ContactListComponent,
+    AddContactDialogComponent,
+    TherapistHomeComponent,
+    TherapistReportsComponent,
+    ReportsListComponent,
+    ReportsViewComponent,
+    AddReportsComponent,
+    ReportDetailsComponent,
+    IncomeReportComponent,
+    UserSettingsComponent,
+    TreatmentTypesListComponent,
+    AddPatientProblemComponent,
+    PatientProblemTableComponent,
+    AddPatientProblemRatingComponent,
+    PatientProblemRatingListComponent,
+    TherapistSettingsMenuComponent,
+    TherapistSettingsViewComponent,
+    AddTaskComponent,
+    TaskListComponent,
+    DebtReportComponent,
+    TherapistHomeSettingComponent,
   ],
   imports: [
     NgChartsModule,
@@ -199,7 +200,7 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
@@ -214,7 +215,7 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     MatDatepickerModule,
     MatTableModule,
     MatCheckboxModule,
-    MatCardModule, 
+    MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
