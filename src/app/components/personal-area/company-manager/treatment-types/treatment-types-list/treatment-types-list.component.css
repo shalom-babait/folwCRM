@@ -5,12 +5,52 @@
 	max-width: 600px;
 }
 
+.header-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	gap: 16px;
+}
+
 .treatment-types-list h2 {
 	color: #2A5448;
 	font-size: 24px;
 	font-weight: 600;
-	margin-bottom: 20px;
+	margin: 0;
 	text-align: right;
+}
+
+.add-button {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 10px 20px;
+	font-size: 15px;
+	font-weight: 500;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+	background-color: #45a049;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	transform: translateY(-1px);
+}
+
+.add-button:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-icon {
+	font-size: 20px;
+	font-weight: bold;
 }
 
 .simple-list {

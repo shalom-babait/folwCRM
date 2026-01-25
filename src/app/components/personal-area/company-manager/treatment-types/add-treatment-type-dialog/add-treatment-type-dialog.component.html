@@ -1,0 +1,40 @@
+<div class="create-treatment-dialog">
+	<h2 class="dialog-title">הוספת סוג טיפול חדש</h2>
+	<form class="input-dialog" [formGroup]="treatmentTypeForm">
+		<div class="form-field" *ngIf="showTherapistSelect">
+			<label for="therapist_id">בחר מטפל</label>
+			<select id="therapist_id" formControlName="therapist_id">
+				<option value="">-- בחר מטפל --</option>
+				<option *ngFor="let therapist of therapists" [value]="therapist.therapist_id">
+					{{ therapist.first_name }} {{ therapist.last_name }}
+				</option>
+			</select>
+			<div class="error-message" *ngIf="treatmentTypeForm.get('therapist_id')?.touched && treatmentTypeForm.get('therapist_id')?.hasError('required')">
+				יש לבחור מטפל
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="type_name">שם סוג הטיפול</label>
+			<input id="type_name" type="text" formControlName="type_name" placeholder="הזן שם סוג הטיפול">
+			<div class="error-message" *ngIf="treatmentTypeForm.get('type_name')?.touched && treatmentTypeForm.get('type_name')?.hasError('required')">
+				שם סוג הטיפול הוא שדה חובה
+			</div>
+			<div class="error-message" *ngIf="treatmentTypeForm.get('type_name')?.touched && treatmentTypeForm.get('type_name')?.hasError('minlength')">
+				שם סוג הטיפול חייב להכיל לפחות 2 תווים
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="type_description">תיאור (אופציונלי)</label>
+			<textarea id="type_description" formControlName="type_description" placeholder="הזן תיאור לסוג הטיפול" rows="3"></textarea>
+		</div>
+		<div class="dialog-actions">
+			<button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+				ביטול
+			</button>
+			<button type="submit" class="save-button" (click)="onSubmit()" [disabled]="!treatmentTypeForm.valid || isSubmitting">
+				<span *ngIf="!isSubmitting">הוסף</span>
+				<span *ngIf="isSubmitting">מוסיף...</span>
+			</button>
+		</div>
+	</form>
+</div>
