@@ -1,3 +1,4 @@
+
 .styled-select {
   appearance: none !important;
   -webkit-appearance: none !important;
@@ -15,6 +16,27 @@
   cursor: pointer !important;
 }
 
+/* === MENU BUTTON === */
+.menu-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  color: #666;
+  flex-shrink: 0;
+  height: 32px;
+  width: 32px;
+  box-sizing: border-box;
+}
+
+.menu-button:hover {
+  background-color: rgba(0,0,0,0.08);
+}
 .styled-select:focus {
   outline: none !important;
   border: 2px solid #888 !important;

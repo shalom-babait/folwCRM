@@ -1,4 +1,3 @@
-// ...
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Patient } from 'src/app/models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,7 +6,7 @@ import { PatientService } from 'src/app/services/patient.service';
 import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
-import { co } from '@fullcalendar/core/internal-common';
+import { SessionsSheetComponent } from '../sessions-sheet/sessions-sheet.component';
 @Component({
   selector: 'app-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -76,6 +75,17 @@ export class AppointmentListComponent implements OnInit {
     if (changes.appointments && changes.appointments.currentValue) {
       this.appointments = changes.appointments.currentValue;
     }
+  }
+    openSessionsSheet(): void {
+    this.dialog.open(SessionsSheetComponent, {
+      width: '900px',
+      direction: 'rtl',
+      data: {
+        appointments: this.filteredAppointments,
+        patient: this.patient,
+        therapistId: this.therapistId
+      }
+    });
   }
   // פתיחת דיאלוג יומן עם הפגישות
   openCalendarDialog(): void {

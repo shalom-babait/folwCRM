@@ -34,6 +34,12 @@
       </select>
       <input type="color" formControlName="color" title="בחר צבע למשימה" class="task-color-input" />
     </div>
+    <!-- שיוך משימה -->
+    <div class="task-assignment-fields">
+      <label>שיוך משימה</label>
+      <mat-checkbox formControlName="assignmentTherapist">מטפל</mat-checkbox>
+      <mat-checkbox formControlName="assignmentPatient">מטופל</mat-checkbox>
+    </div>
     <div class="add-task-actions">
       <button mat-stroked-button color="primary" (click)="saveNewTask()" [disabled]="addTaskForm.invalid">שמור</button>
       <button mat-button (click)="cancelAddTask()">ביטול</button>
@@ -74,7 +80,12 @@
             <option value="high">גבוהה</option>
           </select>
           <input type="color" formControlName="color" title="בחר צבע למשימה" class="task-color-input" />
-          <!-- התווית עברה לכותרת -->
+        </div>
+        <!-- שיוך משימה -->
+        <div class="task-assignment-fields">
+          <label>שיוך משימה</label>
+          <mat-checkbox formControlName="assignmentTherapist">מטפל</mat-checkbox>
+          <mat-checkbox formControlName="assignmentPatient">מטופל</mat-checkbox>
         </div>
         <div class="add-task-actions">
           <button mat-stroked-button color="primary" type="submit" [disabled]="editTaskForm.invalid">שמור</button>
@@ -109,6 +120,15 @@
         </span>
         <span *ngIf="task.priority">
           עדיפות: {{ task.priority }}
+        </span>
+        <span *ngIf="task.assignments && task.assignments.length > 0">
+          <ng-container *ngIf="task.assignments.length === 1">
+            <ng-container *ngIf="task.assignments[0].entity_type === 'therapist'">משויך למטפל</ng-container>
+            <ng-container *ngIf="task.assignments[0].entity_type === 'patient'">משויך למטופל</ng-container>
+          </ng-container>
+          <ng-container *ngIf="task.assignments.length > 1">
+            משויך למטפל ולמטופל
+          </ng-container>
         </span>
       </div>
     </ng-template>

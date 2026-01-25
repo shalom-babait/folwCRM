@@ -1,9 +1,7 @@
-
-
 <div class="therapist-home-grid">
   <div class="top-row">
     <div class="followup-col">
-      <app-user-follow-up-table [dateFilter]="'today'"></app-user-follow-up-table>
+  <app-user-follow-up-table [dateFilter]="'overdueOrToday'"></app-user-follow-up-table>
     </div>
     <div class="calendar-col">
       <app-therapist-calendar [compact]="true"></app-therapist-calendar>

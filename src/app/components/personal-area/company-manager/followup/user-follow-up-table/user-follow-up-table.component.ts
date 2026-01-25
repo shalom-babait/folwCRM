@@ -96,6 +96,7 @@ export class UserFollowUpTableComponent implements OnInit {
     }
 
     const today = new Date();
+    today.setHours(0,0,0,0);
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
     const endOfWeek = new Date(startOfWeek);
@@ -142,6 +143,12 @@ export class UserFollowUpTableComponent implements OnInit {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);
         return date >= startOfNextMonth && date <= endOfNextMonth;
+      });
+    } else if (this.dateFilter === 'overdueOrToday') {
+      filtered = filtered.filter(f => {
+        const date = new Date(f.followUp?.follow_date);
+        date.setHours(0,0,0,0);
+        return date <= today && f.followUp.status === 'open';
       });
     }
     return filtered;

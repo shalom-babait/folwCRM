@@ -108,6 +108,8 @@ import { TaskListComponent } from './components/personal-area/company-manager/ta
 import { DebtReportComponent } from './components/personal-area/company-manager/reports/debt-report/debt-report.component';
 import { TherapistHomeSettingComponent } from './components/personal-area/therapist/settings/therapist-home-setting/therapist-home-setting.component';
 import { TutorialVideosComponent } from './components/personal-area/company-manager/helps/tutorial-videos/tutorial-videos.component';
+import { SessionsSheetComponent } from './components/personal-area/patient/sessions-sheet/sessions-sheet.component';
+import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
 
 @NgModule({
@@ -187,6 +189,8 @@ import { TutorialVideosComponent } from './components/personal-area/company-mana
   TaskListComponent,
   DebtReportComponent,
   TherapistHomeSettingComponent,
+  SessionsSheetComponent,
+  LinebreaksPipe,
   ],
   imports: [
     NgChartsModule,

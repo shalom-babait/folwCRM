@@ -22,10 +22,26 @@
 
     <!-- דוח חובות פתוחות -->
   <div class="list-item-card" (click)="selectDebtsReport()" [class.selected]="selectedReport === 'debts'">
-      <div class="item-info">
-        <span class="item-name">דוח חובות פתוחות</span>
-      </div>
+    <div class="item-info">
+      <span class="item-name">דוח חובות פתוחות</span>
     </div>
+    <div class="list-actions">
+      <button 
+        class="menu-button"
+        [matMenuTriggerFor]="debtsMenu"
+        (click)="$event.stopPropagation()"
+        matTooltip="פעולות">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #debtsMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+        <button mat-menu-item (click)="selectDebtsReport()">
+          <mat-icon>description</mat-icon>
+          <span>הצג דוח</span>
+        </button>
+        <!-- ניתן להוסיף כאן פעולות נוספות בעתיד -->
+      </mat-menu>
+    </div>
+  </div>
 
     <!-- רשימת דוחות קיימים (אם יש) -->
     <div *ngIf="!isLoading && reports.length > 0">

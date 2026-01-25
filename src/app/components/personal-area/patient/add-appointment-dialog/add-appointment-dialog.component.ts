@@ -262,7 +262,10 @@ export class AddAppointmentDialogComponent implements OnInit {
       therapist_id: Number(localStorage.getItem('therapist_id')) || 1,
       patient_id: value.patient_id,
       treatment_type_id: value.type ? Number(value.type) : 0,
-      room_id: value.meeting_type === 'frontal' && value.place ? Number(value.place) : (value.meeting_type === 'phone' ? undefined : 0),
+      room_id:
+        value.meeting_type === 'frontal'
+          ? (value.place ? Number(value.place) : undefined)
+          : (value.meeting_type === 'phone' ? undefined : undefined),
       appointment_date: value.date,
       start_time: value.startTime,
       end_time: value.endTime,
@@ -273,29 +276,43 @@ export class AddAppointmentDialogComponent implements OnInit {
 
     if (this.data && this.data.appointment_id) {
       console.log('Calling updateAppointment with:', this.data.appointment_id, appointment);
-  this.apppointmentService.updateAppointment(this.data.appointment_id, appointment).subscribe({
+      this.apppointmentService.updateAppointment(this.data.appointment_id, appointment).subscribe({
         next: res => {
           console.log('updateAppointment response:', res);
+          if (res && res.message) {
+            alert(res.message);
+          }
           const result = (res && 'data' in res) ? (res as any).data : null;
           this.appointmentAdded.emit(result || { ...appointment, appointment_id: this.data.appointment_id });
           this.dialogRef.close(result || { ...appointment, appointment_id: this.data.appointment_id });
         },
         error: err => {
           console.error('updateAppointment error:', err);
-          alert('שגיאה בעדכון הפגישה');
+          if (err && err.error && err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('שגיאה בעדכון הפגישה');
+          }
         }
       });
     } else {
       console.log('Calling createAppointment with:', appointment);
-  this.apppointmentService.createAppointment(appointment).subscribe({
+      this.apppointmentService.createAppointment(appointment).subscribe({
         next: res => {
           console.log('createAppointment response:', res);
+          if (res && res.message) {
+            alert(res.message);
+          }
           this.appointmentAdded.emit(res.data || appointment);
           this.dialogRef.close(res.data || appointment);
         },
         error: err => {
           console.error('createAppointment error:', err);
-          alert('שגיאה בשמירת הפגישה');
+          if (err && err.error && err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('שגיאה בשמירת הפגישה');
+          }
         }
       });
     }
