@@ -39,11 +39,11 @@
 				<ng-container *ngIf="selectedRoom">
 					<div *ngIf="activeTab === 'calendar'" class="calendar-view">
 						<div class="calendar-card">
-							<app-room-calendar
+							<app-display-calendar
 								*ngIf="selectedRoom.room_id"
 								[roomId]="selectedRoom.room_id"
 								[events]="selectedRoomEvents">
-							</app-room-calendar>
+							</app-display-calendar>
 						</div>
 					</div>
 

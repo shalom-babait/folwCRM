@@ -5,8 +5,8 @@ import { AddAppointmentDialogComponent } from '../add-appointment-dialog/add-app
 import { PatientService } from 'src/app/services/patient.service';
 import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Appointment } from 'src/app/models/appointment.model';
-import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
 import { SessionsSheetComponent } from '../sessions-sheet/sessions-sheet.component';
+import { DisplayCalendarComponent } from '../../company-manager/calendars/display-calendar/display-calendar.component';
 @Component({
   selector: 'app-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -112,7 +112,7 @@ export class AppointmentListComponent implements OnInit {
         }
       };
     });
-    this.dialog.open(RoomCalendarComponent, {
+    this.dialog.open(DisplayCalendarComponent, {
       width: '900px',
       direction: 'rtl',
       data: {

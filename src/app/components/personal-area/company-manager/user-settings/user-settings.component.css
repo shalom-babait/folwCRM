@@ -1,90 +1,82 @@
+.settings-page {
+	padding: 24px;
+	direction: rtl;
+	width: 100%;
+	max-width: 600px;
+}
+
+.settings-page h3 {
+	color: #2A5448;
+	font-size: 18px;
+	font-weight: 600;
+	margin: 24px 0 12px 0;
+	text-align: right;
+}
+
+.settings-page h3:first-of-type {
+	margin-top: 0;
+}
+
 .settings-section {
-	margin-bottom: 0.5rem;
+	background: #ffffff;
+	border-radius: 8px;
+	border: 1px solid #e8f0ed;
+	padding: 0;
+	margin-bottom: 16px;
 }
 
 .settings-label {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
-	font-size: 1rem;
-	margin-bottom: 0.7rem;
-	color: #333;
-	cursor: pointer;
-	transition: color 0.2s;
-}
-
-.settings-page {
-	max-width: 420px;
-	margin: 2.5rem auto;
-	background: #fff;
-	border-radius: 1.2rem;
-	box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
-	padding: 2.2rem 2rem 1.5rem 2rem;
-	font-family: 'Heebo', Arial, sans-serif;
-	direction: rtl;
-}
-
-.settings-page h3 {
-	margin-top: 0;
-	margin-bottom: 1.1rem;
-	font-size: 1.18rem;
+	gap: 12px;
+	padding: 14px 20px;
+	border-bottom: 1px solid #f0f7f5;
 	color: #2A5448;
-	font-weight: 700;
-	letter-spacing: 0.5px;
+	font-size: 16px;
+	font-weight: 400;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
-.settings-page label {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	font-size: 1rem;
-	margin-bottom: 0.7rem;
-	color: #333;
-	cursor: pointer;
-	transition: color 0.2s;
+.settings-label:last-child {
+	border-bottom: none;
 }
-.settings-page label input[type="checkbox"] {
+
+.settings-label:hover {
+	background-color: #f7faf9;
+}
+
+.settings-label input[type="checkbox"] {
 	accent-color: #2A5448;
-	width: 1.1rem;
-	height: 1.1rem;
-	margin-left: 0.3rem;
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
 }
 
 .settings-page hr {
-	border: none;
-	border-top: 1px solid #e0e0e0;
-	margin: 1.3rem 0 1.1rem 0;
+	display: none;
 }
 
 .settings-page button[type="button"] {
 	background: linear-gradient(90deg, #2A5448 0%, #4A7A6D 100%);
 	color: #fff;
 	border: none;
-	border-radius: 0.6rem;
-	padding: 0.7rem 2.2rem;
-	font-size: 1.08rem;
+	border-radius: 8px;
+	padding: 12px 32px;
+	font-size: 16px;
 	font-weight: 600;
-	margin-top: 1.2rem;
+	margin-top: 24px;
 	cursor: pointer;
-	box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-	transition: background 0.2s, box-shadow 0.2s;
+	transition: all 0.2s ease;
 }
+
 .settings-page button[type="button"]:hover {
-	background: linear-gradient(90deg, #4A7A6D 0%, #2A5448 100%);
-	box-shadow: 0 4px 16px rgba(44, 62, 80, 0.13);
+	background: linear-gradient(90deg, #1e3a32 0%, #2A5448 100%);
 }
 
 @media (max-width: 600px) {
 	.settings-page {
-		max-width: 98vw;
-		padding: 1.2rem 0.5rem 1rem 0.5rem;
-	}
-	.settings-page h3 {
-		font-size: 1.05rem;
-	}
-	.settings-page button[type="button"] {
-		width: 100%;
-		padding: 0.8rem 0;
-		font-size: 1rem;
+		max-width: 100%;
+		padding: 16px;
 	}
 }

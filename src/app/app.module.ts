@@ -1,14 +1,14 @@
-import { CalendarOverlayComponent } from './components/personal-area/patient/calendar-overlay.component';
+import { CalendarOverlayComponent } from './components/personal-area/company-manager/calendars/calendar-overlay/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 
-import { AuthInterceptor } from './services/auth.interceptor'; 
+import { AuthInterceptor } from './services/auth.interceptor';
 import { AppComponent } from './app.component';
 import { NgChartsModule } from 'ng2-charts';
 
@@ -45,7 +45,7 @@ import { TherapistDashboardComponent } from './components/personal-area/therapis
 import { AppointmentListComponent } from './components/personal-area/patient/appointment-list/appointment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
 import { AddAppointmentDialogComponent } from './components/personal-area/patient/add-appointment-dialog/add-appointment-dialog.component';
-import { RoomCalendarComponent } from './components/personal-area/company-manager/rooms/room-calendar/room-calendar.component';
+import { DisplayCalendarComponent } from './components/personal-area/company-manager/calendars/display-calendar/display-calendar.component';
 import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
@@ -111,6 +111,7 @@ import { TutorialVideosComponent } from './components/personal-area/company-mana
 import { SessionsSheetComponent } from './components/personal-area/patient/sessions-sheet/sessions-sheet.component';
 import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
+import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,7 @@ import { LinebreaksPipe } from './pipes/linebreaks.pipe';
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
-    RoomCalendarComponent,
+     DisplayCalendarComponent,
     SelectTimeDialogComponent,
     CalendarOverlayComponent,
     RoomsViewComponent,
@@ -191,6 +192,28 @@ import { LinebreaksPipe } from './pipes/linebreaks.pipe';
   TherapistHomeSettingComponent,
   SessionsSheetComponent,
   LinebreaksPipe,
+    TextEditorComponent,
+    ContactListComponent,
+    AddContactDialogComponent,
+    TherapistHomeComponent,
+    TherapistReportsComponent,
+    ReportsListComponent,
+    ReportsViewComponent,
+    AddReportsComponent,
+    ReportDetailsComponent,
+    IncomeReportComponent,
+    UserSettingsComponent,
+    TreatmentTypesListComponent,
+    AddPatientProblemComponent,
+    PatientProblemTableComponent,
+    AddPatientProblemRatingComponent,
+    PatientProblemRatingListComponent,
+    TherapistSettingsMenuComponent,
+    TherapistSettingsViewComponent,
+    AddTaskComponent,
+    TaskListComponent,
+    DebtReportComponent,
+    TherapistHomeSettingComponent,
   ],
   imports: [
     NgChartsModule,
@@ -204,7 +227,7 @@ import { LinebreaksPipe } from './pipes/linebreaks.pipe';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
@@ -219,7 +242,7 @@ import { LinebreaksPipe } from './pipes/linebreaks.pipe';
     MatDatepickerModule,
     MatTableModule,
     MatCheckboxModule,
-    MatCardModule, 
+    MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
