@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TreatmentTypesService } from 'src/app/services/treatment-types.service';
 import { TreatmentType } from 'src/app/models/treatment-type.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { PatientService } from 'src/app/services/patient.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddTreatmentTypeDialogComponent } from '../add-treatment-type-dialog/add-treatment-type-dialog.component';
+import { TherapistService } from 'src/app/services/therapist.service';
 
 @Component({
 	selector: 'app-treatment-types-list',
@@ -8,21 +13,93 @@ import { TreatmentType } from 'src/app/models/treatment-type.model';
 	styleUrls: ['./treatment-types-list.component.css']
 })
 export class TreatmentTypesListComponent implements OnInit {
-	treatmentTypes: TreatmentType[] = []; // נשתמש במודל TreatmentType
+	treatmentTypes: TreatmentType[] = [];
+	therapistId: number | null = null;
+	isSubmitting = false;
+	userRole: string | null = null;
 
-	constructor(private treatmentTypesService: TreatmentTypesService) {}
+	constructor(
+		private treatmentTypesService: TreatmentTypesService,
+		private authService: AuthService,
+		private patientService: PatientService,
+		private therapistService: TherapistService,
+		private dialog: MatDialog
+	) {}
 
 	ngOnInit(): void {
+		this.userRole = this.authService.getRoleFromToken();
+		this.loadTherapistId();
 		this.loadTreatmentTypes();
 	}
 
 	loadTreatmentTypes(): void {
 		this.treatmentTypesService.getTreatmentTypes().subscribe({
 			next: (response) => {
-				this.treatmentTypes = response.data; // ניגש ישירות למערך data
+				this.treatmentTypes = response.data;
 			},
 			error: (err) => {
 				console.error('Error fetching treatment types:', err);
+			}
+		});
+	}
+
+	loadTherapistId(): void {
+		const userId = this.authService.getCurrentUserId();
+		if (!userId) {
+			console.error('User not logged in');
+			return;
+		}
+
+		// אם זה מטפל, נמצא את ה-therapist_id שלו
+		if (this.userRole === 'therapist') {
+			this.patientService.getTherapistIdByUserId(userId).subscribe({
+				next: (therapistId) => {
+					this.therapistId = therapistId;
+					if (!therapistId) {
+						console.warn('Therapist ID not found for user');
+					}
+				},
+				error: (err) => {
+					console.error('Error fetching therapist ID:', err);
+				}
+			});
+		}
+		// אם זה מנהל, therapistId יישאר null ונתן לו לבחור
+	}
+
+	openAddDialog(): void {
+		// אם זה מטפל ואין therapistId
+		if (this.userRole === 'therapist' && !this.therapistId) {
+			alert('לא ניתן להוסיף סוג טיפול - מזהה מטפל לא נמצא. אנא וודא שאתה מחובר כמטפל.');
+			return;
+		}
+
+		const dialogRef = this.dialog.open(AddTreatmentTypeDialogComponent, {
+			width: '500px',
+			direction: 'rtl',
+			data: { 
+				therapistId: this.therapistId,
+				userRole: this.userRole
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.isSubmitting = true;
+				this.treatmentTypesService.createTreatmentType(result).subscribe({
+					next: (response) => {
+						if (response.success) {
+							alert('סוג הטיפול נוסף בהצלחה');
+							this.loadTreatmentTypes();
+						}
+						this.isSubmitting = false;
+					},
+					error: (err) => {
+						console.error('Error creating treatment type:', err);
+						alert('שגיאה בהוספת סוג הטיפול');
+						this.isSubmitting = false;
+					}
+				});
 			}
 		});
 	}

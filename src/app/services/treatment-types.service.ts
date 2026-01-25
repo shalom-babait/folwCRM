@@ -21,4 +21,11 @@ export class TreatmentTypesService {
 			}))
 		);
 	}
+
+	createTreatmentType(treatmentType: TreatmentType): Observable<{ success: boolean; data: TreatmentType }> {
+		return this.http.post<{ success: boolean; data: TreatmentType }>(
+			`${this.apiUrl}/create`,
+			treatmentType
+		);
+	}
 }

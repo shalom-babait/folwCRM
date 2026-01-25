@@ -1,5 +1,4 @@
 import { MatDialog } from '@angular/material/dialog';
-import { CreateTreatmentDialogComponent } from 'src/app/components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
 import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -7,6 +6,7 @@ import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { AddAppointmentDialogComponent } from '../../../patient/add-appointment-dialog/add-appointment-dialog.component';
 
 @Component({
 	selector: 'app-display-calendar',
@@ -67,7 +67,7 @@ export class DisplayCalendarComponent implements OnInit {
 
 	openAddMeetingDialog(date?: string, startTime?: string) {
 		if (this.dialog) {
-			this.dialog.open(CreateTreatmentDialogComponent, {
+			this.dialog.open(AddAppointmentDialogComponent, {
 				width: '700px',
 				data: {
 					...(date ? { date } : {}),
