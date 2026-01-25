@@ -1,20 +1,19 @@
-// ...
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Patient } from 'src/app/models/patient.model';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateTreatmentDialogComponent } from '../add-treatment-dialog/add-treatment-dialog.component';
+import { AddAppointmentDialogComponent } from '../add-appointment-dialog/add-appointment-dialog.component';
 import { PatientService } from 'src/app/services/patient.service';
 import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { Appointment } from 'src/app/models/appointment.model';
-import { RoomCalendarComponent } from '../../company-manager/rooms/room-calendar/room-calendar.component';
-import { co } from '@fullcalendar/core/internal-common';
+import { SessionsSheetComponent } from '../sessions-sheet/sessions-sheet.component';
+import { DisplayCalendarComponent } from '../../company-manager/calendars/display-calendar/display-calendar.component';
 @Component({
-  selector: 'app-treatment-list',
-  templateUrl: './treatment-list.component.html',
-  styleUrls: ['./treatment-list.component.css',
+  selector: 'app-appointment-list',
+  templateUrl: './appointment-list.component.html',
+  styleUrls: ['./appointment-list.component.css',
     '../../../../styles/shared-table.css']
 })
-export class TreatmentListComponent implements OnInit {
+export class AppointmentListComponent implements OnInit {
   @Input() statusFilter: string = 'מתוזמנת';
   selectedStatus: string = '';
 
@@ -39,7 +38,6 @@ export class TreatmentListComponent implements OnInit {
   }
 
   @Input() appointments: Appointment[] = [];
-  @Input() patientId?: number;
   @Input() therapistId?: number;
   @Input() patient?: Patient;
   @Output() appointmentAdded = new EventEmitter<Appointment>();
@@ -58,12 +56,13 @@ export class TreatmentListComponent implements OnInit {
 
   ngOnInit(): void {
     // אם מוצגים כל הפגישות של מטפל (ולא של מטופל מסוים) - סנן כברירת מחדל לפי "מתוזמנת"
-    if (typeof this.therapistId === 'number' && typeof this.patientId !== 'number') {
+    if (typeof this.therapistId === 'number' && !(this.patient && typeof this.patient.patient_id === 'number')) {
       this.selectedStatus = this.statusFilter;
     }
     // אם הועבר מזהה מטופל, נטען לפי מטופל, אחרת אם הועבר מזהה מטפל - נטען לפי מטפל
-    if (typeof this.patientId === 'number') {
-      this.apppointmentService.getAppointmentsByPatient(this.patientId, this.therapistId).subscribe(data => {
+    const patientId = this.patient?.patient_id;
+    if (typeof patientId === 'number') {
+      this.apppointmentService.getAppointmentsByPatient(patientId, this.therapistId).subscribe(data => {
         this.appointments = data;
       });
     } else if (typeof this.therapistId === 'number') {
@@ -76,6 +75,17 @@ export class TreatmentListComponent implements OnInit {
     if (changes.appointments && changes.appointments.currentValue) {
       this.appointments = changes.appointments.currentValue;
     }
+  }
+    openSessionsSheet(): void {
+    this.dialog.open(SessionsSheetComponent, {
+      width: '900px',
+      direction: 'rtl',
+      data: {
+        appointments: this.filteredAppointments,
+        patient: this.patient,
+        therapistId: this.therapistId
+      }
+    });
   }
   // פתיחת דיאלוג יומן עם הפגישות
   openCalendarDialog(): void {
@@ -102,12 +112,12 @@ export class TreatmentListComponent implements OnInit {
         }
       };
     });
-    this.dialog.open(RoomCalendarComponent, {
+    this.dialog.open(DisplayCalendarComponent, {
       width: '900px',
       direction: 'rtl',
       data: {
         events,
-        patientId: this.patientId
+  patientId: this.patient?.patient_id
       }
     });
   }
@@ -130,17 +140,31 @@ export class TreatmentListComponent implements OnInit {
 
   // פתיחת דיאלוג הוספת טיפול
   openCreateAppointmentDialog(): void {
-    const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
+    // שליחת שם המטופל אם קיים
+    const data: any = {};
+    if (this.patient) {
+      data.patient_id = (this.patient as any).patient_id;
+      // תמיכה ב-PersonData/PatientCreationData
+      if ((this.patient as any).first_name && (this.patient as any).last_name) {
+        data.first_name = (this.patient as any).first_name;
+        data.last_name = (this.patient as any).last_name;
+      } else if ((this.patient as any).person) {
+        data.first_name = (this.patient as any).person.first_name;
+        data.last_name = (this.patient as any).person.last_name;
+      }
+    }
+  const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
       width: '500px',
       direction: 'rtl',
-      data: { patient_id: this.patientId }
+      data
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // רענון מלא של הרשימה מהשרת
-        if (typeof this.patientId === 'number') {
-          this.apppointmentService.getAppointmentsByPatient(this.patientId, this.therapistId).subscribe(data => {
+        const patientId = this.patient?.patient_id;
+        if (typeof patientId === 'number') {
+          this.apppointmentService.getAppointmentsByPatient(patientId, this.therapistId).subscribe(data => {
             this.appointments = data;
           });
         }
@@ -171,8 +195,7 @@ export class TreatmentListComponent implements OnInit {
   }
 
   get showPatientColumn(): boolean {
-    return typeof this.patientId !== 'number';
-  }
+    return typeof this.patient?.patient_id !== 'number';  }
   // פורמט תאריך לתצוגה
   formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -182,9 +205,9 @@ export class TreatmentListComponent implements OnInit {
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
-    const dialogRef = this.dialog.open(CreateTreatmentDialogComponent, {
+  const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
       width: '600px',
-      data: { ...appointment, patient_id: this.patientId || appointment.patient_id }
+      data: { ...appointment, patient_id: (this.patient as any)?.patient_id || appointment.patient_id }
     });
 
     dialogRef.afterClosed().subscribe(result => {

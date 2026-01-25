@@ -113,12 +113,11 @@
         <!-- טיפולים -->
         <div *ngIf="activeTab === 'treatments'" class="treatments-view">
           <div class="treatments-card">
-            <app-treatment-list 
+            <app-appointment-list 
               [patient]="selectedPatient.patient" 
-              [patientId]="selectedPatient.patient.patient_id" 
               [therapistId]="therapistId"
             >
-            </app-treatment-list>
+            </app-appointment-list>
           </div>
         </div>
 
@@ -137,9 +136,8 @@
         <!-- תשלומים -->
         <div *ngIf="activeTab === 'payments'" class="payments-view">
           <div class="payments-card">
-            <app-payment-list [patientId]="selectedPatient.patient.patient_id!">
-            </app-payment-list>
-
+            <app-payment-list [patient]="selectedPatient">
+                        </app-payment-list>
           </div>
         </div>
 
@@ -149,10 +147,7 @@
             <app-followup-table [personId]="selectedPatient.person.person_id || 0" [creatorId]="userId || 0"></app-followup-table>
           </div>
         </div>
-
-
       </div>
     </div>
-
   </div>
 </div>

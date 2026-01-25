@@ -11,8 +11,8 @@ html, body {
   overflow: hidden;
 }
 .dashboard-content {
-  width: calc(100vw - 70px);
-  margin-right: 80px;
+  width: calc(100vw - 5rem);
+  margin-right: 5rem;
   /* overflow-y: auto; */
   box-sizing: border-box;
   background: #F3F7F8;

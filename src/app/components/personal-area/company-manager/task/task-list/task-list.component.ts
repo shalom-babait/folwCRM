@@ -1,12 +1,9 @@
-
-
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { Task } from 'src/app/models/task.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskService } from 'src/app/services/task.service';
-
 
 @Component({
   selector: 'app-task-list',
@@ -18,6 +15,10 @@ export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
   addMode = false;
   addTaskForm: FormGroup;
+  assignmentTherapist: boolean = true;
+  assignmentPatient: boolean = false;
+  selectedTherapistId: number | null = null;
+  selectedPatientId: number | null = null;
   editTaskId: number | null = null;
   editTaskForm: FormGroup | null = null;
 
@@ -27,14 +28,15 @@ export class TaskListComponent implements OnInit {
       description: [''],
       patient_id: [null],
       created_by_user_id: [this.getCurrentUserId()],
-      assigned_to_user_id: [1],
       status: ['open', Validators.required],
       priority: ['medium'],
       due_date: [null],
       completed_at: [null],
       color: ['#FFD54F'],
-  created_at: [this.getTodayDate()],
-      updated_at: [null]
+      created_at: [this.getTodayDate()],
+      updated_at: [null],
+      assignmentTherapist: [true],
+      assignmentPatient: [false]
     });
   }
 
@@ -58,7 +60,10 @@ export class TaskListComponent implements OnInit {
   ngOnInit(): void {
     if (this.patientId) {
       this.taskService.getTasksByPatientId(this.patientId).subscribe({
-        next: (tasks) => this.tasks = tasks,
+        next: (tasks) => {
+          console.log('Tasks list from server:', tasks);
+          this.tasks = tasks;
+        },
         error: (err) => console.error('שגיאה בקבלת משימות', err)
       });
     }
@@ -66,12 +71,18 @@ export class TaskListComponent implements OnInit {
 
   showAddTaskCard(): void {
     this.addMode = true;
+    this.assignmentTherapist = true;
+    this.assignmentPatient = false;
+    this.selectedTherapistId = null;
+    this.selectedPatientId = null;
     this.addTaskForm.reset({
       status: 'open',
       priority: 'medium',
       color: '#FFD54F',
       created_by_user_id: this.getCurrentUserId(),
-      created_at: this.getTodayDate()
+      created_at: this.getTodayDate(),
+      assignmentTherapist: true,
+      assignmentPatient: false
     });
   }
 
@@ -99,20 +110,40 @@ export class TaskListComponent implements OnInit {
       priority: 'medium',
       color: '#FFD54F',
       created_by_user_id: this.getCurrentUserId(),
-      created_at: this.getTodayDate()
+      created_at: this.getTodayDate(),
+      assignmentTherapist: true,
+      assignmentPatient: false,
+      therapistId: null,
+      patientAssignmentId: null
     });
+    this.assignmentTherapist = true;
+    this.assignmentPatient = false;
+    this.selectedTherapistId = null;
+    this.selectedPatientId = null;
   }
 
   saveNewTask(): void {
     if (this.addTaskForm.invalid) return;
+    // שיוך משימה: יצירת assignments לפי הצ'קבוקסים והמבנה של הטבלה
+    const assignments = [];
+    // נניח שיש לך דרך לקבל את מזהה המטפל (למשל מהמשתמש המחובר)
+    const therapistId = this.getCurrentTherapistId();
+    if (this.addTaskForm.value.assignmentTherapist && therapistId) {
+      assignments.push({ entity_id: therapistId, entity_type: 'therapist' });
+    }
+    if (this.addTaskForm.value.assignmentPatient && this.patientId) {
+      assignments.push({ entity_id: this.patientId, entity_type: 'patient' });
+    }
+    // אפשר לשמור משימה גם ללא שיוך כלל
     const newTask: Task = {
       ...this.addTaskForm.value,
       patient_id: this.patientId || null,
       created_by_user_id: this.getCurrentUserId(),
-      assigned_to_user_id: this.addTaskForm.value.assigned_to_user_id,
       status: this.addTaskForm.value.status,
-      color: this.addTaskForm.value.color || '#FFD54F'
+      color: this.addTaskForm.value.color || '#FFD54F',
+      assignments: assignments.map(a => ({ entity_id: a.entity_id, entity_type: a.entity_type }))
     };
+    console.log('Task object sent to server:', newTask);
     this.taskService.addTask(newTask).subscribe({
       next: (savedTask) => {
         this.tasks = [savedTask, ...this.tasks];
@@ -137,6 +168,15 @@ export class TaskListComponent implements OnInit {
 
   editTask(task: Task): void {
     this.editTaskId = task.task_id || null;
+    // קביעת צ'קבוקסים ושדות ברירת מחדל
+    let assignmentTherapist = false;
+    let assignmentPatient = false;
+    if (task.assignments) {
+      assignmentTherapist = task.assignments.some(a => a.entity_type === 'therapist');
+      assignmentPatient = task.assignments.some(a => a.entity_type === 'patient');
+    }
+    this.assignmentTherapist = assignmentTherapist;
+    this.assignmentPatient = assignmentPatient;
     this.editTaskForm = this.fb.group({
       title: [task.title, Validators.required],
       description: [task.description],
@@ -144,8 +184,9 @@ export class TaskListComponent implements OnInit {
       priority: [task.priority],
       due_date: [task.due_date],
       color: [task.color],
-      assigned_to_user_id: [task.assigned_to_user_id],
       created_at: [{ value: task.created_at, disabled: true }],
+      assignmentTherapist: [assignmentTherapist],
+      assignmentPatient: [assignmentPatient]
     });
   }
 
@@ -156,10 +197,23 @@ export class TaskListComponent implements OnInit {
 
   saveEditTask(task: Task): void {
     if (!this.editTaskForm || this.editTaskForm.invalid || !task.task_id) return;
+    // נבנה assignments תמיד לפי בחירה נוכחית בטופס
+    const assignments = [];
+    const therapistId = this.getCurrentTherapistId();
+    const assignmentTherapist = this.editTaskForm.get('assignmentTherapist')?.value;
+    const assignmentPatient = this.editTaskForm.get('assignmentPatient')?.value;
+    if (assignmentTherapist && therapistId) {
+      assignments.push({ entity_id: therapistId, entity_type: 'therapist', task_id: task.task_id });
+    }
+    if (assignmentPatient && this.patientId) {
+      assignments.push({ entity_id: this.patientId, entity_type: 'patient', task_id: task.task_id });
+    }
     const updatedTask: Task = {
       ...task,
-      ...this.editTaskForm.value
+      ...this.editTaskForm.value,
+      assignments
     };
+    console.log('Task object sent to server (edit):', updatedTask);
     this.taskService.updateTask(task.task_id, updatedTask).subscribe({
       next: () => {
         this.refreshTasks();
@@ -172,10 +226,20 @@ export class TaskListComponent implements OnInit {
     });
   }
 
+  // דוגמה לפונקציה שמחזירה מזהה מטפל (לשימוש אמיתי יש להחליף בלוגיקה שלך)
+  private getCurrentTherapistId(): number | null {
+    // נשלוף תמיד therapist_id מה-localStorage['therapist']
+    const therapist = JSON.parse(localStorage.getItem('therapist') || '{}');
+    return therapist.therapist_id || null;
+  }
+
   private refreshTasks(): void {
     if (this.patientId) {
       this.taskService.getTasksByPatientId(this.patientId).subscribe({
-        next: (tasks) => this.tasks = tasks,
+        next: (tasks) => {
+          console.log('Tasks list from server (refresh):', tasks);
+          this.tasks = tasks;
+        },
         error: (err) => console.error('שגיאה ברענון משימות', err)
       });
     }

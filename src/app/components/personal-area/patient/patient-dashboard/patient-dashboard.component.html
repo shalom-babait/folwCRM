@@ -28,12 +28,13 @@
   
       <!-- עמודה ימנית - רשימת טיפולים -->
       <div class="main-content">
-        <app-treatment-list
+        <app-appointment-list
+          *ngIf="patient"
           [appointments]="appointments"
-          [patientId]="patientId"
+          [patient]="patient.patient"
           (appointmentAdded)="onAppointmentAdded($event)"
           (appointmentDeleted)="onAppointmentDeleted($event)">
-        </app-treatment-list>
+        </app-appointment-list>
 
       </div>
 

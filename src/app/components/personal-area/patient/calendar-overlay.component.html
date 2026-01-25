@@ -1,9 +1,0 @@
-<div *ngIf="showOverlay" class="calendar-overlay">
-  <app-room-calendar
-    [roomId]="selectedRoomId ?? 0"
-    [events]="roomEvents"
-    (dateSelected)="onOverlayDateSelected($event)">
-  </app-room-calendar>
-  <button class="close-btn" (click)="closeOverlay()">סגור יומן</button>
-</div>
-

@@ -64,7 +64,11 @@ export class UserFollowUpTableComponent implements OnInit {
         }
       });
     }
-
+  updateStatus(f: FollowUpWithPerson): void {
+    if (f.followUp?.followup_id && f.followUp.status) {
+      this.followupService.updateFollowupStatus(f.followUp.followup_id, f.followUp.status).subscribe();
+    }
+  }
     deleteFollowup(followup: FollowUpWithPerson): void {
       if (!followup.followUp?.followup_id) return;
       if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
@@ -92,6 +96,7 @@ export class UserFollowUpTableComponent implements OnInit {
     }
 
     const today = new Date();
+    today.setHours(0,0,0,0);
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
     const endOfWeek = new Date(startOfWeek);
@@ -138,6 +143,12 @@ export class UserFollowUpTableComponent implements OnInit {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);
         return date >= startOfNextMonth && date <= endOfNextMonth;
+      });
+    } else if (this.dateFilter === 'overdueOrToday') {
+      filtered = filtered.filter(f => {
+        const date = new Date(f.followUp?.follow_date);
+        date.setHours(0,0,0,0);
+        return date <= today && f.followUp.status === 'open';
       });
     }
     return filtered;

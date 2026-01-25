@@ -4,6 +4,7 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
 import { PaymentService } from 'src/app/services/payments.service';
 import { Payment } from 'src/app/models/payment.model';
 import { ex } from '@fullcalendar/core/internal-common';
+import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 
 @Component({
   selector: 'app-payment-list',
@@ -11,7 +12,8 @@ import { ex } from '@fullcalendar/core/internal-common';
   styleUrls: ['./payment-list.component.css']
 })
 export class PaymentListComponent implements OnInit {
-  @Input() patientId!: number;
+  @Input() patient!: PatientCreationData;
+  @Input() therapistId?: number;
   sortOrder: 'asc' | 'desc' = 'asc'; // 'asc' למיון מהישן לחדש, 'desc' מהחדש לישן
   transactions: Payment[] = [];
   totalDebits = 0;
@@ -23,13 +25,13 @@ export class PaymentListComponent implements OnInit {
   constructor(private dialog: MatDialog, private paymentService: PaymentService) { }
 
   ngOnInit() {
-    if (this.patientId) {
+    if (this.patient && this.patient.person && this.patient.person.person_id) {
       this.loadTransactions();
     }
   }
 
   loadTransactions() {
-    this.paymentService.getPaymentsByPatientId(this.patientId).subscribe({
+  this.paymentService.getPaymentsByPatientId(this.patient.patient.patient_id || 0).subscribe({
       next: (data) => {
         console.log('Transactions from server:', data);
         this.transactions = data.map((item: any) => {
@@ -90,8 +92,6 @@ export class PaymentListComponent implements OnInit {
     this.calculateTotals();
   }
 
-
-
   recalculateBalances(list: Payment[]) {
     let runningBalance = 0;
     return list.map(t => {
@@ -148,7 +148,8 @@ export class PaymentListComponent implements OnInit {
       direction: 'rtl',
       data: {
         mode: 'edit',
-        patient_id: this.patientId,
+        person_id: this.patient.person.person_id,
+        therapistId: this.therapistId,
         transaction: { ...payment }
       }
     });    
@@ -188,46 +189,12 @@ export class PaymentListComponent implements OnInit {
     const dialogRef = this.dialog.open(AddTransactionComponent, {
       width: '500px',
       direction: 'rtl',
-      data: { patient_id: this.patientId }
+      data: { person_id: this.patient.person.person_id, therapistId: this.therapistId }
     });
 
-    dialogRef.componentInstance.transactionAdded.subscribe((transaction) => {
-      console.log("Patient ID in transactionAdded:", this.patientId);
-
-      const methodMap: any = {
-        cash: 'מזומן',
-        transfer: 'העברה בנקאית',
-        card: 'כרטיס אשראי'
-      };
-
-      const statusMap: any = {
-        pending: 'pending',
-        paid: 'paid',
-        failed: 'failed',
-        refunded: 'refunded'
-      };
-
-      const payload = {
-        appointment_id: transaction.transaction_type === 'debit' ? transaction.appointment_id : null,
-        amount: transaction.amount,
-        payment_date: transaction.payment_date,
-        method: methodMap[transaction.method] ?? 'מזומן',
-        status: statusMap[transaction.status] ?? 'pending',
-        transaction_type: transaction.transaction_type,
-        patient_id: this.patientId,
-        therapist_id: transaction.therapist_id
-      };
-
-
-
-      this.paymentService.createPayment(payload).subscribe({
-        next: () => {
-          console.log("נשמר בהצלחה");
-          this.loadTransactions();
-          dialogRef.close();
-        },
-        error: (err) => console.error("שגיאה בשמירה:", err)
-      });
+    dialogRef.componentInstance.transactionAdded.subscribe(() => {
+      this.loadTransactions();
+      dialogRef.close();
     });
 
 

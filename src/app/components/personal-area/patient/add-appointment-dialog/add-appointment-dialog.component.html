@@ -1,5 +1,8 @@
 <div class="create-treatment-dialog">
-  <h2 class="dialog-title">{{ dialogTitle }}</h2>
+  <h2 class="dialog-title">
+    {{ dialogTitle }}
+    <span *ngIf="patientFirstName && patientLastName">({{ patientFirstName }} {{ patientLastName }})</span>
+  </h2>
 
   <form [formGroup]="treatmentForm">
     <div class="form-section">
@@ -28,8 +31,9 @@
       <div class="form-field" *ngIf="treatmentForm.get('meeting_type')?.value === 'frontal'">
         <label for="place">מקום</label>
         <select id="place" formControlName="place">
-          <option [value]="null">בחר חדר</option>
+          <option *ngIf="!treatmentForm.get('place')?.value" disabled selected hidden>בחר חדר</option>
           <option *ngFor="let room of rooms" [value]="room.room_id">{{ room.room_name }}</option>
+          <option [value]="''">אחר</option>
         </select>
         <div class="error-message" *ngIf="treatmentForm.get('place')?.invalid && treatmentForm.get('place')?.touched">
           חובה לבחור חדר

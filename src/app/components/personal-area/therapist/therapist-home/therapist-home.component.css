@@ -2,24 +2,22 @@
 .therapist-home-grid {
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
+	gap: 1rem;
 	width: 98%;
 	max-width: 98%;
 	box-sizing: border-box;
-	padding-block: 0.5rem;
-	padding-inline: 1rem;
 }
 
 .top-row {
 	display: grid;
-	grid-template-columns: 60% 1fr;
-	gap: 2rem;
+	grid-template-columns: 70% 1fr;
+	gap: 1rem;
 	align-items: flex-start;
 }
 
 .followup-col, .calendar-col {
 	min-width: 0;
-	background: #fff;
+	/* background: #fff; */
 	border-radius: 14px;
 	box-shadow: 0 2px 12px 0 #0001;
 	padding: 1.5rem 1.2rem;
@@ -27,7 +25,6 @@
 }
 
 .appointments-row {
-	width: 100%;
 	background: #fff;
 	border-radius: 14px;
 	box-shadow: 0 2px 12px 0 #0001;

@@ -1,41 +1,41 @@
 /* עיצוב דרופדאון HTML רגיל */
 .styled-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
   /* background: #fff url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 0.7em center/1.2em; */
-  border: 1.5px solid #b0b0b0;
-  border-radius: 8px;
-  padding: 0.3em 2em 0.3em 0.7em;
-  font-size: 0.95em;
-  min-width: 80px;
-  max-width: 140px;
-  height: 32px;
-  color: #022F39;
-  box-shadow: 0 1px 3px rgba(2,47,57,0.07);
-  transition: border 0.2s, box-shadow 0.2s;
-  cursor: pointer;
+  border: 1.5px solid #b0b0b0 !important;
+  border-radius: 8px !important;
+  padding: 0.3em 2em 0.3em 0.7em !important;
+  font-size: 0.95em !important;
+  min-width: 80px !important;
+  max-width: 140px !important;
+  height: 32px !important;
+  color: #022F39 !important;
+  box-shadow: 0 1px 3px rgba(2,47,57,0.07) !important;
+  transition: border 0.2s, box-shadow 0.2s !important;
+  cursor: pointer !important;
 }
 
 .styled-select:focus {
-  outline: none;
-  border: 2px solid #888;
-  box-shadow: 0 0 0 2px #e0e0e0;
-  background-color: #fff;
+  outline: none !important;
+  border: 2px solid #888 !important;
+  box-shadow: 0 0 0 2px #e0e0e0 !important;
+  background-color: #fff !important;
 }
 
 /* סימון וי ליד אופציה נבחרת בדרופדאון */
 .styled-select option:checked {
-  background-color: rgb(167, 195, 201);
-  color: #022F39;
-  font-weight: bold;
-  position: relative;
+  background-color: rgb(167, 195, 201) !important;
+  color: #022F39 !important;
+  font-weight: bold !important;
+  position: relative !important;
 }
 
 /* לא כל הדפדפנים תומכים ב-content ב-option, לכן הוספת וי תעבוד בעיקר בכרום/אדג' */
 .styled-select option:checked::before {
-  content: '\2713  ';
-  color: rgb(167, 195, 201);
+  content: '\2713  ' !important;
+  color: rgb(167, 195, 201) !important;
 }
 /* שורה אופקית של כפתורי פעולה וחיפוש */
 .search-actions-row {
@@ -117,8 +117,8 @@
 }
 
 .search-input {
-  width: 70%;
-  height: 4vh;
+  width: 12rem;
+  height: 2.5rem;
   min-height: 40px;
   border: none;
   border-radius: 1rem;

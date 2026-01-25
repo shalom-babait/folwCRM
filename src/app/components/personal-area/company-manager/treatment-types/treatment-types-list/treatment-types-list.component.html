@@ -1,0 +1,9 @@
+<div class="treatment-types-list">
+	<h2>הגדרות סוגי טיפולים</h2>
+	<ul class="simple-list">
+		<li *ngFor="let type of treatmentTypes" class="list-item">
+			<span class="item-icon">🧠</span>
+			<span class="item-text">{{ type.type_name }}</span>
+		</li>
+	</ul>
+</div>

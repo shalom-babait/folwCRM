@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddTransactionComponent } from 'src/app/components/personal-area/company-manager/payment/add-transaction/add-transaction.component';
 import { ReportsService } from 'src/app/services/reports.service';
 import { OpenDebtReportItem } from 'src/app/models/reports.model';
 
@@ -10,7 +12,7 @@ import { OpenDebtReportItem } from 'src/app/models/reports.model';
 export class DebtReportComponent implements OnInit {
   debts: OpenDebtReportItem[] = [];
 
-  constructor(private reportsService: ReportsService) {}
+  constructor(private reportsService: ReportsService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     const therapistId = this.getTherapistId();
@@ -40,5 +42,26 @@ export class DebtReportComponent implements OnInit {
 
   getTotalDebts(): number {
     return this.debts.reduce((sum, row) => sum + Number(row.open_balance), 0);
+  }
+
+  reportPayment(row: OpenDebtReportItem): void {
+    const dialogRef = this.dialog.open(AddTransactionComponent, {
+      width: '500px',
+      data: {
+        person_id: row.person_id,
+        mode: 'add',
+        openMode: 'credit',
+        therapist_id: this.getTherapistId()
+      }
+    });
+
+    dialogRef.componentInstance.transactionAdded.subscribe(() => {
+      this.ngOnInit(); // רענון הדוח
+      dialogRef.close();
+    });
+
+    dialogRef.componentInstance.cancelled.subscribe(() => {
+      dialogRef.close();
+    });
   }
 }

@@ -1,0 +1,54 @@
+
+<!-- tutorial-videos.component.html -->
+<div class="tutorial-container">
+  <div class="header">
+    <h1>סרטוני הדרכה</h1>
+    <p class="subtitle">למד כיצד להפיק את המרב מהמערכת</p>
+  </div>
+
+  <div class="videos-grid">
+    <div 
+      *ngFor="let video of videos" 
+      class="video-card"
+      (click)="selectVideo(video)"
+    >
+      <div class="thumbnail-container">
+        <img [src]="video.thumbnailUrl" [alt]="video.title" class="thumbnail">
+        <div class="play-overlay">
+          <div class="play-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <span class="duration">{{ video.duration }}</span>
+      </div>
+      <div class="video-info">
+        <h3>{{ video.title }}</h3>
+        <p>{{ video.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-modal" *ngIf="selectedVideo" (click)="closeVideo()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-button" (click)="closeVideo()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
+      <div class="video-wrapper">
+        <iframe 
+          [src]="getSafeUrl(selectedVideo.videoUrl)" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="modal-info">
+        <h2>{{ selectedVideo.title }}</h2>
+        <p>{{ selectedVideo.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

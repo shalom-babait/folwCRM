@@ -1,0 +1,30 @@
+/* עיצוב קצר ואלגנטי לכפתור גיליון מפגשים */
+.sessions-sheet-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #2A5448;
+	color: #fff;
+	border: none;
+	border-radius: 20px;
+	padding: 6px 16px;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.18s;
+}
+.sessions-sheet-btn mat-icon {
+	font-size: 20px;
+	margin-left: 2px;
+}
+.sessions-sheet-btn:hover {
+	background: #6FA79A;
+}
+/* שורת סיכום דביקה בתחתית הרשימה */
+.sticky-summary-row {
+	color: white;
+	position: sticky;
+	bottom: 0;
+	z-index: 10;
+	background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
+}

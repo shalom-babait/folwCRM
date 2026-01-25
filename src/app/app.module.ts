@@ -1,14 +1,14 @@
-import { CalendarOverlayComponent } from './components/personal-area/patient/calendar-overlay.component';
+import { CalendarOverlayComponent } from './components/personal-area/company-manager/calendars/calendar-overlay/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
 
-import { AuthInterceptor } from './services/auth.interceptor'; 
+import { AuthInterceptor } from './services/auth.interceptor';
 import { AppComponent } from './app.component';
 import { NgChartsModule } from 'ng2-charts';
 
@@ -42,10 +42,10 @@ import { PatientListComponent } from './components/personal-area/patient/patient
 import { PatientNameFilterPipe } from './components/personal-area/patient/patient-list/patient-name-filter.pipe';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component'
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
-import { TreatmentListComponent } from './components/personal-area/patient/treatment-list/treatment-list.component';
+import { AppointmentListComponent } from './components/personal-area/patient/appointment-list/appointment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
-import { CreateTreatmentDialogComponent } from './components/personal-area/patient/add-treatment-dialog/add-treatment-dialog.component';
-import { RoomCalendarComponent } from './components/personal-area/company-manager/rooms/room-calendar/room-calendar.component';
+import { AddAppointmentDialogComponent } from './components/personal-area/patient/add-appointment-dialog/add-appointment-dialog.component';
+import { DisplayCalendarComponent } from './components/personal-area/company-manager/calendars/display-calendar/display-calendar.component';
 import { SelectTimeDialogComponent } from './components/select-time-dialog/select-time-dialog.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TreatmentSummaryComponent } from './components/personal-area/patient/treatment-summary/treatment-summary.component';
@@ -107,7 +107,11 @@ import { AddTaskComponent } from './components/personal-area/company-manager/tas
 import { TaskListComponent } from './components/personal-area/company-manager/task/task-list/task-list.component';
 import { DebtReportComponent } from './components/personal-area/company-manager/reports/debt-report/debt-report.component';
 import { TherapistHomeSettingComponent } from './components/personal-area/therapist/settings/therapist-home-setting/therapist-home-setting.component';
+import { TutorialVideosComponent } from './components/personal-area/company-manager/helps/tutorial-videos/tutorial-videos.component';
+import { SessionsSheetComponent } from './components/personal-area/patient/sessions-sheet/sessions-sheet.component';
+import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
+import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
 
 @NgModule({
   declarations: [
@@ -122,16 +126,16 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     TherapistCalendarComponent,
     PatientDashboardComponent,
     TherapistDashboardComponent,
-    TreatmentListComponent,
+    AppointmentListComponent,
     AddPatientDialogComponent,
-    CreateTreatmentDialogComponent,
+  AddAppointmentDialogComponent,
     TreatmentSummaryComponent,
     PatientDetailsComponent,
     TherapistListComponent,
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
-    RoomCalendarComponent,
+     DisplayCalendarComponent,
     SelectTimeDialogComponent,
     CalendarOverlayComponent,
     RoomsViewComponent,
@@ -186,6 +190,30 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
   TaskListComponent,
   DebtReportComponent,
   TherapistHomeSettingComponent,
+  SessionsSheetComponent,
+  LinebreaksPipe,
+    TextEditorComponent,
+    ContactListComponent,
+    AddContactDialogComponent,
+    TherapistHomeComponent,
+    TherapistReportsComponent,
+    ReportsListComponent,
+    ReportsViewComponent,
+    AddReportsComponent,
+    ReportDetailsComponent,
+    IncomeReportComponent,
+    UserSettingsComponent,
+    TreatmentTypesListComponent,
+    AddPatientProblemComponent,
+    PatientProblemTableComponent,
+    AddPatientProblemRatingComponent,
+    PatientProblemRatingListComponent,
+    TherapistSettingsMenuComponent,
+    TherapistSettingsViewComponent,
+    AddTaskComponent,
+    TaskListComponent,
+    DebtReportComponent,
+    TherapistHomeSettingComponent,
   ],
   imports: [
     NgChartsModule,
@@ -199,7 +227,7 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
@@ -214,10 +242,11 @@ import { TherapistHomeSettingComponent } from './components/personal-area/therap
     MatDatepickerModule,
     MatTableModule,
     MatCheckboxModule,
-    MatCardModule, 
+    MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
+      TutorialVideosComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
