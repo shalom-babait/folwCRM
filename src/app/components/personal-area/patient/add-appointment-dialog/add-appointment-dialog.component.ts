@@ -11,14 +11,14 @@ import { ConfirmUnsavedDialogComponent } from 'src/app/components/confirm-unsave
 import { SelectTimeDialogComponent } from 'src/app/components/select-time-dialog/select-time-dialog.component';
 
 @Component({
-  selector: 'app-add-treatment-dialog',
-  templateUrl: './add-treatment-dialog.component.html',
+  selector: 'app-add-appointment-dialog',
+  templateUrl: './add-appointment-dialog.component.html',
   styleUrls: [
-    './add-treatment-dialog.component.css',
+    './add-appointment-dialog.component.css',
      '../../../../styles/dialog-forms.css'
   ]
 })
-export class CreateTreatmentDialogComponent implements OnInit {
+export class AddAppointmentDialogComponent implements OnInit {
   async onCancel(): Promise<void> {
     if (!this.treatmentForm.dirty) {
       this.dialogRef.close();
@@ -55,8 +55,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
   showOverlay = false;
   patients: any[] = [];
 
-    isEditMode = false;
-    dialogTitle = 'טיפול חדש';
+  isEditMode = false;
+  dialogTitle = 'טיפול חדש';
+  patientFirstName?: string;
+  patientLastName?: string;
 
     constructor(
       private fb: FormBuilder,
@@ -66,7 +68,7 @@ export class CreateTreatmentDialogComponent implements OnInit {
       private patientService: PatientService,
       private apppointmentService: ApppointmentService,
       private dialog: MatDialog,
-      public dialogRef: MatDialogRef<CreateTreatmentDialogComponent>,
+  public dialogRef: MatDialogRef<AddAppointmentDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.treatmentForm = this.createForm();
@@ -74,7 +76,14 @@ export class CreateTreatmentDialogComponent implements OnInit {
         this.isEditMode = true;
         this.dialogTitle = 'עריכת טיפול';
       }
+      // שמירת שם המטופל אם הועבר
       if (data) {
+        if (data.first_name) {
+          this.patientFirstName = data.first_name;
+        }
+        if (data.last_name) {
+          this.patientLastName = data.last_name;
+        }
         // תאריך בפורמט YYYY-MM-DD
         let patchObj: any = {};
         if (data.appointment_date) {
@@ -125,6 +134,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
       }
       // Disable close on backdrop click or ESC
       this.dialogRef.disableClose = true;
+      // עדכון כותרת אם יש שם מטופל
+      if (!this.isEditMode && this.patientFirstName && this.patientLastName) {
+        this.dialogTitle = `הוספת טיפול ל${this.patientFirstName} ${this.patientLastName}`;
+      }
     }
 
   // Intercept dialog close (backdrop or X)
@@ -249,7 +262,10 @@ export class CreateTreatmentDialogComponent implements OnInit {
       therapist_id: Number(localStorage.getItem('therapist_id')) || 1,
       patient_id: value.patient_id,
       treatment_type_id: value.type ? Number(value.type) : 0,
-      room_id: value.meeting_type === 'frontal' && value.place ? Number(value.place) : (value.meeting_type === 'phone' ? undefined : 0),
+      room_id:
+        value.meeting_type === 'frontal'
+          ? (value.place ? Number(value.place) : undefined)
+          : (value.meeting_type === 'phone' ? undefined : undefined),
       appointment_date: value.date,
       start_time: value.startTime,
       end_time: value.endTime,
@@ -260,29 +276,43 @@ export class CreateTreatmentDialogComponent implements OnInit {
 
     if (this.data && this.data.appointment_id) {
       console.log('Calling updateAppointment with:', this.data.appointment_id, appointment);
-  this.apppointmentService.updateAppointment(this.data.appointment_id, appointment).subscribe({
+      this.apppointmentService.updateAppointment(this.data.appointment_id, appointment).subscribe({
         next: res => {
           console.log('updateAppointment response:', res);
+          if (res && res.message) {
+            alert(res.message);
+          }
           const result = (res && 'data' in res) ? (res as any).data : null;
           this.appointmentAdded.emit(result || { ...appointment, appointment_id: this.data.appointment_id });
           this.dialogRef.close(result || { ...appointment, appointment_id: this.data.appointment_id });
         },
         error: err => {
           console.error('updateAppointment error:', err);
-          alert('שגיאה בעדכון הפגישה');
+          if (err && err.error && err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('שגיאה בעדכון הפגישה');
+          }
         }
       });
     } else {
       console.log('Calling createAppointment with:', appointment);
-  this.apppointmentService.createAppointment(appointment).subscribe({
+      this.apppointmentService.createAppointment(appointment).subscribe({
         next: res => {
           console.log('createAppointment response:', res);
+          if (res && res.message) {
+            alert(res.message);
+          }
           this.appointmentAdded.emit(res.data || appointment);
           this.dialogRef.close(res.data || appointment);
         },
         error: err => {
           console.error('createAppointment error:', err);
-          alert('שגיאה בשמירת הפגישה');
+          if (err && err.error && err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('שגיאה בשמירת הפגישה');
+          }
         }
       });
     }

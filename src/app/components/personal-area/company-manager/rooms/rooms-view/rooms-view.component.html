@@ -1,74 +1,66 @@
+
 <div class="view-container">
 	<div class="right-panel">
-		<app-room-list-calendar (roomSelected)="onRoomSelected($event)" (roomAction)="onRoomAction($event)"></app-room-list-calendar>
+		<app-room-list-calendar
+			(roomSelected)="onRoomSelected($event)"
+			(roomAction)="onRoomAction($event)">
+		</app-room-list-calendar>
 	</div>
+
 	<div class="left-panel">
-					<!-- קומפוננטת חדרים בית בעיצוב כרטיס כמו יומן חדר -->
-									<div class="room-view">
-										<div class="header-tabs">
-											<button 
-												class="tab-link" 
-												[class.active]="activeTab === 'home'"
-												(click)="setActiveTab('home')">
-												<mat-icon>home</mat-icon>
-												<span>בית</span>
-											</button>
-											<ng-container *ngIf="selectedRoom">
-												<button 
-													class="tab-link" 
-													[class.active]="activeTab === 'calendar'"
-													(click)="setActiveTab('calendar')">
-													<mat-icon>calendar_today</mat-icon>
-													<span>יומן</span>
-												</button>
-												<button 
-													class="tab-link" 
-													[class.active]="activeTab === 'settings'"
-													(click)="setActiveTab('settings')">
-													<mat-icon>settings</mat-icon>
-													<span>הגדרות</span>
-												</button>
-												<button class="close-btn" (click)="onCloseDetails()">
-													<mat-icon>close</mat-icon>
-												</button>
-											</ng-container>
-										</div>
-										<div class="tab-content">
-											<div *ngIf="activeTab === 'home'" class="calendar-view">
-												<div class="calendar-card">
-													<app-rooms-home></app-rooms-home>
-												</div>
-											</div>
-											<ng-container *ngIf="selectedRoom">
-												<!-- יומן -->
-												<div *ngIf="activeTab === 'calendar'" class="calendar-view">
-													<div class="calendar-card">
-														<h3>יומן חדר</h3>
-														<app-display-calendar 
-															*ngIf="selectedRoom.room_id"
-															[roomId]="selectedRoom.room_id"
-															[events]="selectedRoomEvents">
-														</app-display-calendar>
-													</div>
-												</div>
-												<!-- הגדרות חדר -->
-												<div *ngIf="activeTab === 'settings'" class="settings-view">
-													<app-room-settings [room]="selectedRoom"></app-room-settings>
-												</div>
-												<!-- טאב מחיקת חדר -->
-												<div *ngIf="activeTab === 'delete'" class="delete-room-view">
-													<div class="delete-room-card">
-														<h3>מחיקת חדר</h3>
-														<p>האם אתה בטוח שברצונך למחוק את החדר <b>{{selectedRoom.room_name}}</b>?</p>
-														<button mat-raised-button color="warn" (click)="confirmDeleteRoom()">מחק</button>
-														<button mat-button (click)="setActiveTab('calendar')">ביטול</button>
-													</div>
-												</div>
-											</ng-container>
-										</div>
-									</div>
+		<div class="room-view">
+			<div class="header-tabs">
+				<button class="tab-link" [class.active]="activeTab === 'home'" (click)="setActiveTab('home')">
+					<mat-icon>home</mat-icon>
+					<span>בית</span>
+				</button>
+				<ng-container *ngIf="selectedRoom">
+					<button class="tab-link" [class.active]="activeTab === 'calendar'" (click)="setActiveTab('calendar')">
+						<mat-icon>calendar_today</mat-icon>
+						<span>יומן</span>
+					</button>
+					<button class="tab-link" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">
+						<mat-icon>settings</mat-icon>
+						<span>הגדרות</span>
+					</button>
+					<button class="close-btn" (click)="onCloseDetails()">
+						<mat-icon>close</mat-icon>
+					</button>
+				</ng-container>
+			</div>
 
-		<!-- תצוגה כאשר נבחר חדר -->
+			<div class="tab-content">
+				<div *ngIf="activeTab === 'home'" class="calendar-view">
+					<div class="calendar-card">
+						<app-rooms-home></app-rooms-home>
+					</div>
+				</div>
 
+				<ng-container *ngIf="selectedRoom">
+					<div *ngIf="activeTab === 'calendar'" class="calendar-view">
+						<div class="calendar-card">
+							<app-display-calendar
+								*ngIf="selectedRoom.room_id"
+								[roomId]="selectedRoom.room_id"
+								[events]="selectedRoomEvents">
+							</app-display-calendar>
+						</div>
+					</div>
+
+					<div *ngIf="activeTab === 'settings'" class="settings-view">
+						<app-room-settings [room]="selectedRoom"></app-room-settings>
+					</div>
+
+					<div *ngIf="activeTab === 'delete'" class="delete-room-view">
+						<div class="delete-room-card">
+							<h3>מחיקת חדר</h3>
+							<p>האם אתה בטוח שברצונך למחוק את החדר <b>{{selectedRoom.room_name}}</b>?</p>
+							<button mat-raised-button color="warn" (click)="confirmDeleteRoom()">מחק</button>
+							<button mat-button (click)="setActiveTab('calendar')">ביטול</button>
+						</div>
+					</div>
+				</ng-container>
+			</div>
+		</div>
 	</div>
 </div>

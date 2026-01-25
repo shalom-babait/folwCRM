@@ -1,8 +1,9 @@
 
-import { Component, EventEmitter, Output, OnInit, Inject } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Inject, Input } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentService } from 'src/app/services/payments.service';
 import { DebitTransaction, CreditTransaction, Transaction } from 'src/app/models/payment.model';
+
 
 @Component({
   selector: 'app-add-transaction',
@@ -10,11 +11,13 @@ import { DebitTransaction, CreditTransaction, Transaction } from 'src/app/models
   styleUrls: ['./add-transaction.component.css']
 })
 export class AddTransactionComponent implements OnInit {
+  @Input() therapistId?: number;
+  @Input() openMode: 'debit' | 'credit' = 'debit';
   @Output() transactionUpdated = new EventEmitter<Transaction>();
   @Output() transactionAdded = new EventEmitter<Transaction>();
   @Output() cancelled = new EventEmitter<void>();
 
-  patientId!: number;
+  personId!: number;
   appointments: any[] = [];
   mode: 'add' | 'edit' = 'add';
   editingPaymentId?: number;
@@ -22,16 +25,23 @@ export class AddTransactionComponent implements OnInit {
   transactionType: 'debit' | 'credit' = 'debit';
 
   constructor(private paymentService: PaymentService, @Inject(MAT_DIALOG_DATA) public data: any) { }
-private toDateInputValue(date: Date | string): string {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+
+  private toDateInputValue(date: Date | string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnInit() {
-    this.patientId = this.data.patient_id;
+    console.log('AddTransactionComponent data:', this.data);
+  this.personId = this.data.person_id || this.data.patient_id;
+
+    // קבע סוג העסקה לפי openMode אם הגיע מהדיאלוג
+    if (this.data?.openMode === 'credit' || this.data?.openMode === 'debit') {
+      this.transactionType = this.data.openMode;
+    }
 
     if (this.data?.mode === 'edit' && this.data?.transaction) {
       this.mode = 'edit';
@@ -59,10 +69,8 @@ private toDateInputValue(date: Date | string): string {
     this.loadAppointments();
   }
 
-
-
   loadAppointments() {
-    this.paymentService.getAppointments(this.patientId)
+    this.paymentService.getAppointments(this.personId)
       .subscribe((data: any[]) => this.appointments = data);
   }
 
@@ -101,7 +109,6 @@ private toDateInputValue(date: Date | string): string {
     }
   }
 
-
   resetForms() {
     this.debitForm = {
       appointment_id: '',
@@ -128,51 +135,95 @@ private toDateInputValue(date: Date | string): string {
 
   onSubmit() {
     let transaction: Transaction & { therapist_id?: number };
-    const therapistId = Number(localStorage.getItem('therapist_id')); // Declare therapistId once
+    const therapistId = this.therapistId ?? Number(localStorage.getItem('therapist_id'));
+
+    console.log('onSubmit called');
+    console.log('transactionType:', this.transactionType);
+    console.log('mode:', this.mode);
+    console.log('therapistId:', therapistId);
+    console.log('debitForm:', this.debitForm);
+    console.log('creditForm:', this.creditForm);
 
     if (this.transactionType === 'debit') {
-      if (!this.validateDebitForm()) return;
+      if (!this.validateDebitForm()) {
+        console.warn('Debit form validation failed');
+        return;
+      }
       transaction = {
         transaction_type: 'debit',
         appointment_id: this.debitForm.appointment_id
           ? Number(this.debitForm.appointment_id)
           : null,
         amount: this.debitForm.amount,
-        payment_date: this.debitForm.payment_date,  // <-- STRING
+        payment_date: this.debitForm.payment_date,
         status: 'pending',
         method: 'cash',
-        therapist_id: therapistId // Use therapistId from the top declaration
+        therapist_id: therapistId
       };
     } else {
-      if (!this.validateCreditForm()) return;
+      if (!this.validateCreditForm()) {
+        console.warn('Credit form validation failed');
+        return;
+      }
       transaction = {
         transaction_type: 'credit',
         amount: this.creditForm.amount,
-        payment_date: this.creditForm.payment_date,  // <-- STRING
+        payment_date: this.creditForm.payment_date,
         method: this.creditForm.method,
         status: this.creditForm.status,
-        therapist_id: therapistId // Use therapistId from the top declaration
+        therapist_id: therapistId
       };
     }
-    // ודא שמזהה המטפל נשלח תמיד
     if (therapistId) {
       (transaction as any).therapist_id = therapistId;
     }
     (transaction as any).payment_id = this.editingPaymentId;
 
-    if (this.mode === 'edit') {
-      this.transactionUpdated.emit(transaction);
+
+    // שמירה לשרת רק במצב הוספה
+    if (this.mode === 'add') {
+      const methodMap: any = {
+        cash: 'מזומן',
+        transfer: 'העברה בנקאית',
+        card: 'כרטיס אשראי'
+      };
+      const statusMap: any = {
+        pending: 'pending',
+        paid: 'paid',
+        failed: 'failed',
+        refunded: 'refunded'
+      };
+      const payload: any = {
+        amount: transaction.amount,
+        payment_date: transaction.payment_date,
+        method: methodMap[transaction.method] ?? 'מזומן',
+        status: statusMap[transaction.status] ?? 'pending',
+        transaction_type: transaction.transaction_type,
+        person_id: this.personId,
+        therapist_id: transaction.therapist_id
+      };
+      if (transaction.transaction_type === 'debit') {
+        payload.appointment_id = transaction.appointment_id;
+      }
+      this.paymentService.createPayment(payload).subscribe({
+        next: (res) => {
+          console.log('נשמר בהצלחה', res);
+          this.transactionAdded.emit(payload);
+          this.resetForms();
+        },
+        error: (err) => {
+          console.error('שגיאה בשמירת תשלום:', err);
+        }
+      });
     } else {
-      this.transactionAdded.emit(transaction);
+      // עריכה - emit בלבד
+      this.transactionUpdated.emit(transaction);
+      this.resetForms();
     }
-
-    this.resetForms();
-
   }
 
   onCancel() {
     this.cancelled.emit();
-    // this.resetForms();
   }
   paymentMethods = [
     { value: 'cash', label: 'מזומן' },

@@ -1,15 +1,13 @@
-
-
 <div class="therapist-home-grid">
   <div class="top-row">
     <div class="followup-col">
-      <app-user-follow-up-table [dateFilter]="'today'"></app-user-follow-up-table>
+  <app-user-follow-up-table [dateFilter]="'overdueOrToday'"></app-user-follow-up-table>
     </div>
     <div class="calendar-col">
       <app-therapist-calendar [compact]="true"></app-therapist-calendar>
     </div>
   </div>
   <div class="appointments-row">
-    <app-treatment-list [therapistId]="therapistId" [statusFilter]="'מתוזמנת'"></app-treatment-list>
+    <app-appointment-list [therapistId]="therapistId" [statusFilter]="'מתוזמנת'"></app-appointment-list>
   </div>
 </div>

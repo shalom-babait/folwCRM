@@ -1,4 +1,5 @@
 
+
 import { Component, Input, OnInit } from '@angular/core';
 import { PaymentService } from 'src/app/services/payments.service';
 import { ChartConfiguration, ChartType } from 'chart.js';
@@ -87,5 +88,9 @@ export class IncomeReportComponent implements OnInit {
         }
       ]
     };
+  }
+    reportPayment(row: IncomeRow) {
+    // כאן אפשר לפתוח דיאלוג או לבצע פעולה לדיווח על תשלום
+    alert('דיווח על תשלום עבור: ' + row.name);
   }
 }

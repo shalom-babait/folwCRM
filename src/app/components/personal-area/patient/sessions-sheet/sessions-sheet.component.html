@@ -1,0 +1,35 @@
+<div class="sessions-sheet">
+  <h2 class="sheet-title">{{ title }}</h2>
+
+
+  <div class="sessions-list-wrapper">
+    <div *ngIf="appointments && appointments.length; else noSessions" class="sessions-list">
+      <div *ngFor="let app of appointments; let i = index" class="session-card">
+        <div class="session-header" (click)="toggleNotes(i)">
+          <div class="header-content">
+            <span class="session-date">{{ app.appointment_date | date:'dd/MM/yyyy' }}</span>
+            <span class="session-status" [ngClass]="'status-' + app.status">{{ app.status }}</span>
+          </div>
+          <span class="toggle-icon" [class.expanded]="expandedSessions[i]">
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
+        </div>
+
+        <div class="session-notes" *ngIf="expandedSessions[i]" [@slideDown]>
+          <span *ngIf="app.notes && app.notes.length; else noNotes" [innerHTML]="app.notes | linebreaks"></span>
+          <ng-template #noNotes>
+            <span class="no-notes">אין הערות</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noSessions>
+    <div class="empty-state">
+      לא נמצאו מפגשים
+    </div>
+  </ng-template>
+</div>

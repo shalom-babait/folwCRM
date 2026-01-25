@@ -1,8 +1,0 @@
-/* שורת סיכום דביקה בתחתית הרשימה */
-.sticky-summary-row {
-    color: white;
-	position: sticky;
-	bottom: 0;
-	z-index: 10;
-	background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
-}

@@ -35,6 +35,7 @@ export class AddFollowupDialogComponent {
       ],
       follow_time: [this.isEdit ? this.followupData?.follow_time : ''],
       remind: [this.isEdit ? this.followupData?.remind : true],
+      status: [this.isEdit ? this.followupData?.status : 'open'],
       notes: [this.isEdit ? this.followupData?.notes : '']
     });
 
@@ -113,6 +114,7 @@ export class AddFollowupDialogComponent {
           follow_date: formatDate(formValue.follow_date),
           follow_time: formValue.follow_time,
           remind: formValue.remind,
+          status: formValue.status,
           notes: formValue.notes,
           created_at: formatDateTime(new Date())
         };

@@ -5,12 +5,24 @@
 			<tr>
 				<th>שם מטופל</th>
 				<th>סכום חוב פתוח</th>
+				<th>פעולות</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr *ngFor="let row of debts">
 				<td>{{ row.patient_name }}</td>
 				<td>₪{{ row.open_balance }}</td>
+				<td>
+					<button class="menu-button" [matMenuTriggerFor]="debtMenu" matTooltip="פעולות">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+					<mat-menu #debtMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+						<button mat-menu-item (click)="reportPayment(row)">
+							<mat-icon>payments</mat-icon>
+							<span>דווח על תשלום</span>
+						</button>
+					</mat-menu>
+				</td>
 			</tr>
 		</tbody>
 	</table>

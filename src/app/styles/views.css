@@ -3,9 +3,9 @@
 .edit-form { display: flex; flex-direction: column; height: 100%; }
 .form-actions { display: flex; gap: 1rem; margin-top: auto; justify-content: flex-end; }
 /* תצוגת פרטים ראשית */
-.view-container { display: flex; gap: 1.5rem; padding: 1.5rem; height: 97vh; direction: rtl; overflow: hidden; box-sizing: border-box; }
+.view-container { display: flex; gap: 1.5rem; height: 97.5vh; direction: rtl; overflow: hidden; box-sizing: border-box; }
 .right-panel { flex: 0 0 250px; }
-.left-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; height: 97%; }
+.left-panel { flex: 0.97; min-width: 0; display: flex; flex-direction: column; height:100%; }
 
 /* תצוגת סיכום ברירת מחדל */
 .summary-view { height: 100%; display: flex; flex-direction: column; }
@@ -42,7 +42,7 @@
 .header-tabs { display: flex; align-items: center; background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%); flex-shrink: 0; }
 .header-tabs > span { padding: 0 1.5rem; color: white; font-weight: 600; font-size: 1.1rem; }
 .header-tabs > span p { margin: 0; }
-.tab-link { display: flex; align-items: center; gap: 0.5rem; padding: 1.2rem 1.8rem; background: none; border: none; cursor: pointer; font-size: 1rem; color: rgba(255,255,255,0.7); transition: all 0.3s; position: relative; }
+.tab-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.2rem; background: none; border: none; cursor: pointer; font-size: 1rem; color: rgba(255,255,255,0.7); transition: all 0.3s; position: relative; }
 .tab-link::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: white; transform: scaleX(0); transition: transform 0.3s; }
 .tab-link:hover { color: white; background: rgba(255,255,255,0.1); }
 .tab-link.active { color: white; font-weight: 600; }
@@ -57,7 +57,7 @@
 
 /* כרטיסיות תוכן */
 .details-view, .calendar-view, .mail-view, .patients-view, .treatments-view, .history-view, .notes-view { height: 100%; }
-.details-card, .calendar-card, .mail-card, .patients-card, .history-card, .notes-card { background: #f8f9fa; padding: 2rem; border-radius: 0.8rem; min-height: 100%; }
+.details-card, .calendar-card, .mail-card, .patients-card, .history-card, .notes-card { background: #f8f9fa; padding: 2rem; border-radius: 0.8rem; height: 100%; }
 .treatments-card { background: transparent; padding: 0; min-height: 100%; }
 
 .details-card h3,

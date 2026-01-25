@@ -14,8 +14,15 @@ export class FollowupService {
   constructor(private http: HttpClient) { }
 
   addFollowup(followup: FollowUp): Observable<any> {
+    // ודא שיש סטטוס כברירת מחדל
+    if (!followup.status) {
+      followup.status = 'open';
+    }
     console.log('Adding followup with data:', followup);
     return this.http.post(`${this.apiUrl}`, followup);
+  }
+  updateFollowupStatus(followupId: number, status: 'open' | 'completed' | 'cancelled'): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${followupId}`, { status });
   }
 
   getFollowupsByCreator(created_by_person_id: number): Observable<FollowUpWithPerson[]> {

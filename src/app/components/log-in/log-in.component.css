@@ -1,3 +1,23 @@
+html, body {
+  height: 100dvh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+/* עיצוב קופסה מרכזית בלוגאין */
+.login-center-box {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+  border-radius: 1.5rem;
+  padding: 1.5rem;;
+  min-width: 340px;
+  max-width: 380px;
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 /* עיצוב לוגו במסך כניסה */
 .login-logo {
   max-width: 120px;
@@ -8,8 +28,9 @@
 }
 /* עיצוב בשימוש בפועל בלוגאין */
 .login-fullpage-container {
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,23 +38,10 @@
   color: #2A5448;
 }
 
-.login-center-box {
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
-  border-radius: 1.5rem;
-  padding: 2.5rem 2.5rem 2rem 2.5rem;
-  min-width: 340px;
-  max-width: 380px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .login-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
   font-weight: bold;
 }
 
@@ -42,7 +50,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .connection {
@@ -55,7 +63,7 @@
 .login-input {
   width: 100%;
   padding: 0.5rem 0.8rem;
-  font-size: 1rem;
+  font-size: 0.7rem;
   border: none;
   border-radius: 0.5rem;
   box-sizing: border-box;
@@ -133,8 +141,8 @@
 
 @media (max-width: 500px) {
   .login-center-box {
-    min-width: 90vw;
-    max-width: 98vw;
+    /* min-width: 90vw;
+    max-width: 98vw; */
     padding: 1.2rem 0.5rem;
   }
   .login-input {
