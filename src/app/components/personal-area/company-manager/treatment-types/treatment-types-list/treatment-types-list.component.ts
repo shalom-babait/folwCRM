@@ -29,11 +29,13 @@ export class TreatmentTypesListComponent implements OnInit {
 	ngOnInit(): void {
 		this.userRole = this.authService.getRoleFromToken();
 		this.loadTherapistId();
-		this.loadTreatmentTypes();
 	}
 
 	loadTreatmentTypes(): void {
-		this.treatmentTypesService.getTreatmentTypes().subscribe({
+		// אם מטפל - שלח את ה-therapist_id, אם מנהל - אל תשלח (יקבל הכל)
+		const therapistIdToSend = this.userRole === 'therapist' ? this.therapistId : null;
+		
+		this.treatmentTypesService.getTreatmentTypes(therapistIdToSend).subscribe({
 			next: (response) => {
 				this.treatmentTypes = response.data;
 			},
@@ -55,16 +57,19 @@ export class TreatmentTypesListComponent implements OnInit {
 			this.patientService.getTherapistIdByUserId(userId).subscribe({
 				next: (therapistId) => {
 					this.therapistId = therapistId;
-					if (!therapistId) {
-						console.warn('Therapist ID not found for user');
-					}
+					// טוען את הרשימה רק אחרי שמצאנו את ה-therapist_id
+					this.loadTreatmentTypes();
 				},
 				error: (err) => {
 					console.error('Error fetching therapist ID:', err);
+					// גם במקרה של שגיאה, טוען את הרשימה
+					this.loadTreatmentTypes();
 				}
 			});
+		} else {
+			// אם זה מנהל, therapistId יישאר null ונטען את הרשימה מיד
+			this.loadTreatmentTypes();
 		}
-		// אם זה מנהל, therapistId יישאר null ונתן לו לבחור
 	}
 
 	openAddDialog(): void {
