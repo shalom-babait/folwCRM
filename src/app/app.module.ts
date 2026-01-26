@@ -112,6 +112,7 @@ import { SessionsSheetComponent } from './components/personal-area/patient/sessi
 import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
 import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
+import { AddTreatmentTypeDialogComponent } from './components/personal-area/company-manager/treatment-types/add-treatment-type-dialog/add-treatment-type-dialog.component';
 
 @NgModule({
   declarations: [
@@ -227,7 +228,7 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
-      TutorialVideosComponent,
+    TutorialVideosComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
