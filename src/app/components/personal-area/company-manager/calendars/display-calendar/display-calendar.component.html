@@ -1,6 +1,21 @@
 <div class="calendar-container" [ngClass]="{'mini-calendar': miniCalendar}">
-	<button class="add-meeting-btn" (click)="openAddMeetingDialog()">הוספת פגישה</button>
-	<div class="calendar-wrapper">
-		<full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
-	</div>
+  
+  <!-- Header למצב מיני -->
+  <div class="mini-header" *ngIf="miniCalendar">
+  <h3 class="mini-title"><span style="font-weight:bold">לוח שנה</span> / {{ getCurrentMonthYear() }}</h3>
+    <select class="view-dropdown" [(ngModel)]="selectedView" (change)="onViewChange(selectedView)">
+      <option value="month">חודש</option>
+      <option value="week">שבוע</option>
+      <option value="day">יום</option>
+    </select>
+  </div>
+
+  <!-- כפתור הוספת פגישה - רק במצב רגיל -->
+  <button class="add-meeting-btn" (click)="openAddMeetingDialog()" *ngIf="!miniCalendar">
+    הוספת פגישה
+  </button>
+  
+  <div class="calendar-wrapper">
+    <full-calendar #fullcalendar [options]="calendarOptions"></full-calendar>
+  </div>
 </div>

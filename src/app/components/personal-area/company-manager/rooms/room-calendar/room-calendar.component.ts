@@ -29,7 +29,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   encapsulation: ViewEncapsulation.None
 })
 export class RoomCalendarComponent implements OnInit {
-
   @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
   @Input() roomId?: number;
