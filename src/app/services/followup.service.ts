@@ -26,7 +26,9 @@ export class FollowupService {
   }
 
   getFollowupsByCreator(created_by_person_id: number): Observable<FollowUpWithPerson[]> {
-    return this.http.get<FollowUpWithPerson[]>(`${environment.apiUrl}/followups/creator/${created_by_person_id}`);
+    console.log(created_by_person_id, "created_by_person_id");
+    
+    return this.http.get<FollowUpWithPerson[]>(`${this.apiUrl}/creator/${created_by_person_id}`);
   }
 
   getFollowupsByPerson(personId: number): Observable<FollowUp[]> {

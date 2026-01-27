@@ -32,57 +32,58 @@ export class UserFollowUpTableComponent implements OnInit {
     private followupService: FollowupService,
     private authService: AuthService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // If dateFilter is not set by parent, keep 'all' as default
     const userId = this.authService.getCurrentUserId();
     if (userId) {
       this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+        console.log('Follow-ups received in component:', data);
         this.followups = data;
       });
     }
   }
-    editFollowup(followup: FollowUpWithPerson): void {
-      const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
-        width: '400px',
-        data: {
-          followUp: followup.followUp,
-          person: followup.person
-        }
-      });
+  editFollowup(followup: FollowUpWithPerson): void {
+    const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
+      width: '400px',
+      data: {
+        followUp: followup.followUp,
+        person: followup.person
+      }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          // רענון הרשימה אחרי עריכה
-          const userId = this.authService.getCurrentUserId();
-          if (userId) {
-            this.followupService.getFollowupsByCreator(userId).subscribe(data => {
-              this.followups = data;
-            });
-          }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // רענון הרשימה אחרי עריכה
+        const userId = this.authService.getCurrentUserId();
+        if (userId) {
+          this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+            this.followups = data;
+          });
         }
-      });
-    }
+      }
+    });
+  }
   updateStatus(f: FollowUpWithPerson): void {
     if (f.followUp?.followup_id && f.followUp.status) {
       this.followupService.updateFollowupStatus(f.followUp.followup_id, f.followUp.status).subscribe();
     }
   }
-    deleteFollowup(followup: FollowUpWithPerson): void {
-      if (!followup.followUp?.followup_id) return;
-      if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
-        this.followupService.deleteFollowup(followup.followUp.followup_id).subscribe({
-          next: () => {
-            this.followups = this.followups.filter(f => f.followUp.followup_id !== followup.followUp.followup_id);
-          },
-          error: err => {
-            alert('מחיקה נכשלה');
-            console.error('Delete followup error:', err);
-          }
-        });
-      }
+  deleteFollowup(followup: FollowUpWithPerson): void {
+    if (!followup.followUp?.followup_id) return;
+    if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
+      this.followupService.deleteFollowup(followup.followUp.followup_id).subscribe({
+        next: () => {
+          this.followups = this.followups.filter(f => f.followUp.followup_id !== followup.followUp.followup_id);
+        },
+        error: err => {
+          alert('מחיקה נכשלה');
+          console.error('Delete followup error:', err);
+        }
+      });
     }
+  }
 
   get filteredFollowups() {
     let filtered = this.followups;
@@ -91,12 +92,12 @@ export class UserFollowUpTableComponent implements OnInit {
       filtered = filtered.filter(f =>
         ((f.person?.first_name || '') + ' ' + (f.person?.last_name || '')).toLowerCase().includes(term) ||
         (f.person?.phone || '').includes(term) ||
-          (f.followUp?.follow_date || '').includes(term)
+        (f.followUp?.follow_date || '').includes(term)
       );
     }
 
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
     const endOfWeek = new Date(startOfWeek);
@@ -110,9 +111,11 @@ export class UserFollowUpTableComponent implements OnInit {
     const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
     const endOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 
+    console.log('Current dateFilter:', this.dateFilter);
     if (this.dateFilter === 'today') {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);
+        console.log('Checking date:', date, 'Today:', new Date());
         return date.toDateString() === today.toDateString();
       });
     } else if (this.dateFilter === 'tomorrow') {
@@ -147,10 +150,19 @@ export class UserFollowUpTableComponent implements OnInit {
     } else if (this.dateFilter === 'overdueOrToday') {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);
-        date.setHours(0,0,0,0);
-        return date <= today && f.followUp.status === 'open';
+        date.setHours(0, 0, 0, 0);
+        const condition = date <= today && f.followUp.status === 'open';
+        console.log('Checking follow-up:', {
+          followUpDate: date,
+          today: today,
+          status: f.followUp.status,
+          condition: condition
+        });
+        return condition;
       });
     }
+    console.log('Filtered followups after date filter:', filtered);
+
     return filtered;
   }
 }
