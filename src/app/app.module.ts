@@ -198,6 +198,7 @@ import { TemplateViewerComponent } from './components/personal-area/company-mana
     SessionsSheetComponent,
     LinebreaksPipe,
     TreatmentTypesListComponent,
+    AddTreatmentTypeDialogComponent,
     TreatmentTypeViewComponent,
     TreatmentTypeDetailsComponent,
     TemplateViewerComponent,

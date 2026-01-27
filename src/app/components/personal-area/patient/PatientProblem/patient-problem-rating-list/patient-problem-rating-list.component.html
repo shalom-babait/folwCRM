@@ -33,10 +33,10 @@
 								<td class="problem-cell">
 									<ng-container *ngIf="i > 0">
 										<ng-container *ngIf="sortedRatings[i-1].score < r.score">
-											<mat-icon color="warn">trending_down</mat-icon>
-										</ng-container>
-										<ng-container *ngIf="sortedRatings[i-1].score > r.score">
-											<mat-icon style="color: #4CAF50;">trending_up</mat-icon>
+										<mat-icon color="warn">trending_up</mat-icon>
+									</ng-container>
+									<ng-container *ngIf="sortedRatings[i-1].score > r.score">
+										<mat-icon style="color: #4CAF50;">trending_down</mat-icon>
 										</ng-container>
 										<ng-container *ngIf="sortedRatings[i-1].score === r.score">
 											<mat-icon style="color: #222;">trending_flat</mat-icon>
