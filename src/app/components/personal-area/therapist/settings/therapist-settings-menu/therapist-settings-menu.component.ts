@@ -7,8 +7,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class TherapistSettingsMenuComponent {
   @Output() menuSelect = new EventEmitter<string>();
+  menuClosed = false;
 
   onSelect(setting: string) {
     this.menuSelect.emit(setting);
+  }
+
+  toggleMenu() {
+    this.menuClosed = !this.menuClosed;
   }
 }

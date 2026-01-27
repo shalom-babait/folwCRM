@@ -16,7 +16,6 @@
 
     <!-- תצוגה כאשר נבחר מטפל -->
     <div *ngIf="selectedTherapist" class="therapist-view">
-      <!-- כותרת עם לינקים -->
       <div class="header-tabs">
         <button 
           class="tab-link" 
@@ -72,7 +71,7 @@
                 <mat-icon>person</mat-icon>
                 <div>
                   <label>שם מלא:</label>
-                  <p>{{ selectedTherapist?.person?.first_name }} {{ selectedTherapist?.person?.last_name }}</p>
+                  <p>{{ selectedTherapist ? selectedTherapist.person.first_name : '' }} {{ selectedTherapist ? selectedTherapist.person.last_name : '' }}</p>
                 </div>
               </div>
               
@@ -80,7 +79,7 @@
                 <mat-icon>email</mat-icon>
                 <div>
                   <label>אימייל:</label>
-                  <p>{{ selectedTherapist?.person?.email }}</p>
+                  <p>{{ selectedTherapist ? selectedTherapist.person.email : '' }}</p>
                 </div>
               </div>
               
@@ -88,22 +87,22 @@
                 <mat-icon>phone</mat-icon>
                 <div>
                   <label>טלפון:</label>
-                  <p>{{ selectedTherapist?.person?.phone || 'לא צוין' }}</p>
+                  <p>{{ selectedTherapist ? (selectedTherapist.person.phone || 'לא צוין') : 'לא צוין' }}</p>
                 </div>
               </div>
                 <div class="detail-section">
                   <mat-icon>account_circle</mat-icon>
                   <div>
                     <label>שם משתמש:</label>
-                    <p>{{ selectedTherapist?.user?.user_name }}</p>
+                    <p>{{ selectedTherapist ? selectedTherapist.user.user_name : '' }}</p>
                   </div>
                 </div>
-                      <p>{{ selectedTherapist?.user?.user_name }}</p>
+                      <p>{{ selectedTherapist ? selectedTherapist.user.user_name : '' }}</p>
               <div class="detail-section">
                 <mat-icon>badge</mat-icon>
                 <div>
                   <label>מזהה מטפל:</label>
-                  <p>{{ selectedTherapist?.therapist?.therapist_id }}</p>
+                  <p>{{ selectedTherapist ? selectedTherapist.therapist.therapist_id : '' }}</p>
                 </div>
               </div>
             </div>
@@ -122,8 +121,8 @@
           <div class="calendar-card">
             <h3>יומן פגישות</h3>
               <app-therapist-calendar 
-                *ngIf="selectedTherapist?.therapist?.therapist_id"
-                [therapistId]="selectedTherapist?.therapist?.therapist_id">
+                *ngIf="selectedTherapist && selectedTherapist.therapist.therapist_id"
+                [therapistId]="selectedTherapist ? selectedTherapist.therapist.therapist_id : undefined">
               </app-therapist-calendar>
           </div>
         </div>
@@ -140,14 +139,14 @@
         <!-- רשימת מטופלים -->
         <div *ngIf="activeTab === 'patients'" class="patients-view">
             <app-patient-table 
-              [therapistId]="selectedTherapist?.therapist?.therapist_id ?? undefined">
+              [therapistId]="selectedTherapist ? (selectedTherapist.therapist.therapist_id ?? undefined) : undefined">
             </app-patient-table>
         </div>
 
         <!-- טבלת מעקבים -->
         <div *ngIf="activeTab === 'followups'" class="followups-view">
           <app-followup-table 
-            [personId]="selectedTherapist?.person?.person_id || 0">
+            [personId]="selectedTherapist ? (selectedTherapist.person.person_id ?? 0) : 0">
           </app-followup-table>
         </div>
       </div>

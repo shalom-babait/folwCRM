@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
 
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
@@ -17,7 +18,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
   calendarEvents: any[] = [];
   private destroy$ = new Subject<void>();
 
-  constructor(private patientService: PatientService) { }
+  constructor(private apppointmentService: ApppointmentService, private patientService: PatientService) { }
 
   ngOnInit() {
     let therapistIdToUse = this.therapistId;
@@ -39,7 +40,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
     }
     if (therapistIdToUse) {
       this.therapistId = therapistIdToUse;
-  this.patientService.getAppointmentsForTherapist(therapistIdToUse)
+  this.apppointmentService.getAppointmentsForTherapist(therapistIdToUse)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (appointments) => {
@@ -50,7 +51,7 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
             ).subscribe((patients: PatientCreationData[]) => {
               const patientMap: { [id: number]: string } = {};
               patients.forEach((p, idx) => {
-                console.log('getPatientById for pid', patientIds[idx], 'returned:', p);
+                // console.log('getPatientById for pid', patientIds[idx], 'returned:', p);
                 if (p && p.patient && p.patient.patient_id) {
               patientMap[p.patient.patient_id] = (p.person.first_name || '') + ' ' + (p.person.last_name || '');                }
               });

@@ -3,4 +3,6 @@ export interface TreatmentType {
   type_name: string;
   type_description: string;
   therapist_id: number;
+  price_default?: number;
+  color?: string;
 }

@@ -112,6 +112,10 @@ import { SessionsSheetComponent } from './components/personal-area/patient/sessi
 import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
 import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
+import { AddTreatmentTypeDialogComponent } from './components/personal-area/company-manager/treatment-types/add-treatment-type-dialog/add-treatment-type-dialog.component';
+import { TreatmentTypeViewComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-view/treatment-type-view.component';
+import { TreatmentTypeDetailsComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-details/treatment-type-details.component';
+import { TemplateViewerComponent } from './components/personal-area/company-manager/treatment-types/templates/template-viewer/template-viewer.component';
 
 @NgModule({
   declarations: [
@@ -128,14 +132,15 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     TherapistDashboardComponent,
     AppointmentListComponent,
     AddPatientDialogComponent,
-  AddAppointmentDialogComponent,
+    AddTreatmentTypeDialogComponent,
+    AddAppointmentDialogComponent,
     TreatmentSummaryComponent,
     PatientDetailsComponent,
     TherapistListComponent,
     AddTherapistDialogComponent,
     SecretaryHeaderComponent,
     TherapistHeaderComponent,
-     DisplayCalendarComponent,
+    DisplayCalendarComponent,
     SelectTimeDialogComponent,
     CalendarOverlayComponent,
     RoomsViewComponent,
@@ -169,29 +174,6 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     AddRoomDialogComponent,
     RoomSettingsComponent,
     RoomsHomeComponent,
-  TextEditorComponent,
-  ContactListComponent,
-  AddContactDialogComponent,
-  TherapistHomeComponent,
-  TherapistReportsComponent,
-  ReportsListComponent,
-  ReportsViewComponent,
-  AddReportsComponent,
-  ReportDetailsComponent,
-  IncomeReportComponent,
-  UserSettingsComponent,
-  AddPatientProblemComponent,
-  PatientProblemTableComponent,
-  AddPatientProblemRatingComponent,
-  PatientProblemRatingListComponent,
-  TherapistSettingsMenuComponent,
-  TherapistSettingsViewComponent,
-  AddTaskComponent,
-  TaskListComponent,
-  DebtReportComponent,
-  TherapistHomeSettingComponent,
-  SessionsSheetComponent,
-  LinebreaksPipe,
     TextEditorComponent,
     ContactListComponent,
     AddContactDialogComponent,
@@ -203,7 +185,6 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     ReportDetailsComponent,
     IncomeReportComponent,
     UserSettingsComponent,
-    TreatmentTypesListComponent,
     AddPatientProblemComponent,
     PatientProblemTableComponent,
     AddPatientProblemRatingComponent,
@@ -214,8 +195,16 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     TaskListComponent,
     DebtReportComponent,
     TherapistHomeSettingComponent,
+    SessionsSheetComponent,
+    LinebreaksPipe,
+    TreatmentTypesListComponent,
+    TreatmentTypeViewComponent,
+    TreatmentTypeDetailsComponent,
+    TemplateViewerComponent,
+  // TutorialVideosComponent (standalone),
   ],
   imports: [
+    TutorialVideosComponent,
     NgChartsModule,
     QuillModule.forRoot(),
     MatRadioModule,
@@ -226,8 +215,8 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
+  FormsModule,
+  ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
@@ -246,7 +235,7 @@ import { TreatmentTypesListComponent } from './components/personal-area/company-
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FullCalendarModule,
-      TutorialVideosComponent,
+    TutorialVideosComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

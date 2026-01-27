@@ -13,12 +13,28 @@ export class TreatmentTypesService {
 
 	constructor(private http: HttpClient) {}
 
-	getTreatmentTypes(): Observable<{ success: boolean; data: TreatmentType[] }> {
-		return this.http.get<TreatmentType[]>(`${this.apiUrl}/getAll`).pipe(
+	getTreatmentTypes(therapist_id?: number | null): Observable<{ success: boolean; data: TreatmentType[] }> {
+		let url = `${this.apiUrl}/getAll`;
+		if (therapist_id) {
+			url += `?therapist_id=${therapist_id}`;
+		}
+		return this.http.get<TreatmentType[]>(url).pipe(
 			map((data) => ({
 				success: true,
 				data: data
 			}))
 		);
+	}
+
+	createTreatmentType(treatmentType: TreatmentType): Observable<{ success: boolean; data: TreatmentType }> {
+		return this.http.post<{ success: boolean; data: TreatmentType }>(
+			`${this.apiUrl}/create`,
+			treatmentType
+		);
+	}
+
+	deleteTreatmentType(type: TreatmentType): Observable<any> {
+		// נניח שלשרת יש endpoint: DELETE /treatmentTypes/:id
+		return this.http.delete(`${this.apiUrl}/delete/${type.treatment_type_id}`);
 	}
 }
