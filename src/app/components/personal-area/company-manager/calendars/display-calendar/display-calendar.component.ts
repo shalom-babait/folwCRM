@@ -1,6 +1,7 @@
 import { MatDialog } from '@angular/material/dialog';
 import { AddAppointmentDialogComponent } from '../../../patient/add-appointment-dialog/add-appointment-dialog.component'
-import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CalendarOptions } from '@fullcalendar/core';
@@ -15,7 +16,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 	styleUrls: ['./display-calendar.component.css'],
   encapsulation: ViewEncapsulation.None   // ⭐ חובה כדי שה-CSS ישפיע
 })
-export class DisplayCalendarComponent implements OnInit {
+export class DisplayCalendarComponent implements OnInit, AfterViewInit {
 
  @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
@@ -107,17 +108,19 @@ export class DisplayCalendarComponent implements OnInit {
     }
   };
 
+  selectedView: string = 'month';
+  currentMonthYear: string = '';
+
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data?: any,
-    private dialog?: MatDialog
+    private dialog?: MatDialog,
+    private cdr?: ChangeDetectorRef
   ) {
     if (data?.events) {
       this.events = data.events;
       this.calendarOptions.events = this.events;
     }
   }
-
-  selectedView: string = 'month';
 
   ngOnInit(): void {
     // אם זה מצב מיני, אלץ תצוגת חודש והסתר toolbar
@@ -150,15 +153,19 @@ export class DisplayCalendarComponent implements OnInit {
     this.changeView(viewName);
   }
 
-  getCurrentMonthYear(): string {
+
+  ngAfterViewInit(): void {
+    // עדכן את החודש והשנה פעם אחת אחרי שה-View נטען
     if (this.calendarComponent?.getApi) {
       const currentDate = this.calendarComponent.getApi().getDate();
-      return currentDate.toLocaleDateString('he-IL', { 
-        year: 'numeric', 
-        month: 'long' 
+      this.currentMonthYear = currentDate.toLocaleDateString('he-IL', {
+        year: 'numeric',
+        month: 'long'
       });
+      if (this.cdr) {
+        this.cdr.detectChanges();
+      }
     }
-    return '';
   }
 
   ngOnChanges(changes: SimpleChanges) {
