@@ -1,5 +1,4 @@
 import { MatDialog } from '@angular/material/dialog';
-import { AddAppointmentDialogComponent } from '../../../patient/add-appointment-dialog/add-appointment-dialog.component'
 import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
