@@ -1,0 +1,17 @@
+<h2>{{ template?.name }}</h2>
+<p *ngIf="template?.description">{{ template.description }}</p>
+
+<form [formGroup]="form" (ngSubmit)="submitAnswers()">
+  <div *ngFor="let q of questions">
+    <ng-container [ngSwitch]="q.question_type">
+      <p *ngSwitchCase="'static_text'">{{ q.question_text }}</p>
+      <input *ngSwitchCase="'text'" type="text" [formControlName]="q.question_id.toString()" [placeholder]="q.question_text" />
+      <input *ngSwitchCase="'number'" type="number" [formControlName]="q.question_id.toString()" [placeholder]="q.question_text" />
+      <input *ngSwitchCase="'boolean'" type="checkbox" [formControlName]="q.question_id.toString()" /> {{ q.question_text }}
+      <select *ngSwitchCase="'select'" [formControlName]="q.question_id.toString()">
+        <option *ngFor="let opt of q.options">{{ opt }}</option>
+      </select>
+    </ng-container>
+  </div>
+  <button type="submit">שמור תשובות</button>
+</form>
