@@ -25,7 +25,9 @@ export class AddTreatmentTypeDialogComponent implements OnInit {
     this.treatmentTypeForm = this.fb.group({
       type_name: ['', [Validators.required, Validators.minLength(2)]],
       type_description: [''],
-      therapist_id: [data.therapistId || '', this.showTherapistSelect ? [Validators.required] : []]
+      therapist_id: [data.therapistId || '', this.showTherapistSelect ? [Validators.required] : []],
+      price_default: [null],
+      color: ['#2196f3']
     });
   }
 
@@ -58,10 +60,13 @@ export class AddTreatmentTypeDialogComponent implements OnInit {
         ? this.treatmentTypeForm.value.therapist_id 
         : this.data.therapistId;
 
+
       const treatmentType = {
         type_name: this.treatmentTypeForm.value.type_name,
         type_description: this.treatmentTypeForm.value.type_description || '',
-        therapist_id: therapistId
+        therapist_id: therapistId,
+        price_default: this.treatmentTypeForm.value.price_default,
+        color: this.treatmentTypeForm.value.color
       };
 
       this.dialogRef.close(treatmentType);

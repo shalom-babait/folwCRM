@@ -2,7 +2,7 @@
 	<app-therapist-settings-menu (menuSelect)="onMenuSelect($event)"></app-therapist-settings-menu>
 	<div class="settings-view">
 		<app-user-settings *ngIf="selectedSetting === 'system'"></app-user-settings>
-		<app-treatment-types-list *ngIf="selectedSetting === 'treatment-types'"></app-treatment-types-list>
+		<app-treatment-type-view *ngIf="selectedSetting === 'treatment-types'"></app-treatment-type-view>
 		<app-therapist-home-setting *ngIf="selectedSetting === 'homepage-display'"></app-therapist-home-setting>
 		<div *ngIf="!selectedSetting" class="settings-view-content">
 			<h1>ברוך הבא להגדרות</h1>

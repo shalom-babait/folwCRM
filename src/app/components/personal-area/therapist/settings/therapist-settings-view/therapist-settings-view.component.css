@@ -1,12 +1,26 @@
 .settings-layout {
 	display: grid;
-	grid-template-columns: 320px 1fr;
-	gap: 32px;
-	align-items: flex-start;
+	grid-template-columns: minmax(3.5rem, 15rem) 1fr;
+	gap: 1rem;
+	align-items: stretch;
 	direction: rtl;
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
+	width: 98%;
+	height: 92vh;
+	position: relative;
+	transition: grid-template-columns 0.3s;
+}
+
+.settings-layout.menu-closed {
+    grid-template-columns: 0 1fr;
+}
+
+.settings-layout.menu-closed .settings-menu {
+    display: none;
+}
+
+.settings-menu,
+.settings-view {
+	height: 100%;
 }
 
 .settings-menu {
@@ -21,7 +35,7 @@
 	min-height: 500px;
 	box-shadow: 0 2px 8px rgba(42, 84, 72, 0.08);
 	padding: 40px 32px;
-	width: 100%;
+	/* width: 100%; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -54,4 +68,47 @@
 .settings-view-content p {
 	font-size: 1.2rem;
 	color: #444;
+}
+
+.toggle-menu-btn,
+.open-btn,
+.close-btn {
+	all: unset;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	border-radius: 50%;
+	transition: background 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.8rem;
+	height: 1.8rem;
+	box-shadow: none;
+	z-index: 10;
+}
+
+.toggle-menu-btn:hover {
+	background: #f0f0f0;
+}
+
+.toggle-menu-btn mat-icon {
+	font-size: 1.1rem;
+	color: #2A5448;
+}
+
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: unset;
+  }
+  .settings-menu,
+  .settings-view {
+    height: auto;
+  }
 }

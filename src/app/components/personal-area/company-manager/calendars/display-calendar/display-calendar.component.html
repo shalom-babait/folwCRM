@@ -2,7 +2,7 @@
   
   <!-- Header למצב מיני -->
   <div class="mini-header" *ngIf="miniCalendar">
-  <h3 class="mini-title"><span style="font-weight:bold">לוח שנה</span> / {{ getCurrentMonthYear() }}</h3>
+  <h3 class="mini-title"><span style="font-weight:bold">לוח שנה</span> / {{ currentMonthYear }}</h3>
     <select class="view-dropdown" [(ngModel)]="selectedView" (change)="onViewChange(selectedView)">
       <option value="month">חודש</option>
       <option value="week">שבוע</option>

@@ -1,0 +1,16 @@
+.details-card {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 2rem 0;
+}
+.details-card h3 {
+  color: #022F39;
+  margin-bottom: 1rem;
+}
+.details-card p {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+}
