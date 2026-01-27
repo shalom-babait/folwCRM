@@ -1,0 +1,5 @@
+<div class="details-card" *ngIf="treatmentType">
+  <h3>{{ treatmentType.type_name }}</h3>
+  <p><strong>תיאור:</strong> {{ treatmentType.type_description || '---' }}</p>
+  <p><strong>מזהה מטפל:</strong> {{ treatmentType.therapist_id }}</p>
+</div>
