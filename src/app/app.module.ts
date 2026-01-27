@@ -194,6 +194,7 @@ import { AddTreatmentTypeDialogComponent } from './components/personal-area/comp
     SessionsSheetComponent,
     LinebreaksPipe,
     TreatmentTypesListComponent,
+    AddTreatmentTypeDialogComponent
   // TutorialVideosComponent (standalone),
   ],
   imports: [
