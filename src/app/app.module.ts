@@ -113,6 +113,9 @@ import { LinebreaksPipe } from './pipes/linebreaks.pipe';
 
 import { TreatmentTypesListComponent } from './components/personal-area/company-manager/treatment-types/treatment-types-list/treatment-types-list.component';
 import { AddTreatmentTypeDialogComponent } from './components/personal-area/company-manager/treatment-types/add-treatment-type-dialog/add-treatment-type-dialog.component';
+import { TreatmentTypeViewComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-view/treatment-type-view.component';
+import { TreatmentTypeDetailsComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-details/treatment-type-details.component';
+import { TemplateViewerComponent } from './components/personal-area/company-manager/treatment-types/templates/template-viewer/template-viewer.component';
 
 @NgModule({
   declarations: [
@@ -129,6 +132,7 @@ import { AddTreatmentTypeDialogComponent } from './components/personal-area/comp
     TherapistDashboardComponent,
     AppointmentListComponent,
     AddPatientDialogComponent,
+    AddTreatmentTypeDialogComponent,
     AddAppointmentDialogComponent,
     TreatmentSummaryComponent,
     PatientDetailsComponent,
@@ -194,7 +198,10 @@ import { AddTreatmentTypeDialogComponent } from './components/personal-area/comp
     SessionsSheetComponent,
     LinebreaksPipe,
     TreatmentTypesListComponent,
-    AddTreatmentTypeDialogComponent
+    AddTreatmentTypeDialogComponent,
+    TreatmentTypeViewComponent,
+    TreatmentTypeDetailsComponent,
+    TemplateViewerComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [

@@ -112,13 +112,12 @@ export class ApppointmentService {
   }
 
   getAppointmentsForTherapist(therapistId: number): Observable<AppointmentResponse[]> {
-    console.log('getAppointmentsForTherapist - therapistId:', therapistId);
+    // console.log('getAppointmentsForTherapist - therapistId:', therapistId);
     if (!therapistId) {
-      console.error('getAppointmentsForTherapist: therapistId is missing!', therapistId);
+      // console.error('getAppointmentsForTherapist: therapistId is missing!', therapistId);
       return of([]);
     }
     const url = `${this.apiUrl}/appointments/therapist/${therapistId}`;
-    console.log('getAppointmentsForTherapist: GET', url, 'therapistId:', therapistId);
     return this.http.get<ApiResponse<AppointmentResponse[]>>(url).pipe(
       map((response: ApiResponse<AppointmentResponse[]>) => response.data || []),
       catchError((error) => {

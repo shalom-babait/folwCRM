@@ -32,4 +32,9 @@ export class TreatmentTypesService {
 			treatmentType
 		);
 	}
+
+	deleteTreatmentType(type: TreatmentType): Observable<any> {
+		// נניח שלשרת יש endpoint: DELETE /treatmentTypes/:id
+		return this.http.delete(`${this.apiUrl}/delete/${type.treatment_type_id}`);
+	}
 }

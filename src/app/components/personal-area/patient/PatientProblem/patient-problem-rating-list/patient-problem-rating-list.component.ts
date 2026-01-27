@@ -27,7 +27,7 @@ export class PatientProblemRatingListComponent implements OnInit {
   public lineChartOptions = {
     responsive: true,
     scales: {
-      y: { min: 1, max: 10, reverse: true, title: { display: true, text: 'דירוג' } },
+      y: { min: 1, max: 10, title: { display: true, text: 'דירוג' } },
       x: { title: { display: true, text: 'תאריך' } }
     }
   };

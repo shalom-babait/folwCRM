@@ -1,7 +1,10 @@
 <div class="settings-layout">
-	<div class="settings-menu">
-		<h2>תפריט הגדרות</h2>
-		<ul>
+	<div class="settings-menu" [class.closed]="menuClosed">
+		<button class="toggle-menu-btn" (click)="toggleMenu()">
+			<mat-icon>{{ menuClosed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+		</button>
+		<h2 *ngIf="!menuClosed">תפריט הגדרות</h2>
+		<ul *ngIf="!menuClosed">
 			<li>
 				<button type="button" (click)="onSelect('system')">הגדרות מערכת</button>
 			</li>
@@ -14,3 +17,4 @@
 			<!-- בהמשך נוסיף כאן עוד הגדרות -->
 		</ul>
 	</div>
+</div>

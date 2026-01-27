@@ -1,4 +1,4 @@
-.treatment-types-list {
+/* .treatment-types-list {
 	padding: 24px;
 	direction: rtl;
 	width: 100%;
@@ -90,3 +90,19 @@
 	font-weight: 400;
 }
 
+.simple-list .list-item {
+  transition: border-bottom 0.2s, color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.simple-list .list-item:hover {
+  color: #1976d2;
+  cursor: pointer;
+}
+.simple-list .list-item .item-text {
+  transition: color 0.2s;
+}
+.simple-list .list-item:hover .item-text {
+  color: #1976d2;
+  text-decoration: underline;
+}
+ */
