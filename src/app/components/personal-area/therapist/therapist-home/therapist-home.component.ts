@@ -9,16 +9,24 @@ import { Component } from '@angular/core';
 
 })
 export class TherapistHomeComponent {
-
-
-  therapistId: number | undefined = undefined;
+  // סינון משימות בסטטוס 'פתוח' בלבד
+  taskOpenStatusFilter = (task: any) => task.status === 'open';
+  userId: number | null = null;
+  therapistId: number | null = null;
 
   constructor() {}
 
   ngOnInit() {
-    // קביעת מזהה מטפל
-    const id = localStorage.getItem('therapist_id');
-    this.therapistId = id ? Number(id) : undefined;
+    // קביעת מזהה יוזר ומטפל מתוך אובייקט user
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const userObj = JSON.parse(userData);
+      this.userId = userObj.user_id ?? null;
+      this.therapistId = userObj.role === 'therapist' ? userObj.user_id : null;
+    } else {
+      this.userId = null;
+      this.therapistId = null;
+    }
   }
 
 
