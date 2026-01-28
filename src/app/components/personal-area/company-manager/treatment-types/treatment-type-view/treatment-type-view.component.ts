@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TreatmentType } from 'src/app/models/treatment-type.model';
+import { TreatmentTypesService } from 'src/app/services/treatment-types.service';
 
 @Component({
   selector: 'app-treatment-type-view',
@@ -8,7 +10,7 @@ import { TreatmentType } from 'src/app/models/treatment-type.model';
     '../../../../../styles/views.css'
   ]
 })
-export class TreatmentTypeViewComponent {
+export class TreatmentTypeViewComponent implements OnInit, OnDestroy {
   selectedTreatmentType: TreatmentType | null = null;
   activeTab:
     | 'settings'
@@ -18,10 +20,25 @@ export class TreatmentTypeViewComponent {
     | 'addons'
     | 'notes'
     | 'files' = 'settings';
+  
+  private subscription: Subscription = new Subscription();
 
-  onTreatmentTypeSelected(type: TreatmentType) {
-    this.selectedTreatmentType = type;
-    this.activeTab = 'settings';
+  constructor(private treatmentTypesService: TreatmentTypesService) {}
+
+  ngOnInit(): void {
+    // האזנה לשינויים ב-state
+    this.subscription.add(
+      this.treatmentTypesService.selectedTreatmentType$.subscribe(type => {
+        this.selectedTreatmentType = type;
+        if (type) {
+          this.activeTab = 'settings';
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   setActiveTab(
