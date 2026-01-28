@@ -45,7 +45,7 @@
 	left: 0;
 	right: 0;
 	height: 5px;
-	background: linear-gradient(90deg, #14342E, #3F6B60, #BB7E2B);
+	background: linear-gradient(90deg, #14342E, #3F6B60, #00bcd4);
 	transform: scaleX(0);
 	transform-origin: right;
 	transition: transform 0.4s ease;
@@ -54,7 +54,7 @@
 .stat-card:hover {
 	transform: translateY(-8px);
 	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
-	border-color: #BB7E2B;
+	border-color: #00bcd4;
 }
 
 .stat-card:hover::before {
