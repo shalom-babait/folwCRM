@@ -1,6 +1,6 @@
 <div class="view-container">
   <div class="right-panel">
-    <app-treatment-types-list (treatmentTypeSelected)="onTreatmentTypeSelected($event)"></app-treatment-types-list>
+    <app-treatment-types-list></app-treatment-types-list>
   </div>
   <div class="left-panel">
     <div *ngIf="!selectedTreatmentType" class="summary-view">
@@ -43,7 +43,7 @@
       </div>
       <div class="tab-content">
         <div *ngIf="activeTab === 'settings'" class="details-view">
-          <app-treatment-type-details [treatmentType]="selectedTreatmentType"></app-treatment-type-details>
+          <app-treatment-type-details></app-treatment-type-details>
         </div>
         <div *ngIf="activeTab === 'protocols'">
           <div style="text-align:center; color:#888; margin-top:2rem;">אין פרוטוקולים להצגה</div>

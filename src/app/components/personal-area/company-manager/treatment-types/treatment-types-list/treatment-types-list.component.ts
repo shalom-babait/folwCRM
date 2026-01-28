@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TreatmentTypesService } from 'src/app/services/treatment-types.service';
 import { TreatmentType } from 'src/app/models/treatment-type.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,13 +15,12 @@ import { TherapistService } from 'src/app/services/therapist.service';
 		'../../../../../styles/list-cards.css'
 	]
 })
-export class TreatmentTypesListComponent implements OnInit {
+export class TreatmentTypesListComponent implements OnInit, OnDestroy {
 	treatmentTypes: TreatmentType[] = [];
 	therapistId: number | null = null;
 	isSubmitting = false;
 	userRole: string | null = null;
-
-	@Output() treatmentTypeSelected = new EventEmitter<TreatmentType>();
+	private subscription: Subscription = new Subscription();
 
 	constructor(
 		private treatmentTypesService: TreatmentTypesService,
@@ -33,6 +33,17 @@ export class TreatmentTypesListComponent implements OnInit {
 	ngOnInit(): void {
 		this.userRole = this.authService.getRoleFromToken();
 		this.loadTherapistId();
+		
+		// האזנה לשינויים ברשימה מה-state
+		this.subscription.add(
+			this.treatmentTypesService.treatmentTypesList$.subscribe(types => {
+				this.treatmentTypes = types;
+			})
+		);
+	}
+
+	ngOnDestroy(): void {
+		this.subscription.unsubscribe();
 	}
 
 	loadTreatmentTypes(): void {
@@ -113,40 +124,6 @@ export class TreatmentTypesListComponent implements OnInit {
 		});
 	}
 
-	editTreatmentType(type: TreatmentType): void {
-		// פותח דיאלוג עריכה (אפשר למחזר את אותו דיאלוג)
-		const dialogRef = this.dialog.open(AddTreatmentTypeDialogComponent, {
-			width: '500px',
-			direction: 'rtl',
-			data: {
-				treatmentType: type,
-				therapistId: this.therapistId,
-				userRole: this.userRole,
-				editMode: true
-			}
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.isSubmitting = true;
-				this.treatmentTypesService.createTreatmentType(result).subscribe({
-					next: (response) => {
-						if (response.success) {
-							alert('סוג הטיפול עודכן בהצלחה');
-							this.loadTreatmentTypes();
-						}
-						this.isSubmitting = false;
-					},
-					error: (err) => {
-						console.error('Error updating treatment type:', err);
-						alert('שגיאה בעדכון סוג הטיפול');
-						this.isSubmitting = false;
-					}
-				});
-			}
-		});
-	}
-
 	deleteTreatmentType(type: TreatmentType): void {
 		if (!confirm(`האם למחוק את סוג הטיפול "${type.type_name}"? פעולה זו אינה הפיכה!`)) return;
 		this.isSubmitting = true;
@@ -164,8 +141,8 @@ export class TreatmentTypesListComponent implements OnInit {
 		});
 	}
 
-	// כאשר לוחצים על שורה
+	// כאשר לוחצים על שורה - שומרים ב-state
 	selectTreatmentType(type: TreatmentType) {
-		this.treatmentTypeSelected.emit(type);
+		this.treatmentTypesService.selectTreatmentType(type);
 	}
 }
