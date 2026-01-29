@@ -2,20 +2,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
   background: #f8f9fa;
   border-bottom: 2px solid #e9ecef;
 }
 
 .mini-title {
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #2A5448;
   margin: 0;
 }
 
 .view-dropdown {
-  padding: 0.5rem 1rem;
+  padding:0.2rem 0.5rem;
   border: 1.5px solid #2A5448;
   border-radius: 2rem;
   background: white;
@@ -35,17 +34,24 @@
    לוח שנה קטן - תצוגת חודש בלבד
    ========================= */
 
+
 .mini-calendar {
-  max-width: 360px;
-  font-size: 0.9em;
+  max-width: 18rem;
+  font-size: 1em;
 }
 
 .mini-calendar .calendar-wrapper,
 .mini-calendar full-calendar {
   width: 100% !important;
-  max-width: 360px !important;
+  /* max-width: 18rem !important;
+  min-height: 30rem !important;
+  max-height: 34rem !important; */
 }
-
+.mini-calendar .fc-scroller.fc-scroller-liquid-absolute {
+  height: 22rem;
+  min-height: 12rem;
+  max-height: 22rem;
+}
 .mini-calendar .add-meeting-btn {
   display: none; /* הסתרת כפתור הוספת פגישה */
 }
@@ -69,8 +75,8 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0.8rem 0;
-  font-size: 0.95rem;
+  padding: 0.32em 0;
+  font-size: 0.8em;
   color: #333;
 }
 
@@ -79,8 +85,8 @@
   background: #7c4dff;
   color: white;
   border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  width: 1.2em;
+  height: 1.2em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +103,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 2.5rem;
+  min-height: 1.1em;
 }
 
 .mini-calendar .fc-daygrid-day-top {
@@ -117,16 +123,16 @@
 }
 .mini-calendar .calendar-wrapper,
 .mini-calendar full-calendar {
-  min-height: 23rem !important;
-  height: 23rem !important;
+  min-height: unset !important;
+  height: auto !important;
   max-height: none !important;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 44rem) {
   .mini-calendar .calendar-wrapper,
   .mini-calendar full-calendar {
-    min-height: 450px !important;
-    height: 450px !important;
+    min-height: unset !important;
+    height: auto !important;
   }
 }
 
