@@ -8,7 +8,10 @@
     </div>
   </div>
   <div class="appointments-row">
-    <app-appointment-list [therapistId]="therapistId" [statusFilter]="'מתוזמנת'"></app-appointment-list>
+    <app-appointment-list [therapistId]="therapistId ?? undefined" [statusFilter]="'מתוזמנת'"></app-appointment-list>
+  </div>
+  <div class="tasks-row">
+  <app-task-list [userId]="userId" [filterFn]="taskOpenStatusFilter"></app-task-list>
   </div>
   <app-template-viewer [templateId]="7"></app-template-viewer>
 </div>

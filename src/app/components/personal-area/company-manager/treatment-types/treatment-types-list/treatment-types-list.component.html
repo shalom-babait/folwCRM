@@ -20,10 +20,6 @@
 						<mat-icon>more_vert</mat-icon>
 					</button>
 					<mat-menu #typeMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
-						<button mat-menu-item (click)="editTreatmentType(type)">
-							<mat-icon>edit</mat-icon>
-							<span>ערוך</span>
-						</button>
 						<button mat-menu-item (click)="deleteTreatmentType(type)" class="delete-type-btn">
 							<mat-icon color="warn">delete</mat-icon>
 							<span style="color: #c62828;">מחק</span>

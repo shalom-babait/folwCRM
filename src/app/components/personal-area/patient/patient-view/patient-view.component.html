@@ -25,7 +25,7 @@
         <div class="stat-icon">🕐</div>
         <div class="stat-label">סך שעות טיפול</div>
         <div class="stat-value">
-          <span>{{ monthlyStats.total_hours }}</span>
+          <span>{{ monthlyStats.total_hours | number:'1.2-2' }}</span>
           <span class="stat-unit">שעות</span>
         </div>
       </div>

@@ -14,3 +14,41 @@
   font-size: 1.1rem;
   margin-bottom: 0.7rem;
 }
+
+/* תצוגת צבע */
+.color-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  font-weight: 500;
+  min-width: 120px;
+}
+
+/* שדה בחירת צבע */
+.color-input {
+  width: 100px !important;
+  height: 40px !important;
+  padding: 4px !important;
+  cursor: pointer;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+}
+
+/* הודעות שגיאה */
+.error-message {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* textarea */
+textarea.report-value {
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}

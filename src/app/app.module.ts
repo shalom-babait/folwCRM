@@ -116,6 +116,8 @@ import { AddTreatmentTypeDialogComponent } from './components/personal-area/comp
 import { TreatmentTypeViewComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-view/treatment-type-view.component';
 import { TreatmentTypeDetailsComponent } from './components/personal-area/company-manager/treatment-types/treatment-type-details/treatment-type-details.component';
 import { TemplateViewerComponent } from './components/personal-area/company-manager/treatment-types/templates/template-viewer/template-viewer.component';
+import { MiniCalenderComponent } from './components/personal-area/company-manager/calendars/mini-calender/mini-calender.component';
+import { CalenderViewComponent } from './components/personal-area/company-manager/calendars/calender-view/calender-view.component';
 
 @NgModule({
   declarations: [
@@ -198,9 +200,12 @@ import { TemplateViewerComponent } from './components/personal-area/company-mana
     SessionsSheetComponent,
     LinebreaksPipe,
     TreatmentTypesListComponent,
+    AddTreatmentTypeDialogComponent,
     TreatmentTypeViewComponent,
     TreatmentTypeDetailsComponent,
     TemplateViewerComponent,
+    MiniCalenderComponent,
+    CalenderViewComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [

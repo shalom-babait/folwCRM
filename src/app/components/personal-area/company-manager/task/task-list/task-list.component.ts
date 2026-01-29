@@ -12,6 +12,8 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskListComponent implements OnInit {
   @Input() patientId: number | null = null;
+  @Input() userId: number | null = null;
+  @Input() filterFn?: (task: Task) => boolean;
   tasks: Task[] = [];
   addMode = false;
   addTaskForm: FormGroup;
@@ -62,9 +64,17 @@ export class TaskListComponent implements OnInit {
       this.taskService.getTasksByPatientId(this.patientId).subscribe({
         next: (tasks) => {
           console.log('Tasks list from server:', tasks);
-          this.tasks = tasks;
+          this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
         },
         error: (err) => console.error('שגיאה בקבלת משימות', err)
+      });
+    } else if (this.userId) {
+      this.taskService.getTasksByUserId(this.userId).subscribe({
+        next: (tasks: Task[]) => {
+          console.log('Tasks list for user from server:', tasks);
+          this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+        },
+        error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
       });
     }
   }

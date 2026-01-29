@@ -1,5 +1,69 @@
-<div class="details-card" *ngIf="treatmentType">
-  <h3>{{ treatmentType.type_name }}</h3>
-  <p><strong>תיאור:</strong> {{ treatmentType.type_description || '---' }}</p>
-  <p><strong>מזהה מטפל:</strong> {{ treatmentType.therapist_id }}</p>
+<div class="report-card" dir="rtl">
+  <div *ngIf="!isEditing && treatmentType">
+    <div class="report-header">
+      <h3>{{ treatmentType.type_name }}</h3>
+      <button class="main-action-btn" (click)="startEdit()" title="עריכה">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <div class="report-content">
+      <div class="report-row">
+        <span class="report-label">שם הטיפול:</span>
+        <span class="report-value">{{ treatmentType.type_name }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">תיאור:</span>
+        <span class="report-value">{{ treatmentType.type_description || 'אין תיאור' }}</span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">מחיר ברירת מחדל:</span>
+        <span class="report-value">
+          <span *ngIf="treatmentType.price_default">₪{{ treatmentType.price_default }}</span>
+          <span *ngIf="!treatmentType.price_default">לא הוגדר</span>
+        </span>
+      </div>
+      <div class="report-row">
+        <span class="report-label">צבע:</span>
+        <span class="report-value">
+          <div class="color-display" [style.background-color]="treatmentType.color || '#cccccc'">
+            {{ treatmentType.color || 'לא הוגדר' }}
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <form *ngIf="isEditing && treatmentType" [formGroup]="treatmentTypeForm" class="report-card">
+    <div class="report-header">
+      <h3>עריכת סוג טיפול: {{ treatmentType.type_name }}</h3>
+      <button class="main-action-btn" (click)="cancelEdit()" title="ביטול">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="report-content">
+      <div class="report-row">
+        <span class="report-label">שם הטיפול:</span>
+        <input class="report-value" type="text" formControlName="type_name" placeholder="הכנס שם טיפול" />
+        <div class="error-message" *ngIf="treatmentTypeForm.get('type_name')?.invalid && (treatmentTypeForm.get('type_name')?.dirty || treatmentTypeForm.get('type_name')?.touched)">
+          <span *ngIf="treatmentTypeForm.get('type_name')?.errors?.['required']">שם הטיפול הוא שדה חובה</span>
+          <span *ngIf="treatmentTypeForm.get('type_name')?.errors?.['minlength']">שם הטיפול חייב להכיל לפחות 2 תווים</span>
+        </div>
+      </div>
+      <div class="report-row">
+        <span class="report-label">תיאור:</span>
+        <textarea class="report-value" formControlName="type_description" placeholder="הכנס תיאור" rows="3"></textarea>
+      </div>
+      <div class="report-row">
+        <span class="report-label">מחיר ברירת מחדל:</span>
+        <input class="report-value" type="number" formControlName="price_default" min="0" step="0.01" placeholder="הכנס מחיר (₪)" />
+      </div>
+      <div class="report-row">
+        <span class="report-label">צבע:</span>
+        <input class="report-value color-input" type="color" formControlName="color" />
+      </div>
+    </div>
+    <div class="dialog-actions" *ngIf="isEditing">
+      <button type="button" class="main-action-btn" (click)="saveChanges()" [disabled]="!treatmentTypeForm.valid">שמור</button>
+    </div>
+  </form>
 </div>
