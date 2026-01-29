@@ -30,6 +30,10 @@ export class SessionsSheetComponent {
     this.expandedSessions = new Array(this.appointments.length).fill(true);
   }
 
+  printSheet(): void {
+    window.print();
+  }
+
   toggleNotes(index: number): void {
     this.expandedSessions[index] = !this.expandedSessions[index];
   }
