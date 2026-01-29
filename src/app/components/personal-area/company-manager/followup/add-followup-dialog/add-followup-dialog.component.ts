@@ -22,7 +22,7 @@ export class AddFollowupDialogComponent {
     public dialogRef: MatDialogRef<AddFollowupDialogComponent>,
     private fb: FormBuilder,
     private followupService: FollowupService,
-    @Inject(MAT_DIALOG_DATA) public data: { followUp?: FollowUp, person?: Person, person_id?: number, created_by_person_id?: number }
+    @Inject(MAT_DIALOG_DATA) public data: { followUp?: FollowUp, person?: Person, person_id?: number, created_by_user_id?: number }
   ) {
     this.isEdit = !!data.followUp;
     this.followupData = data.followUp;
@@ -107,10 +107,10 @@ export class AddFollowupDialogComponent {
       } else {
         // הוספה חדשה
         const person_id = Number(this.data.person?.person_id ?? this.data.person_id);
-        const created_by_person_id = Number(this.data.followUp?.created_by_person_id ?? this.data.created_by_person_id);
+        const created_by_user_id = Number(this.data.followUp?.created_by_user_id ?? this.data.created_by_user_id);
         const newFollowup = {
           person_id,
-          created_by_person_id,
+          created_by_user_id,
           follow_date: formatDate(formValue.follow_date),
           follow_time: formValue.follow_time,
           remind: formValue.remind,

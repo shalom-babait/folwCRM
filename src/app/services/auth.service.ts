@@ -51,6 +51,7 @@ login(user_name: string, password: string): Observable<{ success: boolean; token
       if (!token) return null;
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('JWT payload:', payload);
     return payload.id || null;
       } catch (err) {
         console.error('JWT decode error:', err);

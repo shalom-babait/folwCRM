@@ -8,7 +8,7 @@ export interface FollowUp {
   remind: boolean;
   notes?: string;
   created_at?: string;
-  created_by_person_id?: number;
+  created_by_user_id?: number;
   status?: 'open' | 'completed' | 'cancelled'; // סטטוס מעקב
 }
 
