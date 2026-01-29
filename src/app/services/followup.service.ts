@@ -25,10 +25,10 @@ export class FollowupService {
     return this.http.put(`${this.apiUrl}/${followupId}`, { status });
   }
 
-  getFollowupsByCreator(created_by_person_id: number): Observable<FollowUpWithPerson[]> {
-    console.log(created_by_person_id, "created_by_person_id");
+  getFollowupsByCreator(created_by_user_id: number): Observable<FollowUpWithPerson[]> {
+    console.log(created_by_user_id, "created_by_user_id");
     
-    return this.http.get<FollowUpWithPerson[]>(`${this.apiUrl}/creator/${created_by_person_id}`);
+    return this.http.get<FollowUpWithPerson[]>(`${this.apiUrl}/creator/${created_by_user_id}`);
   }
 
   getFollowupsByPerson(personId: number): Observable<FollowUp[]> {
