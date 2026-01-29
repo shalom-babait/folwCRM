@@ -16,6 +16,10 @@ import { AddFollowupDialogComponent } from '../add-followup-dialog/add-followup-
 export class UserFollowUpTableComponent implements OnInit {
   @Input() dateFilter: string = 'all';
 
+  followups: FollowUpWithPerson[] = [];
+  filteredFollowups: FollowUpWithPerson[] = [];
+  searchTerm: string = '';
+
   isToday(dateStr: string): boolean {
     if (!dateStr) return false;
     const date = new Date(dateStr);
@@ -24,9 +28,6 @@ export class UserFollowUpTableComponent implements OnInit {
       date.getMonth() === today.getMonth() &&
       date.getDate() === today.getDate();
   }
-  followups: FollowUpWithPerson[] = [];
-  searchTerm: string = '';
-  // dateFilter is now settable via @Input
 
   constructor(
     private followupService: FollowupService,
@@ -41,51 +42,12 @@ export class UserFollowUpTableComponent implements OnInit {
       this.followupService.getFollowupsByCreator(userId).subscribe(data => {
         console.log('Follow-ups received in component:', data);
         this.followups = data;
-      });
-    }
-  }
-  editFollowup(followup: FollowUpWithPerson): void {
-    const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
-      width: '400px',
-      data: {
-        followUp: followup.followUp,
-        person: followup.person
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // רענון הרשימה אחרי עריכה
-        const userId = this.authService.getCurrentUserId();
-        if (userId) {
-          this.followupService.getFollowupsByCreator(userId).subscribe(data => {
-            this.followups = data;
-          });
-        }
-      }
-    });
-  }
-  updateStatus(f: FollowUpWithPerson): void {
-    if (f.followUp?.followup_id && f.followUp.status) {
-      this.followupService.updateFollowupStatus(f.followUp.followup_id, f.followUp.status).subscribe();
-    }
-  }
-  deleteFollowup(followup: FollowUpWithPerson): void {
-    if (!followup.followUp?.followup_id) return;
-    if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
-      this.followupService.deleteFollowup(followup.followUp.followup_id).subscribe({
-        next: () => {
-          this.followups = this.followups.filter(f => f.followUp.followup_id !== followup.followUp.followup_id);
-        },
-        error: err => {
-          alert('מחיקה נכשלה');
-          console.error('Delete followup error:', err);
-        }
+        this.filterFollowups();
       });
     }
   }
 
-  get filteredFollowups() {
+  filterFollowups(): void {
     let filtered = this.followups;
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
@@ -115,7 +77,6 @@ export class UserFollowUpTableComponent implements OnInit {
     if (this.dateFilter === 'today') {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);
-        console.log('Checking date:', date, 'Today:', new Date());
         return date.toDateString() === today.toDateString();
       });
     } else if (this.dateFilter === 'tomorrow') {
@@ -152,17 +113,68 @@ export class UserFollowUpTableComponent implements OnInit {
         const date = new Date(f.followUp?.follow_date);
         date.setHours(0, 0, 0, 0);
         const condition = date <= today && f.followUp.status === 'open';
-        console.log('Checking follow-up:', {
-          followUpDate: date,
-          today: today,
-          status: f.followUp.status,
-          condition: condition
-        });
         return condition;
       });
     }
     console.log('Filtered followups after date filter:', filtered);
-
-    return filtered;
+    this.filteredFollowups = filtered;
   }
+  editFollowup(followup: FollowUpWithPerson): void {
+    const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
+      width: '400px',
+      data: {
+        followUp: followup.followUp,
+        person: followup.person
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // רענון הרשימה אחרי עריכה
+        const userId = this.authService.getCurrentUserId();
+        if (userId) {
+          this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+            this.followups = data;
+            this.filterFollowups();
+          });
+        }
+      }
+    });
+  }
+  updateStatus(f: FollowUpWithPerson): void {
+    if (f.followUp?.followup_id && f.followUp.status) {
+      this.followupService.updateFollowupStatus(f.followUp.followup_id, f.followUp.status).subscribe(() => {
+        // עדכון הרשימה והסינון לאחר עדכון סטטוס
+        const userId = this.authService.getCurrentUserId();
+        if (userId) {
+          this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+            this.followups = data;
+            this.filterFollowups();
+          });
+        }
+      });
+    }
+  }
+  deleteFollowup(followup: FollowUpWithPerson): void {
+    if (!followup.followUp?.followup_id) return;
+    if (confirm('האם אתה בטוח שברצונך למחוק את המעקב?')) {
+      this.followupService.deleteFollowup(followup.followUp.followup_id).subscribe({
+        next: () => {
+          const userId = this.authService.getCurrentUserId();
+          if (userId) {
+            this.followupService.getFollowupsByCreator(userId).subscribe(data => {
+              this.followups = data;
+              this.filterFollowups();
+            });
+          }
+        },
+        error: err => {
+          alert('מחיקה נכשלה');
+          console.error('Delete followup error:', err);
+        }
+      });
+    }
+  }
+
+  // הסינון מתבצע רק פעם אחת בעת טעינת הקומפוננטה
 }
