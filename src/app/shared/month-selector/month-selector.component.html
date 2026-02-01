@@ -1,0 +1,21 @@
+<div class="month-selector">
+  <div class="month-selector-header">
+    <select [ngModel]="selectedYear" (change)="onYearChange($event)">
+      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+    </select>
+    <button mat-button (click)="selectAllMonths()">בחר הכל</button>
+    <button mat-button (click)="resetMonths()">נקה בחירה</button>
+  </div>
+  <div class="month-buttons">
+    <button *ngFor="let month of months; let i = index"
+            [disabled]="!month.hasData"
+            (click)="onMonthClick(i, $event)">
+      <span *ngIf="selectedMonthsCopy.includes(i)">&#10003;</span>
+      {{ month.label }}
+    </button>
+  </div>
+  <div class="selected-months-list" *ngIf="selectedMonthsCopy.length">
+    <span>החודשים שנבחרו להצגה: </span>
+    <span>{{ getSelectedMonthsLabel() }}</span>
+  </div>
+</div>

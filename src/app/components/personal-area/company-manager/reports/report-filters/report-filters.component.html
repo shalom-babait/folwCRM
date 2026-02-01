@@ -1,0 +1,10 @@
+<!-- Quick Presets Buttons -->
+<div class="quick-presets">
+	<button *ngFor="let preset of presets"
+					[ngClass]="{ 'active': selectedPreset === preset, 'outline': selectedPreset !== preset }"
+					(click)="onPresetClick(preset)">
+		{{ presetLabels[preset] }}
+	</button>
+</div>
+<!-- ...existing code... -->
+<p>report-filters works!</p>
