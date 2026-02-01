@@ -1,0 +1,67 @@
+.month-selector button span {
+  color: #1dbf3a;
+  font-weight: bold;
+}
+.checkmark {
+  color: #43a047;
+  font-size: 1em;
+  font-weight: bold;
+  margin-right: 2px;
+  transform: scale(0.7);
+  display: inline-block;
+  animation: checkmark-in 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes checkmark-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.7);
+    opacity: 1;
+  }
+}
+.month-selector {
+  margin-bottom: 18px;
+}
+.month-selector-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.month-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.month-buttons button {
+  padding: 8px 18px;
+  border-radius: 18px;
+  border: 2px solid #3f51b5;
+  background: white;
+  color: #3f51b5;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(63,81,181,0.07);
+}
+.month-buttons button.selected {
+  background: linear-gradient(90deg, #3f51b5 60%, #5c6bc0 100%);
+  color: #fff;
+  border-color: #3f51b5;
+  box-shadow: 0 2px 8px rgba(63,81,181,0.13);
+}
+.month-buttons button.disabled {
+  background: #f3f7fa;
+  color: #bdbdbd;
+  border-color: #bdbdbd;
+  cursor: not-allowed;
+}

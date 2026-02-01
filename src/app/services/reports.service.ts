@@ -11,6 +11,20 @@ export class ReportsService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Get income report by months and year
+   * @param year Selected year
+   * @param months Array of selected month numbers (1-12)
+   * @param therapistId Optional therapist id
+   */
+  getIncomeByMonths(year: number, months: number[], therapistId?: number): Observable<any> {
+    const body: any = { year, months };
+    if (therapistId !== undefined) {
+      body.therapistId = therapistId;
+    }
+    return this.http.post(`${this.apiUrl}/income-by-months`, body);
+  }
+
   getOpenDebtsByTherapist(therapist_id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/open-debts/${therapist_id}`);
   }
