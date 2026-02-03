@@ -1,3 +1,16 @@
+@media print {
+  .sessions-list-wrapper {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .session-card, .session-notes {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .sheet-title-row button, .print-btn, .mat-icon-button {
+    display: none !important;
+  }
+}
 /* גלילה אוטומטית לרשימת המפגשים */
 .sessions-list-wrapper {
   max-height: 70vh;

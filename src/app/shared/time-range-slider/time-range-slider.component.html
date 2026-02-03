@@ -1,0 +1,12 @@
+<div class="slider-labels">
+  <span>{{ startDate | date:'dd/MM/yyyy' }}</span>
+  <span>{{ endDate | date:'dd/MM/yyyy' }}</span>
+</div>
+<!-- כאן יש להטמיע ngx-slider או mat-slider עם dual thumb. דוגמה בסיסית: -->
+<ngx-slider
+  [value]="value"
+  [highValue]="highValue"
+  [options]="options"
+  (userChangeEnd)="onSliderRelease($event)"
+  (userChange)="onSliderChange($event)">
+</ngx-slider>

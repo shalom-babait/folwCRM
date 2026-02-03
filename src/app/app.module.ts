@@ -1,3 +1,6 @@
+import { MonthSelectorComponent } from './shared/month-selector/month-selector.component';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { TimeRangeSliderComponent } from './shared/time-range-slider/time-range-slider.component';
 import { CalendarOverlayComponent } from './components/personal-area/company-manager/calendars/calendar-overlay/calendar-overlay.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -118,9 +121,12 @@ import { TreatmentTypeDetailsComponent } from './components/personal-area/compan
 import { TemplateViewerComponent } from './components/personal-area/company-manager/treatment-types/templates/template-viewer/template-viewer.component';
 import { MiniCalenderComponent } from './components/personal-area/company-manager/calendars/mini-calender/mini-calender.component';
 import { CalenderViewComponent } from './components/personal-area/company-manager/calendars/calender-view/calender-view.component';
+import { ReportFiltersComponent } from './components/personal-area/company-manager/reports/report-filters/report-filters.component';
 
 @NgModule({
   declarations: [
+    MonthSelectorComponent,
+    TimeRangeSliderComponent,
     SecretaryHomeComponent,
     AppComponent,
     PatientListComponent,
@@ -206,9 +212,11 @@ import { CalenderViewComponent } from './components/personal-area/company-manage
     TemplateViewerComponent,
     MiniCalenderComponent,
     CalenderViewComponent,
+    ReportFiltersComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [
+    NgxSliderModule,
     TutorialVideosComponent,
     NgChartsModule,
     QuillModule.forRoot(),

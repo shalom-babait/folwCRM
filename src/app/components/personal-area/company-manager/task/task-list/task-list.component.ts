@@ -4,6 +4,7 @@ import { AddTaskComponent } from '../add-task/add-task.component';
 import { Task } from 'src/app/models/task.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskService } from 'src/app/services/task.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -23,8 +24,9 @@ export class TaskListComponent implements OnInit {
   selectedPatientId: number | null = null;
   editTaskId: number | null = null;
   editTaskForm: FormGroup | null = null;
+  isHomePage: boolean = false;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private taskService: TaskService) {
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private taskService: TaskService, private router: Router) {
     this.addTaskForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -40,7 +42,18 @@ export class TaskListComponent implements OnInit {
       assignmentTherapist: [true],
       assignmentPatient: [false]
     });
+    this.isHomePage = this.router.url.startsWith('/personal-area/therapist');
+
   }
+
+  private setTaskFlags(tasks: Task[]): Task[] {
+    return tasks.map(task => {
+      const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
+      const hasPatient = task.assignmentPatient || (task.assignments?.some(a => a.entity_type === 'patient')) || false;
+      return { ...task, hasTherapist, hasPatient };
+    });
+  }
+
 
   private getTodayDate(): string {
     // Returns YYYY-MM-DD format
@@ -59,6 +72,29 @@ export class TaskListComponent implements OnInit {
     this.editTaskForm.get('color')?.setValue(value);
   }
 
+  getAssignmentLabel(task: Task): string {
+  const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
+  const hasPatient = task.assignments?.some(a => a.entity_type === 'patient') || task.assignmentPatient || false;
+
+  if (hasTherapist && hasPatient) {
+    // משויך למטפל ולמטופל, אם יש שם מטופל בעמוד הבית – מציגים אותו
+    return this.isHomePage && task.patientName
+      ? `משויך למטפל ולמטופל (${task.patientName})`
+      : 'משויך למטפל ולמטופל';
+  }
+
+  if (hasTherapist) return 'משויך למטפל';
+  if (hasPatient) {
+    return this.isHomePage && task.patientName
+      ? `משויך למטופל (${task.patientName})`
+      : 'משויך למטופל';
+  }
+
+  return '';
+}
+
+
+
   ngOnInit(): void {
     if (this.patientId) {
       this.taskService.getTasksByPatientId(this.patientId).subscribe({
@@ -71,12 +107,14 @@ export class TaskListComponent implements OnInit {
     } else if (this.userId) {
       this.taskService.getTasksByUserId(this.userId).subscribe({
         next: (tasks: Task[]) => {
-          console.log('Tasks list for user from server:', tasks);
+          console.log('Tasks list for user from server:', tasks); // ← זה מדפיס את כל המשימות
           this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+          console.log('Tasks after filter:', this.tasks); // ← אופציונלי: אחרי סינון
         },
         error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
       });
     }
+
   }
 
   showAddTaskCard(): void {
@@ -277,4 +315,9 @@ export class TaskListComponent implements OnInit {
       default: return '';
     }
   }
+  isAssignedToPatient(task: Task): boolean {
+    return Array.isArray(task.assignments)
+      && task.assignments.some(a => a.entity_type === 'patient');
+  }
+
 }
