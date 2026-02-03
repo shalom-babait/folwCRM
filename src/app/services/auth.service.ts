@@ -22,6 +22,22 @@ login(user_name: string, password: string): Observable<{ success: boolean; token
   );
 }
 
+  // שליחת בקשה לשחזור סיסמה
+  forgotPassword(user_name: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.apiUrl}/login/forgot-password`,
+      { user_name }
+    );
+  }
+  
+  // החלפת סיסמה (משתמש מחובר)
+  changePassword(user_name: string, oldPassword: string, newPassword: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(
+      `${this.apiUrl}/login/change-password`,
+      { user_name, oldPassword, newPassword }
+    );
+  }
+
   // שולף את ה־token מה־localStorage
   getToken(): string | null {
     return localStorage.getItem('token');
