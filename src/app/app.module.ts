@@ -122,6 +122,7 @@ import { TemplateViewerComponent } from './components/personal-area/company-mana
 import { MiniCalenderComponent } from './components/personal-area/company-manager/calendars/mini-calender/mini-calender.component';
 import { CalenderViewComponent } from './components/personal-area/company-manager/calendars/calender-view/calender-view.component';
 import { ReportFiltersComponent } from './components/personal-area/company-manager/reports/report-filters/report-filters.component';
+import { ChartBaseComponent } from './components/personal-area/company-manager/reports/charts/chart-base/chart-base.component';
 
 @NgModule({
   declarations: [
@@ -213,6 +214,7 @@ import { ReportFiltersComponent } from './components/personal-area/company-manag
     MiniCalenderComponent,
     CalenderViewComponent,
     ReportFiltersComponent,
+    ChartBaseComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [

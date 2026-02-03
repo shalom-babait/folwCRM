@@ -1,3 +1,4 @@
+
 <app-month-selector></app-month-selector>
 
 <div class="view-switcher">
@@ -9,36 +10,34 @@
   </button>
 </div>
 
-<div class="filters">
-  <app-report-filters></app-report-filters>
-  <app-time-range-slider></app-time-range-slider>
-
-  <div *ngIf="filterType === 'range'" class="date-range">
-    <app-time-range-slider
-      [minDate]="minSliderDate"
-      [maxDate]="maxSliderDate"
-      [startDate]="startDateObj"
-      [endDate]="endDateObj"
-      (rangeChange)="onSliderChange($event)"
-      (rangeRelease)="onSliderRelease($event)">
-    </app-time-range-slider>
-    <button mat-raised-button (click)="loadReport()">הצג</button>
-  </div>
-</div>
-
-
 <div class="income-report-form-area">
-  <h3>הכנסות מטיפולים</h3>
-  <div *ngIf="selectedMonths.length || selectedYear" class="selected-filter-info" style="margin-bottom: 12px; font-size: 1.1em;">
-    <span *ngIf="selectedYear">שנה נבחרה: {{ selectedYear }}</span>
-    <span *ngIf="selectedMonths.length">
-      | חודשים נבחרים:
-  {{ getSelectedMonthsLabel() }}
-    </span>
-  </div>
-
-  <ng-container *ngIf="viewMode === 'table'; else chartBlock">
-    <ng-container *ngIf="incomeByMonths.length > 0; else oldTable">
+  <ng-container *ngIf="viewMode === 'chart'; else tableBlock">
+    <mat-form-field appearance="outline" style="min-width: 120px; margin-bottom: 16px;">
+      <mat-label>בחר שנה</mat-label>
+      <mat-select [(value)]="selectedYear" (selectionChange)="onYearChange($event.value)">
+        <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="chart-container">
+      <app-chart-base
+        [type]="chartType"
+        [labels]="chartLabelsSafe"
+        [datasets]="chartData.datasets"
+        [options]="chartOptions || {}"
+        (chartInit)="loadChartYearMonths()">
+      </app-chart-base>
+    </div>
+  </ng-container>
+  <ng-template #tableBlock>
+    <h3>הכנסות מטיפולים</h3>
+    <div *ngIf="selectedMonths.length || selectedYear" class="selected-filter-info" style="margin-bottom: 12px; font-size: 1.1em;">
+      <span *ngIf="selectedYear">שנה נבחרה: {{ selectedYear }}</span>
+      <span *ngIf="selectedMonths.length">
+        | חודשים נבחרים:
+        {{ getSelectedMonthsLabel() }}
+      </span>
+    </div>
+    <ng-container *ngIf="incomeByMonths.length > 0">
       <div *ngFor="let monthData of incomeByMonths">
         <h4 style="margin-top: 24px; margin-bottom: 8px;">{{ getMonthLabel(monthData.month) }} (סה"כ: ₪{{ monthData.total }})</h4>
         <table class="income-table">
@@ -66,40 +65,5 @@
         סך הכל הכנסות מטיפולים: <strong>₪{{ totalIncome }}</strong>
       </div>
     </ng-container>
-    <ng-template #oldTable>
-      <table class="income-table">
-        <thead>
-          <tr>
-            <th>שם לקוח</th>
-            <th>סכום הכנסה</th>
-            <th>פעולות</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of rows">
-            <td>{{ row.name }}</td>
-            <td>₪{{ row.amount }}</td>
-            <td>
-              <button class="menu-button" matTooltip="דיווח על תשלום" (click)="reportPayment(row)">
-                <mat-icon>payments</mat-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="total">
-        סך הכל הכנסות מטיפולים: <strong>₪{{ totalIncome }}</strong>
-      </div>
-    </ng-template>
-  </ng-container>
-  <ng-template #chartBlock>
-    <div class="chart-container">
-      <canvas
-        baseChart
-        [data]="chartData"
-        [type]="chartType"
-        [options]="chartOptions">
-      </canvas>
-    </div>
   </ng-template>
 </div>

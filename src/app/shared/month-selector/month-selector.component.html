@@ -1,21 +1,28 @@
 <div class="month-selector">
-  <div class="month-selector-header">
-    <select [ngModel]="selectedYear" (change)="onYearChange($event)">
-      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-    </select>
-    <button mat-button (click)="selectAllMonths()">בחר הכל</button>
-    <button mat-button (click)="resetMonths()">נקה בחירה</button>
+  <div *ngFor="let sel of selections; let idx = index" class="year-selector-block" style="border:1px solid #e0e0e0; border-radius:8px; margin-bottom:16px; padding:12px;">
+    <div class="month-selector-header">
+      <select [ngModel]="sel.year" (change)="onYearChange(idx, $event)">
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+      <button mat-button (click)="selectAllMonths(idx)">בחר הכל</button>
+      <button mat-button (click)="resetMonths(idx)">נקה בחירה</button>
+      <button mat-icon-button *ngIf="selections.length > 1" (click)="removeYearSelection(idx)" title="הסר שנה">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="month-buttons">
+      <button *ngFor="let month of months; let i = index"
+              [disabled]="!month.hasData"
+              [class.selected]="sel.months.includes(i)"
+              (click)="onMonthClick(idx, i)">
+        <span *ngIf="sel.months.includes(i)">&#10003;</span>
+        {{ month.label }}
+      </button>
+    </div>
+    <div class="selected-months-list" *ngIf="sel.months.length">
+      <span>החודשים שנבחרו להצגה: </span>
+      <span>{{ getSelectedMonthsLabel(idx) }}</span>
+    </div>
   </div>
-  <div class="month-buttons">
-    <button *ngFor="let month of months; let i = index"
-            [disabled]="!month.hasData"
-            (click)="onMonthClick(i, $event)">
-      <span *ngIf="selectedMonthsCopy.includes(i)">&#10003;</span>
-      {{ month.label }}
-    </button>
-  </div>
-  <div class="selected-months-list" *ngIf="selectedMonthsCopy.length">
-    <span>החודשים שנבחרו להצגה: </span>
-    <span>{{ getSelectedMonthsLabel() }}</span>
-  </div>
+  <button mat-raised-button color="primary" (click)="addYearSelection()">הוסף שנה</button>
 </div>
