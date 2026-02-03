@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+export interface YearMonthsSelection {
+  year: number;
+  months: number[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class IncomeFilterService {
-  private filterSubject = new BehaviorSubject<{ year: number; months: number[] } | null>(null);
+  private filterSubject = new BehaviorSubject<YearMonthsSelection[] | null>(null);
   filter$ = this.filterSubject.asObservable();
 
-  setFilter(filter: { year: number; months: number[] }) {
+  setFilter(filter: YearMonthsSelection[]) {
     this.filterSubject.next(filter);
   }
 }

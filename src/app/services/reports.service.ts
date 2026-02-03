@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -22,10 +23,18 @@ export class ReportsService {
     if (therapistId !== undefined) {
       body.therapistId = therapistId;
     }
+    console.log('getIncomeByMonths - body:', body);
     return this.http.post(`${this.apiUrl}/income-by-months`, body);
   }
 
   getOpenDebtsByTherapist(therapist_id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/open-debts/${therapist_id}`);
+  }
+    /**
+   * Get last 12 months income for a given year and month
+   */
+  getMonthlyIncome(year: number, month: number): Observable<any> {
+    const body = { year, month };
+    return this.http.post(`${this.apiUrl}/income-last-12`, body);
   }
 }
