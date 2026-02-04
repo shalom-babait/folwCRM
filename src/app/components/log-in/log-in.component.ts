@@ -16,15 +16,38 @@ export class LogInComponent {
   forgatPassword: boolean = false;
   passwordHasBeenSent: boolean = false;
   SendingPasswordToMail: boolean = false;
+  changePasswordDisplayed: boolean = false; // דיאלוג החלפת סיסמה
 
   password: string = '';
   user_name: string = '';
+  resetUserName: string = ''; // שם משתמש לשחזור סיסמה
+  isLoadingReset: boolean = false; // אינדיקטור טעינה
+  
+  // טיימר לסיסמה זמנית
+  countdown: string = '5:00';
+  private countdownInterval: any;
+  
+  // החלפת סיסמה
+  changePasswordData = {
+    user_name: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  };
+  isLoadingChange: boolean = false;
 
   constructor(
     private authService: AuthService,
     private therapistSessionService: TherapistSessionService,
     private router: Router
   ) {}
+  
+  ngOnDestroy() {
+    // ניקוי הטיימר כשניצאים מהקומפוננטה
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
     // Removed duplicate constructor
   onEnter() {
     if (this.user_name && this.password) {
@@ -108,7 +131,56 @@ export class LogInComponent {
     this.forgatPassword = false;
     this.passwordHasBeenSent = false;
     this.SendingPasswordToMail = true;
+    this.resetUserName = ''; // איפוס שדה שם המשתמש
   }
+  
+  // שליחת בקשה לשחזור סיסמה
+  sendResetPassword() {
+    if (!this.resetUserName || this.resetUserName.trim() === '') {
+      alert('אנא הזן שם משתמש');
+      return;
+    }
+
+    this.isLoadingReset = true;
+    
+    this.authService.forgotPassword(this.resetUserName).subscribe({
+      next: (response) => {
+        this.isLoadingReset = false;
+        console.log('Password reset response:', response);
+        this.startCountdown(); // התחלת טיימר
+        this.showPasswordHasBeenSent();
+      },
+      error: (err) => {
+        this.isLoadingReset = false;
+        console.error('Password reset error:', err);
+        alert('שגיאה בשליחת המייל. אנא נסה שוב מאוחר יותר');
+      }
+    });
+  }
+  
+  // טיימר ספירה לאחור 5 דקות
+  startCountdown() {
+    let totalSeconds = 5 * 60; // 5 דקות
+    
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+    
+    this.countdownInterval = setInterval(() => {
+      totalSeconds--;
+      
+      if (totalSeconds <= 0) {
+        clearInterval(this.countdownInterval);
+        this.countdown = 'פג תוקף';
+        return;
+      }
+      
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      this.countdown = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+  }
+  
   showPasswordHasBeenSent() {
     this.enrollmentFormDisplayed = false;
     this.connectionFormDisplayed = false;
@@ -122,5 +194,61 @@ export class LogInComponent {
     this.forgatPassword = true;
     this.passwordHasBeenSent = false;
     this.SendingPasswordToMail = false;
+    this.changePasswordDisplayed = false;
+  }
+  
+  // הצגת דיאלוג החלפת סיסמה
+  showChangePassword() {
+    this.enrollmentFormDisplayed = false;
+    this.connectionFormDisplayed = false;
+    this.forgatPassword = false;
+    this.passwordHasBeenSent = false;
+    this.SendingPasswordToMail = false;
+    this.changePasswordDisplayed = true;
+    // איפוס שדות
+    this.changePasswordData = {
+      user_name: '',
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    };
+  }
+  
+  // שליחת בקשה להחלפת סיסמה
+  changePassword() {
+    // בדיקות ולידציה
+    if (!this.changePasswordData.user_name || !this.changePasswordData.oldPassword || 
+        !this.changePasswordData.newPassword || !this.changePasswordData.confirmPassword) {
+      alert('אנא מלא את כל השדות');
+      return;
+    }
+    
+    if (this.changePasswordData.newPassword !== this.changePasswordData.confirmPassword) {
+      alert('הסיסמאות החדשות אינן תואמות');
+      return;
+    }
+    
+    if (this.changePasswordData.newPassword.length < 6) {
+      alert('הסיסמה החדשה חייבת להיות באורך 6 תווים לפחות');
+      return;
+    }
+    
+    this.isLoadingChange = true;
+    
+    this.authService.changePassword(
+      this.changePasswordData.user_name,
+      this.changePasswordData.oldPassword,
+      this.changePasswordData.newPassword
+    ).subscribe({
+      next: (response) => {
+        this.isLoadingChange = false;
+        alert('הסיסמה שונתה בהצלחה!');
+        this.showConnectionForm();
+      },
+      error: (err) => {
+        this.isLoadingChange = false;
+        alert('שגיאה: ' + (err.error?.message || 'לא ניתן לשנות סיסמה'));
+      }
+    });
   }
 }

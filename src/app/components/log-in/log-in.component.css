@@ -149,3 +149,7 @@ html, body {
     width: 90vw;
   }
 }
+
+.subtitle{
+  cursor: pointer;
+}
