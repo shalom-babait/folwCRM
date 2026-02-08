@@ -59,17 +59,9 @@ export class AddPatientDialogComponent implements OnInit {
     } else if (formValue.therapist_id) {
       therapist_id = formValue.therapist_id;
     } else {
-      try {
-        const therapistStr = localStorage.getItem('therapist');
-        if (therapistStr) {
-          const therapistObj = JSON.parse(therapistStr);
-          if (therapistObj && therapistObj.therapist_id) {
-            therapist_id = therapistObj.therapist_id;
-          }
-        }
-      } catch (e) {
-        therapist_id = null;
-      }
+      // שלוף ישירות therapist_id כמספר מהמפתח החדש
+      const therapistIdStr = localStorage.getItem('therapist_id');
+      therapist_id = therapistIdStr ? Number(therapistIdStr) : null;
     }
 
     // Ensure gender is always in English

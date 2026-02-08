@@ -67,6 +67,8 @@ export class ReportFiltersComponent implements OnInit {
   selectedPreset: ReportPresetType = ReportPresetType.CurrentMonth;
 
   ngOnInit() {
+    // כברירת מחדל: החודש הנוכחי והשנה הנוכחית
+    this.selectedPreset = ReportPresetType.CurrentMonth;
     this.applyPreset(this.selectedPreset);
   }
 

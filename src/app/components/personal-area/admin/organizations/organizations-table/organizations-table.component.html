@@ -1,0 +1,47 @@
+<p>organizations-table works!</p>
+<div class="organization-list-container">
+  <div class="search-container">
+    <div class="search-actions-row">
+      <button class="icon-button" mat-icon-button (click)="openCreateOrganizationDialog()">
+        <mat-icon style="color: #1976d2;">add</mat-icon>
+      </button>
+      <input type="text" placeholder="חיפוש לפי שם ארגון" class="search-input" [(ngModel)]="searchTerm">
+    </div>
+  </div>
+
+  <div class="organization-row header-row">
+    <div class="organization-cell">שם ארגון</div>
+    <div class="organization-cell">סוג</div>
+    <div class="organization-cell">איש קשר</div>
+    <div class="organization-cell">טלפון</div>
+    <div class="organization-cell">אימייל</div>
+    <div class="organization-cell">סטטוס</div>
+    <div class="organization-cell">נוצר בתאריך</div>
+    <div class="organization-cell">פעולות</div>
+  </div>
+
+  <ng-container *ngIf="filteredOrganizations.length > 0; else noOrganizations">
+    <div class="scrollable-rows">
+      <div class="organization-row data-row" *ngFor="let org of filteredOrganizations">
+        <div class="organization-cell">{{ org.organization_name }}</div>
+        <div class="organization-cell">{{ org.organization_type }}</div>
+        <div class="organization-cell">{{ org.contact_name }}</div>
+        <div class="organization-cell">{{ org.contact_phone }}</div>
+        <div class="organization-cell">{{ org.contact_email }}</div>
+        <div class="organization-cell">{{ org.status === 'active' ? 'פעיל' : 'לא פעיל' }}</div>
+        <div class="organization-cell">{{ org.created_at | date:'dd/MM/yyyy' }}</div>
+        <div class="organization-cell actions-cell">
+          <button mat-icon-button (click)="editOrganization(org)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteOrganization(org.organization_id)" color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noOrganizations>
+    <div class="no-data-msg">לא נמצאו ארגונים</div>
+  </ng-template>
+</div>

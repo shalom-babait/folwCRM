@@ -238,9 +238,9 @@ export class TaskListComponent implements OnInit {
 
   // דוגמה לפונקציה שמחזירה מזהה מטפל (לשימוש אמיתי יש להחליף בלוגיקה שלך)
   private getCurrentTherapistId(): number | null {
-    // נשלוף תמיד therapist_id מה-localStorage['therapist']
-    const therapist = JSON.parse(localStorage.getItem('therapist') || '{}');
-    return therapist.therapist_id || null;
+    // נשלוף תמיד therapist_id מה-localStorage['therapist_id'] כמספר
+    const therapistIdStr = localStorage.getItem('therapist_id');
+    return therapistIdStr ? Number(therapistIdStr) : null;
   }
 
   private refreshTasks(): void {

@@ -51,9 +51,8 @@ export class PatientListComponent implements OnInit, OnDestroy {
       this.therapist_id = this.therapistId;
       this.loadPatientsByTherapist();
     } else {
-      const therapistStr = localStorage.getItem('therapist');
-      const therapistObj = therapistStr ? JSON.parse(therapistStr) : {};
-      this.therapist_id = therapistObj.therapist_id || 0;
+  const therapistIdStr = localStorage.getItem('therapist_id');
+  this.therapist_id = therapistIdStr ? Number(therapistIdStr) : 0;
       this.loadAllPatients();
       this.loadAllTherapists();
     }

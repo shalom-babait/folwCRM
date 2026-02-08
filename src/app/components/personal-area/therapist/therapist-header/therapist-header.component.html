@@ -59,7 +59,11 @@
 
     <div class="profile-menu" *ngIf="showProfileMenu">
       <div class="profile-menu-header">
-        <div class="user-name">{{ user_name }}</div>
+        <div class="user-name">
+          {{ user_name }}
+          <span class="user-role-separator">| </span>
+          <span class="user-role">מטפל/ת</span>
+        </div>
       </div>
       <div class="menu-divider"></div>
       <ul class="profile-menu-items">
