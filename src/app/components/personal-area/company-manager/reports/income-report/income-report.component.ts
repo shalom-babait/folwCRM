@@ -23,7 +23,7 @@ export class IncomeReportComponent implements OnInit {
     const y = Number(year);
     const m = Array.isArray(months) ? months.map(Number).filter(v => !isNaN(v)) : [];
     const body = { year: y, months: m, therapistId: this.therapistId };
-    console.log('נשלח לשרת (income-by-months):', body);
+    // console.log('נשלח לשרת (income-by-months):', body);
     this.reportsService.getIncomeByMonths(y, m, this.therapistId).subscribe({
       next: (response) => {
         if (response && response.success && Array.isArray(response.data)) {
@@ -59,7 +59,18 @@ export class IncomeReportComponent implements OnInit {
     this.selectedYear = currentYear;
     // Initialize months
     this.months = MONTH_LABELS.map(label => ({ label, hasData: true }));
-  // Removed reset of selectedMonths to allow persistent selection
+
+
+    // בחירת החודש הנוכחי כברירת מחדל
+    const currentMonthIndex = new Date().getMonth(); // 0-based
+    this.selectedMonths = [currentMonthIndex];
+
+    // שליחה אוטומטית לשרת עם השנה והחודש הנוכחיים והtherapistId
+    setTimeout(() => {
+      if (this.therapistId) {
+        this.sendFilterToServer(this.selectedYear, this.selectedMonths);
+      }
+    }, 0);
 
     // Debounce for slider changes
     this.sliderChange$.pipe(debounceTime(400)).subscribe(({start, end}) => {
@@ -68,7 +79,6 @@ export class IncomeReportComponent implements OnInit {
       this.loadReport();
     });
     // נטען את המזהה מה-localStorage אם לא הועבר מבחוץ
-      // Subscribe to filter changes
     if (!this.therapistId) {
       const storedId = localStorage.getItem('therapist_id');
       if (storedId) {

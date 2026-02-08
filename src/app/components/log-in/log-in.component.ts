@@ -64,8 +64,8 @@ export class LogInComponent {
         }
         // שמירת מזהה לפי תפקיד
         if (res.therapist_id) {
+
           localStorage.setItem('therapist_id', res.therapist_id.toString());
-          localStorage.setItem('therapist', JSON.stringify({ therapist_id: res.therapist_id }));
 
           // שמירת פרטי המטפל בסשן
           const therapistData: TherapistData = { therapist_id: res.therapist_id };

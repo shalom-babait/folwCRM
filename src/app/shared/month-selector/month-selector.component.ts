@@ -16,8 +16,9 @@ export class MonthSelectorComponent {
   months: { label: string, hasData: boolean }[] = MONTH_LABELS.map(label => ({ label, hasData: true }));
 
   // כל שורה: { year: number, months: number[] }
+
   selections: Array<{ year: number, months: number[] }> = [
-    { year: new Date().getFullYear(), months: [] }
+    { year: new Date().getFullYear(), months: [new Date().getMonth()] }
   ];
 
   ngOnInit() {
