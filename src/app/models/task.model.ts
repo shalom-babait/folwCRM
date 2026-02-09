@@ -38,4 +38,7 @@ export interface Task {
 
   // שיוכים גמישים
   assignments?: TaskAssignment[];
+  assignmentPatient?: boolean;
+  patientName?: string;
+
 }
