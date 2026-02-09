@@ -10,17 +10,14 @@ import { TherapistCreationData, TherapistData } from '../models/therapist.model'
   providedIn: 'root'
 })
 export class TherapistService {
-  getTherapistMonthlyStats(therapistId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/therapists/${therapistId}/monthly-stats`);
-  }
-  private apiUrl = `${environment.apiUrl}`;
+   private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {}
 
-  createTherapist(data: TherapistCreationData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/therapists/create`, data);
+  getTherapistMonthlyStats(therapistId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/therapists/${therapistId}/monthly-stats`);
   }
-
+ 
   getAllTherapists(): Observable<TherapistCreationData[]> {
     return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/all`);
   }
@@ -28,4 +25,8 @@ export class TherapistService {
   searchTherapists(searchTerm: string): Observable<TherapistCreationData[]> {
     return this.http.get<TherapistCreationData[]>(`${this.apiUrl}/therapists/search?name=${encodeURIComponent(searchTerm)}`);
   }
+    createTherapist(data: TherapistCreationData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/therapists/create`, data);
+  }
+
 }

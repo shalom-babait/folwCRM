@@ -45,7 +45,6 @@ export class OrganizationsTableComponent implements OnInit {
         org.organization_name.includes(this.searchTerm)
       );
     }
-    console.log('filteredOrganizations:', result);
     return result;
   }
 

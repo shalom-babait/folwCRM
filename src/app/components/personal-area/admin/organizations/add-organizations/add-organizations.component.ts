@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Organization } from '../../../../../models/organization.model';
+import { Organization, OrganizationCreationData } from '../../../../../models/organization.model';
 import { Person } from '../../../../../models/person.model';
 import { UserData } from '../../../../../models/user.model';
 import { OrganizationsService } from '../../../../../services/organizations.service';
@@ -14,6 +14,7 @@ import { OrganizationsService } from '../../../../../services/organizations.serv
     './add-organizations.component.css'
   ]
 })
+
 export class AddOrganizationsComponent implements OnInit {
   step = 1;
   organizationForm!: FormGroup;
@@ -39,7 +40,7 @@ export class AddOrganizationsComponent implements OnInit {
       organization_name: ['', Validators.required],
       organization_type: ['', Validators.required],
       status: ['active', Validators.required],
-      owner_user_id: [null, Validators.required]
+      // owner_user_id יוזן דינאמית אחרי יצירת יוזר
     });
   }
 
@@ -95,9 +96,15 @@ export class AddOrganizationsComponent implements OnInit {
     const org: Organization = this.organizationForm.value;
     const person: Person = this.personForm.value;
     const user: UserData = this.userForm.value;
-    this.organizationsService.addOrganization(org).subscribe({
-      next: (orgRes: Organization) => {
-        this.dialogRef.close({ org: orgRes, person, user });
+    const creationData: OrganizationCreationData = {
+      organization: org,
+      person,
+      user
+    };
+    console.log('נשלח לשרת OrganizationCreationData:', creationData);
+    this.organizationsService.addOrganization(creationData).subscribe({
+      next: (result: OrganizationCreationData) => {
+        this.dialogRef.close(result);
       },
       error: () => this.isSubmitting = false
     });

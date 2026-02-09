@@ -41,13 +41,7 @@
 				{{ getFieldError(organizationForm, 'status', 'סטטוס') }}
 			</div>
 		</div>
-		<div class="form-field">
-			<label for="owner_user_id">מספר משתמש בעלים *</label>
-			<input type="number" id="owner_user_id" formControlName="owner_user_id" placeholder="הכנס מספר משתמש בעלים">
-			<div class="error-message" *ngIf="isFieldInvalid(organizationForm, 'owner_user_id')">
-				{{ getFieldError(organizationForm, 'owner_user_id', 'מספר משתמש בעלים') }}
-			</div>
-		</div>
+			<!-- שדה owner_user_id לא מוצג, מוזן אוטומטית לאחר יצירת יוזר -->
 		<div class="dialog-actions">
 			<button type="button" class="submit-button" [disabled]="organizationForm.invalid" (click)="nextStep()">הבא</button>
 			<button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">ביטול</button>

@@ -220,7 +220,7 @@ import { AddOrganizationsComponent } from './components/personal-area/admin/orga
     ChartBaseComponent,
     AdminHeaderComponent,
     OrganizationsTableComponent,
-  AddOrganizationsComponent,
+    AddOrganizationsComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [
