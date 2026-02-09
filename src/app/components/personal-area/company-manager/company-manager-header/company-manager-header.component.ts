@@ -48,18 +48,5 @@ import { Router } from '@angular/router';
       console.log('Logout');
       this.router.navigate(['/']);
     }
-    navigateToTherapists() {
-      this.router.navigate(['/secretary-dashboard/therapists']);
-    }
-
-    navigateToRooms() {
-      this.router.navigate(['/secretary-dashboard/rooms']);
-    }
-
-    // תקשורת עם ההורה
-    @Output() showDepartments = new EventEmitter<void>();
-
-    navigateToDepartments() {
-      this.showDepartments.emit();
-  }
+    // פונקציות ניווט ותקשורת עם ההורה הוסרו כי אינן בשימוש
 }

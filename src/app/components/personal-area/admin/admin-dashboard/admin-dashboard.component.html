@@ -1,1 +1,15 @@
-<app-admin-header></app-admin-header>
+<app-admin-header [selectedSection]="selectedSection" (sectionChange)="onSectionChange($event)"></app-admin-header>
+<div class="dashboard-content">
+	<ng-container>
+		<!-- <app-admin-home *ngIf="selectedSection === 'home'"></app-admin-home> -->
+		<app-patient-view *ngIf="selectedSection === 'patients'"></app-patient-view>
+		<!-- <app-employees-table *ngIf="selectedSection === 'employees'"></app-employees-table> -->
+		<app-departments-groups-view *ngIf="selectedSection === 'departments'"></app-departments-groups-view>
+		<app-rooms-view *ngIf="selectedSection === 'rooms'"></app-rooms-view>
+		<app-organizations-table *ngIf="selectedSection === 'organizations'"></app-organizations-table>
+		<app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
+		<!-- <app-admin-settings-view *ngIf="selectedSection === 'settings'"></app-admin-settings-view> -->
+		<app-tutorial-videos *ngIf="selectedSection === 'help'"></app-tutorial-videos>
+		<div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'employees' && selectedSection !== 'departments' && selectedSection !== 'rooms' && selectedSection !== 'organizations' && selectedSection !== 'reports' && selectedSection !== 'settings' && selectedSection !== 'help'">בחר פעולה</div>
+	</ng-container>
+</div>

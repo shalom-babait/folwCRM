@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,22 +12,24 @@ export class AdminHeaderComponent implements OnInit {
   user_name = '';
   userImage = '../../../assets/photoes/LOGO.png'; // תמונת ברירת מחדל
 
-  selectedSection: string | null = null;
-
-  showSection(section: string) {
-    this.selectedSection = this.selectedSection === section ? null : section;
-  }
+  @Input() selectedSection: string = 'home';
+  @Output() sectionChange = new EventEmitter<string>();
 
   constructor(private router: Router) {}
+
+  showSection(section: string) {
+    this.sectionChange.emit(section);
+  }
+
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
   }
+
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
   }
 
-  // סגירת התפריט בלחיצה מחוץ לאזור
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
