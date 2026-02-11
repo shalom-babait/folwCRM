@@ -107,6 +107,10 @@ export class LogInComponent {
           localStorage.setItem('user', JSON.stringify(res.user));
           this.user_name = res.user.user_name || '';
         }
+        // שמירת organization_id
+        if (res.organization_id) {
+          localStorage.setItem('organization_id', res.organization_id.toString());
+        }
         // שמירת מזהה לפי תפקיד
         if (res.therapist_id) {
 
@@ -174,6 +178,11 @@ export class LogInComponent {
       if (response.user) {
         localStorage.setItem('user', JSON.stringify(response.user));
         this.user_name = response.user.user_name || '';
+      }
+      
+      // שמירת organization_id
+      if (response.organization_id) {
+        localStorage.setItem('organization_id', response.organization_id.toString());
       }
       
       // שמירת מזהה לפי תפקיד
