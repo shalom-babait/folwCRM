@@ -1,5 +1,8 @@
 <div class="task-list">
   <div class="task-list-header">
+    <div *ngIf="isHomePage" class="open-tasks-title" style="font-size:1.3em; font-weight:bold; color:#1976d2; margin-bottom:10px;">
+      משימות פתוחות
+    </div>
     <button class="add-item-btn" (click)="showAddTaskCard()" *ngIf="!addMode" title="הוספת משימה">
       <mat-icon>add</mat-icon>
     </button>
@@ -53,6 +56,11 @@
 
   <div class="task-card" *ngFor="let task of tasks"
     [style.borderRightColor]="editTaskId === task.task_id && editTaskForm ? (editTaskForm.get('color')?.value || task.color || '#FFD54F') : (task.color || '#ccc')">
+
+    <!-- הצגת שם המטופל בראש כל משימה בדף הבית -->
+    <div *ngIf="isHomePage && task.patient_id && patientsMap[task.patient_id]" class="patient-name-header" style="font-weight:bold; color:#1976d2; margin-bottom:4px;">
+      {{ patientsMap[task.patient_id] }}
+    </div>
 
     <ng-container *ngIf="editTaskId === task.task_id && editTaskForm; else displayTask">
       <form [formGroup]="editTaskForm" (ngSubmit)="saveEditTask(task)">

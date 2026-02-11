@@ -11,7 +11,7 @@
     <app-appointment-list [therapistId]="therapistId ?? undefined" [statusFilter]="'מתוזמנת'"></app-appointment-list>
   </div>
   <div class="tasks-row">
-  <app-task-list [userId]="userId" [filterFn]="taskOpenStatusFilter"></app-task-list>
+  <app-task-list [userId]="userId" [filterFn]="taskOpenStatusFilter" [isHomePage]="true"></app-task-list>
   </div>
   <app-template-viewer [templateId]="7"></app-template-viewer>
 </div>
