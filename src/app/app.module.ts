@@ -126,7 +126,6 @@ import { ChartBaseComponent } from './components/personal-area/company-manager/r
 import { AdminHeaderComponent } from './components/personal-area/admin/admin-header/admin-header.component';
 import { OrganizationsTableComponent } from './components/personal-area/admin/organizations/organizations-table/organizations-table.component';
 import { AddOrganizationsComponent } from './components/personal-area/admin/organizations/add-organizations/add-organizations.component';
-import { AddOrganizationDialogComponent } from './components/personal-area/admin/organizations/add-organization-dialog/add-organization-dialog.component';
 
 @NgModule({
   declarations: [
@@ -221,8 +220,7 @@ import { AddOrganizationDialogComponent } from './components/personal-area/admin
     ChartBaseComponent,
     AdminHeaderComponent,
     OrganizationsTableComponent,
-  AddOrganizationsComponent,
-  AddOrganizationDialogComponent,
+    AddOrganizationsComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [

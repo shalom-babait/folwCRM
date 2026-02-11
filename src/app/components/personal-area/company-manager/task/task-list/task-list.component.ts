@@ -5,7 +5,8 @@ import { Task } from 'src/app/models/task.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TaskService } from 'src/app/services/task.service';
 import { Router } from '@angular/router';
-
+import { PatientStateService } from 'src/app/services/state/patient-state.service';
+import { PatientData } from 'src/app/models/patient.model';
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
@@ -15,6 +16,7 @@ export class TaskListComponent implements OnInit {
   @Input() patientId: number | null = null;
   @Input() userId: number | null = null;
   @Input() filterFn?: (task: Task) => boolean;
+  patientsMap: { [id: number]: string } = {};
   tasks: Task[] = [];
   addMode = false;
   addTaskForm: FormGroup;
@@ -24,27 +26,31 @@ export class TaskListComponent implements OnInit {
   selectedPatientId: number | null = null;
   editTaskId: number | null = null;
   editTaskForm: FormGroup | null = null;
-  isHomePage: boolean = false;
+  @Input() isHomePage: boolean = false;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private taskService: TaskService, private router: Router) {
-    this.addTaskForm = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      patient_id: [null],
-      created_by_user_id: [this.getCurrentUserId()],
-      status: ['open', Validators.required],
-      priority: ['medium'],
-      due_date: [null],
-      completed_at: [null],
-      color: ['#FFD54F'],
-      created_at: [this.getTodayDate()],
-      updated_at: [null],
-      assignmentTherapist: [true],
-      assignmentPatient: [false]
-    });
-    this.isHomePage = this.router.url.startsWith('/personal-area/therapist');
-
-  }
+constructor(
+  private fb: FormBuilder,
+  private dialog: MatDialog,
+  private taskService: TaskService,
+  private patientState: PatientStateService, // ← במקום PatientService
+  private router: Router
+) {
+  this.addTaskForm = this.fb.group({
+    title: ['', Validators.required],
+    description: [''],
+    patient_id: [null],
+    created_by_user_id: [this.getCurrentUserId()],
+    status: ['open', Validators.required],
+    priority: ['medium'],
+    due_date: [null],
+    completed_at: [null],
+    color: ['#FFD54F'],
+    created_at: [this.getTodayDate()],
+    updated_at: [null],
+    assignmentTherapist: [true],
+    assignmentPatient: [false]
+  });
+}
 
   private setTaskFlags(tasks: Task[]): Task[] {
     return tasks.map(task => {
@@ -72,51 +78,63 @@ export class TaskListComponent implements OnInit {
     this.editTaskForm.get('color')?.setValue(value);
   }
 
-  getAssignmentLabel(task: Task): string {
+getAssignmentLabel(task: Task): string {
   const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
   const hasPatient = task.assignments?.some(a => a.entity_type === 'patient') || task.assignmentPatient || false;
 
+  // הצגת שם המטופל מהסטייט בדף הבית
+  const patientName = this.isHomePage && task.patient_id && this.patientsMap[task.patient_id]
+    ? this.patientsMap[task.patient_id]
+    : '';
+
   if (hasTherapist && hasPatient) {
-    // משויך למטפל ולמטופל, אם יש שם מטופל בעמוד הבית – מציגים אותו
-    return this.isHomePage && task.patientName
-      ? `משויך למטפל ולמטופל (${task.patientName})`
+    return patientName
+      ? `משויך למטפל ולמטופל (${patientName})`
       : 'משויך למטפל ולמטופל';
   }
-
   if (hasTherapist) return 'משויך למטפל';
   if (hasPatient) {
-    return this.isHomePage && task.patientName
-      ? `משויך למטופל (${task.patientName})`
+    return patientName
+      ? `משויך למטופל (${patientName})`
       : 'משויך למטופל';
   }
-
   return '';
 }
 
-
-
-  ngOnInit(): void {
-    if (this.patientId) {
-      this.taskService.getTasksByPatientId(this.patientId).subscribe({
-        next: (tasks) => {
-          console.log('Tasks list from server:', tasks);
-          this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-        },
-        error: (err) => console.error('שגיאה בקבלת משימות', err)
-      });
-    } else if (this.userId) {
-      this.taskService.getTasksByUserId(this.userId).subscribe({
-        next: (tasks: Task[]) => {
-          console.log('Tasks list for user from server:', tasks); // ← זה מדפיס את כל המשימות
-          this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-          console.log('Tasks after filter:', this.tasks); // ← אופציונלי: אחרי סינון
-        },
-        error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
-      });
-    }
-
+ ngOnInit(): void {
+  if (this.patientId) {
+    this.taskService.getTasksByPatientId(this.patientId).subscribe({
+      next: (tasks) => {
+        console.log('Tasks list from server:', tasks);
+        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+      },
+      error: (err) => console.error('שגיאה בקבלת משימות', err)
+    });
+  } else if (this.userId) {
+    this.taskService.getTasksByUserId(this.userId).subscribe({
+      next: (tasks: Task[]) => {
+        console.log('Tasks list for user from server:', tasks);
+        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+        console.log('Tasks after filter:', this.tasks);
+      },
+      error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
+    });
   }
 
+  // טעינת שמות המטופלים מהסטייט לדף הבית של מטפל
+  if (this.isHomePage) {
+    this.patientState.patients$.subscribe((patients: PatientData[]) => {
+      this.patientsMap = {};
+      for (const patient of patients) {
+        if (patient.patient_id !== undefined && patient.person) {
+          const first = patient.person.first_name || '';
+          const last = patient.person.last_name || '';
+          this.patientsMap[patient.patient_id] = (first + (last ? ' ' + last : '')).trim();
+        }
+      }
+    });
+  }
+}
   showAddTaskCard(): void {
     this.addMode = true;
     this.assignmentTherapist = true;

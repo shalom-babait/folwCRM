@@ -1,1 +1,144 @@
-<p>add-organizations works!</p>
+<div class="create-treatment-dialog" dir="rtl">
+	<h2 class="dialog-title">הוספת ארגון חדש</h2>
+		<div class="wizard-tabs">
+			<div class="wizard-tab" [class.active]="step === 1" [class.completed]="step > 1" (click)="step = 1">
+				<span>ארגון</span>
+			</div>
+			<div class="wizard-tab" [class.active]="step === 2" [class.completed]="step > 2" [class.disabled]="step < 2" (click)="step >= 2 && (step = 2)">
+				<span>איש קשר</span>
+			</div>
+			<div class="wizard-tab" [class.active]="step === 3" [class.disabled]="step < 3" (click)="step >= 3 && (step = 3)">
+				<span>יוזר</span>
+			</div>
+		</div>
+
+	<form class="input-dialog" *ngIf="step === 1" [formGroup]="organizationForm">
+		<div class="form-field">
+			<label for="organization_name">שם ארגון *</label>
+			<input type="text" id="organization_name" formControlName="organization_name" placeholder="הכנס שם ארגון">
+			<div class="error-message" *ngIf="isFieldInvalid(organizationForm, 'organization_name')">
+				{{ getFieldError(organizationForm, 'organization_name', 'שם ארגון') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="organization_type">סוג ארגון *</label>
+			<select id="organization_type" formControlName="organization_type">
+				<option value="company">חברה</option>
+				<option value="clinic">מרפאה</option>
+				<option value="personal">עצמאי</option>
+			</select>
+			<div class="error-message" *ngIf="isFieldInvalid(organizationForm, 'organization_type')">
+				{{ getFieldError(organizationForm, 'organization_type', 'סוג ארגון') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="status">סטטוס *</label>
+			<select id="status" formControlName="status">
+				<option value="active">פעיל</option>
+				<option value="inactive">לא פעיל</option>
+			</select>
+			<div class="error-message" *ngIf="isFieldInvalid(organizationForm, 'status')">
+				{{ getFieldError(organizationForm, 'status', 'סטטוס') }}
+			</div>
+		</div>
+			<!-- שדה owner_user_id לא מוצג, מוזן אוטומטית לאחר יצירת יוזר -->
+		<div class="dialog-actions">
+			<button type="button" class="submit-button" [disabled]="organizationForm.invalid" (click)="nextStep()">הבא</button>
+			<button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">ביטול</button>
+		</div>
+	</form>
+
+		<form class="input-dialog" *ngIf="step === 2" [formGroup]="personForm">
+			<div class="form-field">
+				<label for="first_name">שם פרטי *</label>
+				<input type="text" id="first_name" formControlName="first_name" placeholder="הכנס שם פרטי">
+				<div class="error-message" *ngIf="isFieldInvalid(personForm, 'first_name')">
+					{{ getFieldError(personForm, 'first_name', 'שם פרטי') }}
+				</div>
+			</div>
+			<div class="form-field">
+				<label for="last_name">שם משפחה *</label>
+				<input type="text" id="last_name" formControlName="last_name" placeholder="הכנס שם משפחה">
+				<div class="error-message" *ngIf="isFieldInvalid(personForm, 'last_name')">
+					{{ getFieldError(personForm, 'last_name', 'שם משפחה') }}
+				</div>
+			</div>
+			<div class="form-field">
+				<label for="teudat_zehut">תעודת זהות</label>
+				<input type="text" id="teudat_zehut" formControlName="teudat_zehut" placeholder="הכנס תעודת זהות">
+			</div>
+			<div class="form-field">
+				<label for="phone">טלפון *</label>
+				<input type="text" id="phone" formControlName="phone" placeholder="הכנס טלפון">
+				<div class="error-message" *ngIf="isFieldInvalid(personForm, 'phone')">
+					{{ getFieldError(personForm, 'phone', 'טלפון') }}
+				</div>
+			</div>
+			<div class="form-field">
+				<label for="city">עיר</label>
+				<input type="text" id="city" formControlName="city" placeholder="הכנס עיר">
+			</div>
+			<div class="form-field">
+				<label for="address">כתובת</label>
+				<input type="text" id="address" formControlName="address" placeholder="הכנס כתובת">
+			</div>
+			<div class="form-field">
+				<label for="birth_date">תאריך לידה</label>
+				<input type="date" id="birth_date" formControlName="birth_date">
+			</div>
+			<div class="form-field">
+				<label for="gender">מגדר</label>
+				<select id="gender" formControlName="gender">
+					<option value="">בחר מגדר</option>
+					<option value="male">זכר</option>
+					<option value="female">נקבה</option>
+					<option value="other">אחר</option>
+				</select>
+			</div>
+			<div class="form-field">
+				<label for="email">אימייל *</label>
+				<input type="email" id="email" formControlName="email" placeholder="הכנס אימייל">
+				<div class="error-message" *ngIf="isFieldInvalid(personForm, 'email')">
+					{{ getFieldError(personForm, 'email', 'אימייל') }}
+				</div>
+			</div>
+			<div class="dialog-actions">
+				<button type="button" class="submit-button" [disabled]="personForm.invalid" (click)="nextStep()">הבא</button>
+				<button type="button" class="cancel-button" (click)="prevStep()">חזור</button>
+			</div>
+		</form>
+
+	<form class="input-dialog" *ngIf="step === 3" [formGroup]="userForm">
+		<div class="form-field">
+			<label for="user_name">שם משתמש *</label>
+			<input type="text" id="user_name" formControlName="user_name" placeholder="הכנס שם משתמש">
+			<div class="error-message" *ngIf="isFieldInvalid(userForm, 'user_name')">
+				{{ getFieldError(userForm, 'user_name', 'שם משתמש') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="password">סיסמה *</label>
+			<input type="password" id="password" formControlName="password" placeholder="הכנס סיסמה">
+			<div class="error-message" *ngIf="isFieldInvalid(userForm, 'password')">
+				{{ getFieldError(userForm, 'password', 'סיסמה') }}
+			</div>
+		</div>
+		<div class="form-field">
+			<label for="role">תפקיד *</label>
+			<select id="role" formControlName="role">
+				<option value="secretary">מזכירה</option>
+				<option value="manager">מנהל</option>
+				<option value="therapist">מטפל</option>
+				<option value="patient">מטופל</option>
+				<option value="other">אחר</option>
+			</select>
+			<div class="error-message" *ngIf="isFieldInvalid(userForm, 'role')">
+				{{ getFieldError(userForm, 'role', 'תפקיד') }}
+			</div>
+		</div>
+		<div class="dialog-actions">
+			<button type="button" class="submit-button" [disabled]="userForm.invalid || isSubmitting" (click)="onSave()">שמור</button>
+			<button type="button" class="cancel-button" (click)="prevStep()">חזור</button>
+		</div>
+	</form>
+</div>

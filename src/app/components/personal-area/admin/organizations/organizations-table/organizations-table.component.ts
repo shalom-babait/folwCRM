@@ -1,19 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddOrganizationDialogComponent } from '../add-organization-dialog/add-organization-dialog.component';
-
-export interface Organization {
-  organization_id: number;
-  organization_name: string;
-  owner_user_id: number;
-  organization_type: 'company' | 'clinic' | 'personal';
-  contact_name: string;
-  contact_phone: string;
-  contact_email: string;
-  status: 'active' | 'inactive';
-  created_at: string;
-  updated_at: string;
-}
+import { Organization } from '../../../../../models/organization.model';
+import { OrganizationsService } from '../../../../../services/organizations.service';
+import { AddOrganizationsComponent } from '../add-organizations/add-organizations.component';
 
 @Component({
   selector: 'app-organizations-table',
@@ -25,41 +14,42 @@ export interface Organization {
 export class OrganizationsTableComponent implements OnInit {
   organizations: Organization[] = [];
   searchTerm: string = '';
+  isLoading: boolean = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private organizationsService: OrganizationsService) {}
 
   ngOnInit(): void {
     this.loadOrganizations();
   }
 
   loadOrganizations(): void {
-    // כאן יש לטעון את הארגונים מהשרת (להחליף ב-API אמיתי)
-    // דמו:
-    this.organizations = [
-      {
-        organization_id: 1,
-        organization_name: 'ארגון א',
-        owner_user_id: 2,
-        organization_type: 'company',
-        contact_name: 'דני כהן',
-        contact_phone: '050-1234567',
-        contact_email: 'dani@example.com',
-        status: 'active',
-        created_at: '2026-01-01T10:00:00Z',
-        updated_at: '2026-01-01T10:00:00Z'
+    this.isLoading = true;
+    this.organizationsService.getOrganizations().subscribe({
+      next: orgs => {
+        console.log('ארגונים שהתקבלו מהשרת:', orgs);
+  this.organizations = orgs;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
-    ];
+    });
   }
 
   get filteredOrganizations(): Organization[] {
-    if (!this.searchTerm.trim()) return this.organizations;
-    return this.organizations.filter(org =>
-      org.organization_name.includes(this.searchTerm)
-    );
+    let result: Organization[];
+    if (!this.searchTerm.trim()) {
+      result = this.organizations;
+    } else {
+      result = this.organizations.filter(org =>
+        org.organization_name.includes(this.searchTerm)
+      );
+    }
+    return result;
   }
 
   openCreateOrganizationDialog(): void {
-    const dialogRef = this.dialog.open(AddOrganizationDialogComponent, {
+    const dialogRef = this.dialog.open(AddOrganizationsComponent, {
       width: '500px',
       data: {}
     });

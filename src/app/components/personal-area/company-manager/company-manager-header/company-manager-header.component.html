@@ -45,7 +45,7 @@
         </button>
       </li>
       <li>
-        <button (click)="showSection('departments'); navigateToDepartments()">
+  <button (click)="showSection('departments')">
           <span class="menu-vertical">
             <mat-icon class="menu-icon">apartment</mat-icon>
             <span>מחלקות</span>
@@ -107,25 +107,3 @@
     </div>
   </div>
 </header>
-<div class="dynamic-section-container" *ngIf="selectedSection">
-  <ng-container [ngSwitch]="selectedSection">
-    <ng-container *ngSwitchCase="'prospects'">
-      <app-prospect-view></app-prospect-view>
-    </ng-container>
-    <ng-container *ngSwitchCase="'patients'">
-      <app-patient-view></app-patient-view>
-    </ng-container>
-
-    <!-- דוגמאות נוספות, ניתן להוסיף קומפוננטות נוספות -->
-    <ng-container *ngSwitchCase="'employees'">
-      <!-- <app-employee-table></app-employee-table> -->
-    </ng-container>
-    <ng-container *ngSwitchCase="'departments'">
-      <app-departments-groups-view></app-departments-groups-view>
-    </ng-container>
-    <ng-container *ngSwitchCase="'rooms'">
-      <app-rooms-view></app-rooms-view>
-    </ng-container>
-    <!-- אפשר להמשיך להוסיף cases נוספים -->
-  </ng-container>
-</div>
