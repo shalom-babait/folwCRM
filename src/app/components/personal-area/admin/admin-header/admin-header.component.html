@@ -20,14 +20,6 @@
           </span>
         </button>
       </li>
-      <!-- <li>
-        <button (click)="showSection('requests')">
-          <span class="menu-vertical">
-            <mat-icon class="menu-icon">assignment</mat-icon>
-            <span>רשימת פניות</span>
-          </span>
-        </button>
-      </li> -->
       <li>
         <button (click)="showSection('patients')">
           <span class="menu-vertical">
@@ -37,15 +29,7 @@
         </button>
       </li>
       <li>
-        <button (click)="showSection('prospects')">
-          <span class="menu-vertical">
-            <mat-icon class="menu-icon">person_search</mat-icon>
-            <span>לקוחות</span>
-          </span>
-        </button>
-      </li>
-      <li>
-  <button (click)="showSection('departments')">
+        <button (click)="showSection('departments')">
           <span class="menu-vertical">
             <mat-icon class="menu-icon">apartment</mat-icon>
             <span>מחלקות</span>
@@ -61,18 +45,18 @@
         </button>
       </li>
       <li>
-        <button routerLink="contact">
-          <span class="menu-vertical">
-            <mat-icon class="menu-icon">mail</mat-icon>
-            <span>דואר</span>
-          </span>
-        </button>
-      </li>
-      <li>
         <button (click)="showSection('reports')">
           <span class="menu-vertical">
             <mat-icon class="menu-icon">bar_chart</mat-icon>
             <span>דוחות</span>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button (click)="showSection('organizations')">
+          <span class="menu-vertical">
+            <mat-icon class="menu-icon">business</mat-icon>
+            <span>ארגונים</span>
           </span>
         </button>
       </li>
@@ -90,7 +74,7 @@
         <div class="user-name">
           {{ user_name }}
           <span class="user-role-separator">| </span>
-          <span class="user-role">מנהל חברה</span>
+          <span class="user-role">אדמין</span>
         </div>
       </div>
       <div class="menu-divider"></div>

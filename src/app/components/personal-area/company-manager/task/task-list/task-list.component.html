@@ -1,65 +1,74 @@
 <div class="task-list">
   <div class="task-list-header">
-  <button class="add-item-btn" (click)="showAddTaskCard()" *ngIf="!addMode" title="הוספת משימה">
-    <mat-icon>add</mat-icon>
-  </button>
-  <div *ngIf="tasks.length === 0 && !addMode" class="no-tasks-message">
-    <p>אין משימות להצגה</p>
-    <p>לחץ על כפתור הוספה כדי להוסיף משימה חדשה</p>
-  </div>
-  <!-- כרטיס הוספת משימה -->
-  <div class="task-card add-task-card" *ngIf="addMode" [formGroup]="addTaskForm" [style.borderRightColor]="addTaskForm.get('color')?.value || '#FFD54F'">
-    <div class="task-header">
-      <input class="task-title-input" formControlName="title" placeholder="כותרת משימה *" />
-      <div class="task-actions-group">
-          <span class="created-at-label">נוצר בתאריך: {{ formatDateDDMMYYYY(addTaskForm.get('created_at')?.value) }}</span>
-  <label for="add-status">סטטוס</label>
-        <select id="add-status" class="custom-select" formControlName="status">
-          <option value="open">פתוחה</option>
-          <option value="in_progress">בטיפול</option>
-          <option value="completed">הושלמה</option>
-          <option value="cancelled">בוטלה</option>
+    <div *ngIf="isHomePage" class="open-tasks-title" style="font-size:1.3em; font-weight:bold; color:#1976d2; margin-bottom:10px;">
+      משימות פתוחות
+    </div>
+    <button class="add-item-btn" (click)="showAddTaskCard()" *ngIf="!addMode" title="הוספת משימה">
+      <mat-icon>add</mat-icon>
+    </button>
+    <div *ngIf="tasks.length === 0 && !addMode" class="no-tasks-message">
+      <p>אין משימות להצגה</p>
+      <p>לחץ על כפתור הוספה כדי להוסיף משימה חדשה</p>
+    </div>
+    <!-- כרטיס הוספת משימה -->
+    <div class="task-card add-task-card" *ngIf="addMode" [formGroup]="addTaskForm"
+      [style.borderRightColor]="addTaskForm.get('color')?.value || '#FFD54F'">
+      <div class="task-header">
+        <input class="task-title-input" formControlName="title" placeholder="כותרת משימה *" />
+        <div class="task-actions-group">
+          <span class="created-at-label">נוצר בתאריך: {{ formatDateDDMMYYYY(addTaskForm.get('created_at')?.value)
+            }}</span>
+          <label for="add-status">סטטוס</label>
+          <select id="add-status" class="custom-select" formControlName="status">
+            <option value="open">פתוחה</option>
+            <option value="in_progress">בטיפול</option>
+            <option value="completed">הושלמה</option>
+            <option value="cancelled">בוטלה</option>
+          </select>
+        </div>
+      </div>
+      <textarea class="description-input" formControlName="description" placeholder="תיאור משימה"></textarea>
+      <div class="task-meta">
+        <label for="add-due-date">תאריך יעד</label>
+        <input id="add-due-date" type="date" formControlName="due_date" />
+        <label for="add-priority">עדיפות</label>
+        <select id="add-priority" class="custom-select" formControlName="priority">
+          <option value="low">נמוכה</option>
+          <option value="medium">בינונית</option>
+          <option value="high">גבוהה</option>
         </select>
+        <input type="color" formControlName="color" title="בחר צבע למשימה" class="task-color-input" />
+      </div>
+      <!-- שיוך משימה -->
+      <div class="task-assignment-fields">
+        <label>שיוך משימה</label>
+        <mat-checkbox formControlName="assignmentTherapist">מטפל</mat-checkbox>
+        <mat-checkbox formControlName="assignmentPatient">מטופל</mat-checkbox>
+      </div>
+      <div class="add-task-actions">
+        <button mat-stroked-button color="primary" (click)="saveNewTask()"
+          [disabled]="addTaskForm.invalid">שמור</button>
+        <button mat-button (click)="cancelAddTask()">ביטול</button>
       </div>
     </div>
-    <textarea class="description-input" formControlName="description" placeholder="תיאור משימה"></textarea>
-    <div class="task-meta">
-      <label for="add-due-date">תאריך יעד</label>
-      <input id="add-due-date" type="date" formControlName="due_date" />
-      <label for="add-priority">עדיפות</label>
-      <select id="add-priority" class="custom-select" formControlName="priority">
-        <option value="low">נמוכה</option>
-        <option value="medium">בינונית</option>
-        <option value="high">גבוהה</option>
-      </select>
-      <input type="color" formControlName="color" title="בחר צבע למשימה" class="task-color-input" />
-    </div>
-    <!-- שיוך משימה -->
-    <div class="task-assignment-fields">
-      <label>שיוך משימה</label>
-      <mat-checkbox formControlName="assignmentTherapist">מטפל</mat-checkbox>
-      <mat-checkbox formControlName="assignmentPatient">מטופל</mat-checkbox>
-    </div>
-    <div class="add-task-actions">
-      <button mat-stroked-button color="primary" (click)="saveNewTask()" [disabled]="addTaskForm.invalid">שמור</button>
-      <button mat-button (click)="cancelAddTask()">ביטול</button>
-    </div>
-  </div>
   </div>
 
 
-  <div
-    class="task-card"
-    *ngFor="let task of tasks"
-    [style.borderRightColor]="editTaskId === task.task_id && editTaskForm ? (editTaskForm.get('color')?.value || task.color || '#FFD54F') : (task.color || '#ccc')"
-  >
+  <div class="task-card" *ngFor="let task of tasks"
+    [style.borderRightColor]="editTaskId === task.task_id && editTaskForm ? (editTaskForm.get('color')?.value || task.color || '#FFD54F') : (task.color || '#ccc')">
+
+    <!-- הצגת שם המטופל בראש כל משימה בדף הבית -->
+    <div *ngIf="isHomePage && task.patient_id && patientsMap[task.patient_id]" class="patient-name-header" style="font-weight:bold; color:#1976d2; margin-bottom:4px;">
+      {{ patientsMap[task.patient_id] }}
+    </div>
 
     <ng-container *ngIf="editTaskId === task.task_id && editTaskForm; else displayTask">
       <form [formGroup]="editTaskForm" (ngSubmit)="saveEditTask(task)">
         <div class="task-header">
           <input class="task-title-input" formControlName="title" placeholder="כותרת משימה *" />
           <div class="task-actions-group">
-            <span class="created-at-label">נוצר בתאריך: {{ formatDateDDMMYYYY(editTaskForm.get('created_at')?.value) }}</span>
+            <span class="created-at-label">נוצר בתאריך: {{ formatDateDDMMYYYY(editTaskForm.get('created_at')?.value)
+              }}</span>
             <label for="edit-status-{{task.task_id}}">סטטוס</label>
             <select id="edit-status-{{task.task_id}}" class="custom-select" formControlName="status">
               <option value="open">פתוחה</option>
@@ -121,15 +130,12 @@
         <span *ngIf="task.priority">
           עדיפות: {{ task.priority }}
         </span>
-        <span *ngIf="task.assignments && task.assignments.length > 0">
-          <ng-container *ngIf="task.assignments.length === 1">
-            <ng-container *ngIf="task.assignments[0].entity_type === 'therapist'">משויך למטפל</ng-container>
-            <ng-container *ngIf="task.assignments[0].entity_type === 'patient'">משויך למטופל</ng-container>
-          </ng-container>
-          <ng-container *ngIf="task.assignments.length > 1">
-            משויך למטפל ולמטופל
-          </ng-container>
-        </span>
+        
+       <span>{{ getAssignmentLabel(task) }}</span>
+
+
+
+
       </div>
     </ng-template>
   </div>

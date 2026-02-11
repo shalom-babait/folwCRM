@@ -16,19 +16,35 @@
             <span class="eye-icon" (click)="togglePasswordVisibility()" [class.visible]="showPassword"></span>
         </div>
     <button class="submitButton" (click)="onLogin()" [disabled]="!user_name || !password">כניסה</button>
-        <a class="subtitle" (click)="showSendingPasswordToMail()" style="color: #3F6B60 ;">שכחתי שם משתמש/סיסמה</a>
+        <a class="subtitle" (click)="showSendingPasswordToMail()" style="color: #3F6B60; cursor: pointer;">שכחתי סיסמה</a>
+        <a class="subtitle" (click)="showChangePassword()" style="color: #3F6B60; cursor: pointer; margin-right: 20px;">החלפת סיסמה</a>
     </div>
     <div *ngIf="SendingPasswordToMail">
         <div class="showSendingPasswordToMail">
             <label class="dialogTitle">שחזור סיסמה</label>
-            <input class="login-input" type="email" name="email" placeholder="מייל" required>
-            <button class="submitButton SubmitNewPasswordButton" (click)="showPasswordHasBeenSent()">שלח למייל סיסימה חדשה</button>
+            <input class="login-input" 
+                   type="text" 
+                   name="resetUserName" 
+                   placeholder="שם משתמש" 
+                   required 
+                   [(ngModel)]="resetUserName">
+            <button class="submitButton SubmitNewPasswordButton" 
+                    (click)="sendResetPassword()" 
+                    [disabled]="!resetUserName || isLoadingReset">
+                {{ isLoadingReset ? 'שולח...' : 'שלח סיסמה חדשה למייל' }}
+            </button>
         </div>
     </div>
     <div *ngIf="passwordHasBeenSent">
         <div class="passwordHasBeenSent">
             <label class="dialogTitle">!הסיסמה נשלחה בהצלחה</label>
-            <button class="submitButton SubmitNewPasswordButton" (click)="showForgotPassword()">לשחזור סיסמה</button>
+            <p style="font-size: 18px; color: #e74c3c; font-weight: bold; margin: 10px 0;">
+                ⏱️ זמן נותר: {{ countdown }}
+            </p>
+            <p style="font-size: 14px; color: #666; margin: 10px 0;">
+                סיסמה זמנית נשלחה למייל שלך. השתמש בה תוך 5 דקות!
+            </p>
+            <button class="submitButton SubmitNewPasswordButton" (click)="showConnectionForm()">חזור להתחברות</button>
         </div>
     </div>
     <div *ngIf="forgatPassword">
@@ -38,6 +54,47 @@
             <input class="login-input" type="password" name="password" placeholder="בחר סיסמה חדשה" required>
             <input class="login-input" type="password" name="password" placeholder="אימות סיסמה חדשה" required>
             <button class="submitButton">כניסה</button>
+        </div>
+    </div>
+    
+    <!-- דיאלוג החלפת סיסמה -->
+    <div *ngIf="changePasswordDisplayed">
+        <div class="showSendingPasswordToMail">
+            <label class="dialogTitle">החלפת סיסמה</label>
+            <input class="login-input" 
+                   type="text" 
+                   name="changeUserName" 
+                   placeholder="שם משתמש" 
+                   required 
+                   [(ngModel)]="changePasswordData.user_name">
+            <input class="login-input" 
+                   type="password" 
+                   name="oldPassword" 
+                   placeholder="סיסמה ישנה" 
+                   required 
+                   [(ngModel)]="changePasswordData.oldPassword">
+            <input class="login-input" 
+                   type="password" 
+                   name="newPassword" 
+                   placeholder="סיסמה חדשה" 
+                   required 
+                   [(ngModel)]="changePasswordData.newPassword">
+            <input class="login-input" 
+                   type="password" 
+                   name="confirmPassword" 
+                   placeholder="אימות סיסמה חדשה" 
+                   required 
+                   [(ngModel)]="changePasswordData.confirmPassword">
+            <button class="submitButton SubmitNewPasswordButton" 
+                    (click)="changePassword()" 
+                    [disabled]="isLoadingChange || !changePasswordData.user_name || !changePasswordData.oldPassword || !changePasswordData.newPassword || !changePasswordData.confirmPassword">
+                {{ isLoadingChange ? 'משנה...' : 'שנה סיסמה' }}
+            </button>
+            <button class="submitButton" 
+                    (click)="showConnectionForm()" 
+                    style="margin-top: 10px; background-color: #999;">
+                ביטול
+            </button>
         </div>
     </div>
   </div>

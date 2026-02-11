@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
+  selectedSection: string = 'home';
 
+  onSectionChange(section: string) {
+    this.selectedSection = section;
+  }
 }

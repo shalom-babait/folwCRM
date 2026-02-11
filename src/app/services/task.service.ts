@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class TaskService {
   getTasksByUserId(user_id: number): Observable<Task[]> {
+    console.log(user_id , "user_id in service");
     return this.http.get<Task[]>(`${this.apiUrl}/by-user/${user_id}`);
   }
   private apiUrl = `${environment.apiUrl}/tasks`;

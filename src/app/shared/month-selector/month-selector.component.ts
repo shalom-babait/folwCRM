@@ -1,5 +1,8 @@
+
+
 import { Component } from '@angular/core';
 import { IncomeFilterService } from 'src/app/services/state/income-filter.service';
+import { MONTH_LABELS } from 'src/app/shared/constants/month-labels';
 
 @Component({
   selector: 'app-month-selector',
@@ -8,66 +11,67 @@ import { IncomeFilterService } from 'src/app/services/state/income-filter.servic
 })
 export class MonthSelectorComponent {
   constructor(private incomeFilterService: IncomeFilterService) {}
-  getSelectedMonthsLabel(): string {
-    return this.selectedMonthsCopy.map(i => this.months[i]?.label).filter(Boolean).join(', ');
-  }
+
   years: number[] = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
-  selectedYear: number = new Date().getFullYear();
-  months: { label: string, hasData: boolean }[] = [
-    { label: 'ינואר', hasData: true },
-    { label: 'פברואר', hasData: true },
-    { label: 'מרץ', hasData: true },
-    { label: 'אפריל', hasData: true },
-    { label: 'מאי', hasData: true },
-    { label: 'יוני', hasData: true },
-    { label: 'יולי', hasData: true },
-    { label: 'אוגוסט', hasData: true },
-    { label: 'ספטמבר', hasData: true },
-    { label: 'אוקטובר', hasData: true },
-    { label: 'נובמבר', hasData: true },
-    { label: 'דצמבר', hasData: true }
+  months: { label: string, hasData: boolean }[] = MONTH_LABELS.map(label => ({ label, hasData: true }));
+
+  // כל שורה: { year: number, months: number[] }
+
+  selections: Array<{ year: number, months: number[] }> = [
+    { year: new Date().getFullYear(), months: [new Date().getMonth()] }
   ];
 
-  // Removed drag selection logic
-  selectedMonthsCopy: number[] = [];
-
   ngOnInit() {
-    this.selectedMonthsCopy = [];
     this.updateFilter();
   }
 
-  selectAllMonths() {
-    this.selectedMonthsCopy = this.months.map((_, i) => i).filter(i => this.months[i].hasData);
+  addYearSelection() {
+    // ברירת מחדל: שנה אחרונה שעדיין לא נבחרה, או השנה הנוכחית
+    const usedYears = this.selections.map(sel => sel.year);
+    const available = this.years.find(y => !usedYears.includes(y)) ?? this.years[0];
+    this.selections.push({ year: available, months: [] });
     this.updateFilter();
   }
 
-  resetMonths() {
-    this.selectedMonthsCopy = [];
+  removeYearSelection(idx: number) {
+    this.selections.splice(idx, 1);
     this.updateFilter();
   }
 
-  onYearChange(event: any) {
-    this.selectedYear = Number(event.target.value);
-    this.selectedMonthsCopy = [];
+  onYearChange(idx: number, event: any) {
+    const year = Number(event.target.value);
+    this.selections[idx].year = year;
+    this.selections[idx].months = [];
     this.updateFilter();
   }
 
-  onMonthClick(index: number, event: MouseEvent) {
-    if (!this.months[index].hasData) return;
-    if (this.selectedMonthsCopy.includes(index)) {
-      this.selectedMonthsCopy = this.selectedMonthsCopy.filter(i => i !== index);
+  onMonthClick(idx: number, monthIdx: number) {
+    const sel = this.selections[idx];
+    if (!this.months[monthIdx].hasData) return;
+    if (sel.months.includes(monthIdx)) {
+      sel.months = sel.months.filter(i => i !== monthIdx);
     } else {
-      this.selectedMonthsCopy = [...this.selectedMonthsCopy, index];
+      sel.months = [...sel.months, monthIdx];
     }
     this.updateFilter();
   }
 
-  updateFilter() {
-    this.incomeFilterService.setFilter({
-      year: this.selectedYear,
-      months: [...this.selectedMonthsCopy]
-    });
+  selectAllMonths(idx: number) {
+    this.selections[idx].months = this.months.map((_, i) => i).filter(i => this.months[i].hasData);
+    this.updateFilter();
   }
 
-  // Removed drag selection logic
+  resetMonths(idx: number) {
+    this.selections[idx].months = [];
+    this.updateFilter();
+  }
+
+  getSelectedMonthsLabel(idx: number): string {
+    return this.selections[idx].months.map(i => this.months[i]?.label).filter(Boolean).join(', ');
+  }
+
+  updateFilter() {
+    // שלח מערך של {year, months}
+    this.incomeFilterService.setFilter(this.selections.map(sel => ({ year: sel.year, months: [...sel.months] })));
+  }
 }

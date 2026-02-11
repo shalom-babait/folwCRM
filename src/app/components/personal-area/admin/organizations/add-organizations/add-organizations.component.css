@@ -1,0 +1,46 @@
+/* טאבים wizard דמוי header-tabs */
+.wizard-tabs {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #2A5448;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.wizard-tab {
+	flex: 1;
+	text-align: center;
+	padding: 1rem 0.5rem;
+	color: rgba(255,255,255,0.7);
+	font-weight: 600;
+	font-size: 1.1rem;
+	cursor: pointer;
+	position: relative;
+	transition: all 0.3s;
+	border-bottom: 3px solid transparent;
+}
+.wizard-tab.active {
+	color: #fff;
+	border-bottom: 3px solid #fff;
+	background: rgba(255,255,255,0.08);
+	z-index: 2;
+}
+.wizard-tab.completed {
+	color: #fff;
+	background: rgba(255,255,255,0.04);
+}
+.wizard-tab.disabled {
+	color: rgba(255,255,255,0.3);
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+.wizard-tab:not(:last-child)::after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 2px;
+	height: 60%;
+	background: rgba(255,255,255,0.15);
+	border-radius: 2px;
+}

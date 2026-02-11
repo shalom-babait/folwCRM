@@ -26,16 +26,6 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
       const therapistIdStr = localStorage.getItem('therapist_id');
       if (therapistIdStr) {
         therapistIdToUse = Number(therapistIdStr);
-      } else {
-        const therapistObjStr = localStorage.getItem('therapist');
-        if (therapistObjStr) {
-          try {
-            const therapistObj = JSON.parse(therapistObjStr);
-            if (therapistObj && therapistObj.therapist_id) {
-              therapistIdToUse = Number(therapistObj.therapist_id);
-            }
-          } catch { }
-        }
       }
     }
     if (therapistIdToUse) {

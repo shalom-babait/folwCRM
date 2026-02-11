@@ -1,4 +1,3 @@
-
 import { Component, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -6,7 +5,9 @@ import { PaymentService } from 'src/app/services/payments.service';
 import { IncomeFilterService } from 'src/app/services/state/income-filter.service';
 import { ReportsService } from 'src/app/services/reports.service';
 import { ChartConfiguration, ChartType } from 'chart.js';
+import { MONTH_LABELS } from 'src/app/shared/constants/month-labels';
 import { IncomeRow } from 'src/app/models/reports.model';
+
 @Component({
   selector: 'app-income-report',
   templateUrl: './income-report.component.html',
@@ -18,7 +19,12 @@ export class IncomeReportComponent implements OnInit {
    */
   incomeByMonths: Array<{ month: number, total: number, clients: Array<{ person_id: number, client_name: string, total: number }> }> = [];
   sendFilterToServer(year: number, months: number[]) {
-    this.reportsService.getIncomeByMonths(year, months, this.therapistId).subscribe({
+    // ודא שהערכים הם מספרים
+    const y = Number(year);
+    const m = Array.isArray(months) ? months.map(Number).filter(v => !isNaN(v)) : [];
+    const body = { year: y, months: m, therapistId: this.therapistId };
+    // console.log('נשלח לשרת (income-by-months):', body);
+    this.reportsService.getIncomeByMonths(y, m, this.therapistId).subscribe({
       next: (response) => {
         if (response && response.success && Array.isArray(response.data)) {
           this.incomeByMonths = response.data;
@@ -36,6 +42,7 @@ export class IncomeReportComponent implements OnInit {
       }
     });
   }
+
   getSelectedMonthsLabel(): string {
     return this.selectedMonths.map(i => this.months[i]?.label).filter(label => !!label).join(', ');
   }
@@ -51,21 +58,19 @@ export class IncomeReportComponent implements OnInit {
     this.years = Array.from({ length: 5 }, (_, i) => currentYear - i);
     this.selectedYear = currentYear;
     // Initialize months
-    this.months = [
-      { label: 'ינואר', hasData: true },
-      { label: 'פברואר', hasData: true },
-      { label: 'מרץ', hasData: true },
-      { label: 'אפריל', hasData: true },
-      { label: 'מאי', hasData: true },
-      { label: 'יוני', hasData: true },
-      { label: 'יולי', hasData: true },
-      { label: 'אוגוסט', hasData: true },
-      { label: 'ספטמבר', hasData: true },
-      { label: 'אוקטובר', hasData: true },
-      { label: 'נובמבר', hasData: true },
-      { label: 'דצמבר', hasData: true }
-    ];
-  // Removed reset of selectedMonths to allow persistent selection
+    this.months = MONTH_LABELS.map(label => ({ label, hasData: true }));
+
+
+    // בחירת החודש הנוכחי כברירת מחדל
+    const currentMonthIndex = new Date().getMonth(); // 0-based
+    this.selectedMonths = [currentMonthIndex];
+
+    // שליחה אוטומטית לשרת עם השנה והחודש הנוכחיים והtherapistId
+    setTimeout(() => {
+      if (this.therapistId) {
+        this.sendFilterToServer(this.selectedYear, this.selectedMonths);
+      }
+    }, 0);
 
     // Debounce for slider changes
     this.sliderChange$.pipe(debounceTime(400)).subscribe(({start, end}) => {
@@ -74,7 +79,6 @@ export class IncomeReportComponent implements OnInit {
       this.loadReport();
     });
     // נטען את המזהה מה-localStorage אם לא הועבר מבחוץ
-      // Subscribe to filter changes
     if (!this.therapistId) {
       const storedId = localStorage.getItem('therapist_id');
       if (storedId) {
@@ -82,12 +86,14 @@ export class IncomeReportComponent implements OnInit {
       }
     }
     this.loadReport(); // Call loadReport without filter values
-    this.filterSubscription = this.incomeFilterService.filter$.subscribe(filter => {
-      if (filter) {
-  this.selectedYear = filter.year;
-  this.selectedMonths = filter.months;
-  this.sendFilterToServer(filter.year, filter.months);
-  this.loadReport();
+    this.filterSubscription = this.incomeFilterService.filter$.subscribe(filterArr => {
+      if (Array.isArray(filterArr) && filterArr.length > 0) {
+        // שלח בקשה לכל בחירה (שנה+חודשים)
+        filterArr.forEach(f => {
+          if (f && f.year && Array.isArray(f.months) && f.months.length > 0) {
+            this.sendFilterToServer(f.year, f.months);
+          }
+        });
       }
     });
   }
@@ -97,11 +103,9 @@ export class IncomeReportComponent implements OnInit {
   this.selectedMonths = selected;
   }
 
-  onYearChange(event: any) {
-  this.selectedYear = event;
-  // אין איפוס של selectedMonths כאן
-  // כאן אפשר לטעון נתונים חדשים לשנה שנבחרה
-  // this.months.forEach(m => m.hasData = true/false);
+  onYearChange(year: number) {
+    this.selectedYear = year;
+    this.loadReport();
   }
 
   // Timeline slider state
@@ -119,7 +123,7 @@ export class IncomeReportComponent implements OnInit {
   @Input() therapistId?: number; // אפשר להעביר מבחוץ, אבל נטען כברירת מחדל מלוקאל סטורג'
   @Input() viewMode: 'table' | 'chart' = 'table';
 
-  filterType: 'month' | 'quarter' | 'range' = 'month';
+  filterType: 'month' = 'month';
   startDate: string = '';
   endDate: string = '';
   rows: IncomeRow[] = [];
@@ -133,16 +137,10 @@ export class IncomeReportComponent implements OnInit {
   }
 
   // Chart properties
-  chartType: ChartType = 'line';
+  chartType: ChartType = 'bar';
   chartData: ChartConfiguration['data'] = {
-    labels: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-    datasets: [
-      {
-        label: 'הכנסות',
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        tension: 0.4
-      }
-    ]
+    labels: [],
+    datasets: []
   };
   chartOptions: ChartConfiguration['options'] = {
     responsive: true
@@ -153,6 +151,11 @@ export class IncomeReportComponent implements OnInit {
     private incomeFilterService: IncomeFilterService,
     private reportsService: ReportsService
   ) {}
+
+  // Getter שמבטיח תמיד string[] עבור labels
+  get chartLabelsSafe(): string[] {
+    return (this.chartData.labels as string[]) || [];
+  }
 
 
   onSliderChange(event: {start: Date, end: Date}) {
@@ -176,49 +179,53 @@ export class IncomeReportComponent implements OnInit {
   }
 
   loadReport() {
-    // כרגע רק month, אפשר להרחיב בהמשך
-    if (this.filterType === 'month' && this.therapistId) {
-      this.paymentService.getTherapistMonthlyPaymentsList(this.therapistId).subscribe(data => {
-        console.log('נתונים מהשרת לדוח הכנסות:', data);
-        this.rows = data.map((item: any) => ({
-          name: item.patient_name,
-          amount: Number(item.total_payments)
-        }));
-        this.totalIncome = this.rows.reduce((sum, row) => sum + row.amount, 0);
-        // עדכון נתוני הגרף
-        this.updateChartData();
-      });
-    } else {
-      // דמו לשאר הפילטרים
-      this.rows = [];
-      this.totalIncome = 0;
-      this.updateChartData();
-    }
+    // טען נתוני גרף מהשרת בלבד
+    this.loadChartYearMonths();
   }
 
-  updateChartData() {
-    // דוגמה: סכום הכנסות לכל חודש (בהנחה שיש שדה month בנתונים)
-    const monthlyTotals = Array(12).fill(0);
-    this.rows.forEach(row => {
-      // כאן יש להוסיף לוגיקה לפי החודש של כל שורה
-      // monthlyTotals[monthIndex] += row.amount;
-      // כרגע דמו: הכל בחודש ינואר
-      monthlyTotals[0] += row.amount;
-    });
-    this.chartData = {
-      labels: ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
-      datasets: [
-        {
-          label: 'הכנסות',
-          data: monthlyTotals,
-          tension: 0.4
+  loadChartYearMonths() {
+    // קריאה לשרת לקבלת הכנסות חודשי עבור השנה והחודש הנוכחיים
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // 1-based
+    this.reportsService.getMonthlyIncome(year, month).subscribe((res: any) => {
+      console.log('monthlyIncome response:', res);
+      const monthlyIncome = Array.isArray(res.data?.monthlyIncome) ? res.data.monthlyIncome : Array(12).fill(0);
+      // יצירת תוויות דינמיות בפורמט M/YYYY מהחודש הנוכחי אחורה 12 חודשים
+      const now = new Date();
+      let month = now.getMonth() + 1; // 1-based
+      let year = now.getFullYear();
+      const labels: string[] = [];
+      for (let i = 0; i < 12; i++) {
+        labels.unshift(`${month}/${year}`);
+        month--;
+        if (month === 0) {
+          month = 12;
+          year--;
         }
-      ]
-    };
+      }
+      // המערך מהשרת כבר מסודר מהכי רחוק (שמאל) להכי קרוב (ימין)
+      this.chartData = {
+        labels,
+        datasets: [
+          {
+            label: 'הכנסות',
+            data: monthlyIncome,
+            tension: 0.4,
+            backgroundColor: 'rgba(0, 200, 83, 0.6)', // ירוק בהיר
+            borderColor: 'rgba(0, 150, 50, 1)', // ירוק כהה
+            borderWidth: 2
+          }
+        ]
+      };
+    });
   }
-    reportPayment(row: IncomeRow | { person_id: number, client_name: string, total: number }) {
-      // תומך גם ב-IncomeRow וגם באובייקט מהשרת
-      const name = (row as any).name || (row as any).client_name || '';
-      alert('דיווח על תשלום עבור: ' + name);
-    }
+
+
+
+  reportPayment(row: import('src/app/models/reports.model').IncomeRow | { person_id: number, client_name: string, total: number }) {
+    // תומך גם ב-IncomeRow וגם באובייקט מהשרת
+    const name = (row as any).name || (row as any).client_name || '';
+    alert('דיווח על תשלום עבור: ' + name);
+  }
 }
