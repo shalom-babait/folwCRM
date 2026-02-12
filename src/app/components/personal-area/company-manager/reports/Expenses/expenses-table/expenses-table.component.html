@@ -1,0 +1,56 @@
+<div class="expenses-list-container">
+  <!-- שורת חיפוש וכפתור הוספה -->
+  <div class="search-container">
+    <div class="search-actions-row">
+      <button class="icon-button" mat-icon-button (click)="openCreateExpenseDialog()">
+        <mat-icon style="color: #1976d2;">add</mat-icon>
+      </button>
+      <input type="text" placeholder="חיפוש לפי תאריך/סכום/קטגוריה" class="search-input" [(ngModel)]="searchTerm">
+    </div>
+  </div>
+
+  <!-- כותרות -->
+  <div class="expenses-row header-row">
+    <div class="expenses-cell">תאריך תשלום</div>
+    <div class="expenses-cell">סכום</div>
+    <div class="expenses-cell">קטגוריה</div>
+    <div class="expenses-cell">אמצעי תשלום</div>
+    <div class="expenses-cell">אסמכתא</div>
+    <div class="expenses-cell">הערות</div>
+    <div class="expenses-cell">פעולות</div>
+  </div>
+
+  <!-- נתונים -->
+  <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
+    <div class="scrollable-rows">
+      <div class="expenses-row data-row" *ngFor="let e of filteredExpenses">
+        <div class="expenses-cell">{{ e.payment_date | date:'dd/MM/yyyy' }}</div>
+        <div class="expenses-cell">{{ e.amount | number:'1.2-2' }}</div>
+        <div class="expenses-cell">{{ getCategoryName(e.expense_category_id) }}</div>
+        <div class="expenses-cell">{{ getPaymentMethodLabel(e.payment_method) }}</div>
+        <div class="expenses-cell">{{ e.reference_number }}</div>
+        <div class="expenses-cell">{{ e.notes }}</div>
+        <div class="expenses-cell actions-cell">
+          <button mat-icon-button [matMenuTriggerFor]="expenseMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #expenseMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
+            <button mat-menu-item (click)="editExpense(e)">
+              <mat-icon>edit</mat-icon>
+              <span>ערוך</span>
+            </button>
+            <button mat-menu-item (click)="e.expense_id && deleteExpense(e.expense_id)" color="warn">
+              <mat-icon>delete</mat-icon>
+              <span>מחק</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noExpenses>
+    <div class="no-expenses-message">
+      אין עדיין הוצאות. לחץ על הוספה להוספת הוצאה.
+    </div>
+  </ng-template>
+</div>

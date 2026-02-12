@@ -1,0 +1,55 @@
+<div class="create-treatment-dialog">
+  <h2 class="dialog-title">הוספת הוצאה חדשה</h2>
+  <form class="input-dialog" [formGroup]="expenseForm">
+    <div class="form-field">
+      <label for="amount">סכום</label>
+      <input id="amount" type="number" formControlName="amount" placeholder="הזן סכום">
+      <div class="error-message" *ngIf="expenseForm.get('amount')?.hasError('required')">
+        סכום הוא שדה חובה
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="payment_date">תאריך תשלום</label>
+      <input id="payment_date" type="date" formControlName="payment_date">
+      <div class="error-message" *ngIf="expenseForm.get('payment_date')?.hasError('required')">
+        תאריך תשלום הוא שדה חובה
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="expense_category_id">קטגוריה</label>
+      <select id="expense_category_id" formControlName="expense_category_id">
+        <option *ngFor="let cat of categories" [value]="cat.expense_category_id">{{cat.category_name}}</option>
+      </select>
+      <div class="error-message" *ngIf="expenseForm.get('expense_category_id')?.hasError('required')">
+        קטגוריה היא שדה חובה
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="payment_method">אמצעי תשלום</label>
+      <select id="payment_method" formControlName="payment_method">
+        <option value="cash">מזומן</option>
+        <option value="credit_card">אשראי</option>
+        <option value="bank_transfer">העברה בנקאית</option>
+        <option value="check">צ׳ק</option>
+        <option value="other">אחר</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="reference_number">אסמכתא</label>
+      <input id="reference_number" type="text" formControlName="reference_number">
+    </div>
+    <div class="form-field">
+      <label for="notes">הערות</label>
+      <textarea id="notes" formControlName="notes"></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+        ביטול
+      </button>
+      <button type="submit" class="save-button" (click)="onSubmit()" [disabled]="!expenseForm.valid || isSubmitting">
+        <span *ngIf="!isSubmitting">הוסף</span>
+        <span *ngIf="isSubmitting">מוסיף...</span>
+      </button>
+    </div>
+  </form>
+</div>
