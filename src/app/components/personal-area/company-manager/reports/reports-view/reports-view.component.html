@@ -4,6 +4,7 @@
   </div>
   <div class="report-details-panel">
     <app-debt-report *ngIf="selectedReport?.id === -1"></app-debt-report>
-    <app-report-details *ngIf="selectedReport?.id !== -1" [report]="selectedReport"></app-report-details>
+    <app-expenses-table *ngIf="selectedReport?.id === 2"></app-expenses-table>
+    <app-report-details *ngIf="selectedReport && selectedReport.id !== -1 && selectedReport.id !== 2" [report]="selectedReport"></app-report-details>
   </div>
 </div>
