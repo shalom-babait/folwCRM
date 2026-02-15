@@ -15,7 +15,19 @@
                    [(ngModel)]="password">
             <span class="eye-icon" (click)="togglePasswordVisibility()" [class.visible]="showPassword"></span>
         </div>
-    <button class="submitButton" (click)="onLogin()" [disabled]="!user_name || !password">כניסה</button>
+    <button class="submitButton" (click)="onLogin()">כניסה</button>
+        
+        <!-- Google Sign-In Button -->
+        <div class="google-signin-container">
+            <div class="divider">
+                <span>או</span>
+            </div>
+            <button class="google-signin-button" (click)="loginWithGoogle()" type="button">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="google-icon">
+                <span>המשך עם Google</span>
+            </button>
+        </div>
+
         <a class="subtitle" (click)="showSendingPasswordToMail()" style="color: #3F6B60; cursor: pointer;">שכחתי סיסמה</a>
         <a class="subtitle" (click)="showChangePassword()" style="color: #3F6B60; cursor: pointer; margin-right: 20px;">החלפת סיסמה</a>
     </div>

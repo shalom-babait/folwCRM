@@ -16,17 +16,14 @@ export class TaskListComponent implements OnInit {
   @Input() patientId: number | null = null;
   @Input() userId: number | null = null;
   @Input() filterFn?: (task: Task) => boolean;
+  @Input() isHomePage: boolean = false;
   patientsMap: { [id: number]: string } = {};
   tasks: Task[] = [];
   addMode = false;
   addTaskForm: FormGroup;
-  assignmentTherapist: boolean = true;
-  assignmentPatient: boolean = false;
-  selectedTherapistId: number | null = null;
-  selectedPatientId: number | null = null;
+  // משתנים אלו לא נדרשים כמשתנים גלובליים
   editTaskId: number | null = null;
   editTaskForm: FormGroup | null = null;
-  @Input() isHomePage: boolean = false;
 
 constructor(
   private fb: FormBuilder,
@@ -51,32 +48,13 @@ constructor(
     assignmentPatient: [false]
   });
 }
-
-  private setTaskFlags(tasks: Task[]): Task[] {
-    return tasks.map(task => {
-      const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
-      const hasPatient = task.assignmentPatient || (task.assignments?.some(a => a.entity_type === 'patient')) || false;
-      return { ...task, hasTherapist, hasPatient };
-    });
-  }
-
-
   private getTodayDate(): string {
     // Returns YYYY-MM-DD format
     const today = new Date();
     return today.toISOString().split('T')[0];
   }
 
-  onAddTaskColorChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.addTaskForm.get('color')?.setValue(value);
-  }
-
-  onEditTaskColorChange(event: Event): void {
-    if (!this.editTaskForm) return;
-    const value = (event.target as HTMLInputElement).value;
-    this.editTaskForm.get('color')?.setValue(value);
-  }
+  // פונקציות שינוי צבע לא בשימוש בתבנית
 
 getAssignmentLabel(task: Task): string {
   const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
@@ -137,10 +115,7 @@ getAssignmentLabel(task: Task): string {
 }
   showAddTaskCard(): void {
     this.addMode = true;
-    this.assignmentTherapist = true;
-    this.assignmentPatient = false;
-    this.selectedTherapistId = null;
-    this.selectedPatientId = null;
+  // משתנים אלו הוסרו
     this.addTaskForm.reset({
       status: 'open',
       priority: 'medium',
@@ -182,10 +157,6 @@ getAssignmentLabel(task: Task): string {
       therapistId: null,
       patientAssignmentId: null
     });
-    this.assignmentTherapist = true;
-    this.assignmentPatient = false;
-    this.selectedTherapistId = null;
-    this.selectedPatientId = null;
   }
 
   saveNewTask(): void {
@@ -228,9 +199,7 @@ getAssignmentLabel(task: Task): string {
   }
 
 
-  openAddTaskDialog(): void {
-    // Removed dialog opening logic
-  }
+  // פונקציה זו לא בשימוש
 
   editTask(task: Task): void {
     this.editTaskId = task.task_id || null;
@@ -241,8 +210,7 @@ getAssignmentLabel(task: Task): string {
       assignmentTherapist = task.assignments.some(a => a.entity_type === 'therapist');
       assignmentPatient = task.assignments.some(a => a.entity_type === 'patient');
     }
-    this.assignmentTherapist = assignmentTherapist;
-    this.assignmentPatient = assignmentPatient;
+  // משתנים אלו הוסרו
     this.editTaskForm = this.fb.group({
       title: [task.title, Validators.required],
       description: [task.description],
@@ -332,10 +300,6 @@ getAssignmentLabel(task: Task): string {
       case 'cancelled': return 'בוטלה';
       default: return '';
     }
-  }
-  isAssignedToPatient(task: Task): boolean {
-    return Array.isArray(task.assignments)
-      && task.assignments.some(a => a.entity_type === 'patient');
   }
 
 }

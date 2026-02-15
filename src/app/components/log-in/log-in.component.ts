@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TherapistSessionService } from 'src/app/services/therapist-session.service';
 import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-log-in',
@@ -39,8 +40,46 @@ export class LogInComponent {
   constructor(
     private authService: AuthService,
     private therapistSessionService: TherapistSessionService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
+  
+  ngOnInit() {
+    // בדיקה אם יש callback מ-Google
+    this.route.queryParams.subscribe(params => {
+      if (params['googleAuth']) {
+        this.handleGoogleCallback(params['googleAuth']);
+      } else if (params['error']) {
+        // הודעות שגיאה ברורות לפי סוג השגיאה
+        let errorMessage = 'שגיאה באימות Google';
+        
+        switch(params['error']) {
+          case 'user_not_registered':
+            errorMessage = 'לא נמצא חשבון במערכת המשויך לכתובת המייל הזו, אם קיבלת הרשאה לשימוש במערכת, יש לפנות למנהל המערכת.';
+            break;
+          case 'google_auth_failed':
+            errorMessage = 'האימות דרך Google נכשל. אנא נסה שוב.';
+            break;
+          case 'no_user':
+            errorMessage = 'לא ניתן לאמת את המשתמש.';
+            break;
+          case 'auth_error':
+            errorMessage = 'שגיאה באימות. אנא נסה שוב מאוחר יותר.';
+            break;
+          case 'callback_error':
+            errorMessage = 'שגיאה בעיבוד התשובה מ-Google.';
+            break;
+          default:
+            errorMessage = 'שגיאה באימות Google: ' + params['error'];
+        }
+        
+        alert(errorMessage);
+        
+        // ניקוי ה-URL אחרי הצגת השגיאה - חזרה לדף ההתחברות
+        this.router.navigate([''], { replaceUrl: true });
+      }
+    });
+  }
   
   ngOnDestroy() {
     // ניקוי הטיימר כשניצאים מהקומפוננטה
@@ -55,12 +94,22 @@ export class LogInComponent {
     }
   }
   onLogin() {
+  // בדיקה שיש שם משתמש וסיסמה
+  if (!this.user_name || !this.password) {
+    alert('נא למלא שם משתמש וסיסמה');
+    return;
+  }
+  
   this.authService.login(this.user_name, this.password).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         if (res.user) {
           localStorage.setItem('user', JSON.stringify(res.user));
           this.user_name = res.user.user_name || '';
+        }
+        // שמירת organization_id
+        if (res.organization_id) {
+          localStorage.setItem('organization_id', res.organization_id.toString());
         }
         // שמירת מזהה לפי תפקיד
         if (res.therapist_id) {
@@ -104,6 +153,77 @@ export class LogInComponent {
         alert('שגיאה בהתחברות: ' + (err.error?.message || err.message || 'נסה שוב מאוחר יותר'));
       }
     });
+  }
+  
+  // התחברות עם Google
+  loginWithGoogle() {
+    // פתיחת חלון Google OAuth
+    window.location.href = `${environment.apiUrl}/auth/google`;
+  }
+  
+  // טיפול ב-callback מ-Google
+  handleGoogleCallback(encodedData: string) {
+    try {
+      const jsonString = atob(encodedData);
+      const response = JSON.parse(jsonString);
+      
+      // בדיקה אם ההתחברות הצליחה
+      if (!response.success || !response.token) {
+        alert('שגיאה באימות Google');
+        return;
+      }
+      
+      // שמירת הטוקן והמשתמש
+      localStorage.setItem('token', response.token);
+      if (response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.user_name = response.user.user_name || '';
+      }
+      
+      // שמירת organization_id
+      if (response.organization_id) {
+        localStorage.setItem('organization_id', response.organization_id.toString());
+      }
+      
+      // שמירת מזהה לפי תפקיד
+      if (response.therapist_id) {
+        localStorage.setItem('therapist_id', response.therapist_id.toString());
+        const therapistData: TherapistData = { therapist_id: response.therapist_id };
+        const therapistSession: TherapistCreationData = {
+          user: response.user,
+          person: response.user?.person || {},
+          therapist: therapistData,
+          selectedDepartments: response.selectedDepartments || []
+        };
+        this.therapistSessionService.setTherapist(therapistSession);
+      }
+      if (response.patient_id) {
+        localStorage.setItem('patient_id', response.patient_id.toString());
+      }
+      if (response.secretary_id) {
+        localStorage.setItem('secretary_id', response.secretary_id.toString());
+      }
+      
+      // ניתוב לפי תפקיד
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const role = user.role;
+      if (role === 'company_manager') {
+        this.router.navigate(['/company-manager']);
+      } else if (role === 'therapist') {
+        this.router.navigate(['/personal-area/therapist']);
+      } else if (role === 'patient') {
+        this.router.navigate(['/personal-area/patient']);
+      } else if (role === 'secretary') {
+        this.router.navigate(['/personal-area/secretary']);
+      } else if (role === 'admin') {
+        this.router.navigate(['/personal-area/admin']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    } catch (error) {
+      console.error('Error handling Google callback:', error);
+      alert('שגיאה בעיבוד אימות Google');
+    }
   }
   
   togglePasswordVisibility() {
