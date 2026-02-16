@@ -14,6 +14,7 @@ export interface Expense {
 	expense_id: number;
 	organization_id: number;
 	expense_category_id: number;
+	other_category_name?: string | null;
 	person_id?: number | null;
 	amount: number;
 	payment_date: string; // YYYY-MM-DD
