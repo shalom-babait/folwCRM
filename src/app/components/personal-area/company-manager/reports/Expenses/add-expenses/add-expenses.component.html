@@ -19,9 +19,17 @@
       <label for="expense_category_id">קטגוריה</label>
       <select id="expense_category_id" formControlName="expense_category_id">
         <option *ngFor="let cat of categories" [value]="cat.expense_category_id">{{cat.category_name}}</option>
+        <option value="other">אחר</option>
       </select>
       <div class="error-message" *ngIf="expenseForm.get('expense_category_id')?.hasError('required')">
         קטגוריה היא שדה חובה
+      </div>
+    </div>
+    <div class="form-field" *ngIf="showOtherCategory">
+      <label for="other_category_name">שם קטגוריה אחרת</label>
+      <input id="other_category_name" type="text" formControlName="other_category_name" placeholder="הזן קטגוריה אחרת">
+      <div class="error-message" *ngIf="expenseForm.get('other_category_name')?.hasError('required')">
+        יש להזין שם קטגוריה
       </div>
     </div>
     <div class="form-field">

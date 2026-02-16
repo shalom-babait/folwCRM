@@ -26,7 +26,7 @@
       <div class="expenses-row data-row" *ngFor="let e of filteredExpenses">
         <div class="expenses-cell">{{ e.payment_date | date:'dd/MM/yyyy' }}</div>
         <div class="expenses-cell">{{ e.amount | number:'1.2-2' }}</div>
-        <div class="expenses-cell">{{ getCategoryName(e.expense_category_id) }}</div>
+        <div class="expenses-cell">{{ getCategoryName(e.expense_category_id, e.other_category_name) }}</div>
         <div class="expenses-cell">{{ getPaymentMethodLabel(e.payment_method) }}</div>
         <div class="expenses-cell">{{ e.reference_number }}</div>
         <div class="expenses-cell">{{ e.notes }}</div>

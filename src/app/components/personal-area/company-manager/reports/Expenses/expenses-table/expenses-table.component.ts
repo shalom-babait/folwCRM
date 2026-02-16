@@ -26,8 +26,12 @@ export class ExpensesTableComponent implements OnInit {
   }
 
   loadExpenses(): void {
-    this.expensesService.getAllExpenses().subscribe(data => {
-      this.expenses = data;
+    this.expensesService.getAllExpenses().subscribe((res: any) => {
+      const expenses = Array.isArray(res) ? res : (res && res.data ? res.data : []);
+      this.expenses = (expenses || []).map((e: any) => ({ ...e, amount: +e.amount }));
+      console.log('Expenses loaded:', this.expenses);
+    }, error => {
+      console.error('Error loading expenses:', error);
     });
   }
 
@@ -47,7 +51,8 @@ export class ExpensesTableComponent implements OnInit {
     );
   }
 
-  getCategoryName(categoryId: number): string {
+  getCategoryName(categoryId: number | null, otherCategoryName?: string | null): string {
+    if ((categoryId === null || categoryId === undefined) && otherCategoryName) return otherCategoryName;
     const cat = this.categories.find(c => c.expense_category_id === categoryId);
     return cat ? cat.category_name : '';
   }
