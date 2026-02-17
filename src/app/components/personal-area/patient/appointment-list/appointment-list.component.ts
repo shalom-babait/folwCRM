@@ -76,7 +76,7 @@ export class AppointmentListComponent implements OnInit {
       this.appointments = changes.appointments.currentValue;
     }
   }
-    openSessionsSheet(): void {
+  openSessionsSheet(): void {
     this.dialog.open(SessionsSheetComponent, {
       width: '900px',
       direction: 'rtl',
@@ -117,7 +117,7 @@ export class AppointmentListComponent implements OnInit {
       direction: 'rtl',
       data: {
         events,
-  patientId: this.patient?.patient_id
+        patientId: this.patient?.patient_id
       }
     });
   }
@@ -153,7 +153,7 @@ export class AppointmentListComponent implements OnInit {
         data.last_name = (this.patient as any).person.last_name;
       }
     }
-  const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
+    const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
       width: '500px',
       direction: 'rtl',
       data
@@ -195,7 +195,8 @@ export class AppointmentListComponent implements OnInit {
   }
 
   get showPatientColumn(): boolean {
-    return typeof this.patient?.patient_id !== 'number';  }
+    return typeof this.patient?.patient_id !== 'number';
+  }
   // פורמט תאריך לתצוגה
   formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -205,7 +206,7 @@ export class AppointmentListComponent implements OnInit {
 
   // עריכת טיפול
   editAppointment(appointment: Appointment): void {
-  const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
+    const dialogRef = this.dialog.open(AddAppointmentDialogComponent, {
       width: '600px',
       data: { ...appointment, patient_id: (this.patient as any)?.patient_id || appointment.patient_id }
     });
@@ -233,4 +234,25 @@ export class AppointmentListComponent implements OnInit {
       });
     }
   }
+  selectedIds = new Set<number>();
+
+  toggleSelection(id: number | undefined): void {
+    if (id == null) return;
+
+    this.selectedIds.has(id)
+      ? this.selectedIds.delete(id)
+      : this.selectedIds.add(id);
+
+    console.log('selectedIds:', Array.from(this.selectedIds));
+  }
+
+  isSelected(id: number | undefined): boolean {
+    return id != null && this.selectedIds.has(id);
+  }
+  
+  printSelected(): void {
+  console.log('selectedIds:', Array.from(this.selectedIds));
+}
+
+
 }

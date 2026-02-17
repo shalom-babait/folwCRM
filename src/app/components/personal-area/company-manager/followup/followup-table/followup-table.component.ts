@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FollowupService } from 'src/app/services/followup.service';
 import { FollowUp } from 'src/app/models/followup.model';
-import { AddFollowupDialogComponent} from '../add-followup-dialog/add-followup-dialog.component';
+import { AddFollowupDialogComponent } from '../add-followup-dialog/add-followup-dialog.component';
 
 @Component({
   selector: 'app-followup-table',
@@ -22,13 +22,13 @@ export class FollowupTableComponent implements OnInit {
   constructor(
     private followupService: FollowupService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-      // console.log('Creator ID (ngOnInit):', this.creatorId);
-      if (typeof this.creatorId === 'undefined') {
-        console.warn('Creator ID is undefined!');
-      }
+    // console.log('Creator ID (ngOnInit):', this.creatorId);
+    if (typeof this.creatorId === 'undefined') {
+      console.warn('Creator ID is undefined!');
+    }
     if (this.personId) {
       this.loadFollowups();
     }
@@ -48,11 +48,11 @@ export class FollowupTableComponent implements OnInit {
   }
 
   openCreateFollowupDialog(): void {
-      const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
-        width: '450px',
-        direction: 'rtl',
-        data: { person_id: this.personId, created_by_user_id: this.creatorId }
-      });
+    const dialogRef = this.dialog.open(AddFollowupDialogComponent, {
+      width: '450px',
+      direction: 'rtl',
+      data: { person_id: this.personId, created_by_user_id: this.creatorId }
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.loadFollowups();
@@ -89,4 +89,17 @@ export class FollowupTableComponent implements OnInit {
       this.followupService.updateFollowupStatus(f.followup_id, f.status).subscribe();
     }
   }
+  selectedIds = new Set<number>();
+
+  toggleSelection(id: number | undefined): void {
+    if (id == null) return;
+    this.selectedIds.has(id)
+      ? this.selectedIds.delete(id)
+      : this.selectedIds.add(id);
+  }
+
+  isSelected(id: number | undefined): boolean {
+    return id != null && this.selectedIds.has(id);
+  }
+
 }

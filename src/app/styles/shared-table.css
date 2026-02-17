@@ -12,7 +12,7 @@
   max-width: 140px !important;
   height: 32px !important;
   color: #022F39 !important;
-  box-shadow: 0 1px 3px rgba(2,47,57,0.07) !important;
+  box-shadow: 0 1px 3px rgba(2, 47, 57, 0.07) !important;
   transition: border 0.2s, box-shadow 0.2s !important;
   cursor: pointer !important;
 }
@@ -37,6 +37,7 @@
   content: '\2713  ' !important;
   color: rgb(167, 195, 201) !important;
 }
+
 /* שורה אופקית של כפתורי פעולה וחיפוש */
 .search-actions-row {
   display: flex;
@@ -45,6 +46,7 @@
   gap: 0.5rem;
   width: 100%;
 }
+
 /* גלילה פנימית רק על שורות הטיפולים */
 .table-records {
   max-height: 60vh;
@@ -56,6 +58,7 @@
   justify-content: center !important;
   text-align: center !important;
 }
+
 /* ==================== קונטיינר ראשי ==================== */
 .table-container {
   background: whitesmoke;
@@ -68,8 +71,10 @@
   /* אפשר גלילה פנימית אך שומרים על עיצוב הקונטיינר (rounded corners, shadow) */
   overflow-x: auto;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
-  background-clip: padding-box; /* ensures rounded corners are preserved when content scrolls */
+  -webkit-overflow-scrolling: touch;
+  /* smooth scrolling on mobile */
+  background-clip: padding-box;
+  /* ensures rounded corners are preserved when content scrolls */
 }
 
 /* ==================== כותרת ראשית ==================== */
@@ -108,6 +113,7 @@
 .icon-button mat-icon {
   color: #2A5448 !important;
 }
+
 .icon-button:hover mat-icon {
   color: white !important;
 }
@@ -146,7 +152,8 @@
 .header-row {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(var(--table-cols, 8), 1fr); /* ברירת מחדל 8 עמודות שוות */
+  grid-template-columns: repeat(var(--table-cols, 8), 1fr);
+  /* ברירת מחדל 8 עמודות שוות */
   background-color: #2A5448;
   color: white;
   font-weight: bold;
@@ -164,7 +171,8 @@
 .data-row {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(var(--table-cols, 8), 1fr); /* ברירת מחדל 8 עמודות שוות */
+  grid-template-columns: repeat(var(--table-cols, 8), 1fr);
+  /* ברירת מחדל 8 עמודות שוות */
   background-color: #ffffff;
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
@@ -207,7 +215,8 @@
 /* ==================== שורות נתונים ==================== */
 .data-row {
   display: grid;
-  grid-template-columns: repeat(var(--table-cols, 8), 1fr); /* ברירת מחדל 8 עמודות שוות */
+  grid-template-columns: repeat(var(--table-cols, 8), 1fr);
+  /* ברירת מחדל 8 עמודות שוות */
   background-color: #ffffff;
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
@@ -221,11 +230,13 @@
   animation: fadeIn 0.3s ease-in-out;
   min-width: 0;
 }
+
 .data-row:hover {
   background-color: #f8f9fa;
   transform: translateX(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
+
 .data-row.selected {
   background: linear-gradient(135deg, #022F39 0%, #034752 100%);
   color: white;
@@ -340,13 +351,40 @@
   transition: all 0.2s ease;
 }
 
-.status-badge.status-new { background-color: #2196F3; color: white; }
-.status-badge.status-contacted { background-color: #FF9800; color: white; }
-.status-badge.status-interested_groom { background-color: #9C27B0; color: white; }
-.status-badge.status-waiting_consultant { background-color: #FFC107; color: #333; }
-.status-badge.status-in_treatment { background-color: #00BCD4; color: white; }
-.status-badge.status-converted { background-color: #4CAF50; color: white; }
-.status-badge.status-not_relevant { background-color: #9E9E9E; color: white; }
+.status-badge.status-new {
+  background-color: #2196F3;
+  color: white;
+}
+
+.status-badge.status-contacted {
+  background-color: #FF9800;
+  color: white;
+}
+
+.status-badge.status-interested_groom {
+  background-color: #9C27B0;
+  color: white;
+}
+
+.status-badge.status-waiting_consultant {
+  background-color: #FFC107;
+  color: #333;
+}
+
+.status-badge.status-in_treatment {
+  background-color: #00BCD4;
+  color: white;
+}
+
+.status-badge.status-converted {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.status-not_relevant {
+  background-color: #9E9E9E;
+  color: white;
+}
 
 .data-row.selected .status-badge {
   border: 1px solid white;
@@ -454,22 +492,65 @@
   height: 1.1rem;
 }
 
-.action-btn:active { transform: scale(0.9); }
+.action-btn:active {
+  transform: scale(0.9);
+}
 
-.action-btn.view { color: #2196F3; }
-.action-btn.view:hover { background-color: #2196F3; color: white; }
-.action-btn.edit { color: #4CAF50; }
-.action-btn.edit:hover { background-color: #4CAF50; color: white; }
-.action-btn.convert { color: #FF9800; }
-.action-btn.convert:hover { background-color: #FF9800; color: white; }
-.action-btn.delete { color: #F44336; }
-.action-btn.delete:hover { background-color: #F44336; color: white; }
+.action-btn.view {
+  color: #2196F3;
+}
 
-.data-row.selected .action-btn { color: white; }
-.data-row.selected .action-btn.view:hover { background-color: rgba(33, 150, 243, 0.5); }
-.data-row.selected .action-btn.edit:hover { background-color: rgba(76, 175, 80, 0.5); }
-.data-row.selected .action-btn.convert:hover { background-color: rgba(255, 152, 0, 0.5); }
-.data-row.selected .action-btn.delete:hover { background-color: rgba(244, 67, 54, 0.5); }
+.action-btn.view:hover {
+  background-color: #2196F3;
+  color: white;
+}
+
+.action-btn.edit {
+  color: #4CAF50;
+}
+
+.action-btn.edit:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.action-btn.convert {
+  color: #FF9800;
+}
+
+.action-btn.convert:hover {
+  background-color: #FF9800;
+  color: white;
+}
+
+.action-btn.delete {
+  color: #F44336;
+}
+
+.action-btn.delete:hover {
+  background-color: #F44336;
+  color: white;
+}
+
+.data-row.selected .action-btn {
+  color: white;
+}
+
+.data-row.selected .action-btn.view:hover {
+  background-color: rgba(33, 150, 243, 0.5);
+}
+
+.data-row.selected .action-btn.edit:hover {
+  background-color: rgba(76, 175, 80, 0.5);
+}
+
+.data-row.selected .action-btn.convert:hover {
+  background-color: rgba(255, 152, 0, 0.5);
+}
+
+.data-row.selected .action-btn.delete:hover {
+  background-color: rgba(244, 67, 54, 0.5);
+}
 
 /* ==================== הודעות ריקות ==================== */
 .no-results {
@@ -520,6 +601,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -528,6 +610,7 @@
 
 /* ==================== רספונסיביות ==================== */
 @media screen and (max-width: 1400px) {
+
   .header-row,
   .data-row {
     grid-template-columns: repeat(8, 1fr);
@@ -610,11 +693,30 @@
     border-bottom: none;
   }
 
-  .id-cell::before { content: "מזהה: "; font-weight: bold; }
-  .phone-cell::before { content: "טלפון: "; font-weight: bold; }
-  .email-cell::before { content: "אימייל: "; font-weight: bold; }
-  .date-cell::before { content: "תאריך: "; font-weight: bold; }
-  .converted-cell::before { content: "הומר: "; font-weight: bold; }
+  .id-cell::before {
+    content: "מזהה: ";
+    font-weight: bold;
+  }
+
+  .phone-cell::before {
+    content: "טלפון: ";
+    font-weight: bold;
+  }
+
+  .email-cell::before {
+    content: "אימייל: ";
+    font-weight: bold;
+  }
+
+  .date-cell::before {
+    content: "תאריך: ";
+    font-weight: bold;
+  }
+
+  .converted-cell::before {
+    content: "הומר: ";
+    font-weight: bold;
+  }
 
   .name-cell {
     justify-content: flex-start;
@@ -721,6 +823,7 @@
 
 /* ==================== הדפסה ==================== */
 @media print {
+
   .search-container,
   .actions-cell,
   .icon-button {
@@ -750,6 +853,7 @@
     border: 1px solid #ddd;
   }
 }
+
 .cell {
   padding: 0 0.5rem;
   display: flex;
@@ -758,9 +862,12 @@
   text-align: center;
   overflow: hidden;
   min-width: 0;
-  word-wrap: break-word; /* הוספה */
-  word-break: break-word; /* הוספה */
+  word-wrap: break-word;
+  /* הוספה */
+  word-break: break-word;
+  /* הוספה */
 }
+
 /* ================= טיפול בטבלת טיפולים בלבד ================= */
 
 .treatment-table .header-row,
@@ -783,4 +890,29 @@
   flex-wrap: nowrap;
   white-space: nowrap;
   justify-content: center;
+}
+
+/* ===== Checkbox Selection Column ===== */
+
+.checkbox-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-cell input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #2A5448;
+  transition: transform 0.15s ease;
+}
+
+.checkbox-cell input[type="checkbox"]:hover {
+  transform: scale(1.1);
+}
+
+.data-row.selected {
+  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
+  color: white;
 }

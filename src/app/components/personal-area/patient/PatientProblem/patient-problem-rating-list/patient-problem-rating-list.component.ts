@@ -111,32 +111,46 @@ export class PatientProblemRatingListComponent implements OnInit {
       }
     ];
   }
-  
-    editRating(rating: PatientProblemRating): void {
-      // פותח דיאלוג עריכה (אפשר להחליף לדיאלוג עריכה אמיתי)
-      this.dialog.open(AddPatientProblemRatingComponent, {
-        width: '400px',
-        data: { patient_problem_id: this.patientProblemId, rating }
-      }).afterClosed().subscribe(result => {
-        if (result) {
-          this.ngOnInit(); // רענון דירוגים
-        }
-      });
-    }
 
-    deleteRating(rating: PatientProblemRating): void {
-      if (!confirm('האם למחוק דירוג זה?')) return;
-      if (!rating.patient_problem_rating_id && rating.patient_problem_rating_id !== 0) {
-        alert('לא ניתן למחוק דירוג ללא מזהה תקין');
-        return;
+  editRating(rating: PatientProblemRating): void {
+    // פותח דיאלוג עריכה (אפשר להחליף לדיאלוג עריכה אמיתי)
+    this.dialog.open(AddPatientProblemRatingComponent, {
+      width: '400px',
+      data: { patient_problem_id: this.patientProblemId, rating }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.ngOnInit(); // רענון דירוגים
       }
-      this.patientProblemsService.deleteProblemRating(rating.patient_problem_rating_id).subscribe({
-        next: () => {
-          this.ngOnInit(); // רענון דירוגים
-        },
-        error: () => {
-          alert('שגיאה במחיקת דירוג');
-        }
-      });
+    });
+  }
+
+  deleteRating(rating: PatientProblemRating): void {
+    if (!confirm('האם למחוק דירוג זה?')) return;
+    if (!rating.patient_problem_rating_id && rating.patient_problem_rating_id !== 0) {
+      alert('לא ניתן למחוק דירוג ללא מזהה תקין');
+      return;
     }
+    this.patientProblemsService.deleteProblemRating(rating.patient_problem_rating_id).subscribe({
+      next: () => {
+        this.ngOnInit(); // רענון דירוגים
+      },
+      error: () => {
+        alert('שגיאה במחיקת דירוג');
+      }
+    });
+  }
+
+  selectedIds = new Set<number>();
+
+  toggleSelection(id: number | undefined): void {
+    if (id == null) return;
+    this.selectedIds.has(id)
+      ? this.selectedIds.delete(id)
+      : this.selectedIds.add(id);
+  }
+
+  isSelected(id: number | undefined): boolean {
+    return id != null && this.selectedIds.has(id);
+  }
+
 }
