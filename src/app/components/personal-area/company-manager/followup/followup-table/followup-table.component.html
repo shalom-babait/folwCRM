@@ -11,6 +11,7 @@
 
   <!-- כותרות -->
   <div class="treatment-row header-row">
+    <div class="treatment-cell checkbox-cell"></div>
     <div class="treatment-cell">תזכורת?</div>
     <div class="treatment-cell">תאריך מעקב</div>
     <div class="treatment-cell">שעה</div>
@@ -22,7 +23,14 @@
   <!-- נתונים -->
   <ng-container *ngIf="filteredFollowups.length > 0; else noFollowups">
     <div class="scrollable-rows">
-      <div class="treatment-row data-row" *ngFor="let f of filteredFollowups">
+      <div class="treatment-row data-row" *ngFor="let f of filteredFollowups"
+        [class.selected]="isSelected(f.followup_id)">
+
+        <div class="treatment-cell checkbox-cell">
+          <input type="checkbox" [checked]="isSelected(f.followup_id)" (click)="$event.stopPropagation()"
+            (change)="toggleSelection(f.followup_id)">
+        </div>
+
         <div class="treatment-cell">
           <ng-container *ngIf="f.remind; else toggle">
             <mat-icon color="primary">check</mat-icon>
@@ -42,7 +50,8 @@
           </select>
         </div>
         <div class="treatment-cell actions-cell">
-          <button mat-icon-button [matMenuTriggerFor]="followupMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+          <button mat-icon-button [matMenuTriggerFor]="followupMenu" aria-label="open actions"
+            (click)="$event.stopPropagation()">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #followupMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
