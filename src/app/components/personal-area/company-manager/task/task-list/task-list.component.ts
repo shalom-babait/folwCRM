@@ -80,26 +80,7 @@ getAssignmentLabel(task: Task): string {
 }
 
  ngOnInit(): void {
-  if (this.patientId) {
-    this.taskService.getTasksByPatientId(this.patientId).subscribe({
-      next: (tasks) => {
-        console.log('Tasks list from server:', tasks);
-        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-      },
-      error: (err) => console.error('שגיאה בקבלת משימות', err)
-    });
-  } else if (this.userId) {
-    this.taskService.getTasksByUserId(this.userId).subscribe({
-      next: (tasks: Task[]) => {
-        console.log('Tasks list for user from server:', tasks);
-        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-        console.log('Tasks after filter:', this.tasks);
-      },
-      error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
-    });
-  }
-
-  // טעינת שמות המטופלים מהסטייט לדף הבית של מטפל
+  // טוען מטופלים ומשימות רק כאשר isHomePage=true (כלומר, רק באזור האישי של מטפל)
   if (this.isHomePage) {
     this.patientState.patients$.subscribe((patients: PatientData[]) => {
       this.patientsMap = {};
@@ -109,6 +90,34 @@ getAssignmentLabel(task: Task): string {
           const last = patient.person.last_name || '';
           this.patientsMap[patient.patient_id] = (first + (last ? ' ' + last : '')).trim();
         }
+      }
+      console.log('--- אבחון מטופלים ---');
+      console.log('patientsMap:', this.patientsMap);
+      // לאחר שהמפה מוכנה, נטען את המשימות
+      if (this.userId) {
+        this.taskService.getTasksByUserId(this.userId).subscribe({
+          next: (tasks: Task[]) => {
+            this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+            console.log('tasks:', this.tasks);
+            this.tasks.forEach(task => {
+              const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
+              console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
+            });
+          },
+          error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
+        });
+      } else if (this.patientId) {
+        this.taskService.getTasksByPatientId(this.patientId).subscribe({
+          next: (tasks) => {
+            this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+            console.log('tasks:', this.tasks);
+            this.tasks.forEach(task => {
+              const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
+              console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
+            });
+          },
+          error: (err) => console.error('שגיאה בקבלת משימות', err)
+        });
       }
     });
   }

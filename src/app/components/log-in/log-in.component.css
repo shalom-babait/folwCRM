@@ -73,6 +73,7 @@ html, body {
   margin-bottom: 0.7rem;
 }
 
+
 .login-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #022F39;
@@ -86,15 +87,15 @@ html, body {
   border: none;
   border-radius: 0.5rem;
   font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0.7rem 0;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(2,47,57,0.08);
 }
-.submitButton:hover {
-  background: linear-gradient(135deg, #14342E 0%, #3F6B60 100%);
-  box-shadow: 0 4px 16px rgba(2,47,57,0.13);
+
+.login-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.2rem;
+  max-width: 120px;
+  max-height: 120px;
 }
 .submitButton:disabled {
   background: #8ca0ad !important;
@@ -130,6 +131,7 @@ html, body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
 }
 
+/* עיצוב לוגו במסך כניסה */
 .login-logo {
   display: block;
   margin-left: auto;

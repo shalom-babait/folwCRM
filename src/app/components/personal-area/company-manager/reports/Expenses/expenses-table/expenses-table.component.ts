@@ -14,6 +14,9 @@ export class ExpensesTableComponent implements OnInit {
   expenses: Expense[] = [];
   categories: ExpenseCategory[] = [];
   searchTerm: string = '';
+  selectedCategoryId: string | number = '';
+  showAddCategoryInput: boolean = false;
+  newCategoryName: string = '';
 
   constructor(
     private expensesService: ExpensesService,
@@ -23,6 +26,13 @@ export class ExpensesTableComponent implements OnInit {
   ngOnInit(): void {
     this.loadExpenses();
     this.loadCategories();
+  }
+
+  ngOnChanges(): void {
+    if (this.selectedCategoryId === 'add-category') {
+      this.openAddCategoryDialog();
+      this.selectedCategoryId = '';
+    }
   }
 
   loadExpenses(): void {
@@ -41,13 +51,43 @@ export class ExpensesTableComponent implements OnInit {
     this.categories = [];
   }
 
+  openAddCategoryDialog(): void {
+    // יש להוסיף דיאלוג הוספת קטגוריה חדשה
+    alert('הוספת קטגוריה חדשה');
+  }
+
+  onCategorySelect(): void {
+    if (this.selectedCategoryId === 'add-category') {
+      this.showAddCategoryInput = true;
+      this.selectedCategoryId = '';
+    }
+  }
+
+  addCategory(): void {
+    if (!this.newCategoryName.trim()) return;
+    // כאן אפשר להוסיף קריאה לשרת להוספת קטגוריה
+    this.categories.push({
+      expense_category_id: Date.now(), // מזהה זמני
+      organization_id: 1,
+      category_name: this.newCategoryName,
+      is_active: true,
+      created_at: ''
+    });
+    this.newCategoryName = '';
+    this.showAddCategoryInput = false;
+  }
+
   get filteredExpenses(): Expense[] {
-    if (!this.searchTerm.trim()) return this.expenses;
+    let filtered = this.expenses;
+    if (this.selectedCategoryId !== '' && this.selectedCategoryId !== undefined && this.selectedCategoryId !== 'add-category') {
+      filtered = filtered.filter(e => e.expense_category_id == this.selectedCategoryId);
+    }
+    if (!this.searchTerm.trim()) return filtered;
     const term = this.searchTerm.trim().toLowerCase();
-    return this.expenses.filter(e =>
+    return filtered.filter(e =>
       e.payment_date.includes(term) ||
       e.amount.toString().includes(term) ||
-      this.getCategoryName(e.expense_category_id).includes(term)
+      this.getCategoryName(e.expense_category_id, e.other_category_name).includes(term)
     );
   }
 

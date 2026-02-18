@@ -129,6 +129,7 @@ import { AddOrganizationsComponent } from './components/personal-area/admin/orga
 import { ExpensesTableComponent } from './components/personal-area/company-manager/reports/Expenses/expenses-table/expenses-table.component';
 import { AddExpensesComponent } from './components/personal-area/company-manager/reports/Expenses/add-expenses/add-expenses.component';
 import { ExpensesViewComponent } from './components/personal-area/company-manager/reports/Expenses/expenses-view/expenses-view.component';
+import { AddExpenseCategoriesComponent } from './components/personal-area/company-manager/reports/Expenses/add-expense-categories/add-expense-categories.component';
 
 @NgModule({
   declarations: [
@@ -227,6 +228,7 @@ import { ExpensesViewComponent } from './components/personal-area/company-manage
     ExpensesTableComponent,
     AddExpensesComponent,
     ExpensesViewComponent,
+    AddExpenseCategoriesComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [
