@@ -65,4 +65,39 @@ export class OrganizationsTableComponent implements OnInit {
   deleteOrganization(organization_id: number): void {
     // מחיקת ארגון (להוסיף דיאלוג/פונקציונליות)
   }
+  selectedIds = new Set<number>();
+
+toggleSelection(id: number | undefined): void {
+  if (id == null) return;
+  this.selectedIds.has(id)
+    ? this.selectedIds.delete(id)
+    : this.selectedIds.add(id);
+}
+
+isSelected(id: number | undefined): boolean {
+  return id != null && this.selectedIds.has(id);
+}
+
+toggleAll(): void {
+  if (this.isAllSelected()) {
+    this.selectedIds.clear();
+  } else {
+    this.filteredOrganizations.forEach(o => {
+      if (o.organization_id != null) {
+        this.selectedIds.add(o.organization_id);
+      }
+    });
+  }
+}
+
+isAllSelected(): boolean {
+  return (
+    this.filteredOrganizations.length > 0 &&
+    this.filteredOrganizations.every(o =>
+      o.organization_id != null &&
+      this.selectedIds.has(o.organization_id)
+    )
+  );
+}
+
 }

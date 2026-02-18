@@ -9,8 +9,11 @@
   </div>
 
   <div class="organization-row header-row">
+    <div class="organization-cell checkbox-cell">
+      <mat-checkbox [checked]="isAllSelected()" (change)="toggleAll()" title="בחר הכל">
+      </mat-checkbox>
+    </div>
     <div class="organization-cell">שם ארגון</div>
-    <div class="organization-cell">סוג</div>
     <div class="organization-cell">איש קשר</div>
     <div class="organization-cell">טלפון</div>
     <div class="organization-cell">אימייל</div>
@@ -28,6 +31,11 @@
     <ng-container *ngIf="filteredOrganizations.length > 0; else noOrganizations">
       <div class="scrollable-rows">
         <div class="organization-row data-row" *ngFor="let org of filteredOrganizations">
+          <div class="organization-cell checkbox-cell">
+            <mat-checkbox [checked]="isSelected(org.organization_id)" (change)="toggleSelection(org.organization_id)">
+            </mat-checkbox>
+          </div>
+
           <div class="organization-cell">{{ org.organization_name }}</div>
           <div class="organization-cell">{{ org.organization_type }}</div>
           <div class="organization-cell">{{ org.contact_name }}</div>
@@ -39,7 +47,8 @@
             <button mat-icon-button (click)="editOrganization(org)">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button *ngIf="org.organization_id !== undefined" (click)="deleteOrganization(org.organization_id)" color="warn">
+            <button mat-icon-button *ngIf="org.organization_id !== undefined"
+              (click)="deleteOrganization(org.organization_id)" color="warn">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

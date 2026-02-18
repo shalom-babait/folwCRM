@@ -19,7 +19,9 @@
 
       <select class="styled-select" [(ngModel)]="selectedStatus">
         <option value="">הכל</option>
-        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+        <option *ngFor="let s of statusOptions" [value]="s">
+          {{ s }}
+        </option>
       </select>
 
       <button class="sessions-sheet-btn" (click)="openSessionsSheet()">
@@ -28,7 +30,6 @@
       </button>
     </div>
   </div>
-
 
   <div class="table-records treatment-table">
 
@@ -40,7 +41,13 @@
            : 'auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto'
          ">
 
-      <div class="treatment-cell checkbox-cell"></div>
+      <!-- ✔ Select All -->
+      <div class="treatment-cell checkbox-cell">
+        <input type="checkbox"
+               title="בחר הכל"
+               [checked]="isAllSelected()"
+               (change)="toggleAll()">
+      </div>
 
       <div class="treatment-cell" *ngIf="showPatientColumn">מטופל</div>
       <div class="treatment-cell">תאריך</div>
@@ -53,7 +60,6 @@
       <div class="treatment-cell">פעולות</div>
     </div>
 
-
     <!-- שורות -->
     <div class="treatment-row data-row"
          *ngFor="let appointment of filteredAppointments"
@@ -64,12 +70,13 @@
            : 'auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto'
          ">
 
-      <!-- Checkbox -->
+      <!-- ✔ Checkbox שורה -->
       <div class="treatment-cell checkbox-cell">
         <input type="checkbox"
                [checked]="isSelected(appointment.appointment_id)"
                (click)="$event.stopPropagation()"
                (change)="toggleSelection(appointment.appointment_id)">
+               
       </div>
 
       <!-- מטופל -->
@@ -135,7 +142,6 @@
     </div>
 
   </div>
-
 
   <!-- שורת סיכום -->
   <div class="treatment-row summary-row sticky-summary-row">
