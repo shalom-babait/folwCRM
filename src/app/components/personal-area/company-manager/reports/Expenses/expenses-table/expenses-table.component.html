@@ -6,6 +6,18 @@
         <mat-icon style="color: #1976d2;">add</mat-icon>
       </button>
       <input type="text" placeholder="חיפוש לפי תאריך/סכום/קטגוריה" class="search-input" [(ngModel)]="searchTerm">
+      <div class="category-dropdown-wrapper" style="position:relative; display:inline-block;">
+        <select class="category-filter-select" [(ngModel)]="selectedCategoryId" (change)="onCategorySelect()">
+          <option value="">כל הקטגוריות</option>
+          <option value="add-category">➕ הוסף קטגוריה חדשה</option>
+          <option *ngFor="let cat of categories" [value]="cat.expense_category_id">{{cat.category_name}}</option>
+        </select>
+        <div *ngIf="showAddCategoryInput" class="add-category-input-row" style="position:absolute; left:0; top:100%; background:white; border:1px solid #ccc; z-index:10; width:220px;">
+          <input type="text" [(ngModel)]="newCategoryName" placeholder="שם קטגוריה חדשה" style="width:140px;">
+          <button mat-button color="primary" (click)="addCategory()">הוסף</button>
+          <button mat-button (click)="showAddCategoryInput=false">ביטול</button>
+        </div>
+      </div>
     </div>
   </div>
 
