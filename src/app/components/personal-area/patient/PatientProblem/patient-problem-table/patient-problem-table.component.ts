@@ -103,4 +103,40 @@ export class PatientProblemTableComponent implements OnInit {
       }
     });
   }
+
+  selectedIds = new Set<number>();
+
+toggleSelection(id: number | undefined): void {
+  if (id == null) return;
+  this.selectedIds.has(id)
+    ? this.selectedIds.delete(id)
+    : this.selectedIds.add(id);
+}
+
+isSelected(id: number | undefined): boolean {
+  return id != null && this.selectedIds.has(id);
+}
+
+toggleAll(): void {
+  if (this.isAllSelected()) {
+    this.selectedIds.clear();
+  } else {
+    this.filteredProblems.forEach(p => {
+      if (p.patient_problem_id != null) {
+        this.selectedIds.add(p.patient_problem_id);
+      }
+    });
+  }
+}
+
+isAllSelected(): boolean {
+  return (
+    this.filteredProblems.length > 0 &&
+    this.filteredProblems.every(p =>
+      p.patient_problem_id != null &&
+      this.selectedIds.has(p.patient_problem_id)
+    )
+  );
+}
+
 }

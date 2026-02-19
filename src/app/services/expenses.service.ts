@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Expense } from '../models/expenses.model';
+import { Expense, ExpenseCategory } from '../models/expenses.model';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 
@@ -35,5 +35,10 @@ export class ExpensesService {
   // מחיקת הוצאה
   deleteExpense(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  // הוספת קריאת API לקטגוריות הוצאה
+  getExpenseCategories(): Observable<ExpenseCategory[]> {
+    return this.http.get<ExpenseCategory[]>(`${this.baseUrl}/categories`);
   }
 }

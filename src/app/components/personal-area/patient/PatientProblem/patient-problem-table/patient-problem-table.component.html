@@ -11,6 +11,10 @@
 
 	<!-- כותרות -->
 	<div class="problem-row header-row">
+		<div class="problem-cell checkbox-cell">
+			<mat-checkbox [checked]="isAllSelected()" (change)="toggleAll()"  title="בחר הכל">
+			</mat-checkbox>
+		</div>
 		<div class="problem-cell">שם בעיה</div>
 		<div class="problem-cell">תיאור</div>
 		<div class="problem-cell">תאריך עדכון אחרון</div>
@@ -21,11 +25,19 @@
 	<ng-container *ngIf="filteredProblems.length > 0; else noProblems">
 		<div class="scrollable-rows">
 			<div class="problem-row data-row" *ngFor="let p of filteredProblems">
+
+				<div class="problem-cell checkbox-cell">
+					<mat-checkbox [checked]="isSelected(p.patient_problem_id)" 
+						(change)="toggleSelection(p.patient_problem_id)">
+					</mat-checkbox>
+				</div>
+
 				<div class="problem-cell">{{ p.title }}</div>
 				<div class="problem-cell">{{ p.description }}</div>
 				<div class="problem-cell">{{ p.created_at | date:'dd/MM/yyyy' }}</div>
 				<div class="problem-cell actions-cell">
-					<button mat-icon-button [matMenuTriggerFor]="problemMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+					<button mat-icon-button [matMenuTriggerFor]="problemMenu" aria-label="open actions"
+						(click)="$event.stopPropagation()">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 					<mat-menu #problemMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">
@@ -41,7 +53,8 @@
 							<mat-icon>bar_chart</mat-icon>
 							<span>הצג דירוגים</span>
 						</button>
-						<button mat-menu-item (click)="p.patient_problem_id && deleteProblem(p.patient_problem_id)" color="warn">
+						<button mat-menu-item (click)="p.patient_problem_id && deleteProblem(p.patient_problem_id)"
+							color="warn">
 							<mat-icon>delete</mat-icon>
 							<span>מחק</span>
 						</button>

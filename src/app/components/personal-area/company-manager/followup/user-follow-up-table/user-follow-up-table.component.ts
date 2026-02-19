@@ -40,7 +40,7 @@ export class UserFollowUpTableComponent implements OnInit {
     const userId = this.authService.getCurrentUserId();
     if (userId) {
       this.followupService.getFollowupsByCreator(userId).subscribe(data => {
-        console.log('Follow-ups received in component:', data);
+        // console.log('Follow-ups received in component:', data);
         this.followups = data;
         this.filterFollowups();
       });
@@ -116,7 +116,7 @@ export class UserFollowUpTableComponent implements OnInit {
         return condition;
       });
     }
-    console.log('Filtered followups after date filter:', filtered);
+    // console.log('Filtered followups after date filter:', filtered);
     this.filteredFollowups = filtered;
   }
   editFollowup(followup: FollowUpWithPerson): void {

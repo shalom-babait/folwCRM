@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExpensesService } from 'src/app/services/expenses.service';
@@ -9,7 +9,7 @@ import { ExpenseCategory } from 'src/app/models/expenses.model';
   templateUrl: './add-expenses.component.html',
   styleUrls: ['./add-expenses.component.css', '../../../../../../styles/dialog-forms.css']
 })
-export class AddExpensesComponent {
+export class AddExpensesComponent implements OnInit {
   expenseForm: FormGroup;
   isSubmitting = false;
   categories: ExpenseCategory[] = [];
@@ -29,12 +29,6 @@ export class AddExpensesComponent {
       reference_number: [''],
       notes: ['']
     });
-    // כאן אפשר לטעון קטגוריות אמיתיות מהשרת בעתיד
-    this.categories = [
-      { expense_category_id: 1, organization_id: 1, category_name: 'שכירות', is_active: true, created_at: '' },
-      { expense_category_id: 2, organization_id: 1, category_name: 'ציוד משרדי', is_active: true, created_at: '' },
-      // ...
-    ];
 
     // מאזין לשינוי בקטגוריה
     this.expenseForm.get('expense_category_id')?.valueChanges.subscribe(val => {
@@ -47,6 +41,22 @@ export class AddExpensesComponent {
         this.expenseForm.get('other_category_name')?.setValue('');
         this.expenseForm.get('other_category_name')?.clearValidators();
         this.expenseForm.get('other_category_name')?.updateValueAndValidity();
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.expensesService.getExpenseCategories().subscribe({
+      next: (categories: ExpenseCategory[]) => {
+        this.categories = categories;
+      },
+      error: (err: any) => {
+        console.error('Error loading categories:', err);
+        this.categories = [];
       }
     });
   }

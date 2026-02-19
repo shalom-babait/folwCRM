@@ -52,7 +52,7 @@ export class AddAppointmentDialogComponent implements OnInit {
   types: any[] = [];
   selectedRoomId: number | null = null;
   roomEvents: any[] = [];
-  showOverlay = false;
+  // showOverlay and overlay logic removed (no auto or manual open)
   patients: any[] = [];
 
   isEditMode = false;
@@ -173,7 +173,6 @@ export class AddAppointmentDialogComponent implements OnInit {
 
     this.treatmentForm.get('place')?.valueChanges.subscribe(roomId => {
       this.selectedRoomId = roomId;
-      this.showOverlay = !!roomId;
       this.loadRoomEvents(roomId);
     });
   }
@@ -223,28 +222,9 @@ export class AddAppointmentDialogComponent implements OnInit {
     });
   }
 
-  onOverlayDateSelected(event: any) {
-    this.showOverlay = false;
-    if (event?.dateStr) {
-      this.treatmentForm.patchValue({ date: event.dateStr.split('T')[0] });
-    }
+  // onOverlayDateSelected removed (no overlay logic)
 
-    const dialogRef = this.dialog.open(SelectTimeDialogComponent, {
-      width: '350px',
-      data: { roomEvents: this.roomEvents }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.treatmentForm.patchValue({
-          startTime: result.startTime,
-          endTime: result.endTime
-        });
-      }
-    });
-  }
-
-  closeOverlay() { this.showOverlay = false; }
+  // closeOverlay removed (no overlay logic)
 
   getErrorMessage(field: string): string {
     const control = this.treatmentForm.get(field);
