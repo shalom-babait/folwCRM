@@ -27,7 +27,6 @@ export class PatientTableComponent implements OnInit, OnChanges {
   showAddPatientDialog: boolean = false;
   isEditModeOnOpen: boolean = false;
 
-
   constructor(
     private patientService: PatientService,
     private groupservice: GroupsService,
@@ -226,7 +225,6 @@ export class PatientTableComponent implements OnInit, OnChanges {
     }
   }
 
-
   /** חישוב גיל לפי תאריך לידה */
   getAge(dateOfBirth?: string): number | null {
     if (!dateOfBirth) return null;
@@ -262,19 +260,14 @@ export class PatientTableComponent implements OnInit, OnChanges {
     }
   }
 
-
-
   openPatientDetails(patient: any, editMode: boolean) {
     // ניווט ל-patient-view עם מזהה המטופל
     this.router.navigate(['/patient-view', patient.patient.patient_id]);
   }
 
-
-
   closePatientDetails() {
     this.selectedPatient = null;
   }
-
 
   openAddPatientDialog(): void {
     const dialogRef = this.dialog.open(AddPatientDialogComponent, {

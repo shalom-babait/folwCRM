@@ -82,7 +82,15 @@ getAssignmentLabel(task: Task): string {
  ngOnInit(): void {
   // טוען מטופלים ומשימות רק כאשר isHomePage=true (כלומר, רק באזור האישי של מטפל)
   if (this.isHomePage) {
+    // בדוק אם יש מתודה loadPatients ב-PatientStateService
+    if (typeof (this.patientState as any).loadPatients === 'function') {
+      console.log('PatientStateService.loadPatients exists. Calling it...');
+      (this.patientState as any).loadPatients();
+    } else {
+      console.warn('PatientStateService.loadPatients DOES NOT exist!');
+    }
     this.patientState.patients$.subscribe((patients: PatientData[]) => {
+      // console.log('patients$ emitted:', patients);
       this.patientsMap = {};
       for (const patient of patients) {
         if (patient.patient_id !== undefined && patient.person) {
@@ -98,10 +106,10 @@ getAssignmentLabel(task: Task): string {
         this.taskService.getTasksByUserId(this.userId).subscribe({
           next: (tasks: Task[]) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            console.log('tasks:', this.tasks);
+            // console.log('tasks:', this.tasks);
             this.tasks.forEach(task => {
               const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-              console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
+              // console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
             });
           },
           error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
@@ -110,10 +118,10 @@ getAssignmentLabel(task: Task): string {
         this.taskService.getTasksByPatientId(this.patientId).subscribe({
           next: (tasks) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            console.log('tasks:', this.tasks);
+            // console.log('tasks:', this.tasks);
             this.tasks.forEach(task => {
               const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-              console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
+              // console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
             });
           },
           error: (err) => console.error('שגיאה בקבלת משימות', err)

@@ -1,3 +1,4 @@
+import { PatientService } from 'src/app/services/patient.service';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PatientData } from 'src/app/models/patient.model';
@@ -21,6 +22,25 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class PatientStateService {
+  constructor(private patientService: PatientService) {}
+  // טוען מטופלים מהשרת ומעדכן state
+  loadPatients() {
+    this.setLoading(true);
+    this.patientService.getAllPatients().subscribe({
+      next: (patients: any[]) => {
+        // המרה ל-PatientData (בהנחה שיש שדות בסיסיים)
+        const mapped: PatientData[] = patients.map(p => ({
+          ...p,
+          user_id: p.user_id ?? null, // ודא ששדה user_id קיים, או הוסף ברירת מחדל
+        }));
+        this.setPatients(mapped);
+      },
+      error: (err: any) => {
+        this.setError('שגיאה בטעינת מטופלים');
+        console.error('שגיאה בטעינת מטופלים:', err);
+      }
+    });
+  }
 
   private stateSubject = new BehaviorSubject<PatientsState>(initialPatientsState);
   state$ = this.stateSubject.asObservable();

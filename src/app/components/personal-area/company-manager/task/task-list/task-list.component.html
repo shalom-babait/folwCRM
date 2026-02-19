@@ -57,9 +57,9 @@
   <div class="task-card" *ngFor="let task of tasks"
     [style.borderRightColor]="editTaskId === task.task_id && editTaskForm ? (editTaskForm.get('color')?.value || task.color || '#FFD54F') : (task.color || '#ccc')">
 
-    <!-- הצגת שם המטופל בראש כל משימה בדף הבית -->
-    <div *ngIf="isHomePage && task.patient_id && patientsMap[task.patient_id]" class="patient-name-header" style="font-weight:bold; color:#1976d2; margin-bottom:4px;">
-      {{ patientsMap[task.patient_id] }}
+    <!-- הצגת שם המטופל מתוך task.patientName בראש כל משימה בדף הבית -->
+    <div *ngIf="isHomePage && task.patientName" class="patient-name-header" style="font-weight:bold; color:#1976d2; margin-bottom:4px;">
+      {{ task.patientName }}
     </div>
 
     <ng-container *ngIf="editTaskId === task.task_id && editTaskForm; else displayTask">
