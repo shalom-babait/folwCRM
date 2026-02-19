@@ -238,9 +238,9 @@
 }
 
 .data-row.selected {
-  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(2, 47, 57, 0.3);
+  background: #F5F5F5;
+  color: #022F39;
+  box-shadow: 0 4px 12px rgba(2, 47, 57, 0.08);
 }
 
 /* ==================== תאים כלליים ==================== */
@@ -910,9 +910,4 @@
 
 .checkbox-cell input[type="checkbox"]:hover {
   transform: scale(1.1);
-}
-
-.data-row.selected {
-  background: linear-gradient(135deg, #022F39 0%, #034752 100%);
-  color: white;
 }

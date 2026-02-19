@@ -41,15 +41,7 @@
       </div>
 
       <!-- יומן חדר ב-overlay -->
-      <ng-container *ngIf="showOverlay">
-        <app-calendar-overlay
-          [showOverlay]="showOverlay"
-          [selectedRoomId]="selectedRoomId"
-          [roomEvents]="roomEvents"
-          (overlayDateSelected)="onOverlayDateSelected($event)"
-          (closeOverlayEvent)="closeOverlay()">
-        </app-calendar-overlay>
-      </ng-container>
+      <!-- overlay/calendar logic removed: לא מוצג יומן -->
 
       <!-- תאריך -->
       <div class="form-field">
