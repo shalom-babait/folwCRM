@@ -14,7 +14,10 @@
 		<table class="problem-row ratings-table">
 			<thead>
 				<tr class="header-row">
-					<th class="problem-cell checkbox-cell"></th>
+					<th class="problem-cell checkbox-cell">
+						<input type="checkbox"  title="בחר הכל"[checked]="isAllSelected()" (change)="toggleAll()">
+					</th>
+
 					<th class="problem-cell">תאריך</th>
 					<th class="problem-cell">דירוג</th>
 					<th class="problem-cell">הערות</th>

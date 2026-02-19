@@ -153,4 +153,26 @@ export class PatientProblemRatingListComponent implements OnInit {
     return id != null && this.selectedIds.has(id);
   }
 
+  toggleAll(): void {
+    if (this.isAllSelected()) {
+      this.selectedIds.clear();
+    } else {
+      this.sortedRatings.forEach(r => {
+        if (r.patient_problem_rating_id != null) {
+          this.selectedIds.add(r.patient_problem_rating_id);
+        }
+      });
+    }
+  }
+
+  isAllSelected(): boolean {
+    return (
+      this.sortedRatings.length > 0 &&
+      this.sortedRatings.every(r =>
+        r.patient_problem_rating_id != null &&
+        this.selectedIds.has(r.patient_problem_rating_id)
+      )
+    );
+  }
+
 }

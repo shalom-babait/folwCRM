@@ -129,4 +129,40 @@ export class ExpensesTableComponent implements OnInit {
       this.expenses = this.expenses.filter(x => x.expense_id !== id);
     });
   }
+
+  selectedIds = new Set<number>();
+
+toggleSelection(id: number | undefined): void {
+  if (id == null) return;
+  this.selectedIds.has(id)
+    ? this.selectedIds.delete(id)
+    : this.selectedIds.add(id);
+}
+
+isSelected(id: number | undefined): boolean {
+  return id != null && this.selectedIds.has(id);
+}
+
+toggleAll(): void {
+  if (this.isAllSelected()) {
+    this.selectedIds.clear();
+  } else {
+    this.filteredExpenses.forEach(e => {
+      if (e.expense_id != null) {
+        this.selectedIds.add(e.expense_id);
+      }
+    });
+  }
+}
+
+isAllSelected(): boolean {
+  return (
+    this.filteredExpenses.length > 0 &&
+    this.filteredExpenses.every(e =>
+      e.expense_id != null &&
+      this.selectedIds.has(e.expense_id)
+    )
+  );
+}
+
 }

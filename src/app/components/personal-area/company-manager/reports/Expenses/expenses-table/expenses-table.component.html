@@ -23,6 +23,10 @@
 
   <!-- כותרות -->
   <div class="expenses-row header-row">
+    <div class="expenses-cell checkbox-cell">
+      <mat-checkbox [checked]="isAllSelected()" title="בחר הכל" (change)="toggleAll()">
+      </mat-checkbox>
+    </div>
     <div class="expenses-cell">תאריך תשלום</div>
     <div class="expenses-cell">סכום</div>
     <div class="expenses-cell">קטגוריה</div>
@@ -36,6 +40,11 @@
   <ng-container *ngIf="filteredExpenses.length > 0; else noExpenses">
     <div class="scrollable-rows">
       <div class="expenses-row data-row" *ngFor="let e of filteredExpenses">
+        <div class="expenses-cell checkbox-cell">
+          <mat-checkbox [checked]="isSelected(e.expense_id)" (change)="toggleSelection(e.expense_id)">
+          </mat-checkbox>
+        </div>
+
         <div class="expenses-cell">{{ e.payment_date | date:'dd/MM/yyyy' }}</div>
         <div class="expenses-cell">{{ e.amount | number:'1.2-2' }}</div>
         <div class="expenses-cell">{{ getCategoryName(e.expense_category_id, e.other_category_name) }}</div>
@@ -43,7 +52,8 @@
         <div class="expenses-cell">{{ e.reference_number }}</div>
         <div class="expenses-cell">{{ e.notes }}</div>
         <div class="expenses-cell actions-cell">
-          <button mat-icon-button [matMenuTriggerFor]="expenseMenu" aria-label="open actions" (click)="$event.stopPropagation()">
+          <button mat-icon-button [matMenuTriggerFor]="expenseMenu" aria-label="open actions"
+            (click)="$event.stopPropagation()">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #expenseMenu="matMenu" xPosition="before" [backdropClass]="'transparent-backdrop'">

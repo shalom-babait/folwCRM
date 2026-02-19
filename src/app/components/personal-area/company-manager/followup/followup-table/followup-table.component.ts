@@ -102,4 +102,27 @@ export class FollowupTableComponent implements OnInit {
     return id != null && this.selectedIds.has(id);
   }
 
+  toggleAll(): void {
+    if (this.isAllSelected()) {
+      this.selectedIds.clear();
+    } else {
+      this.filteredFollowups.forEach(f => {
+        if (f.followup_id != null) {
+          this.selectedIds.add(f.followup_id);
+        }
+      });
+    }
+  }
+
+  isAllSelected(): boolean {
+    return (
+      this.filteredFollowups.length > 0 &&
+      this.filteredFollowups.every(f =>
+        f.followup_id != null &&
+        this.selectedIds.has(f.followup_id)
+      )
+    );
+  }
+
+
 }

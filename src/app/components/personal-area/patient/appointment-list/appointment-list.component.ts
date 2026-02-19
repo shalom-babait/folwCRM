@@ -238,21 +238,35 @@ export class AppointmentListComponent implements OnInit {
 
   toggleSelection(id: number | undefined): void {
     if (id == null) return;
-
     this.selectedIds.has(id)
       ? this.selectedIds.delete(id)
       : this.selectedIds.add(id);
-
-    console.log('selectedIds:', Array.from(this.selectedIds));
   }
 
   isSelected(id: number | undefined): boolean {
     return id != null && this.selectedIds.has(id);
   }
-  
-  printSelected(): void {
-  console.log('selectedIds:', Array.from(this.selectedIds));
-}
 
+  toggleAll(): void {
+    if (this.isAllSelected()) {
+      this.selectedIds.clear();
+    } else {
+      this.filteredAppointments.forEach(a => {
+        if (a.appointment_id != null) {
+          this.selectedIds.add(a.appointment_id);
+        }
+      });
+    }
+  }
+
+  isAllSelected(): boolean {
+    return (
+      this.filteredAppointments.length > 0 &&
+      this.filteredAppointments.every(a =>
+        a.appointment_id != null &&
+        this.selectedIds.has(a.appointment_id)
+      )
+    );
+  }
 
 }
