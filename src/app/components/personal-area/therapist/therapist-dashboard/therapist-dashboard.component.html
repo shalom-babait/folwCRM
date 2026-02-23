@@ -6,7 +6,7 @@
     <app-rooms-view *ngIf="selectedSection === 'rooms'"></app-rooms-view>
     <!-- <app-mail *ngIf="selectedSection === 'mail'"></app-mail> -->
     <!-- <app-declarations *ngIf="selectedSection === 'declarations'"></app-declarations> -->
-    <app-calender-view *ngIf="selectedSection === 'calendar'"></app-calender-view>
+    <app-calender-view *ngIf="selectedSection === 'calendar'" [therapistId]="therapistId"></app-calender-view>
     <app-user-follow-up-table *ngIf="selectedSection === 'followups'"></app-user-follow-up-table>
   <app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
   <app-therapist-settings-view *ngIf="selectedSection === 'settings'"></app-therapist-settings-view>
