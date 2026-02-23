@@ -2,6 +2,7 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CreatePatientProblemRating } from 'src/app/models/patient-problems';
+import { UserStateService } from 'src/app/services/state/user-state.service';
 import { PatientProblemsService } from 'src/app/services/patient-problems.service';
 
 // ...השארת מחלקה אחת בלבד, כל השאר הוסר...
@@ -22,7 +23,8 @@ export class AddPatientProblemRatingComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddPatientProblemRatingComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { patient_problem_id: number; last_score?: number | null },
-    private patientProblemsService: PatientProblemsService
+    private patientProblemsService: PatientProblemsService,
+    private userStateService: UserStateService
   ) {
     this.patient_problem_id = data?.patient_problem_id;
   }
@@ -66,12 +68,23 @@ export class AddPatientProblemRatingComponent implements OnInit {
     if (this.ratingForm.invalid) return;
     this.isSubmitting = true;
     const formValue = this.ratingForm.value;
-    const rating: Omit<CreatePatientProblemRating, 'patient_problem_id'> = {
+    // קבלת organization_id מהסטייט או localStorage
+    let orgId = 1;
+    const user = this.userStateService.getUser();
+    if (user && user.user && user.user.organization_id) {
+      orgId = user.user.organization_id;
+    } else {
+      orgId = Number(localStorage.getItem('organization_id')) || 1;
+    }
+    const rating: import('src/app/models/patient-problems').PatientProblemRating = {
+      patient_problem_id: this.patient_problem_id,
       rating_date: formValue.rating_date,
       score: formValue.score,
-      notes: formValue.notes
+      notes: formValue.notes,
+      organization_id: orgId
     };
-    this.patientProblemsService.addProblemRating(this.patient_problem_id, rating).subscribe({
+    console.log('נשלח לשרת דירוג:', rating);
+    this.patientProblemsService.addProblemRating(rating).subscribe({
       next: (savedRating) => {
         this.isSubmitting = false;
         this.dialogRef.close(savedRating);

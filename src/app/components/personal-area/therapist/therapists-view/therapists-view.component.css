@@ -1,0 +1,27 @@
+/* מבנה כללי */
+.therapists-view-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* טאב היומן */
+.calendar-view {
+  height: 100%;
+  width: 100%;
+}
+
+.calendar-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: calc(100vh - 200px);
+  min-height: 600px;
+  overflow: auto;
+}
+
+.calendar-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.5rem;
+}

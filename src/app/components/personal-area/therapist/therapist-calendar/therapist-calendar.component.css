@@ -28,3 +28,74 @@
   display: block !important;
   opacity: 1 !important;
 }
+
+/* מבנה החדש עם sidebar ויומן */
+.therapist-calendar-container {
+  height: 100%;
+  width: 100%;
+}
+
+.calendar-with-sidebar {
+  display: flex;
+  gap: 1rem;
+  height: 100%;
+  direction: rtl;
+}
+
+/* סיידבר עם מניו סינון */
+.calendar-sidebar {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
+
+/* יומן ראשי */
+.calendar-main {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* responsive */
+@media (max-width: 1200px) {
+  .calendar-sidebar {
+    flex: 0 0 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-with-sidebar {
+    flex-direction: column;
+  }
+  
+  .calendar-sidebar {
+    flex: 0 0 auto;
+    max-height: 400px;
+  }
+  
+  .calendar-main {
+    flex: 1;
+  }
+}
+
+/* מצב compact - ליומן בדף הבית של המטפל */
+.compact-calendar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  width: 100%;
+}
+
+.compact-filter-header {
+  flex: 0 0 auto;
+}
+
+.compact-calendar-main {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}

@@ -18,10 +18,13 @@ export class ReportsService {
    * @param months Array of selected month numbers (1-12)
    * @param therapistId Optional therapist id
    */
-  getIncomeByMonths(year: number, months: number[], therapistId?: number): Observable<any> {
+  getIncomeByMonths(year: number, months: number[], therapistId?: number, userId?: number): Observable<any> {
     const body: any = { year, months };
     if (therapistId !== undefined) {
       body.therapistId = therapistId;
+    }
+    if (userId !== undefined) {
+      body.userId = userId;
     }
     console.log('getIncomeByMonths - body:', body);
     return this.http.post(`${this.apiUrl}/income-by-months`, body);
@@ -33,8 +36,11 @@ export class ReportsService {
     /**
    * Get last 12 months income for a given year and month
    */
-  getMonthlyIncome(year: number, month: number): Observable<any> {
-    const body = { year, month };
+  getMonthlyIncome(year: number, month: number, userId?: number): Observable<any> {
+    const body: any = { year, month };
+    if (userId !== undefined) {
+      body.userId = userId;
+    }
     return this.http.post(`${this.apiUrl}/income-last-12`, body);
   }
 }

@@ -44,6 +44,7 @@ import { PatientDashboardComponent } from './components/personal-area/patient/pa
 import { PatientListComponent } from './components/personal-area/patient/patient-list/patient-list.component';
 import { PatientNameFilterPipe } from './components/personal-area/patient/patient-list/patient-name-filter.pipe';
 import { TherapistCalendarComponent } from './components/personal-area/therapist/therapist-calendar/therapist-calendar.component'
+import { TherapistCalendarFilterMenuComponent } from './components/personal-area/therapist/therapist-calendar-filter-menu/therapist-calendar-filter-menu.component';
 import { TherapistDashboardComponent } from './components/personal-area/therapist/therapist-dashboard/therapist-dashboard.component';
 import { AppointmentListComponent } from './components/personal-area/patient/appointment-list/appointment-list.component';
 import { AddPatientDialogComponent } from './components/personal-area/patient/add-patient-dialog/add-patient-dialog.component';
@@ -144,6 +145,7 @@ import { AddExpenseCategoriesComponent } from './components/personal-area/compan
     AdminDashboardComponent,
     SecretaryDashboardComponent,
     TherapistCalendarComponent,
+    TherapistCalendarFilterMenuComponent,
     PatientDashboardComponent,
     TherapistDashboardComponent,
     AppointmentListComponent,

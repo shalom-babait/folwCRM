@@ -5,6 +5,7 @@ import { TherapistSessionService } from 'src/app/services/therapist-session.serv
 import { TherapistCreationData, TherapistData } from 'src/app/models/therapist.model';
 import { environment } from 'src/environments/environment';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { UserStateService } from 'src/app/services/state/user-state.service';
 
 @Component({
   selector: 'app-log-in',
@@ -51,7 +52,8 @@ export class LogInComponent {
     private therapistSessionService: TherapistSessionService,
     private router: Router,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private userState: UserStateService
   ) {}
 
   // ===================== Lifecycle Hooks =====================
@@ -104,7 +106,7 @@ export class LogInComponent {
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         if (res.user) {
-          localStorage.setItem('user', JSON.stringify(res.user));
+          this.userState.setUser({ user: res.user, person: res.user?.person || {} });
           this.user_name = res.user.user_name || '';
         }
         // שמירת organization_id
@@ -130,10 +132,10 @@ export class LogInComponent {
         if (res.secretary_id) {
           localStorage.setItem('secretary_id', res.secretary_id.toString());
         }
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const role = user.role;
-        // ניתוב לפי תפקיד (משתמש במיפוי אחיד)
-        this.router.navigate([this.routes[role] || '/']);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const role = user.user?.role;
+  // ניתוב לפי תפקיד (משתמש במיפוי אחיד)
+  this.router.navigate([this.routes[role] || '/']);
       },
       error: (err) => {
         this.errorHandler.handleHttpError(err);

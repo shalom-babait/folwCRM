@@ -1,0 +1,114 @@
+<div class="filter-menu-container">
+  <!-- כותרת התפריט -->
+  <div class="filter-header">
+    <h3>סינון יומן</h3>
+  </div>
+
+  <!-- קטגוריה: המטופלים שלי -->
+  <div class="filter-category">
+    <div class="category-header" (click)="togglePatientsExpanded()">
+      <span class="expand-icon" [class.expanded]="isPatientsExpanded">
+        {{ isPatientsExpanded ? '▼' : '◄' }}
+      </span>
+      <span class="category-title">המטופלים שלי</span>
+      <span class="selected-count" *ngIf="!isPatientsExpanded && patients.length > 0">
+        ({{ selectedPatientsCount }}/{{ patients.length }})
+      </span>
+    </div>
+
+    <!-- רשימת המטופלים -->
+    <div class="category-content" *ngIf="isPatientsExpanded">
+      <!-- טעינה -->
+      <div *ngIf="isLoadingPatients" class="loading-message">
+        טוען מטופלים...
+      </div>
+
+      <!-- אין מטופלים -->
+      <div *ngIf="!isLoadingPatients && patients.length === 0" class="empty-message">
+        אין מטופלים זמינים
+      </div>
+
+      <!-- בחירת הכל/ביטול הכל -->
+      <div *ngIf="!isLoadingPatients && patients.length > 0" class="select-all-row">
+        <label class="filter-checkbox-label">
+          <input 
+            type="checkbox" 
+            [checked]="areAllPatientsSelected"
+            [indeterminate]="isSomePatientsSelected"
+            (change)="toggleAllPatients($any($event.target).checked)"
+          />
+          <span class="checkbox-text">בחר הכל</span>
+        </label>
+      </div>
+
+      <!-- רשימת המטופלים עם checkboxes -->
+      <div *ngIf="!isLoadingPatients" class="filter-items-list">
+        <label 
+          *ngFor="let patient of patients" 
+          class="filter-checkbox-label"
+        >
+          <input 
+            type="checkbox" 
+            [checked]="patient.isSelected"
+            (change)="onPatientSelectionChange(patient.patient_id, $any($event.target).checked)"
+          />
+          <span class="checkbox-text">{{ patient.displayName }}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- קטגוריה: החדרים שלי -->
+  <div class="filter-category">
+    <div class="category-header" (click)="toggleRoomsExpanded()">
+      <span class="expand-icon" [class.expanded]="isRoomsExpanded">
+        {{ isRoomsExpanded ? '▼' : '◄' }}
+      </span>
+      <span class="category-title">החדרים שלי</span>
+      <span class="selected-count" *ngIf="!isRoomsExpanded && rooms.length > 0">
+        ({{ selectedRoomsCount }}/{{ rooms.length }})
+      </span>
+    </div>
+
+    <!-- רשימת החדרים -->
+    <div class="category-content" *ngIf="isRoomsExpanded">
+      <!-- טעינה -->
+      <div *ngIf="isLoadingRooms" class="loading-message">
+        טוען חדרים...
+      </div>
+
+      <!-- אין חדרים -->
+      <div *ngIf="!isLoadingRooms && rooms.length === 0" class="empty-message">
+        אין חדרים זמינים
+      </div>
+
+      <!-- בחירת הכל/ביטול הכל -->
+      <div *ngIf="!isLoadingRooms && rooms.length > 0" class="select-all-row">
+        <label class="filter-checkbox-label">
+          <input 
+            type="checkbox" 
+            [checked]="areAllRoomsSelected"
+            [indeterminate]="isSomeRoomsSelected"
+            (change)="toggleAllRooms($any($event.target).checked)"
+          />
+          <span class="checkbox-text">בחר הכל</span>
+        </label>
+      </div>
+
+      <!-- רשימת החדרים עם checkboxes -->
+      <div *ngIf="!isLoadingRooms" class="filter-items-list">
+        <label 
+          *ngFor="let room of rooms" 
+          class="filter-checkbox-label"
+        >
+          <input 
+            type="checkbox" 
+            [checked]="room.isSelected"
+            (change)="onRoomSelectionChange(room.room_id, $any($event.target).checked)"
+          />
+          <span class="checkbox-text">{{ room.room_name }}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

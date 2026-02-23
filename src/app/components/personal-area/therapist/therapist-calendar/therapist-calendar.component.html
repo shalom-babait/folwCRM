@@ -1,1 +1,32 @@
-<app-display-calendar [events]="calendarEvents" [miniCalendar]="compact" [ngClass]="{'mini-calendar': compact}"></app-display-calendar>
+<div class="therapist-calendar-container">
+  <!-- מבנה מלא עם מניו סינון - רק במצב רגיל (לא compact) -->
+  <ng-container *ngIf="!compact; else compactMode">
+    <div class="calendar-with-sidebar">
+      <!-- סיידבר עם מניו סינון -->
+      <div class="calendar-sidebar">
+        <app-mini-calender [events]="calendarEvents"></app-mini-calender>
+        <app-therapist-calendar-filter-menu
+          [therapistId]="therapistId"
+          (filterChanged)="onFilterChanged($event)">
+        </app-therapist-calendar-filter-menu>
+      </div>
+      
+      <!-- היומן הראשי -->
+      <div class="calendar-main">
+        <app-display-calendar 
+          [events]="calendarEvents" 
+          [miniCalendar]="false">
+        </app-display-calendar>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- מצב compact - רק יומן -->
+  <ng-template #compactMode>
+    <app-display-calendar 
+      [events]="calendarEvents" 
+      [miniCalendar]="true" 
+      [ngClass]="{'mini-calendar': true}">
+    </app-display-calendar>
+  </ng-template>
+</div>

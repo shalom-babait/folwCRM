@@ -65,16 +65,34 @@ export class ExpensesTableComponent implements OnInit {
 
   addCategory(): void {
     if (!this.newCategoryName.trim()) return;
-    // כאן אפשר להוסיף קריאה לשרת להוספת קטגוריה
-    this.categories.push({
-      expense_category_id: Date.now(), // מזהה זמני
-      organization_id: 1,
+    // קבלת organization_id מהסטייט
+    let orgId = 1;
+    try {
+      const userStateService = (window as any).ng?.getInjector(this.constructor)?.get('UserStateService');
+      if (userStateService && userStateService.getUser()) {
+        orgId = userStateService.getUser().user.organization_id || 1;
+      } else {
+        orgId = Number(localStorage.getItem('organization_id')) || 1;
+      }
+    } catch {
+      orgId = Number(localStorage.getItem('organization_id')) || 1;
+    }
+    const newCat = {
       category_name: this.newCategoryName,
+      organization_id: orgId,
       is_active: true,
-      created_at: ''
+      created_at: new Date().toISOString()
+    };
+    this.expensesService.addExpenseCategory(newCat).subscribe({
+      next: (savedCat) => {
+        this.categories.push(savedCat);
+        this.newCategoryName = '';
+        this.showAddCategoryInput = false;
+      },
+      error: () => {
+        alert('שגיאה בהוספת קטגוריה');
+      }
     });
-    this.newCategoryName = '';
-    this.showAddCategoryInput = false;
   }
 
   get filteredExpenses(): Expense[] {
