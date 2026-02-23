@@ -1,3 +1,4 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Expense, ExpenseCategory } from '../models/expenses.model';
@@ -21,7 +22,10 @@ export class ExpensesService {
   getExpenseById(id: number): Observable<Expense> {
     return this.http.get<Expense>(`${this.baseUrl}/${id}`);
   }
-
+  // הוספת קטגוריה חדשה להוצאה
+  addExpenseCategory(category: Partial<ExpenseCategory>): Observable<ExpenseCategory> {
+    return this.http.post<ExpenseCategory>(`${this.baseUrl}/categories`, category);
+  }
   // יצירת הוצאה
   createExpense(expense: Partial<Expense>): Observable<Expense> {
     return this.http.post<Expense>(`${this.baseUrl}/create`, expense);

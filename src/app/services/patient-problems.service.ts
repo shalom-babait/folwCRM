@@ -42,9 +42,12 @@ export class PatientProblemsService {
   /**
    * הוספת דירוג לבעיה קיימת (נתיב חדש)
    */
-  addProblemRating(patient_problem_id: number, rating: Omit<CreatePatientProblemRating, 'patient_problem_id'>): Observable<PatientProblemRating> {
-    console.log('נתוני דירוג שנשלחים לשרת:', { patient_problem_id, ...rating });
-    return this.http.post<PatientProblemRating>(`${this.apiUrl}/${patient_problem_id}/problem-ratings`, rating);
+  /**
+   * הוספת דירוג לבעיה קיימת (כל הנתונים ב-body)
+   */
+  addProblemRating(rating: PatientProblemRating): Observable<PatientProblemRating> {
+  console.log('נתוני דירוג שנשלחים לשרת:', rating);
+  return this.http.post<PatientProblemRating>(`${this.apiUrl}/${rating.patient_problem_id}/problem-ratings`, rating);
   }
 
   /**

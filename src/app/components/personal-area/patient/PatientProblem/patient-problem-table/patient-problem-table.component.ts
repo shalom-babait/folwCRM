@@ -79,7 +79,8 @@ export class PatientProblemTableComponent implements OnInit {
   addProblemRating(problem: PatientProblem): void {
     if (!problem.patient_problem_id) return;
     this.dialog.open(AddPatientProblemRatingComponent, {
-      width: '400px',
+      width: '40rem',
+      maxWidth: '90vw',
       data: {
         patient_problem_id: problem.patient_problem_id,
         last_score: (problem as any).last_score || null

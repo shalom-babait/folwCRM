@@ -21,14 +21,15 @@ export interface CreditTransaction {
 
 export type Transaction = DebitTransaction | CreditTransaction;
 export interface Payment {
-  payment_id?: number; // או payment_id, לפי מה שמחזיר ה-API
-  appointment_id: number;
+  payment_id?: number;
+  organization_id?: number;
+  appointment_id?: number;
   amount: number;
-  payment_date?: Date; // או string אם לא ממירים ל-Date
+  payment_date?: string | Date; // תואם timestamp מה-DB, יכול להיות גם Date
   method: 'כרטיס אשראי' | 'העברה בנקאית' | 'מזומן';
   status?: 'pending' | 'paid' | 'failed' | 'refunded';
   transaction_type?: 'debit' | 'credit';
-  person_id?: number; // או patient_id, לפי השימוש שלך
+  person_id?: number;
   therapist_id: number;
   balance?: number;
 }

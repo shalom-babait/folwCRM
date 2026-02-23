@@ -202,6 +202,10 @@ export class AddTransactionComponent implements OnInit {
         person_id: this.personId,
         therapist_id: transaction.therapist_id
       };
+      // הוספת organization_id אם קיים ב-data
+      if (this.data?.organization_id) {
+        payload.organization_id = this.data.organization_id;
+      }
       if (transaction.transaction_type === 'debit') {
         payload.appointment_id = transaction.appointment_id;
       }

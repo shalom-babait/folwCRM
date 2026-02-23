@@ -7,6 +7,7 @@ export interface PatientProblem {
   status: 'active' | 'resolved';
   created_at?: string; // ISO date
   closed_at?: string | null; // ISO date | null
+  organization_id: number;
 }
 // מדידה של מצב בעיה מסוימת בתאריך נתון.
 export interface PatientProblemRating {
@@ -16,6 +17,7 @@ export interface PatientProblemRating {
   score: number; // 1–10
   notes?: string;
   created_at?: string; // ISO date
+  organization_id: number;
 }
 // מודל תצוגה משולב – בעיה + כל הדירוגים שלה.
 export interface PatientProblemWithRatings extends PatientProblem {
