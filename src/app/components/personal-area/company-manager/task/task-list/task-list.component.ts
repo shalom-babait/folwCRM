@@ -84,13 +84,10 @@ getAssignmentLabel(task: Task): string {
   if (this.isHomePage) {
     // בדוק אם יש מתודה loadPatients ב-PatientStateService
     if (typeof (this.patientState as any).loadPatients === 'function') {
-      console.log('PatientStateService.loadPatients exists. Calling it...');
       (this.patientState as any).loadPatients();
     } else {
-      console.warn('PatientStateService.loadPatients DOES NOT exist!');
     }
     this.patientState.patients$.subscribe((patients: PatientData[]) => {
-      // console.log('patients$ emitted:', patients);
       this.patientsMap = {};
       for (const patient of patients) {
         if (patient.patient_id !== undefined && patient.person) {
@@ -99,17 +96,13 @@ getAssignmentLabel(task: Task): string {
           this.patientsMap[patient.patient_id] = (first + (last ? ' ' + last : '')).trim();
         }
       }
-      console.log('--- אבחון מטופלים ---');
-      console.log('patientsMap:', this.patientsMap);
       // לאחר שהמפה מוכנה, נטען את המשימות
       if (this.userId) {
         this.taskService.getTasksByUserId(this.userId).subscribe({
           next: (tasks: Task[]) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            // console.log('tasks:', this.tasks);
             this.tasks.forEach(task => {
               const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-              // console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
             });
           },
           error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
@@ -118,10 +111,8 @@ getAssignmentLabel(task: Task): string {
         this.taskService.getTasksByPatientId(this.patientId).subscribe({
           next: (tasks) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            // console.log('tasks:', this.tasks);
             this.tasks.forEach(task => {
               const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-              // console.log('task id:', task.task_id, 'patient_id:', task.patient_id, 'patientsMap[patient_id]:', pid !== undefined ? this.patientsMap[pid] : undefined);
             });
           },
           error: (err) => console.error('שגיאה בקבלת משימות', err)
@@ -197,7 +188,6 @@ getAssignmentLabel(task: Task): string {
       color: this.addTaskForm.value.color || '#FFD54F',
       assignments: assignments.map(a => ({ entity_id: a.entity_id, entity_type: a.entity_type }))
     };
-    console.log('Task object sent to server:', newTask);
     this.taskService.addTask(newTask).subscribe({
       next: (savedTask) => {
         this.tasks = [savedTask, ...this.tasks];
@@ -264,7 +254,6 @@ getAssignmentLabel(task: Task): string {
       ...this.editTaskForm.value,
       assignments
     };
-    console.log('Task object sent to server (edit):', updatedTask);
     this.taskService.updateTask(task.task_id, updatedTask).subscribe({
       next: () => {
         this.refreshTasks();
@@ -288,7 +277,6 @@ getAssignmentLabel(task: Task): string {
     if (this.patientId) {
       this.taskService.getTasksByPatientId(this.patientId).subscribe({
         next: (tasks) => {
-          console.log('Tasks list from server (refresh):', tasks);
           this.tasks = tasks;
         },
         error: (err) => console.error('שגיאה ברענון משימות', err)
