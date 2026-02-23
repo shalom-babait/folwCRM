@@ -2,6 +2,7 @@ import { Person } from "./person.model";
 
 export interface UserData {
   user_id?: number;
+  organization_id?: number;
   person_id?: number; 
   user_name: string;
   password?: string;

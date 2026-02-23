@@ -31,7 +31,7 @@ export class PaymentListComponent implements OnInit {
   }
 
   loadTransactions() {
-  this.paymentService.getPaymentsByPatientId(this.patient.patient.patient_id || 0).subscribe({
+    this.paymentService.getPaymentsByPatientId(this.patient.patient.patient_id || 0).subscribe({
       next: (data) => {
         console.log('Transactions from server:', data);
         this.transactions = data.map((item: any) => {
@@ -50,9 +50,11 @@ export class PaymentListComponent implements OnInit {
 
         // מיון לפי תאריך מהישן לחדש
         this.transactions.sort((a, b) => {
+          const aDate = typeof a.payment_date === 'string' ? new Date(a.payment_date) : a.payment_date;
+          const bDate = typeof b.payment_date === 'string' ? new Date(b.payment_date) : b.payment_date;
           return this.sortOrder === 'asc'
-            ? (a.payment_date?.getTime() ?? 0) - (b.payment_date?.getTime() ?? 0)
-            : (b.payment_date?.getTime() ?? 0) - (a.payment_date?.getTime() ?? 0);
+            ? ((aDate && bDate) ? aDate.getTime() - bDate.getTime() : 0)
+            : ((aDate && bDate) ? bDate.getTime() - aDate.getTime() : 0);
         });
         this.transactions = this.recalculateBalances(this.transactions);
         this.filteredTransactions = [...this.transactions];
@@ -79,9 +81,10 @@ export class PaymentListComponent implements OnInit {
 
     if (this.dateFilter) {
       const filterDate = new Date(this.dateFilter);
-      list = list.filter(t =>
-        t.payment_date ? t.payment_date >= filterDate : false
-      );
+      list = list.filter(t => {
+        const tDate = typeof t.payment_date === 'string' ? new Date(t.payment_date) : t.payment_date;
+        return tDate ? tDate >= filterDate : false;
+      });
     }
 
     if (this.amountFilter) {
@@ -204,12 +207,13 @@ export class PaymentListComponent implements OnInit {
   }
 
 
-  formatDate(date: Date): string {
-    const d = new Date(date);
-    // שימוש בתאריך המקומי של המשתמש
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+  formatDate(date: string | Date): string {
+    if (!(date instanceof Date)) {
+      date = new Date(date);
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     return `${day}/${month}/${year}`;
   }
 
