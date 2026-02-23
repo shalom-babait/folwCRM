@@ -21,8 +21,8 @@ export class TherapistHomeComponent {
     const userData = localStorage.getItem('user');
     if (userData) {
       const userObj = JSON.parse(userData);
-      this.userId = userObj.user_id ?? null;
-      this.therapistId = userObj.role === 'therapist' ? userObj.user_id : null;
+      this.userId = userObj.user?.user_id ?? null;
+      this.therapistId = userObj.user?.role === 'therapist' ? userObj.user?.user_id : null;
     } else {
       this.userId = null;
       this.therapistId = null;
