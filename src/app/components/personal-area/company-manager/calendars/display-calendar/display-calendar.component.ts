@@ -157,7 +157,9 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // עדכן את החודש והשנה פעם אחת אחרי שה-View נטען
     if (this.calendarComponent?.getApi) {
-      const currentDate = this.calendarComponent.getApi().getDate();
+      const api = this.calendarComponent.getApi();
+      const currentDate = api.getDate();
+      
       this.currentMonthYear = currentDate.toLocaleDateString('he-IL', {
         year: 'numeric',
         month: 'long'
@@ -165,20 +167,38 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
       if (this.cdr) {
         this.cdr.detectChanges();
       }
+      
+      // נסה לרנדר מחדש
+      setTimeout(() => {
+        api.render();
+      }, 100);
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['events']) {
+      // עדכן את calendarOptions עם האירועים החדשים
       this.calendarOptions = {
         ...this.calendarOptions,
-        events: this.events
+        events: this.events || []
       };
 
       if (this.calendarComponent?.getApi) {
         const api = this.calendarComponent.getApi();
-        api.removeAllEvents();
+        
+        // אל תעדכן אם מגיע מערך ריק והיומן כבר מאותחל
+        if (!this.events || this.events.length === 0) {
+          return;
+        }
+        
+        api.removeAllEventSources();
+        
         api.addEventSource(this.events);
+        
+        // כפה render
+        setTimeout(() => {
+          api.render();
+        }, 50);
       }
     }
   }
