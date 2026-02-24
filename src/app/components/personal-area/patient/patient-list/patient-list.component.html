@@ -48,7 +48,7 @@
     <div *ngIf="!isLoading && filteredPatients.length > 0">
       <div class="list-item-card" *ngFor="let patient of filteredPatients | patientNameFilter:searchText"
         [class.selected]="selectedPatientId === (patient.patient ? patient.patient.patient_id : null)">
-        <div class="item-info" (click)="viewPatientDetails(patient); logPatient(patient)">
+  <div class="item-info" (click)="viewPatientDetails(patient)">
           <span class="item-name">
             {{ patient.person.first_name || '---' }} {{ patient.person.last_name || '' }}
           </span>

@@ -17,7 +17,7 @@ export class TaskListComponent implements OnInit {
   @Input() userId: number | null = null;
   @Input() filterFn?: (task: Task) => boolean;
   @Input() isHomePage: boolean = false;
-  patientsMap: { [id: number]: string } = {};
+  patients: PatientData[] = [];
   tasks: Task[] = [];
   addMode = false;
   addTaskForm: FormGroup;
@@ -60,11 +60,16 @@ getAssignmentLabel(task: Task): string {
   const hasTherapist = task.assignments?.some(a => a.entity_type === 'therapist') || false;
   const hasPatient = task.assignments?.some(a => a.entity_type === 'patient') || task.assignmentPatient || false;
 
-  // הצגת שם המטופל מהסטייט בדף הבית
-  const patientName = this.isHomePage && task.patient_id && this.patientsMap[task.patient_id]
-    ? this.patientsMap[task.patient_id]
-    : '';
-
+  // הצגת שם המטופל מהסטייט בדף הבית (ללא מפה)
+  let patientName = '';
+  if (this.isHomePage && task.patient_id && this.patients.length > 0) {
+    const found = this.patients.find(p => p.patient_id === task.patient_id);
+    if (found && found.person) {
+      const first = found.person.first_name || '';
+      const last = found.person.last_name || '';
+      patientName = (first + (last ? ' ' + last : '')).trim();
+    }
+  }
   if (hasTherapist && hasPatient) {
     return patientName
       ? `משויך למטפל ולמטופל (${patientName})`
@@ -85,25 +90,15 @@ getAssignmentLabel(task: Task): string {
     // בדוק אם יש מתודה loadPatients ב-PatientStateService
     if (typeof (this.patientState as any).loadPatients === 'function') {
       (this.patientState as any).loadPatients();
-    } else {
     }
     this.patientState.patients$.subscribe((patients: PatientData[]) => {
-      this.patientsMap = {};
-      for (const patient of patients) {
-        if (patient.patient_id !== undefined && patient.person) {
-          const first = patient.person.first_name || '';
-          const last = patient.person.last_name || '';
-          this.patientsMap[patient.patient_id] = (first + (last ? ' ' + last : '')).trim();
-        }
-      }
-      // לאחר שהמפה מוכנה, נטען את המשימות
+  // ...existing code...
+      this.patients = patients;
+      // לאחר שהמטופלים נטענו, נטען את המשימות
       if (this.userId) {
         this.taskService.getTasksByUserId(this.userId).subscribe({
           next: (tasks: Task[]) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            this.tasks.forEach(task => {
-              const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-            });
           },
           error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
         });
@@ -111,13 +106,24 @@ getAssignmentLabel(task: Task): string {
         this.taskService.getTasksByPatientId(this.patientId).subscribe({
           next: (tasks) => {
             this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
-            this.tasks.forEach(task => {
-              const pid = (task.patient_id !== undefined && task.patient_id !== null) ? Number(task.patient_id) : undefined;
-            });
           },
           error: (err) => console.error('שגיאה בקבלת משימות', err)
         });
       }
+    });
+  } else if (this.userId) {
+    this.taskService.getTasksByUserId(this.userId).subscribe({
+      next: (tasks: Task[]) => {
+        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+      },
+      error: (err: any) => console.error('שגיאה בקבלת משימות למשתמש', err)
+    });
+  } else if (this.patientId) {
+    this.taskService.getTasksByPatientId(this.patientId).subscribe({
+      next: (tasks) => {
+        this.tasks = this.filterFn ? tasks.filter(this.filterFn) : tasks;
+      },
+      error: (err) => console.error('שגיאה בקבלת משימות', err)
     });
   }
 }
@@ -188,6 +194,7 @@ getAssignmentLabel(task: Task): string {
       color: this.addTaskForm.value.color || '#FFD54F',
       assignments: assignments.map(a => ({ entity_id: a.entity_id, entity_type: a.entity_type }))
     };
+  // ...existing code...
     this.taskService.addTask(newTask).subscribe({
       next: (savedTask) => {
         this.tasks = [savedTask, ...this.tasks];
@@ -201,8 +208,8 @@ getAssignmentLabel(task: Task): string {
   }
 
   private getCurrentUserId(): number {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.user_id || 1;
+  const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+  return userObj.user?.user_id || 1;
   }
 
 

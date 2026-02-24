@@ -211,10 +211,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
     }
   }
 
-  logPatient(patient: any) {
-    console.log('Patient:', patient);
-  }
-
   /** מחיקת מטופל */
   deletePatient(patient: PatientCreationData) {
     const name = patient.person?.first_name + ' ' + patient.person?.last_name;
