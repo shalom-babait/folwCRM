@@ -31,6 +31,8 @@ export interface Appointment {
   // treatment_type?: string;
   room?: string;
   group_name?: string; // שם סוג טיפול או קבוצה
+  isEditing?: boolean;
+
 }
 export interface AppointmentFormInput {
   therapist_id: number;

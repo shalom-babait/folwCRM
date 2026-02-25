@@ -3,14 +3,20 @@
     max-height: none !important;
     overflow: visible !important;
   }
-  .session-card, .session-notes {
+
+  .session-card,
+  .session-notes {
     page-break-inside: avoid;
     break-inside: avoid;
   }
-  .sheet-title-row button, .print-btn, .mat-icon-button {
+
+  .sheet-title-row button,
+  .print-btn,
+  .mat-icon-button {
     display: none !important;
   }
 }
+
 /* גלילה אוטומטית לרשימת המפגשים */
 .sessions-list-wrapper {
   max-height: 70vh;
@@ -25,15 +31,17 @@
   width: 10px;
   background: #fffbe7;
 }
+
 .sessions-list-wrapper::-webkit-scrollbar-thumb {
   background: #2A5448;
   border-radius: 8px;
   border: 2px solid #fffbe7;
 }
+
 /* .sessions-list-wrapper::-webkit-scrollbar-thumb:hover {
   background: #FFC400;
 } */
-  /* max-height: 70vh;
+/* max-height: 70vh;
   overflow-y: auto;
 } */
 
@@ -41,7 +49,7 @@
 .sessions-sheet {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08);
   padding: 32px 24px 24px 24px;
   direction: rtl;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -71,6 +79,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.3s ease;
 }
+
 .session-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
@@ -84,6 +93,7 @@
   user-select: none;
   transition: background-color 0.2s ease;
 }
+
 .session-header:hover {
   background-color: #f8f9fa;
 }
@@ -109,16 +119,19 @@
   font-weight: 500;
   text-transform: capitalize;
 }
+
 .status-מתוזמנת,
 .status-scheduled {
   background-color: #e3f2fd;
   color: #1976d2;
 }
+
 .status-התקיים,
 .status-completed {
   background-color: #e8f5e9;
   color: #388e3c;
 }
+
 .status-בוטל,
 .status-cancelled {
   background-color: #ffebee;
@@ -133,6 +146,7 @@
   color: #666;
   margin-right: 8px;
 }
+
 .toggle-icon.expanded {
   transform: rotate(180deg);
 }
@@ -146,11 +160,13 @@
   border-top: 1px solid #e0e0e0;
   animation: slideDown 0.3s ease;
 }
+
 @keyframes slideDown {
   from {
     opacity: 0;
     max-height: 0;
   }
+
   to {
     opacity: 1;
     max-height: 500px;
@@ -167,9 +183,42 @@
   padding: 60px 20px;
   color: #9e9e9e;
 }
+
 .empty-state p {
   font-size: 18px;
   margin: 0;
+}
+
+.session-notes {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 12px;
+}
+
+.session-notes-content {
+  flex: 1;
+}
+
+.edit-btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+.edit-actions {
+  display: flex;
+  justify-content: flex-start; 
+  gap: 8px;                  
+  margin-top: 8px;            
+}
+.session-notes textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
 }
 
 /* Responsive Design */
@@ -177,24 +226,30 @@
   .sessions-sheet {
     padding: 16px;
   }
+
   .sheet-title {
     font-size: 24px;
     margin-bottom: 24px;
   }
+
   .session-card {
     border-radius: 8px;
   }
+
   .session-header {
     padding: 16px;
   }
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
+
   .session-date {
     font-size: 16px;
   }
+
   .session-notes {
     padding: 0 16px 16px 16px;
   }
