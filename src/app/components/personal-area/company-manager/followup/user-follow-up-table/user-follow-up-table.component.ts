@@ -73,7 +73,6 @@ export class UserFollowUpTableComponent implements OnInit {
     const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
     const endOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 
-    console.log('Current dateFilter:', this.dateFilter);
     if (this.dateFilter === 'today') {
       filtered = filtered.filter(f => {
         const date = new Date(f.followUp?.follow_date);

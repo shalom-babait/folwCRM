@@ -33,7 +33,6 @@ export class PaymentListComponent implements OnInit {
   loadTransactions() {
     this.paymentService.getPaymentsByPatientId(this.patient.patient.patient_id || 0).subscribe({
       next: (data) => {
-        console.log('Transactions from server:', data);
         this.transactions = data.map((item: any) => {
           return {
             payment_id: item.payment_id ?? item.id ?? item.payment_id,
@@ -143,9 +142,7 @@ export class PaymentListComponent implements OnInit {
     }
   }
 
-  showDetails(payment: Payment): void {
-    console.log(payment);
-  
+  showDetails(payment: Payment): void {  
     const dialogRef = this.dialog.open(AddTransactionComponent, {
       width: '500px',
       direction: 'rtl',

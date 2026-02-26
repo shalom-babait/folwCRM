@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Appointment } from 'src/app/models/appointment.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { SessionsService } from 'src/app/services/session-sheet.service';
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 @Component({
   selector: 'app-sessions-sheet',
   templateUrl: './sessions-sheet.component.html',
@@ -26,7 +26,7 @@ export class SessionsSheetComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private sessionsService: SessionsService
+    private appointmentsService: ApppointmentService
   ) {
     this.appointments = data?.appointments || [];
     this.expandedSessions = new Array(this.appointments.length).fill(true);
@@ -46,7 +46,7 @@ export class SessionsSheetComponent {
     app.isEditing = false;
   }
   updateNotes(appointmentId: number, notes: string): void {
-    this.sessionsService.updateNotes(appointmentId, notes)
+    this.appointmentsService.updateNotes(appointmentId, notes)
       .subscribe();
   }
 }
