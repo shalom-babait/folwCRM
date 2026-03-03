@@ -1,6 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
 import { AddAppointmentDialogComponent } from '../../../patient/add-appointment-dialog/add-appointment-dialog.component'
-import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, Inject, OnInit, Optional, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,6 +9,8 @@ import { ViewEncapsulation } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { CalendarStateService } from 'src/app/services/calendar-state.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'app-display-calendar',
@@ -16,7 +18,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 	styleUrls: ['./display-calendar.component.css'],
   encapsulation: ViewEncapsulation.None   // ⭐ חובה כדי שה-CSS ישפיע
 })
-export class DisplayCalendarComponent implements OnInit, AfterViewInit {
+export class DisplayCalendarComponent implements OnInit, AfterViewInit, OnDestroy {
 
  @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
 
@@ -25,6 +27,8 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
   @Input() miniCalendar: boolean = false;
 
   @Output() dateSelected = new EventEmitter<any>();
+
+  private destroy$ = new Subject<void>();
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
@@ -92,6 +96,18 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
 
     dateClick: (arg) => this.onDateClick(arg),
 
+    // סימון ליום הנבחר - גם ביומן קטן וגם ביומן גדול
+    dayCellClassNames: (arg) => {
+      if (this.calendarStateService) {
+        const isSelected = this.calendarStateService.isDateSelected(arg.date);
+        if (isSelected) {
+          // ביומן קטן - סימון אחד, ביומן גדול - סימון אחר
+          return this.miniCalendar ? ['fc-day-selected'] : ['fc-day-clicked'];
+        }
+      }
+      return [];
+    },
+
     eventContent: (arg) => {
       const therapistName =
         arg.event.extendedProps && arg.event.extendedProps['therapist_name'];
@@ -114,7 +130,8 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
   constructor(
     @Optional() @Inject(MAT_DIALOG_DATA) public data?: any,
     private dialog?: MatDialog,
-    private cdr?: ChangeDetectorRef
+    private cdr?: ChangeDetectorRef,
+    private calendarStateService?: CalendarStateService
   ) {
     if (data?.events) {
       this.events = data.events;
@@ -123,6 +140,20 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // האזנה לשינויים בתאריך הנבחר - לעדכון הסימון ביומן
+    if (this.calendarStateService) {
+      this.calendarStateService.selectedDate$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          // עדכן את התצוגה כשהתאריך הנבחר משתנה
+          if (this.calendarComponent?.getApi) {
+            setTimeout(() => {
+              this.calendarComponent.getApi().render();
+            }, 50);
+          }
+        });
+    }
+
     // אם זה מצב מיני, אלץ תצוגת חודש והסתר toolbar
     if (this.miniCalendar) {
       this.calendarOptions = {
@@ -216,8 +247,12 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
   }
 
   onDateClick(arg: any) {
-    // אל תפתח דיאלוג במצב מיני
+    // במצב מיני - עדכן את ה-State
     if (this.miniCalendar) {
+      const clickedDate = arg.date;
+      if (this.calendarStateService) {
+        this.calendarStateService.setSelectedDate(clickedDate);
+      }
       return;
     }
 
@@ -244,5 +279,21 @@ export class DisplayCalendarComponent implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+  /**
+   * ניווט לתאריך ספציפי ביומן הראשי
+   * התצוגה תישאר כפי שהיא (יום/שבוע/חודש)
+   */
+  navigateToDate(date: Date): void {
+    if (this.calendarComponent?.getApi) {
+      const api = this.calendarComponent.getApi();
+      api.gotoDate(date);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
