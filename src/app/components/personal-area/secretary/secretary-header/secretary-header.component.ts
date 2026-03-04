@@ -23,8 +23,12 @@ export class SecretaryHeaderComponent implements OnInit {
 
   constructor(private router: Router) {}
   ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
+    const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+    if (userObj.user && (userObj.user.first_name || userObj.user.last_name)) {
+      this.user_name = (userObj.user.first_name || '') + ' ' + (userObj.user.last_name || '');
+    } else {
+      this.user_name = userObj.user?.user_name || 'משתמש';
+    }
   }
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;

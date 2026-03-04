@@ -21,8 +21,11 @@ import { Router } from '@angular/router';
 
     constructor(private router: Router) {}
     ngOnInit() {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
+      const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+      this.user_name =
+        (userObj.user?.first_name || '') + ' ' + (userObj.user?.last_name || '') ||
+        userObj.user?.user_name ||
+        'משתמש';
     }
     toggleProfileMenu() {
       this.showProfileMenu = !this.showProfileMenu;

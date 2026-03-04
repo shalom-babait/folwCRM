@@ -35,7 +35,7 @@ export class AddTransactionComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('AddTransactionComponent data:', this.data);
+    // console.log('AddTransactionComponent data:', this.data);
   this.personId = this.data.person_id || this.data.patient_id;
 
     // קבע סוג העסקה לפי openMode אם הגיע מהדיאלוג
@@ -137,12 +137,12 @@ export class AddTransactionComponent implements OnInit {
     let transaction: Transaction & { therapist_id?: number };
     const therapistId = this.therapistId ?? Number(localStorage.getItem('therapist_id'));
 
-    console.log('onSubmit called');
-    console.log('transactionType:', this.transactionType);
-    console.log('mode:', this.mode);
-    console.log('therapistId:', therapistId);
-    console.log('debitForm:', this.debitForm);
-    console.log('creditForm:', this.creditForm);
+    // console.log('onSubmit called');
+    // console.log('transactionType:', this.transactionType);
+    // console.log('mode:', this.mode);
+    // console.log('therapistId:', therapistId);
+    // console.log('debitForm:', this.debitForm);
+    // console.log('creditForm:', this.creditForm);
 
     if (this.transactionType === 'debit') {
       if (!this.validateDebitForm()) {

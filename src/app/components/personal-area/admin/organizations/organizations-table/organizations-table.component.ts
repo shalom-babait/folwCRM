@@ -26,7 +26,7 @@ export class OrganizationsTableComponent implements OnInit {
     this.isLoading = true;
     this.organizationsService.getOrganizations().subscribe({
       next: orgs => {
-        console.log('ארגונים שהתקבלו מהשרת:', orgs);
+        // console.log('ארגונים שהתקבלו מהשרת:', orgs);
   this.organizations = orgs;
         this.isLoading = false;
       },
