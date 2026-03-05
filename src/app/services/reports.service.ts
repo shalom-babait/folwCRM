@@ -58,4 +58,11 @@ export class ReportsService {
     }
     return this.http.post(`${this.apiUrl}/income-last-12`, body);
   }
+  /**
+   * Get monthly treatments report
+   * @param body { therapist_id, organization_id, year, month }
+   */
+  getMonthlyTreatmentsReport(body: { therapist_id: number, organization_id: number, year: number, month: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/monthly-treatments`, body);
+  }
 }

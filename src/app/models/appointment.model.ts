@@ -1,3 +1,5 @@
+import { Person } from "./person.model";
+
 export interface CreateAppointmentRequest {
   therapist_id: number;
   patient_id: number;
@@ -28,6 +30,7 @@ export interface Appointment {
   status?: 'מתוזמנת' | 'הושלמה' | 'בוטלה' | 'נדחתה';
   notes?: string;
   cost?: number;
+  meeting_type?: string;
   // treatment_type?: string;
   room?: string;
   group_name?: string; // שם סוג טיפול או קבוצה
@@ -43,4 +46,8 @@ export interface AppointmentFormInput {
   start_time: string;
   end_time: string;
   // אפשר להוסיף שדות עזר להצגה בלבד
+}
+export interface AppointmentReportItem {
+  appointments: Appointment[];
+  person: Person;
 }

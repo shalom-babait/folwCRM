@@ -1,0 +1,72 @@
+/* עיצוב מודרני לדוח פגישות */
+.appointments-container {
+	margin: 0 auto;
+	max-width: 900px;
+	padding: 16px;
+}
+
+h3 {
+	background: #f0f4fa;
+	color: #2a3b5c;
+	padding: 12px 18px;
+	border-radius: 8px 8px 0 0;
+	margin-top: 32px;
+	margin-bottom: 0;
+	font-size: 1.25em;
+	box-shadow: 0 2px 8px #e0e6ed;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 32px;
+	background: #fff;
+	box-shadow: 0 2px 8px #e0e6ed;
+	border-radius: 0 0 8px 8px;
+	overflow: hidden;
+}
+
+th, td {
+	padding: 10px 8px;
+	text-align: center;
+}
+
+th {
+	background: #e3eafc;
+	color: #2a3b5c;
+	font-weight: bold;
+	border-bottom: 2px solid #b6c6e3;
+}
+
+tr:nth-child(even) {
+	background: #f7fafd;
+}
+
+tr:hover {
+	background: #eaf2fb;
+}
+
+.appointments-container .summary {
+	font-size: 0.95em;
+	color: #555;
+	margin-right: 12px;
+}
+
+.error, .no-data {
+	color: #b71c1c;
+	background: #ffeaea;
+	padding: 10px 16px;
+	border-radius: 6px;
+	margin: 16px 0;
+	text-align: center;
+}
+
+.loading {
+	color: #1976d2;
+	font-weight: bold;
+	margin: 20px 0;
+	text-align: center;
+}
