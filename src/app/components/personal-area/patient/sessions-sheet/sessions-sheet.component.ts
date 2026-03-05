@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Appointment } from 'src/app/models/appointment.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { trigger, transition, style, animate } from '@angular/animations';
-
+import { ApppointmentService } from 'src/app/services/apppointment.service';
 @Component({
   selector: 'app-sessions-sheet',
   templateUrl: './sessions-sheet.component.html',
@@ -24,9 +24,11 @@ export class SessionsSheetComponent {
   title: string = 'גיליון מפגשים';
   expandedSessions: boolean[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private appointmentsService: ApppointmentService
+  ) {
     this.appointments = data?.appointments || [];
-    // Initialize all sessions as expanded (open)
     this.expandedSessions = new Array(this.appointments.length).fill(true);
   }
 
@@ -36,5 +38,15 @@ export class SessionsSheetComponent {
 
   toggleNotes(index: number): void {
     this.expandedSessions[index] = !this.expandedSessions[index];
+  }
+  onSave(app: any) {
+    if (app.appointment_id != null) {
+      this.updateNotes(app.appointment_id, app.notes);
+    }
+    app.isEditing = false;
+  }
+  updateNotes(appointmentId: number, notes: string): void {
+    this.appointmentsService.updateNotes(appointmentId, notes)
+      .subscribe();
   }
 }
