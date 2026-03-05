@@ -126,4 +126,11 @@ export class ApppointmentService {
       })
     );
   }
+  
+  updateNotes(appointmentId: number, notes: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/appointments/updateNotes`, {
+      appointmentId,
+      notes
+    });
+  }
 }

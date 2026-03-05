@@ -1,9 +1,9 @@
 <div class="sessions-sheet">
   <div class="sheet-title-row">
     <h2 class="sheet-title">{{ title }}
-    <button mat-icon-button (click)="printSheet()" title="הדפס גיליון">
-      <mat-icon>print</mat-icon>
-    </button>
+      <button mat-icon-button (click)="printSheet()" title="הדפס גיליון">
+        <mat-icon>print</mat-icon>
+      </button>
     </h2>
   </div>
 
@@ -22,11 +22,30 @@
           </span>
         </div>
 
-        <div class="session-notes" *ngIf="expandedSessions[i]" [@slideDown]>
-          <span *ngIf="app.notes && app.notes.length; else noNotes" [innerHTML]="app.notes | linebreaks"></span>
-          <ng-template #noNotes>
-            <span class="no-notes">אין הערות</span>
-          </ng-template>
+        <div class="session-notes">
+          <div class="session-notes-content">
+            <span *ngIf="app.notes && app.notes.length; else noNotes" [innerHTML]="app.notes | linebreaks"></span>
+            <ng-template #noNotes>
+              <span class="no-notes">אין הערות</span>
+            </ng-template>
+          </div>
+
+          <!-- כפתור ערוך בצד -->
+          <button mat-stroked-button color="primary" class="edit-btn" *ngIf="!app.isEditing"
+            (click)="app.isEditing = true">
+            ערוך
+          </button>
+
+          <!-- מצב עריכה -->
+          <ng-container *ngIf="app.isEditing">
+            <textarea [(ngModel)]="app.notes" rows="4"></textarea>
+            <div class="edit-actions">
+              <div class="edit-actions">
+                <button mat-stroked-button color="primary" (click)="onSave(app)">שמור</button>
+                <button mat-stroked-button (click)="app.isEditing = false">ביטול</button>
+              </div>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
