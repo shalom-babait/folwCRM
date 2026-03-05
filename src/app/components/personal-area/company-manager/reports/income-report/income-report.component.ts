@@ -189,7 +189,7 @@ export class IncomeReportComponent implements OnInit {
     const year = now.getFullYear();
     const month = now.getMonth() + 1; // 1-based
     this.reportsService.getMonthlyIncome(year, month).subscribe((res: any) => {
-      console.log('monthlyIncome response:', res);
+      // console.log('monthlyIncome response:', res);
       const monthlyIncome = Array.isArray(res.data?.monthlyIncome) ? res.data.monthlyIncome : Array(12).fill(0);
       // יצירת תוויות דינמיות בפורמט M/YYYY מהחודש הנוכחי אחורה 12 חודשים
       const now = new Date();

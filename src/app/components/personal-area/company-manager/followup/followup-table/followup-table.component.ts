@@ -25,7 +25,6 @@ export class FollowupTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // console.log('Creator ID (ngOnInit):', this.creatorId);
     if (typeof this.creatorId === 'undefined') {
       console.warn('Creator ID is undefined!');
     }

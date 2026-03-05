@@ -22,6 +22,12 @@
       <span>חדרים</span>
     </span>
   </button></li>
+  <li><button [ngClass]="{selected: selectedSection === 'finance'}" (click)="sectionChange.emit('finance')">
+    <span class="menu-vertical">
+      <mat-icon class="menu-icon">monetization_on</mat-icon>
+      <span>ניהול כספים</span>
+    </span>
+  </button></li>
   <!-- <li><button [ngClass]="{selected: selectedSection === 'mail'}" (click)="sectionChange.emit('mail')"><span class="menu-vertical"><mat-icon class="menu-icon">mail</mat-icon><span>דואר</span></span></button></li> -->
   <!-- <li><button (click)="sectionChange.emit('declarations')"><span class="menu-vertical"><mat-icon class="menu-icon">assignment</mat-icon><span>הצהרות</span></span></button></li> -->
   <li><button [ngClass]="{selected: selectedSection === 'calendar'}" (click)="sectionChange.emit('calendar')">

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
 
 import { ApppointmentService } from 'src/app/services/apppointment.service';
@@ -6,6 +6,8 @@ import { PatientService } from 'src/app/services/patient.service';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Patient, PatientCreationData } from 'src/app/models/patient.model';
 import { FilterSelection } from 'src/app/models/calendar-filter.model';
+import { DisplayCalendarComponent } from '../../company-manager/calendars/display-calendar/display-calendar.component';
+import { CalendarStateService } from 'src/app/services/calendar-state.service';
 
 @Component({
   selector: 'app-therapist-calendar',
@@ -15,6 +17,7 @@ import { FilterSelection } from 'src/app/models/calendar-filter.model';
 export class TherapistCalendarComponent implements OnInit, OnDestroy {
   @Input() therapistId?: number;
   @Input() compact: boolean = false;
+  @ViewChild('mainCalendar') mainCalendar?: DisplayCalendarComponent;
   
   allAppointments: Appointment[] = [];
   filteredAppointments: Appointment[] = [];
@@ -29,9 +32,22 @@ export class TherapistCalendarComponent implements OnInit, OnDestroy {
   
   private destroy$ = new Subject<void>();
 
-  constructor(private apppointmentService: ApppointmentService, private patientService: PatientService) { }
+  constructor(
+    private apppointmentService: ApppointmentService, 
+    private patientService: PatientService,
+    private calendarStateService: CalendarStateService
+  ) { }
 
   ngOnInit() {
+    // האזנה לשינויים במצב התאריך הנבחר
+    this.calendarStateService.selectedDate$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(date => {
+        if (date && this.mainCalendar) {
+          this.mainCalendar.navigateToDate(date);
+        }
+      });
+
     let therapistIdToUse = this.therapistId;
     if (!therapistIdToUse) {
       const therapistIdStr = localStorage.getItem('therapist_id');

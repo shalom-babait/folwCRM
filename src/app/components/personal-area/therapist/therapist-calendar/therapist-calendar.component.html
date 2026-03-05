@@ -4,7 +4,9 @@
     <div class="calendar-with-sidebar">
       <!-- סיידבר עם מניו סינון -->
       <div class="calendar-sidebar">
-        <app-mini-calender [events]="calendarEvents"></app-mini-calender>
+        <app-mini-calender 
+          [events]="calendarEvents">
+        </app-mini-calender>
         <app-therapist-calendar-filter-menu
           [therapistId]="therapistId"
           (filterChanged)="onFilterChanged($event)">
@@ -14,6 +16,7 @@
       <!-- היומן הראשי -->
       <div class="calendar-main">
         <app-display-calendar 
+          #mainCalendar
           [events]="calendarEvents" 
           [miniCalendar]="false">
         </app-display-calendar>

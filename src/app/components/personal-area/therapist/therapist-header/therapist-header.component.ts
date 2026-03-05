@@ -17,8 +17,11 @@ export class TherapistHeaderComponent implements OnInit {
   constructor(private therapistSessionService: TherapistSessionService) { }
 
   ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.user_name = user.first_name + ' ' + user.last_name || 'משתמש';
+    const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user_name =
+      (userObj.user?.first_name || '') + ' ' + (userObj.user?.last_name || '') ||
+      userObj.user?.user_name ||
+      'משתמש';
     // קבלת מזהה המטפל מהסשן
     this.therapistId = this.therapistSessionService.getTherapistId();
     // עדכון מזהה המטפל אם יש שינוי בסשן

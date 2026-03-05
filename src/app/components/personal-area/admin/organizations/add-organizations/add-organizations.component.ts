@@ -101,7 +101,7 @@ export class AddOrganizationsComponent implements OnInit {
       person,
       user
     };
-    console.log('נשלח לשרת OrganizationCreationData:', creationData);
+    // console.log('נשלח לשרת OrganizationCreationData:', creationData);
     this.organizationsService.addOrganization(creationData).subscribe({
       next: (result: OrganizationCreationData) => {
         this.dialogRef.close(result);
