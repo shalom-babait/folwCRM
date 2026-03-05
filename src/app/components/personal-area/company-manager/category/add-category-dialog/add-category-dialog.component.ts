@@ -75,7 +75,7 @@ this.categoryForm = this.fb.group({
   onSave(): void {
     if (this.categoryForm.valid) {
       const formValue = this.categoryForm.value;
-      console.log('Form value:', formValue);
+      // console.log('Form value:', formValue);
 
       const categoryData: CategoryFormData = {
         category_type: formValue.category_type,

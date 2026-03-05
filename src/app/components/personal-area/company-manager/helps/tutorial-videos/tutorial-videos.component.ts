@@ -28,7 +28,7 @@ export class TutorialVideosComponent {
       title: 'מבוא למערכת',
       description: 'למד את יסודות העבודה במערכת וההתחלה המהירה',
       duration: '5:30',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/4A90E2/ffffff?text=מבוא+למערכת',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     },
     {
@@ -36,7 +36,7 @@ export class TutorialVideosComponent {
       title: 'ניהול משתמשים',
       description: 'כיצד להוסיף, לערוך ולנהל משתמשים במערכת',
       duration: '8:15',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/50C878/ffffff?text=ניהול+משתמשים',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     },
     {
@@ -44,7 +44,7 @@ export class TutorialVideosComponent {
       title: 'דוחות ותצוגות',
       description: 'יצירת דוחות מותאמים אישית ותצוגות מידע',
       duration: '6:45',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/FF6B6B/ffffff?text=דוחות+ותצוגות',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     },
     {
@@ -52,7 +52,7 @@ export class TutorialVideosComponent {
       title: 'הגדרות מתקדמות',
       description: 'התאמה אישית והגדרות מתקדמות של המערכת',
       duration: '10:20',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/FFA500/ffffff?text=הגדרות+מתקדמות',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     },
     {
@@ -60,7 +60,7 @@ export class TutorialVideosComponent {
       title: 'פתרון בעיות נפוצות',
       description: 'מדריך לפתרון בעיות ותקלות נפוצות',
       duration: '7:00',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/9B59B6/ffffff?text=פתרון+בעיות',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     },
     {
@@ -68,7 +68,7 @@ export class TutorialVideosComponent {
       title: 'טיפים ועצות',
       description: 'שיפור יעילות העבודה במערכת עם טיפים מועילים',
       duration: '4:50',
-      thumbnailUrl: 'https://via.placeholder.com/320x180/1ABC9C/ffffff?text=טיפים+ועצות',
+      thumbnailUrl: 'assets/photoes/tutorials/placeholder.jpg',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
     }
   ];

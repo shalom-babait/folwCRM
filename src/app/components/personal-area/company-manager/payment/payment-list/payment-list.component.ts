@@ -142,7 +142,7 @@ export class PaymentListComponent implements OnInit {
     }
   }
 
-  showDetails(payment: Payment): void {  
+  showDetails(payment: Payment): void {
     const dialogRef = this.dialog.open(AddTransactionComponent, {
       width: '500px',
       direction: 'rtl',

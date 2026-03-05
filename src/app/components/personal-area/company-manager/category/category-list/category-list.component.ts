@@ -29,7 +29,7 @@ export class CategoryListComponent implements OnInit {
    * When a filter chip is clicked, select the category and emit to parent
    */
 filterByCategory(categoryId: number | null) {
-  console.log('Filtering by category ID:', categoryId);
+  // console.log('Filtering by category ID:', categoryId);
   this.selectedCategoryId = categoryId;
   this.categorySelected.emit(categoryId);
 }

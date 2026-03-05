@@ -18,15 +18,30 @@ export class ReportsService {
    * @param months Array of selected month numbers (1-12)
    * @param therapistId Optional therapist id
    */
-  getIncomeByMonths(year: number, months: number[], therapistId?: number, userId?: number): Observable<any> {
+  getIncomeByMonths(year: number, months: number[], therapistId?: number, userId?: number, organizationId?: number): Observable<any> {
     const body: any = { year, months };
     if (therapistId !== undefined) {
-      body.therapistId = therapistId;
+      body.therapist_id = therapistId;
     }
     if (userId !== undefined) {
-      body.userId = userId;
+      body.user_id = userId;
     }
-    console.log('getIncomeByMonths - body:', body);
+    let orgId = organizationId;
+    if (orgId === undefined) {
+      const orgFromStorage = localStorage.getItem('organization_id');
+      if (orgFromStorage) {
+        orgId = Number(orgFromStorage);
+      }
+    }
+    if (orgId !== undefined) {
+      body.organization_id = orgId;
+    }
+    // הסר מפתחות לא דרושים אם הערך שלהם undefined
+    Object.keys(body).forEach(key => {
+      if (body[key] === undefined) {
+        delete body[key];
+      }
+    });
     return this.http.post(`${this.apiUrl}/income-by-months`, body);
   }
 
