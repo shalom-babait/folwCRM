@@ -1,3 +1,20 @@
+
+<div class="report-filter-buttons" style="display: flex; gap: 12px; justify-content: center; margin-bottom: 18px; margin-top: 8px;">
+			<button mat-raised-button color="primary" (click)="onFilterSelect('current'); customMode=false">החודש</button>
+			<button mat-raised-button (click)="onFilterSelect('prev'); customMode=false">חודש קודם</button>
+			<button mat-raised-button (click)="onFilterSelect('last3'); customMode=false">3 חודשים אחרונים</button>
+			<button mat-raised-button color="accent" (click)="customMode=true">מותאם אישית</button>
+		</div>
+
+		<div *ngIf="customMode" style="display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 18px;">
+			<label>מתאריך:</label>
+			<input type="date" [(ngModel)]="customStartDate" style="direction:ltr;">
+			<label>עד:</label>
+			<input type="date" [(ngModel)]="customEndDate" style="direction:ltr;">
+			<button mat-raised-button color="primary" (click)="onCustomRangeSubmit()">הצג דוח</button>
+		</div>
+
+
 <div *ngIf="isLoading">טוען נתונים...</div>
 <div *ngIf="error">{{ error }}</div>
 
