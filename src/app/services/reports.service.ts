@@ -60,9 +60,9 @@ export class ReportsService {
   }
   /**
    * Get monthly treatments report
-   * @param body { therapist_id, organization_id, year, month }
+   * @param body { therapist_id, organization_id, start_date, end_date }
    */
-  getMonthlyTreatmentsReport(body: { therapist_id: number, organization_id: number, year: number, month: number }): Observable<any> {
+  getMonthlyTreatmentsReport(body: { therapist_id: number, organization_id: number, start_date: string, end_date: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/monthly-treatments`, body);
   }
 }
