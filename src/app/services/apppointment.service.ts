@@ -61,13 +61,13 @@ export class ApppointmentService {
 
   getAppointmentsByPatient(patientId: number, therapistId?: number): Observable<Appointment[]> {
     const tid = typeof therapistId === 'number' ? therapistId : 0;
-    console.log('getAppointmentsByPatient - patientId:', patientId, 'therapistId:', tid);
+    // console.log('getAppointmentsByPatient - patientId:', patientId, 'therapistId:', tid);
     const url = `${this.apiUrl}/appointments/byPatientAndTherapist/${patientId}/${tid}`;
     return this.http.get<ApiResponse<Appointment[]>>(url)
       .pipe(
         map(response => Array.isArray(response) ? response : (response.data || [])),
         tap(appointments => {
-          console.log('Appointments returned from getAppointmentsByPatient:', appointments);
+          // console.log('Appointments returned from getAppointmentsByPatient:', appointments);
         }),
         catchError(error => {
           console.error('Error fetching appointments for patient:', error);

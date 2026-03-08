@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MONTH_LABELS } from 'src/app/shared/constants/month-labels';
 import { ReportsService } from 'src/app/services/reports.service';
-import { AppointmentReportItem } from 'src/app/models/appointment.model';
+import { AppointmentReportItem, Appointment } from 'src/app/models/appointment.model';
 
 @Component({
   selector: 'app-appointment-reports',
@@ -19,37 +19,24 @@ export class AppointmentReportsComponent implements OnInit {
 
   constructor(private reportsService: ReportsService) {}
 
-  getHebrewMonthName(): string {
-    const now = new Date();
-    return MONTH_LABELS[now.getMonth()];
+  /**
+   * סך כל הפגישות בדוח הנוכחי
+   */
+  getTotalAppointmentsAllPatients(): number {
+    return this.typedReportData.reduce((sum: number, person: AppointmentReportItem) => sum + (person.appointments?.length || 0), 0);
   }
 
-  getTotalHours(appointments: any[]): string {
-    if (!appointments || !appointments.length) return '0';
-    const totalMinutes = appointments.reduce((sum, appt) => sum + (appt.total_minutes || 0), 0);
+  /**
+   * סך כל השעות בדוח הנוכחי (כל הפגישות של כל המטופלים)
+   */
+  getTotalHoursAllPatients(): string {
+    const totalMinutes = this.typedReportData.reduce((sum: number, person: AppointmentReportItem) =>
+      sum + (person.appointments?.reduce((s: number, appt: Appointment) => s + (appt.total_minutes || 0), 0) || 0)
+    , 0);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return minutes ? `${hours}:${minutes.toString().padStart(2, '0')}` : `${hours}`;
   }
-
-  /**
-   * סינון דוח לפי בחירת כפתור: 'current' | 'prev' | 'last3' | 'custom'
-import { Component, OnInit } from '@angular/core';
-import { MONTH_LABELS } from 'src/app/shared/constants/month-labels';
-import { ReportsService } from 'src/app/services/reports.service';
-import { AppointmentReportItem } from 'src/app/models/appointment.model';
-
-@Component({
-  selector: 'app-appointment-reports',
-  templateUrl: './appointment-reports.component.html',
-  styleUrls: ['./appointment-reports.component.css']
-})
-export class AppointmentReportsComponent implements OnInit {
-  typedReportData: AppointmentReportItem[] = [];
-  isLoading = false;
-  error: string | null = null;
-
-  constructor(private reportsService: ReportsService) {}
 
   getHebrewMonthName(): string {
     const now = new Date();
@@ -71,8 +58,8 @@ export class AppointmentReportsComponent implements OnInit {
     if (type !== 'custom') {
       this.customMode = false;
     }
-  let start: Date | null = null;
-  let end: Date | null = null;
+    let start: Date | null = null;
+    let end: Date | null = null;
     const now = new Date();
     if (type === 'current') {
       // החודש הנוכחי
@@ -99,7 +86,6 @@ export class AppointmentReportsComponent implements OnInit {
     if (start && end) {
       this.fetchReport(start, end);
     }
-
   }
 
   onCustomRangeSubmit() {
@@ -122,11 +108,15 @@ export class AppointmentReportsComponent implements OnInit {
     const organization_id = Number(localStorage.getItem('organization_id')) || 1;
     const start_date = this.formatDate(start);
     const end_date = this.formatDate(end);
-  const body = { therapist_id, organization_id, start_date, end_date };
-  this.reportsService.getMonthlyTreatmentsReport(body).subscribe(
+    const body = { therapist_id, organization_id, start_date, end_date };
+    this.reportsService.getMonthlyTreatmentsReport(body).subscribe(
       (data: any) => {
         if (data && data.data) {
-          this.typedReportData = data.data as AppointmentReportItem[];
+          // הוסף שדה _expanded לכל פגישה
+          this.typedReportData = (data.data as AppointmentReportItem[]).map(person => ({
+            ...person,
+            appointments: person.appointments.map(appt => ({ ...appt, _expanded: false }))
+          }));
         } else {
           this.typedReportData = [];
         }
@@ -147,6 +137,10 @@ export class AppointmentReportsComponent implements OnInit {
     const m = (date.getMonth() + 1).toString().padStart(2, '0');
     const d = date.getDate().toString().padStart(2, '0');
     return `${y}-${m}-${d}`;
+  }
+
+  expandAppointment(appointments: any[], index: number): void {
+    appointments.forEach((appt: any, i: number) => appt._expanded = i === index ? !appt._expanded : false);
   }
 
   ngOnInit(): void {
