@@ -19,9 +19,14 @@
 <div *ngIf="error">{{ error }}</div>
 
 <ng-container *ngIf="typedReportData.length">
-	<h2 style="text-align:center; margin-bottom: 24px; margin-top: 8px;">
+	<h2 style="text-align:center; margin-bottom: 8px; margin-top: 8px;">
 		סיכום פגישות לחודש {{ getHebrewMonthName() }}
 	</h2>
+	<div style="text-align:center; margin-bottom: 24px; font-size:1.1em;">
+		<span>סך פגישות: <b>{{ getTotalAppointmentsAllPatients() }}</b></span>
+		&nbsp;|&nbsp;
+		<span>סך שעות: <b>{{ getTotalHoursAllPatients() }}</b></span>
+	</div>
 </ng-container>
 <div *ngIf="typedReportData.length">
 	<div *ngFor="let item of typedReportData">
@@ -41,18 +46,24 @@
 					<th>משך (דקות)</th>
 					<th>סוג פגישה</th>
 					<th>סטטוס</th>
-					<th>הערות</th>
+					<!-- <th>הערות</th> -->
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let appt of item.appointments">
-					<td>{{ appt.appointment_date | date:'dd/MM/yyyy' }}</td>
-					<td>{{ appt.start_time }} - {{ appt.end_time }}</td>
-					<td>{{ appt.total_minutes }}</td>
-					<td>{{ appt.meeting_type }}</td>
-					<td>{{ appt.status }}</td>
-					<td>{{ appt.notes || '-' }}</td>
-				</tr>
+				<ng-container *ngFor="let appt of item.appointments; let i = index">
+					<tr (click)="expandAppointment(item.appointments, i)" style="cursor:pointer;">
+						<td>{{ appt.appointment_date | date:'dd/MM/yyyy' }}</td>
+						<td>{{ appt.start_time }} - {{ appt.end_time }}</td>
+						<td>{{ appt.total_minutes }}</td>
+						<td>{{ appt.meeting_type }}</td>
+						<td>{{ appt.status }}</td>
+					</tr>
+					<tr *ngIf="appt._expanded">
+						<td colspan="5" style="background:#f7f7f7; border-top:none; text-align:right; font-size:0.98em;">
+						<strong>הערות:</strong> <span [innerHTML]="appt.notes || 'אין הערות'"></span>
+						</td>
+					</tr>
+				</ng-container>
 			</tbody>
 		</table>
 	</div>

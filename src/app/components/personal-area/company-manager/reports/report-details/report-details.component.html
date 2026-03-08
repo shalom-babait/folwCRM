@@ -17,12 +17,7 @@
       </div>
     </div>
   </div>
-    <ng-container *ngIf="report.name === 'דוח הכנסות'; else otherReport">
-      <app-income-report></app-income-report>
-    </ng-container>
-    <ng-template #otherReport>
-      <p>כאן יוצגו פרטי הדוח המלאים (דמו).</p>
-    </ng-template>
+    <app-income-report *ngIf="report.name === 'דוח הכנסות'"></app-income-report>
   </div>
 </div>
 <ng-template #noReport>
