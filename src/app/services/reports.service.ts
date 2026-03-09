@@ -46,7 +46,9 @@ export class ReportsService {
   }
 
   getOpenDebtsByTherapist(therapist_id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/open-debts/${therapist_id}`);
+    const orgId = Number(localStorage.getItem('organization_id'));
+    const params: any = { organization_id: orgId };
+    return this.http.get(`${this.apiUrl}/open-debts/${therapist_id}`, { params });
   }
     /**
    * Get last 12 months income for a given year and month

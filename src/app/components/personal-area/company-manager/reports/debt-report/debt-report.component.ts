@@ -28,17 +28,18 @@ export class DebtReportComponent implements OnInit {
         } else if (data && Array.isArray(data.data)) {
           debtsList = data.data;
         }
-        this.debts = debtsList;
-        console.log('רשימת החובות מהשרת:', debtsList);
+  this.debts = debtsList;
       });
     }
   }
+
 
   getTherapistId(): number | null {
     // נטען מה-localStorage או ממקור אחר
     const id = localStorage.getItem('therapist_id');
     return id ? Number(id) : null;
   }
+
 
   getTotalDebts(): number {
     return this.debts.reduce((sum, row) => sum + Number(row.open_balance), 0);
