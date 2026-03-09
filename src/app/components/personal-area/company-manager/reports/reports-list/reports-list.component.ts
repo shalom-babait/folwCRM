@@ -15,7 +15,8 @@ export class ReportsListComponent {
   reports: { id: number, name: string }[] = [
     { id: 1, name: 'דוח הכנסות' },
     { id: 2, name: 'דוח הוצאות' },
-    { id: 3, name: 'דוח פעילות חודשית' }
+    { id: 3, name: 'דוח פעילות חודשית' },
+    { id: -1, name: 'דוח חובות פתוחות' }
   ];
   selectedReportId: number | null = null;
   isLoading: boolean = false;
