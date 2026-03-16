@@ -39,7 +39,6 @@ export class ExpensesTableComponent implements OnInit {
     this.expensesService.getAllExpenses().subscribe((res: any) => {
       const expenses = Array.isArray(res) ? res : (res && res.data ? res.data : []);
       this.expenses = (expenses || []).map((e: any) => ({ ...e, amount: +e.amount }));
-      console.log('Expenses loaded:', this.expenses);
     }, error => {
       console.error('Error loading expenses:', error);
     });
