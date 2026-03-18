@@ -1,0 +1,292 @@
+.financial-management-container {
+  padding: 2rem;
+  background-color: whitesmoke;
+  min-height: 100vh;
+  direction: rtl;
+  border-radius: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header עם בחירת חודש */
+.month-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.month-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #022F39;
+  margin: 0;
+}
+
+.month-nav-button {
+  background-color: transparent;
+  border: 2px solid #2A5448;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  transition: all 0.3s;
+  color: #2A5448;
+}
+
+.month-nav-button:hover {
+  background-color: #2A5448;
+  transform: scale(1.05);
+}
+
+.month-nav-button:hover mat-icon {
+  color: white;
+}
+
+.month-nav-button mat-icon {
+  color: #2A5448;
+}
+
+/* סיכום הכנסות/הוצאות */
+.summary-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-right: 4px solid;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.income-card {
+  border-right-color: #28a745;
+}
+
+.expense-card {
+  border-right-color: #dc3545;
+}
+
+.balance-card {
+  border-right-color: #2A5448;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.summary-amount {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.income-amount {
+  color: #28a745;
+}
+
+.expense-amount {
+  color: #dc3545;
+}
+
+.positive-balance {
+  color: #2A5448;
+}
+
+.negative-balance {
+  color: #dc3545;
+}
+
+/* כפתורי סינון */
+.filter-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.filter-buttons button {
+  padding: 10px 24px;
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  background-color: #fff;
+  color: #022F39;
+  border: 2px solid #C7DED8;
+  min-height: 40px;
+}
+
+.filter-buttons button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #2A5448;
+}
+
+.filter-buttons button.active {
+  background-color: #2A5448;
+  color: #fff;
+  border-color: #2A5448;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.income-filter-btn.active {
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
+}
+
+.expense-filter-btn.active {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+/* טבלת תנועות */
+.transactions-table {
+  background-color: whitesmoke;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.transaction-row {
+  display: grid;
+  grid-template-columns: 100px 130px 100px 1fr 150px 150px 80px;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.3rem;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.header-row {
+  background-color: #2A5448;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin-bottom: 0.5rem;
+}
+
+.data-row {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.data-row:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.transaction-cell {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #022F39;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.income-text {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.expense-text {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 1rem;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.income-badge {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.expense-badge {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.actions-cell {
+  text-align: center;
+}
+
+.scrollable-rows {
+  max-height: calc(100vh - 450px);
+  overflow-y: auto;
+}
+
+.no-transactions-message {
+  text-align: center;
+  padding: 48px;
+  color: #6c757d;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-section {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .header-row {
+    display: none;
+  }
+
+  .transaction-cell::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-left: 8px;
+    color: #6c757d;
+  }
+
+  .financial-management-container {
+    padding: 1rem;
+  }
+}

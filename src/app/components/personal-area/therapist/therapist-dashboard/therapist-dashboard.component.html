@@ -9,9 +9,10 @@
     <app-calender-view *ngIf="selectedSection === 'calendar'" [therapistId]="therapistId"></app-calender-view>
     <app-user-follow-up-table *ngIf="selectedSection === 'followups'"></app-user-follow-up-table>
   <app-reports-view *ngIf="selectedSection === 'reports'"></app-reports-view>
+  <app-financial-management *ngIf="selectedSection === 'finance'"></app-financial-management>
   <app-therapist-settings-view *ngIf="selectedSection === 'settings'"></app-therapist-settings-view>
   <app-tutorial-videos *ngIf="selectedSection === 'help'"></app-tutorial-videos>
-  <div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'rooms' && selectedSection !== 'calendar' && selectedSection !== 'followups' && selectedSection !== 'reports' && selectedSection !== 'settings' && selectedSection !== 'help'">בחר פעולה</div>
+  <div *ngIf="selectedSection !== 'home' && selectedSection !== 'patients' && selectedSection !== 'rooms' && selectedSection !== 'calendar' && selectedSection !== 'followups' && selectedSection !== 'reports' && selectedSection !== 'finance' && selectedSection !== 'settings' && selectedSection !== 'help'">בחר פעולה</div>
   </ng-container>
 </div>
 
