@@ -25,8 +25,6 @@ export class PaymentService {
   }
 
   createPayment(paymentData: any) {
-    console.log(paymentData);
-
     return this.http.post(`${this.apiUrl}/payments/create`, paymentData);
   }
 
@@ -39,5 +37,10 @@ export class PaymentService {
   }
   updatePayment(paymentId: number, paymentData: any) {
     return this.http.put(`${this.apiUrl}/payments/update/${paymentId}`, paymentData);
+  }
+
+  /** שליפת תנועות כספיות משולבות לפי מטפל וחודש */
+  getFinancialTransactionsByMonth(therapistId: number, month: number, year: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payments/financial-transactions/${therapistId}?month=${month}&year=${year}`);
   }
 }

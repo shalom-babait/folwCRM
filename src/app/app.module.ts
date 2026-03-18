@@ -132,6 +132,7 @@ import { AddExpensesComponent } from './components/personal-area/company-manager
 import { ExpensesViewComponent } from './components/personal-area/company-manager/reports/Expenses/expenses-view/expenses-view.component';
 import { AddExpenseCategoriesComponent } from './components/personal-area/company-manager/reports/Expenses/add-expense-categories/add-expense-categories.component';
 import { AppointmentReportsComponent } from './components/personal-area/company-manager/reports/appointment-reports/appointment-reports.component';
+import { FinancialManagementComponent } from './components/personal-area/therapist/financial-management/financial-management.component';
 
 @NgModule({
   declarations: [
@@ -233,6 +234,7 @@ import { AppointmentReportsComponent } from './components/personal-area/company-
     ExpensesViewComponent,
     AddExpenseCategoriesComponent,
     AppointmentReportsComponent,
+    FinancialManagementComponent,
   // TutorialVideosComponent (standalone),
   ],
   imports: [

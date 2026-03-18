@@ -1,0 +1,110 @@
+<div class="financial-management-container">
+  <!-- Header עם בחירת חודש -->
+  <div class="month-selector-header">
+    <button mat-icon-button (click)="previousMonth()" class="month-nav-button">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <h2 class="month-title">תנועות לחודש - {{ getMonthName() }} {{ selectedYear }}</h2>
+    <button mat-icon-button (click)="nextMonth()" class="month-nav-button">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+  </div>
+
+  <!-- סיכום הכנסות/הוצאות -->
+  <div class="summary-section">
+    <div class="summary-card income-card">
+      <div class="summary-label">הכנסות</div>
+      <div class="summary-amount income-amount">₪{{ totalIncome | number:'1.2-2' }}</div>
+    </div>
+    <div class="summary-card expense-card">
+      <div class="summary-label">הוצאות</div>
+      <div class="summary-amount expense-amount">₪{{ totalExpense | number:'1.2-2' }}</div>
+    </div>
+    <div class="summary-card balance-card">
+      <div class="summary-label">יתרה</div>
+      <div class="summary-amount" [ngClass]="{'positive-balance': balance >= 0, 'negative-balance': balance < 0}">
+        ₪{{ balance | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתורי סינון -->
+  <div class="filter-buttons">
+    <button 
+      mat-raised-button 
+      [class.active]="filterType === 'all'" 
+      (click)="onFilterChange('all')">
+      הכל
+    </button>
+    <button 
+      mat-raised-button 
+      [class.active]="filterType === 'income'" 
+      (click)="onFilterChange('income')"
+      class="income-filter-btn">
+      הכנסות
+    </button>
+    <button 
+      mat-raised-button 
+      [class.active]="filterType === 'expense'" 
+      (click)="onFilterChange('expense')"
+      class="expense-filter-btn">
+      הוצאות
+    </button>
+  </div>
+
+  <!-- טבלת תנועות -->
+  <div class="transactions-table">
+    <!-- Header -->
+    <div class="transaction-row header-row">
+      <div class="transaction-cell">תאריך</div>
+      <div class="transaction-cell">סכום</div>
+      <div class="transaction-cell">סוג</div>
+      <div class="transaction-cell">פרוט</div>
+      <div class="transaction-cell">קטגוריה</div>
+      <div class="transaction-cell">אמצעי תשלום</div>
+      <div class="transaction-cell">פעולות</div>
+    </div>
+
+    <!-- Data Rows -->
+    <ng-container *ngIf="filteredTransactions.length > 0; else noTransactions">
+      <div class="scrollable-rows">
+        <div class="transaction-row data-row" *ngFor="let transaction of filteredTransactions">
+          <div class="transaction-cell">{{ transaction.date | date:'dd/MM/yyyy' }}</div>
+          <div class="transaction-cell" 
+               [ngClass]="{'income-text': transaction.type === 'income', 'expense-text': transaction.type === 'expense'}">
+            ₪{{ transaction.amount | number:'1.2-2' }}
+          </div>
+          <div class="transaction-cell">
+            <span class="type-badge" [ngClass]="transaction.type === 'income' ? 'income-badge' : 'expense-badge'">
+              {{ transaction.type === 'income' ? 'הכנסה' : 'הוצאה' }}
+            </span>
+          </div>
+          <div class="transaction-cell">{{ transaction.details }}</div>
+          <div class="transaction-cell">{{ transaction.category }}</div>
+          <div class="transaction-cell">{{ getPaymentMethodLabel(transaction.method) }}</div>
+          <div class="transaction-cell actions-cell">
+            <button mat-icon-button [matMenuTriggerFor]="transactionMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #transactionMenu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="editTransaction(transaction)">
+                <mat-icon>edit</mat-icon>
+                <span>ערוך</span>
+              </button>
+              <button mat-menu-item (click)="deleteTransaction(transaction)">
+                <mat-icon>delete</mat-icon>
+                <span>מחק</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noTransactions>
+      <div class="no-transactions-message">
+        אין תנועות כספיות לחודש זה
+      </div>
+    </ng-template>
+  </div>
+</div>
