@@ -131,6 +131,7 @@ import { ExpensesTableComponent } from './components/personal-area/company-manag
 import { AddExpensesComponent } from './components/personal-area/company-manager/reports/Expenses/add-expenses/add-expenses.component';
 import { ExpensesViewComponent } from './components/personal-area/company-manager/reports/Expenses/expenses-view/expenses-view.component';
 import { AddExpenseCategoriesComponent } from './components/personal-area/company-manager/reports/Expenses/add-expense-categories/add-expense-categories.component';
+import { AddPaymentComponent } from './components/personal-area/therapist/financial-management/add-payment/add-payment.component';
 import { AppointmentReportsComponent } from './components/personal-area/company-manager/reports/appointment-reports/appointment-reports.component';
 import { FinancialManagementComponent } from './components/personal-area/therapist/financial-management/financial-management.component';
 
@@ -233,6 +234,7 @@ import { FinancialManagementComponent } from './components/personal-area/therapi
     AddExpensesComponent,
     ExpensesViewComponent,
     AddExpenseCategoriesComponent,
+    AddPaymentComponent,
     AppointmentReportsComponent,
     FinancialManagementComponent,
   // TutorialVideosComponent (standalone),

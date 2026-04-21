@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PaymentService } from 'src/app/services/payments.service';
 import { TherapistSessionService } from 'src/app/services/therapist-session.service';
+import { AddPaymentComponent } from './add-payment/add-payment.component';
+import { AddExpensesComponent } from '../../company-manager/reports/Expenses/add-expenses/add-expenses.component';
 
 interface Transaction {
   id: number;
@@ -18,7 +21,7 @@ interface Transaction {
   styleUrls: ['./financial-management.component.css']
 })
 export class FinancialManagementComponent implements OnInit {
-  therapistId: number = 0;
+  personId: number = 0;  // שימוש ב-person_id במקום therapist_id
   selectedMonth: number = new Date().getMonth() + 1;
   selectedYear: number = new Date().getFullYear();
   
@@ -38,21 +41,32 @@ export class FinancialManagementComponent implements OnInit {
 
   constructor(
     private paymentService: PaymentService,
-    private therapistSessionService: TherapistSessionService
+    private therapistSessionService: TherapistSessionService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    const therapist = this.therapistSessionService.getTherapist();
-    this.therapistId = therapist?.therapist?.therapist_id || 0;
+    const user = this.getUserFromLocalStorage();
+    this.personId = user?.person_id || user?.user?.person_id || 0;
     
-    if (this.therapistId) {
+    if (this.personId) {
       this.loadTransactions();
+    }
+  }
+
+  getUserFromLocalStorage(): any {
+    try {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch (error) {
+      console.error('שגיאה בקריאת נתוני משתמש:', error);
+      return null;
     }
   }
 
   loadTransactions(): void {
     this.paymentService.getFinancialTransactionsByMonth(
-      this.therapistId,
+      this.personId,
       this.selectedMonth,
       this.selectedYear
     ).subscribe({
@@ -129,5 +143,33 @@ export class FinancialManagementComponent implements OnInit {
 
   deleteTransaction(transaction: Transaction): void {
     // פונקציונליות מחיקה - תתווסף בשלב הבא
+  }
+
+  openAddIncomeDialog(): void {
+    const dialogRef = this.dialog.open(AddPaymentComponent, {
+      width: '500px',
+      direction: 'rtl',
+      panelClass: 'add-payment-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadTransactions();
+      }
+    });
+  }
+
+  openAddExpenseDialog(): void {
+    const dialogRef = this.dialog.open(AddExpensesComponent, {
+      width: '500px',
+      direction: 'rtl',
+      panelClass: 'add-expense-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadTransactions();
+      }
+    });
   }
 }
