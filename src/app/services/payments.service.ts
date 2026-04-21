@@ -39,8 +39,8 @@ export class PaymentService {
     return this.http.put(`${this.apiUrl}/payments/update/${paymentId}`, paymentData);
   }
 
-  /** שליפת תנועות כספיות משולבות לפי מטפל וחודש */
-  getFinancialTransactionsByMonth(therapistId: number, month: number, year: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/payments/financial-transactions/${therapistId}?month=${month}&year=${year}`);
+  /** שליפת תנועות כספיות משולבות לפי person_id וחודש */
+  getFinancialTransactionsByMonth(personId: number, month: number, year: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payments/financial-transactions/${personId}?month=${month}&year=${year}`);
   }
 }

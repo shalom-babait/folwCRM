@@ -1,0 +1,65 @@
+<div class="create-treatment-dialog">
+  <h2 class="dialog-title">הוספת הכנסה חדשה</h2>
+  <form class="input-dialog" [formGroup]="paymentForm">
+    <div class="form-field">
+      <label for="amount">סכום</label>
+      <input id="amount" type="number" formControlName="amount" placeholder="הזן סכום">
+      <div class="error-message" *ngIf="paymentForm.get('amount')?.hasError('required')">
+        סכום הוא שדה חובה
+      </div>
+      <div class="error-message" *ngIf="paymentForm.get('amount')?.hasError('min')">
+        סכום חייב להיות חיובי
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="payment_date">תאריך תשלום</label>
+      <input id="payment_date" type="date" formControlName="payment_date">
+      <div class="error-message" *ngIf="paymentForm.get('payment_date')?.hasError('required')">
+        תאריך תשלום הוא שדה חובה
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="method">אמצעי תשלום</label>
+      <select id="method" formControlName="method">
+        <option value="מזומן">מזומן</option>
+        <option value="כרטיס אשראי">כרטיס אשראי</option>
+        <option value="העברה בנקאית">העברה בנקאית</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="transaction_type">סוג טרנזקציה</label>
+      <select id="transaction_type" formControlName="transaction_type">
+        <option value="credit">הכנסה (זיכוי)</option>
+        <option value="debit">החזר (חיוב)</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="status">סטטוס</label>
+      <select id="status" formControlName="status">
+        <option value="paid">שולם</option>
+        <option value="pending">ממתין</option>
+        <option value="failed">נכשל</option>
+        <option value="refunded">הוחזר</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="notes">הערות</label>
+      <textarea id="notes" formControlName="notes" rows="3" placeholder="הערות נוספות (אופציונלי)"></textarea>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()" [disabled]="isSubmitting">
+        ביטול
+      </button>
+      <button type="submit" class="save-button" (click)="onSubmit()" [disabled]="!paymentForm.valid || isSubmitting">
+        <span *ngIf="!isSubmitting">הוסף</span>
+        <span *ngIf="isSubmitting">מוסיף...</span>
+      </button>
+    </div>
+  </form>
+</div>

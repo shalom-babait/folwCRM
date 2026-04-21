@@ -71,6 +71,16 @@ export class AddExpensesComponent implements OnInit {
     return user.organization_id || null;
   }
 
+  getUserFromLocalStorage(): any {
+    try {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch (error) {
+      console.error('שגיאה בקריאת נתוני משתמש:', error);
+      return null;
+    }
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
@@ -78,16 +88,27 @@ export class AddExpensesComponent implements OnInit {
   onSubmit(): void {
     if (this.expenseForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
+      
+      const user = this.getUserFromLocalStorage();
+      if (!user) {
+        alert('לא נמצאו פרטי משתמש. אנא התחבר מחדש.');
+        this.isSubmitting = false;
+        return;
+      }
+
       let expense: any = {
         ...this.expenseForm.value,
-        expense_id: 0, // backend assigns
-        organization_id: this.getOrganizationId()
+        expense_id: 0,
+        organization_id: user.organization_id || user.user?.organization_id,
+        person_id: user.person_id || user.user?.person_id
       };
+      
       if (expense.expense_category_id === 'other') {
         expense.expense_category_id = null;
       } else {
         expense.other_category_name = null;
       }
+
       this.expensesService.createExpense(expense).subscribe({
         next: () => {
           this.isSubmitting = false;
@@ -96,6 +117,7 @@ export class AddExpensesComponent implements OnInit {
         error: (error) => {
           this.isSubmitting = false;
           console.error('Error adding expense:', error);
+          alert('שגיאה בהוספת הוצאה. אנא נסה שוב.');
         }
       });
     }

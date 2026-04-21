@@ -108,15 +108,58 @@
   color: #dc3545;
 }
 
-/* כפתורי סינון */
+/* כפתורי סינון והוספה */
 .filter-buttons {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
   margin-bottom: 24px;
-  justify-content: center;
 }
 
-.filter-buttons button {
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-buttons-group {
+  display: flex;
+  gap: 12px;
+}
+
+.add-income-btn {
+  background-color: #28a745 !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 10px 20px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.add-income-btn:hover {
+  background-color: #218838 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+.add-expense-btn {
+  background-color: #dc3545 !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 10px 20px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+.add-expense-btn:hover {
+  background-color: #c82333 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+}
+
+.filter-buttons-group button {
   padding: 10px 24px;
   border-radius: 1rem;
   font-weight: 600;
@@ -127,17 +170,27 @@
   min-height: 40px;
 }
 
-.filter-buttons button:hover {
+.filter-buttons-group button:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-color: #2A5448;
 }
 
-.filter-buttons button.active {
+.filter-buttons-group button.active {
   background-color: #2A5448;
   color: #fff;
   border-color: #2A5448;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.income-filter-btn.active {
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
+}
+
+.expense-filter-btn.active {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
 }
 
 .income-filter-btn.active {

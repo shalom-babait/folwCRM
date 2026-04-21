@@ -28,28 +28,48 @@
     </div>
   </div>
 
-  <!-- כפתורי סינון -->
+  <!-- כפתורי סינון והוספה -->
   <div class="filter-buttons">
-    <button 
-      mat-raised-button 
-      [class.active]="filterType === 'all'" 
-      (click)="onFilterChange('all')">
-      הכל
-    </button>
-    <button 
-      mat-raised-button 
-      [class.active]="filterType === 'income'" 
-      (click)="onFilterChange('income')"
-      class="income-filter-btn">
-      הכנסות
-    </button>
-    <button 
-      mat-raised-button 
-      [class.active]="filterType === 'expense'" 
-      (click)="onFilterChange('expense')"
-      class="expense-filter-btn">
-      הוצאות
-    </button>
+    <div class="action-buttons">
+      <button 
+        mat-raised-button 
+        color="primary"
+        class="add-income-btn"
+        (click)="openAddIncomeDialog()">
+        <mat-icon>add</mat-icon>
+        הוסף הכנסה
+      </button>
+      <button 
+        mat-raised-button 
+        color="accent"
+        class="add-expense-btn"
+        (click)="openAddExpenseDialog()">
+        <mat-icon>add</mat-icon>
+        הוסף הוצאה
+      </button>
+    </div>
+    <div class="filter-buttons-group">
+      <button 
+        mat-raised-button 
+        [class.active]="filterType === 'all'" 
+        (click)="onFilterChange('all')">
+        הכל
+      </button>
+      <button 
+        mat-raised-button 
+        [class.active]="filterType === 'income'" 
+        (click)="onFilterChange('income')"
+        class="income-filter-btn">
+        הכנסות
+      </button>
+      <button 
+        mat-raised-button 
+        [class.active]="filterType === 'expense'" 
+        (click)="onFilterChange('expense')"
+        class="expense-filter-btn">
+        הוצאות
+      </button>
+    </div>
   </div>
 
   <!-- טבלת תנועות -->
